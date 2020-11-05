@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+
+    <LinearLayout
+        android:id="@+id/processLyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/tvDelivery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="@string/delivery"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/txt_color"
+            app:drawableStartCompat="@drawable/ic_next_process" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="@string/address"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+
+        <TextView
+            android:id="@+id/tvPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="@string/payment"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+    </LinearLayout>
+
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/confirmLyt"
+        android:layout_below="@+id/processLyt"
+        android:background="@color/bg_color"
+        android:nestedScrollingEnabled="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/relLayoutPromoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_shadow"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/imgRefresh"
+                    android:text="@string/promo_code_msg"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/mid_text" />
+
+                <ImageView
+                    android:id="@+id/imgRefresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    app:srcCompat="@drawable/ic_refresh1" />
+
+                <EditText
+                    android:id="@+id/edtPromoCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/tvMessage"
+                    android:layout_marginTop="-1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/btnApply"
+                    android:background="@drawable/edt_bg"
+                    android:hint="@string/promo_code"
+                    android:inputType="text"
+                    android:padding="@dimen/margin_10dp" />
+
+                <Button
+                    android:id="@+id/btnApply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/edtPromoCode"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/margin_10dp"
+                    android:background="@color/colorAccent"
+                    android:minHeight="0dp"
+                    android:padding="@dimen/margin_5dp"
+                    android:text="@string/apply"
+                    android:textColor="@color/white" />
+
+                <ProgressBar
+                    android:id="@+id/pBar"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:padding="@dimen/margin_5dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvAlert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edtPromoCode"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/small_size"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/relLayoutPromoCode"
+                android:layout_gravity="center_vertical"
+                android:padding="2dp"
+                android:text="@string/order_list"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/mid_text" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="5dp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/confirmLyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/dimen_5dp"
+        android:background="@drawable/card_shadow"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/lytamtbeforetax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/margin_10dp"
+            android:paddingEnd="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/total_amt" />
+
+            <TextView
+                android:id="@+id/tvTotalBeforeTax"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lytTax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lytamtbeforetax"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/margin_10dp"
+            android:paddingEnd="@dimen/margin_10dp">
+
+            <TextView
+                android:id="@+id/tvTaxPercent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/tax" />
+
+            <TextView
+                android:id="@+id/tvTaxAmt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lytdelivery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lytTax"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/margin_10dp"
+            android:paddingEnd="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/delivery_charge" />
+
+            <TextView
+                android:id="@+id/tvDeliveryCharge"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lytPromo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lytdelivery"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/margin_10dp"
+            android:paddingEnd="@dimen/margin_10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvPromoCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tvPCAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/formula"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lytPromo"
+            android:paddingStart="@dimen/margin_10dp"
+            android:paddingEnd="@dimen/margin_10dp"
+            android:text="@string/tax_formula"
+            android:textColor="@color/green"
+            android:textSize="@dimen/small_size" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/formula"
+            android:layout_marginTop="@dimen/dimen_5dp"
+            android:background="@drawable/card_shadow"
+            android:padding="@dimen/dimen_10dp">
+
+            <TextView
+                android:id="@+id/tvPreTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawablePadding="@dimen/margin_5dp"
+                android:text="@string/total"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/ic_info" />
+
+            <TextView
+                android:id="@+id/tvSubTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/tvConfirmOrder"
+                android:layout_toEndOf="@+id/tvPreTotal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvConfirmOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/confirm_bg"
+                android:drawablePadding="@dimen/margin_10dp"
+                android:gravity="center"
+                android:paddingStart="@dimen/margin_10dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="@dimen/margin_10dp"
+                android:paddingBottom="7dp"
+                android:text="@string/btn_continue"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                app:drawableEndCompat="@drawable/ic_confirm" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

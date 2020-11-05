@@ -1,6 +1,4 @@
 # eCart
+Wrteam eCart Customer App
 
-eCart Customer App
-
-By WRTeam
-Product - https://codecanyon.net/item/city-ecommerce-app/22015911  
+https://codecanyon.net/item/city-ecommerce-app/22015911

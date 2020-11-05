@@ -1,0 +1,149 @@
+{
+  "project_info": {
+    "project_number": "382070340183",
+    "firebase_url": "https://ekart-2d9ee.firebaseio.com",
+    "project_id": "ekart-2d9ee",
+    "storage_bucket": "ekart-2d9ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382070340183:android:f49943b4b5692944f7c112",
+        "android_client_info": {
+          "package_name": "wrteam.ekart.dboy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382070340183-dvl10ef5kqimh4f5miiva2h6f1f23k9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.dboy",
+            "certificate_hash": "9a29587539559ec4c0ae601054896571e64d5351"
+          }
+        },
+        {
+          "client_id": "382070340183-ijob81nmmlr5eissguun5uts8ngh67i5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.dboy",
+            "certificate_hash": "924e3bbd04c87c6d4c7570b6256fae1215565641"
+          }
+        },
+        {
+          "client_id": "382070340183-r0u2qb7cjg1va0m1e07svopgrmj89o9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.dboy",
+            "certificate_hash": "a4f666b67a4641258eb3469214cef280dc2255d4"
+          }
+        },
+        {
+          "client_id": "382070340183-msb3occmpb5b5nekg8v0lcp0vu97v7si.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.dboy",
+            "certificate_hash": "d078a9b5d27166665a8de0d30dfe1ffad48d2ddb"
+          }
+        },
+        {
+          "client_id": "382070340183-456ojt9427fe4hi6dmi7f944kqbppimn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcu1jA6vsQxCh5_0xmO6RTIP-Fukxszyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382070340183-456ojt9427fe4hi6dmi7f944kqbppimn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382070340183:android:9537508329f59fc2f7c112",
+        "android_client_info": {
+          "package_name": "wrteam.ekart.shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382070340183-knndf85sp91692ksbd90hgm0bm1kedqr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.shop",
+            "certificate_hash": "9a29587539559ec4c0ae601054896571e64d5351"
+          }
+        },
+        {
+          "client_id": "382070340183-tcqsvv2ifu4np7kimiocc851q7st3ctv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.shop",
+            "certificate_hash": "924e3bbd04c87c6d4c7570b6256fae1215565641"
+          }
+        },
+        {
+          "client_id": "382070340183-kcuq1geplighirpibov1udov9hcrddr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.shop",
+            "certificate_hash": "a4f666b67a4641258eb3469214cef280dc2255d4"
+          }
+        },
+        {
+          "client_id": "382070340183-rs2emikseajc4sujpu2503tipct0fd96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.shop",
+            "certificate_hash": "d8601d0426a91566185daccd64b491be6db0652e"
+          }
+        },
+        {
+          "client_id": "382070340183-1gr13u5i6650og9tmij27bh1qrjmt0o7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.shop",
+            "certificate_hash": "d078a9b5d27166665a8de0d30dfe1ffad48d2ddb"
+          }
+        },
+        {
+          "client_id": "382070340183-1rgi7hlmdpak7ng2jedn4dq013jbmvai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wrteam.ekart.shop",
+            "certificate_hash": "45bb3e18adfa655e32e201e664c93156920e29fb"
+          }
+        },
+        {
+          "client_id": "382070340183-456ojt9427fe4hi6dmi7f944kqbppimn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcu1jA6vsQxCh5_0xmO6RTIP-Fukxszyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382070340183-456ojt9427fe4hi6dmi7f944kqbppimn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

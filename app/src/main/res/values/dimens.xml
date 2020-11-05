@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="pv_pin_view_item_size">40dp</dimen>
+    <dimen name="pv_pin_view_item_spacing">3dp</dimen>
+    <dimen name="pv_pin_view_item_line_width">2dp</dimen>
+    <dimen name="pv_pin_view_cursor_width">2dp</dimen>
+
+    <!--<dimen name="design_navigation_icon_size" tools:override="true">24dp</dimen>-->
+    <!--<dimen name="design_navigation_icon_padding" tools:override="true">50dp</dimen>-->
+
+    <dimen name="common_padding">5dp</dimen>
+    <dimen name="slider_height">150dp</dimen>
+    <dimen name="default_margin">10dp</dimen>
+    <dimen name="p_text_size">12sp</dimen>
+    <dimen name="txt_size">10sp</dimen>
+    <dimen name="mid_text">16sp</dimen>
+    <dimen name="large_text">20sp</dimen>
+    <dimen name="xlarge_text">25sp</dimen>
+    <dimen name="small_size">12sp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="dimen_3dp">3dp</dimen>
+    <dimen name="margin_15dp">15dp</dimen>
+    <dimen name="profile_size">130dp</dimen>
+    <dimen name="margin_dp">15dp</dimen>
+    <dimen name="dimen_17dp">17dp</dimen>
+    <dimen name="dimen_pad_lock">13sp</dimen>
+    <dimen name="txt_size_8">8sp</dimen>
+    <dimen name="txt_size_6">6sp</dimen>
+</resources>

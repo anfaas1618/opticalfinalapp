@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/recyclerView"
+    android:layout_marginTop="@dimen/default_margin"
+    android:background="@drawable/card_shadow"
+    android:visibility="visible">
+
+    <RelativeLayout
+        android:id="@+id/titleLyt1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_toStartOf="@+id/tvMore"
+            android:text="section"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/mid_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitle"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_toStartOf="@+id/tvMore"
+            android:text="item"
+            android:textColor="@color/gray_blue" />
+
+        <TextView
+            android:id="@+id/tvMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/margin_10dp"
+            android:background="@drawable/bg_btn"
+            android:padding="5dp"
+            android:text="@string/view_all"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleLyt1"
+        android:layout_margin="5dp"
+        android:background="@drawable/default_bg" />
+</RelativeLayout>

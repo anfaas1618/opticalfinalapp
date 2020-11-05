@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lytPaymentMode"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/margin_5dp"
+    android:weightSum="10">
+
+    <ImageView
+        android:id="@+id/imgPaymentMode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="3" />
+
+    <TextView
+        android:id="@+id/tvPaymentMode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="6"
+        android:textColor="@color/txt_color"
+        android:textSize="@dimen/mid_text" />
+
+    <RadioButton
+        android:id="@+id/rdPaymentMode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/margin_10dp"
+        android:textSize="@dimen/mid_text" />
+</LinearLayout>
