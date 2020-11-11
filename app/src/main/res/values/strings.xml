@@ -7,7 +7,6 @@
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
     <string name="title_home">Home</string>
-    <string name="refresh">Refresh</string>
     <string name="cart">Cart</string>
     <string name="change_pass">Change Password</string>
     <string name="reset_pass">Reset Password</string>
@@ -17,13 +16,11 @@
     <string name="title_category">Category</string>
     <string name="title_fav">Wish List</string>
     <string name="title_cart">Cart</string>
-    <string name="communicate">Communicate</string>
     <string name="contact">Contact Us</string>
     <string name="about">About Us</string>
     <string name="via">Via&#160;</string>
     <string name="cod">C.O.D.</string>
     <string name="faq">FAQ</string>
-    <string name="work">Work</string>
     <string name="logout">LogOut</string>
     <string name="shopbycategory">Shop by Category</string>
     <string name="search">Search</string>
@@ -33,9 +30,7 @@
     <string name="password_">Password</string>
     <string name="verify">Verify</string>
 
-    <string name="track_title">Login</string>
     <string name="track_login_msg">You have to login if you want to show order tracker.</string>
-    <string name="mail_send_msg">We will send you an OTP on this email to verify. </string>
     <string name="mobile_send_msg">We will send you an OTP on this mobile number to verify. </string>
     <string name="please_type_verification_code_sent_to">Please Enter OTP sent via SMS on</string>
     <string name="personal_info">Personal Info</string>
@@ -45,51 +40,36 @@
     <string name="changepswtext">Change Password </string>
     <string name="old_pass">Old Password </string>
     <string name="reset_pass_text">Reset Your Password</string>
-    <string name="plus_sign">+</string>
     <string name="changepsw">Change Password ?</string>
     <string name="confirm_pass">Confirm Password</string>
     <string name="update">Update</string>
-    <string name="add">Add</string>
     <string name="confirm_order_amt">Confirm Order Amount</string>
-    <string name="ortext"><u>OR</u></string>
     <string name="profile">Profile</string>
-    <string name="delivery_boy">Delivery Boy</string>
     <string name="refer">Referral Code (optional)</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="mobile">Mobile No</string>
     <string name="alternate_mobile">Alternate Mobile No</string>
-    <string name="city">City</string>
     <string name="select_city">Select City</string>
     <string name="select_area">Select Area</string>
     <string name="address">Address</string>
     <string name="addresses">Addresses</string>
     <string name="pincode">PinCode</string>
-    <string name="code">00</string>
-    <string name="dateofbirth">Date Of Birth</string>
     <string name="is_login">Welcome Guest</string>
     <string name="is_mobile">Login&#160;/&#160;Register</string>
-    <string name="sign_up">SignUp</string>
     <string name="next">Next</string>
     <string name="otp">Enter OTP</string>
-    <string name="deliverytime">Delivery Time</string>
-    <string name="select_delivery_date">Select Delivery Day</string>
-    <string name="verify_your_email">Verify Your Email </string>
     <string name="no_data_found">NO DATA FOUND</string>
     <string name="fav_text">Wish List</string>
     <string name="share_text">Share</string>
     <string name="similarproduct">Similar Products</string>
     <string name="product_details">Product Details</string>
     <string name="quantity">Quantity</string>
-    <string name="buynow">Go To Cart</string>
-    <string name="relatedproducts">Related Products</string>
-    <string name="view_more"><u>View More</u></string>
     <string name="msg_no_result">Sorry, no results found</string>
     <string name="msg_search_again">Please check the spelling or try a different word</string>
 
     <string name="limit_alert">Apologies, max product quantity limit reached.</string>
 
-    <string name="no_item_cart">Cart is Empty</string>
     <string name="deleteproductmsg">Are you sure, you want to remove this product from cart ?</string>
     <string name="delete_address_msg">Are you sure, you want to remove this address?</string>
     <string name="image_permisison_msg">You have to enable storage permission.\n\nGo to app settings > Permissions > Enable Storage</string>
@@ -104,13 +84,10 @@
     <string name="delivery_charge">Delivery Charge</string>
     <string name="delivery_charge1">Delivery Charge :</string>
     <string name="free">Free</string>
-    <string name="cart_subtotal">Total</string>
     <string name="tax">Tax</string>
     <string name="discount">Discount</string>
     <string name="checkout">Checkout</string>
     <string name="update_location">Update Your Location</string>
-    <string name="Delivery_Address">Delivery Address</string>
-    <string name="delivery">Delivery</string>
     <string name="payment">Payment</string>
     <string name="current_location">Current Location</string>
     <string name="order_list">Order Summary</string>
@@ -119,16 +96,9 @@
     <string name="promo_code_msg">Have a Promo Code?</string>
     <string name="promo_code">Promo Code</string>
     <string name="apply">Apply</string>
-    <string name="applied">Applied</string>
-    <string name="selectcity">Please Select City</string>
-    <string name="selectarea">Please Select Area</string>
-    <string name="product_name">Product Name</string>
-    <string name="qty">Qty</string>
-    <string name="price">Price</string>
     <string name="noitem_incart">Your cart is empty</string>
     <string name="noitem_incart_msg">You have no items in your shopping cart.\nLets\'s go buy something!</string>
     <string name="shop_now">Shop Now</string>
-    <string name="sort">Sortlist</string>
     <string name="filterby">Filter By</string>
     <string name="payment_mathod">Payment Method</string>
     <string name="cod_pay">Cash On Delivery</string>
@@ -142,19 +112,16 @@
     <string name="paypal">PayPal</string>
     <string name="resend">Resend</string>
     <string name="resend_cap">RE-SEND</string>
-    <string name="not_receive_msg">Don\'t receive verify otp ?</string>
     <string name="verify_message">Verify your registered number and reset your password. </string>
     <string name="alert_register_num1">Mobile number is not registered on&#160;</string>
     <string name="alert_register_num2">. Please register to continue. Return to Log In screen and select Sign Up.</string>
     <string name="verify_alert_1">Mobile number already registered with&#160;</string>
     <string name="verify_alert_2">. You can sign into account using your credentials.</string>
     <string name="reset_alert_msg">Are you sure, you want to reset password?</string>
-    <string name="msg_forget_otp">OTP sent to this mobile number</string>
     <string name="verify_your_mobile">Verify Your Mobile </string>
 
     <string name="onlinepaytype">payumoney</string>
     <string name="codpaytype">cod</string>
-    <string name="orderplaced">Order Placed</string>
     <string name="order_placed1">Order Placed!!!</string>
     <string name="order_error">Error while payment!!!</string>
     <string name="order_cancel">Cancel payment!!!</string>
@@ -167,7 +134,6 @@
     <string name="txn_cancel_msg">Are you sure you want to cancel the transaction?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="mobile_">Mobile:&#160;</string>
     <string name="qty_1">Qty:&#160;</string>
     <string name="update_alert">Update Alert</string>
     <string name="alert">Alert!!!</string>
@@ -176,7 +142,6 @@
     <string name="update_msg_1">Update the app for a batter experience!</string>
     <string name="not_now">Not Now</string>
     <string name="update_now">Update</string>
-    <string name="my_location">My Location</string>
     <string name="offer_price">Offer Price:&#160;</string>
     <string name="mrp">Price :&#160;</string>
     <string name="you_save">You Save:&#160;</string>
@@ -185,11 +150,7 @@
     <string name="mobile_no_1">\nMobile No :&#160;</string>
     <string name="address_1">\nAddress :&#160;</string>
     <string name="total_">Total&#160;</string>
-    <string name="_item_">&#160;Item&#160;</string>
-    <string name="_items_">&#160;Items&#160;</string>
-    <string name="total_balance">Total Balance:&#160;</string>
     <string name="noitem_intracker">You have not order yet</string>
-    <string name="order_track">Track Order</string>
     <string name="order_track_detail">Order Details</string>
     <string name="_title_order_track">Track Order</string>
     <string name="ordered_id">Ordered Id:&#160;</string>
@@ -208,21 +169,15 @@
     <string name="returned">Returned</string>
     <string name="other_details">Other Details</string>
     <string name="price_details">Price Detail</string>
-    <string name="trackingstatus">Tracking Status on</string>
     <string name="order_status">Order Status</string>
     <string name="cancel_order_detail">Cancel Order ?</string>
-    <string name="cancel_success">Cancelled Successfully</string>
-    <string name="request_success">Request Sent Successfully</string>
     <string name="cancel_msg">Are you sure, you want to cancel this item ?</string>
     <string name="return_msg">Are you sure, you want to return this item ?</string>
     <string name="rate">Rate Us</string>
     <string name="notifications">Notifications</string>
     <string name="enter_name">Enter Name</string>
-    <string name="enter_address">Enter Address</string>
-    <string name="enter_pincode">Enter PinCod</string>
     <string name="enter_email">Enter email address</string>
     <string name="enter_valid_email">Enter valid email address</string>
-    <string name="enter_country_code">Enter country code</string>
     <string name="enter_mobile_no">Enter mobile number</string>
     <string name="enter_valid_mobile_no">Enter valid mobile number</string>
     <string name="enter_pass">Enter password</string>
@@ -231,8 +186,6 @@
     <string name="enter_confirm_pass">Enter Confirm password</string>
     <string name="no_match_old_pass">Old password not matched</string>
     <string name="pass_not_match">Password not matched</string>
-    <string name="enter_promo_code">Enter promo code</string>
-    <string name="promo_code_already_applied">Promo code already applied</string>
     <string name="sharapp">Share App</string>
     <string name="refere">Refer &amp; Earn</string>
     <string name="wallet_balance">Wallet Balance  </string>
@@ -248,7 +201,6 @@
     <string name="day_max_limit">day maximum limit</string>
     <string name="ok">OK</string>
     <string name="share_via">Share via</string>
-    <string name="select_location">Select Your location</string>
     <string name="set_location">Set Location</string>
     <string name="exit_msg">Please click BACK again to exit</string>
     <string name="alert_select_location">Please select your location</string>
@@ -263,16 +215,12 @@
     <string name="select_delivery_day">Please select delivery day!</string>
     <string name="select_delivery_time">Please select delivery time!</string>
     <string name="select_payment_method">Please select payment method!</string>
-    <string name="loading">Loading&#8230;</string>
     <string name="processing">Processing&#8230;</string>
     <string name="order_failed">Order Failed</string>
 
     <!--invite friend msg-->
     <string name="invite_frnd_title">Invite Friend Using</string>
-    <string name="invite_frnd">Invite friends</string>
     <string name="refer_code_copied">Refer Code Copied to Clipboard</string>
-    <string name="refer_message_1">Refer a friend and earn up to &#160;</string>
-    <string name="refer_message_2">&#160; on first successful delivered order that register with your code</string>
     <string name="your_refer_code">Your Referral Code</string>
     <string name="tap_copy">Tap To Copy</string>
     <string name="refer_now">REFER NOW</string>
@@ -281,13 +229,8 @@
     <string name="refer_code_alert_msg">Your refer code not generated please re-login for your refer code.</string>
 
     <!--Firebase AUTH -->
-    <string name="phone_number">Phone Number</string>
-    <string name="generate_otp">Generate OTP</string>
-    <string name="otp_receive_alert">Not received OTP resend and try</string>
     <string name="otp_resend_alert">An OTP (One-Time-Password) has been sent to your registered mobile number.</string>
     <string name="enter_otp">Enter OTP</string>
-    <string name="verify_sign_in">Verify and Sign In</string>
-    <string name="sign_out">sign out</string>
 
 
     <string name="wallet_history">Wallet History</string>
@@ -298,11 +241,6 @@
     <string name="transaction_date_and_time"><![CDATA[Date & Time]]></string>
     <string name="tx_message">Message</string>
     <string name="status">Status</string>
-    <string name="show_more">Show More</string>
-    <string name="show_less">Show Less</string>
-    <string name="retry">Retry</string>
-    <string name="title_new_to_old">New To Old</string>
-    <string name="title_old_to_new">Old To New</string>
     <string name="delivery_date">Preferred Delivery Date / Time</string>
     <string name="add_new_address">Add New Address</string>
     <string name="manage_addresses">Manage Addresses</string>
@@ -311,16 +249,12 @@
     <string name="country">Country</string>
     <string name="office">Office</string>
     <string name="other">Other</string>
-    <string name="title_map">Map</string>
     <string name="set_as_default_address">Set as default address</string>
     <string name="default_address">Default</string>
-    <string name="delivery_address_select_msg">Please select delivery address first!</string>
     <string name="select_delivery_address">Please select delivery address !</string>
     <string name="msg_minimum_order_amount">"Minimum order amount should be\u0020</string>
     <string name="title_manufacturer">Manufacturer</string>
     <string name="title_made_in">Made In</string>
-    <string name="date">Date</string>
-    <string name="take_photo">Take Photo</string>
     <string name="from_library">" Choose from Library"</string>
     <string name="your_orders">Your Orders</string>
     <string name="no_wish_list_found">No Wish List Found!!!</string>
@@ -338,9 +272,7 @@
     <string name="no_faq_found">No Faq Found Yet !</string>
     <string name="you_have_not_any_frequently_ask_question_history_yet">You have not any frequently ask question history yet !</string>
     <string name="go_to_cart">Go to Cart</string>
-    <string name="payable_amount">Payable Amount</string>
 
-    <string name="check">Check</string>
     <string name="cvv">CVV</string>
     <string name="expiry">Expiry</string>
     <string name="card_number">Card Number</string>
@@ -349,8 +281,6 @@
     <string name="expiry_month">MM</string>
     <string name="flutterwave">Flutterwave</string>
     <string name="your_balance">Your Balance</string>
-    <string name="top_up">Top-Up</string>
-    <string name="withdraw">Withdraw</string>
     <string name="recharge_your_wallet">Recharge Your Wallet</string>
     <string name="amount">Amount</string>
     <string name="recharge">Recharge</string>
@@ -361,10 +291,14 @@
     <string name="alert_enter_amount">Please enter amount!!!</string>
     <string name="title_order_otp">Order OTP :</string>
     <string name="order_otp">Order OTP</string>
-    <string name="tax_per">Tax(%)</string>
-    <string name="total_after_tax">Total + Tax</string>
-    <string name="total_before_tax">Total Before Tax</string>
     <string name="tax_formula">tax_percentage = ( tax_amount x 100 ) / order_total_without_tax</string>
     <string name="off">OFF</string>
     <string name="alert_payment_methods_blank">Payment methods not found!</string>
+    <string name="stripe_card_details">Testing Card Number: 4242 4242 4242 4242\nExpiry Date: Any Future Date\nCVC : Any 3 Digit Number\nPostal Code : Any Postal</string>
+    <string name="wallettype">wallet</string>
+    <string name="midtrans">Midtrans</string>
+    <string name="stripe">Stripe</string>
+    <string name="refer_text_1">"Refer a friend and earn upto "</string>
+    <string name="refer_text_2">\" when your friend\'s first order is successfully delivered. Minimum Order amount should be \"</string>
+    <string name="refer_text_3">. which allows you to earn upto</string>
 </resources>

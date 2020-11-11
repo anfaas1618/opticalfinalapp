@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 public class DefaultMovementMethod implements MovementMethod {
 
-    private static DefaultMovementMethod sInstance;
+    static DefaultMovementMethod sInstance;
 
-    private DefaultMovementMethod() {
+    DefaultMovementMethod() {
     }
 
     public static MovementMethod getInstance() {

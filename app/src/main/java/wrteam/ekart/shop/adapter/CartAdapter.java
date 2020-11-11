@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -78,9 +78,18 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             double price = Double.parseDouble(cart.getItems().get(0).getDiscounted_price());
 
-            holder.imgproduct.setImageUrl(cart.getItems().get(0).getImage(), Constant.imageLoader);
+            Picasso.get()
+                    .load(cart.getItems().get(0).getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgproduct);
+
             holder.txtproductname.setText(cart.getItems().get(0).getName());
+
             holder.txtmeasurement.setText(cart.getItems().get(0).getMeasurement() + "\u0020" + cart.getItems().get(0).getUnit());
+            
             holder.txtprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getDiscounted_price())));
 
 
@@ -191,7 +200,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 activity.invalidateOptionsMenu();
                                 if (getItemCount() == 0) {
                                     CartFragment.lytempty.setVisibility(View.VISIBLE);
-                                    CartFragment.lyttotal.setVisibility(View.GONE);
+                                    CartFragment.lytTotal.setVisibility(View.GONE);
                                 }
                             }
                         });
@@ -244,8 +253,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class ProductHolderItems extends RecyclerView.ViewHolder {
-        NetworkImageView imgproduct;
-        ImageView imgdelete, btnminusqty, btnaddqty;
+        ImageView imgproduct, imgdelete, btnminusqty, btnaddqty;
         TextView txtproductname, txtmeasurement, txtprice, txtoriginalprice, txtQuantity, txttotalprice;
 
         public ProductHolderItems(@NonNull View itemView) {

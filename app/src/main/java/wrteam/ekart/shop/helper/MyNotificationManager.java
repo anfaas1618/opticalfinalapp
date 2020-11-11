@@ -30,7 +30,7 @@ public class MyNotificationManager {
     public static final int ID_BIG_NOTIFICATION = 234;
     public static final int ID_SMALL_NOTIFICATION = 235;
 
-    private final Context mCtx;
+    final Context mCtx;
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
     public MyNotificationManager(Context mCtx) {
@@ -96,7 +96,7 @@ public class MyNotificationManager {
 
 
     //The method will return Bitmap from an image URL
-    private Bitmap getBitmapFromURL(String strURL) {
+    Bitmap getBitmapFromURL(String strURL) {
         try {
             URL url = new URL(strURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -112,7 +112,7 @@ public class MyNotificationManager {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private void createChannel(NotificationManager notificationManager) {
+    void createChannel(NotificationManager notificationManager) {
         String name = "notification";
         String description = "Notifications for download status";
         int importance = NotificationManager.IMPORTANCE_DEFAULT;

@@ -76,9 +76,9 @@ public class WalletTransactionFragment extends Fragment {
     int offset = 0;
     TextView tvAlertTitle, tvAlertSubTitle;
     Button btnRechargeWallet;
-    private Session session;
-    private boolean isLoadMore = false;
-    private String paymentMethod = null;
+    Session session;
+    boolean isLoadMore = false;
+    String paymentMethod = null;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -136,8 +136,8 @@ public class WalletTransactionFragment extends Fragment {
                 Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                 TextView tvDialogSend, tvDialogCancel, edtAmount, edtMsg;
-                LinearLayout lytPayOption, lytFlutterWave, lytPayU, lytPayPal, lytRazorPay, lytPayStack;
-                RadioButton rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave;
+                LinearLayout lytPayOption, lytFlutterWave, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
+                RadioButton rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe;
 
                 edtAmount = dialogView.findViewById(R.id.edtAmount);
                 edtMsg = dialogView.findViewById(R.id.edtMsg);
@@ -145,15 +145,21 @@ public class WalletTransactionFragment extends Fragment {
                 tvDialogSend = dialogView.findViewById(R.id.tvDialogRecharge);
                 lytPayOption = dialogView.findViewById(R.id.lytPayOption);
                 lytPayStack = dialogView.findViewById(R.id.lytPayStack);
+
                 rbPayStack = dialogView.findViewById(R.id.rbPayStack);
                 rbFlutterWave = dialogView.findViewById(R.id.rbFlutterWave);
                 rbPayU = dialogView.findViewById(R.id.rbPayU);
                 rbPayPal = dialogView.findViewById(R.id.rbPayPal);
                 rbRazorPay = dialogView.findViewById(R.id.rbRazorPay);
+                rbMidTrans = dialogView.findViewById(R.id.rbMidTrans);
+                rbStripe = dialogView.findViewById(R.id.rbStripe);
+
                 lytPayPal = dialogView.findViewById(R.id.lytPayPal);
                 lytRazorPay = dialogView.findViewById(R.id.lytRazorPay);
                 lytPayU = dialogView.findViewById(R.id.lytPayU);
                 lytFlutterWave = dialogView.findViewById(R.id.lytFlutterWave);
+                lytMidTrans = dialogView.findViewById(R.id.lytMidTrans);
+                lytStripe = dialogView.findViewById(R.id.lytStripe);
 
                 Map<String, String> params = new HashMap<>();
                 params.put(Constant.SETTINGS, Constant.GetVal);
@@ -170,43 +176,52 @@ public class WalletTransactionFragment extends Fragment {
                                     if (objectbject.has("payment_methods")) {
                                         JSONObject object = objectbject.getJSONObject(Constant.PAYMENT_METHODS);
 
-                                        if (object.has("cod_payment_method")) {
+                                        if (object.has(Constant.cod_payment_method)) {
                                             Constant.COD = object.getString(Constant.cod_payment_method);
                                         }
-
-                                        if (object.has("paypal_payment_method")) {
-                                            Constant.PAYPAL = object.getString(Constant.paypal_method);
-                                        }
-
-                                        if (object.has("payumoney_payment_method")) {
+                                        if (object.has(Constant.payu_method)) {
                                             Constant.PAYUMONEY = object.getString(Constant.payu_method);
                                             Constant.MERCHANT_KEY = object.getString(Constant.PAY_M_KEY);
                                             Constant.MERCHANT_ID = object.getString(Constant.PAYU_M_ID);
                                             Constant.MERCHANT_SALT = object.getString(Constant.PAYU_SALT);
                                         }
-
-                                        if (object.has("razorpay_payment_method")) {
+                                        if (object.has(Constant.razor_pay_method)) {
                                             Constant.RAZORPAY = object.getString(Constant.razor_pay_method);
                                             Constant.RAZOR_PAY_KEY_VALUE = object.getString(Constant.RAZOR_PAY_KEY);
                                         }
-
-                                        if (object.has("paystack_payment_method")) {
+                                        if (object.has(Constant.paypal_method)) {
+                                            Constant.PAYPAL = object.getString(Constant.paypal_method);
+                                        }
+                                        if (object.has(Constant.paystack_method)) {
                                             Constant.PAYSTACK = object.getString(Constant.paystack_method);
                                             Constant.PAYSTACK_KEY = object.getString(Constant.paystack_public_key);
                                         }
-
-                                        if (object.has("flutterwave_payment_method")) {
+                                        if (object.has(Constant.flutterwave_payment_method)) {
                                             Constant.FLUTTERWAVE = object.getString(Constant.flutterwave_payment_method);
                                             Constant.FLUTTERWAVE_ENCRYPTION_KEY_VAL = object.getString(Constant.flutterwave_encryption_key);
                                             Constant.FLUTTERWAVE_PUBLIC_KEY_VAL = object.getString(Constant.flutterwave_public_key);
                                             Constant.FLUTTERWAVE_SECRET_KEY_VAL = object.getString(Constant.flutterwave_secret_key);
                                         }
+                                        if (object.has(Constant.midtrans_payment_method)) {
+                                            Constant.MIDTRANS = object.getString(Constant.midtrans_payment_method);
+//                                            "stripe_payment_method":"1",
+//                                                    "stripe_publishable_key":
+//                                            "pk_test_51Hh90WLYfObhNTTwooBHwynrlfiPo2uwxyCVqGNNCWGmpdOHuaW4rYS9cDldKJ1hxV5ik52UXUDSYgEM66OX45550065US7tRX",
+//                                                    "stripe_secret_key": "sk_test_51Hh90WLYfObhNTTwO8kCsbdnMdmLxiGHEpiQPGBkYlahlBAQ3RnXPIKGn3YsGIEMoIQ5bNfxye4kzE6wfLiINzNk00xOYprnZt"
+                                        }
+                                        if (object.has(Constant.stripe_payment_method)) {
+//                                            Constant.STRIPE = object.getString(Constant.stripe_payment_method);
+//                                            Constant.STRIPE_PUBLISHABLE_KEY = "pk_test_0gg61LPlfsTrBeOQJGbaVQ4o";
+//                                            Constant.STRIPE_SECRET_KEY = "sk_test_zuIZ9ndSCsycbwnnqgVDd1Kt";
+//                                            Constant.STRIPE_CURRENCY = "inr";
+//                                            Constant.STRIPE_BASE_URL = "https://netsofters.com/stripe/";
+                                        }
 
-                                        if (Constant.FLUTTERWAVE.equals("0") && Constant.PAYPAL.equals("0") && Constant.PAYUMONEY.equals("0") && Constant.COD.equals("0") && Constant.RAZORPAY.equals("0") && Constant.PAYSTACK.equals("0")) {
+                                        if (Constant.FLUTTERWAVE.equals("0") && Constant.PAYPAL.equals("0") && Constant.PAYUMONEY.equals("0") && Constant.COD.equals("0") && Constant.RAZORPAY.equals("0") && Constant.PAYSTACK.equals("0") && Constant.MIDTRANS.equals("0") && Constant.STRIPE.equals("0")) {
                                             lytPayOption.setVisibility(View.GONE);
                                         } else {
                                             lytPayOption.setVisibility(View.VISIBLE);
-
+                                            
                                             if (Constant.PAYUMONEY.equals("1")) {
                                                 lytPayU.setVisibility(View.VISIBLE);
                                             }
@@ -222,6 +237,12 @@ public class WalletTransactionFragment extends Fragment {
                                             if (Constant.PAYPAL.equals("1")) {
                                                 lytPayPal.setVisibility(View.VISIBLE);
                                             }
+                                            if (Constant.MIDTRANS.equals("1")) {
+                                                lytMidTrans.setVisibility(View.VISIBLE);
+                                            }
+                                            if (Constant.STRIPE.equals("1")) {
+                                                lytStripe.setVisibility(View.VISIBLE);
+                                            }
 
                                             rbPayU.setOnClickListener(v -> {
                                                 rbPayU.setChecked(true);
@@ -229,6 +250,8 @@ public class WalletTransactionFragment extends Fragment {
                                                 rbRazorPay.setChecked(false);
                                                 rbPayStack.setChecked(false);
                                                 rbFlutterWave.setChecked(false);
+                                                rbStripe.setChecked(false);
+                                                rbMidTrans.setChecked(false);
                                                 paymentMethod = rbPayU.getTag().toString();
 
                                             });
@@ -239,6 +262,8 @@ public class WalletTransactionFragment extends Fragment {
                                                 rbRazorPay.setChecked(false);
                                                 rbPayStack.setChecked(false);
                                                 rbFlutterWave.setChecked(false);
+                                                rbStripe.setChecked(false);
+                                                rbMidTrans.setChecked(false);
                                                 paymentMethod = rbPayPal.getTag().toString();
 
                                             });
@@ -249,6 +274,8 @@ public class WalletTransactionFragment extends Fragment {
                                                 rbRazorPay.setChecked(true);
                                                 rbPayStack.setChecked(false);
                                                 rbFlutterWave.setChecked(false);
+                                                rbStripe.setChecked(false);
+                                                rbMidTrans.setChecked(false);
                                                 paymentMethod = rbRazorPay.getTag().toString();
                                                 Checkout.preload(getContext());
                                             });
@@ -259,6 +286,8 @@ public class WalletTransactionFragment extends Fragment {
                                                 rbRazorPay.setChecked(false);
                                                 rbPayStack.setChecked(true);
                                                 rbFlutterWave.setChecked(false);
+                                                rbStripe.setChecked(false);
+                                                rbMidTrans.setChecked(false);
                                                 paymentMethod = rbPayStack.getTag().toString();
 
                                             });
@@ -269,7 +298,33 @@ public class WalletTransactionFragment extends Fragment {
                                                 rbRazorPay.setChecked(false);
                                                 rbPayStack.setChecked(false);
                                                 rbFlutterWave.setChecked(true);
+                                                rbStripe.setChecked(false);
+                                                rbMidTrans.setChecked(false);
                                                 paymentMethod = rbFlutterWave.getTag().toString();
+
+                                            });
+
+                                            rbStripe.setOnClickListener(v -> {
+                                                rbPayU.setChecked(false);
+                                                rbPayPal.setChecked(false);
+                                                rbRazorPay.setChecked(false);
+                                                rbPayStack.setChecked(false);
+                                                rbFlutterWave.setChecked(true);
+                                                rbStripe.setChecked(true);
+                                                rbMidTrans.setChecked(false);
+                                                paymentMethod = rbStripe.getTag().toString();
+
+                                            });
+
+                                            rbMidTrans.setOnClickListener(v -> {
+                                                rbPayU.setChecked(false);
+                                                rbPayPal.setChecked(false);
+                                                rbRazorPay.setChecked(false);
+                                                rbPayStack.setChecked(false);
+                                                rbFlutterWave.setChecked(false);
+                                                rbStripe.setChecked(false);
+                                                rbMidTrans.setChecked(true);
+                                                paymentMethod = rbMidTrans.getTag().toString();
 
                                             });
                                         }
@@ -381,7 +436,7 @@ public class WalletTransactionFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void StartFlutterWavePayment() {
+    void StartFlutterWavePayment() {
         new RavePayManager(this)
                 .setAmount(Double.parseDouble(amount))
                 .setEmail(session.getData(Constant.EMAIL))

@@ -13,12 +13,11 @@
         android:layout_gravity="center_horizontal"
         android:src="@drawable/placeholder" />
 
-    <com.android.volley.toolbox.NetworkImageView
+    <ImageView
         android:id="@+id/imgslider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY" />
+        android:adjustViewBounds="true" />
 
 </androidx.cardview.widget.CardView>

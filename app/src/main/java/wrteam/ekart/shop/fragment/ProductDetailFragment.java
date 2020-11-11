@@ -364,7 +364,7 @@ public class ProductDetailFragment extends Fragment {
     }
 
 
-    private void GetSimilarData(Product product) {
+    void GetSimilarData(Product product) {
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_SIMILAR_PRODUCT, Constant.GetVal);
         params.put(Constant.PRODUCT_ID, product.getId());
@@ -437,7 +437,7 @@ public class ProductDetailFragment extends Fragment {
         }
     }
 
-    private void GetProductDetail(final String productid) {
+    void GetProductDetail(final String productid) {
         root.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.PRODUCT_ID, productid);
@@ -477,7 +477,7 @@ public class ProductDetailFragment extends Fragment {
 
 
     @SuppressLint("SetTextI18n")
-    private void SetProductDetails(final Product product) {
+    void SetProductDetails(final Product product) {
         try {
             sliderArrayList = new ArrayList<>();
 

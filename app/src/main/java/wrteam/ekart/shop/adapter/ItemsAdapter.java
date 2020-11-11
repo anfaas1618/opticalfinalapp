@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +19,8 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,9 +86,18 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         holder.txtstatus.setText(activeStatus);
         holder.txtstatusdate.setText(order.getActiveStatusDate());
         holder.txtname.setText(order.getName() + "(" + order.getMeasurement() + order.getUnit() + ")");
-        holder.imgorder.setDefaultImageResId(R.drawable.placeholder);
-        holder.imgorder.setErrorImageResId(R.drawable.placeholder);
-        holder.imgorder.setImageUrl(order.getImage(), Constant.imageLoader);
+
+        Picasso.get().
+                load(order.getImage())
+                .fit()
+                .centerInside()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .into(holder.imgorder);
+
+//        holder.imgorder.setDefaultImageResId(R.drawable.placeholder);
+//        holder.imgorder.setErrorImageResId(R.drawable.placeholder);
+//        holder.imgorder.setImageUrl(order.getImage(), Constant.imageLoader);
 
         holder.carddetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +213,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         }
     }
 
-    private void updateOrderStatus(final Activity activity, final OrderTracker order, final String status, final CartItemHolder holder, final String from) {
+    void updateOrderStatus(final Activity activity, final OrderTracker order, final String status, final CartItemHolder holder, final String from) {
 
         final Map<String, String> params = new HashMap<>();
         params.put(Constant.UPDATE_ORDER_ITEM_STATUS, Constant.GetVal);
@@ -294,7 +304,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
 
     public class CartItemHolder extends RecyclerView.ViewHolder {
         TextView txtqty, txtprice, txtpaytype, txtstatus, txtstatusdate, txtname;
-        NetworkImageView imgorder;
+        ImageView imgorder;
         CardView carddetail;
         RecyclerView recyclerView;
         Button btnCancel, btnReturn;

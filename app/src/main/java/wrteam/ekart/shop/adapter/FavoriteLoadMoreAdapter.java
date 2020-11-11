@@ -28,7 +28,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,8 +54,8 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
-    private final Context context;
-    private final Activity activity;
+    final Context context;
+    final Activity activity;
     // The minimum amount of items to have below your current scroll position
     // before loading more.
     public boolean isLoading;
@@ -121,10 +121,14 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
 
             holder.productName.setText(Html.fromHtml(product.getName()));
-            holder.imgThumb.setDefaultImageResId(R.drawable.placeholder);
-            holder.imgThumb.setErrorImageResId(R.drawable.placeholder);
 
-            holder.imgThumb.setImageUrl(product.getImage(), Constant.imageLoader);
+            Picasso.get()
+                    .load(product.getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgThumb);
 
             FavoriteLoadMoreAdapter.CustomAdapter customAdapter = new FavoriteLoadMoreAdapter.CustomAdapter(context, priceVariations, holder, product);
             holder.spinner.setAdapter(customAdapter);
@@ -361,7 +365,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     }
 
-    private class ViewHolderLoading extends RecyclerView.ViewHolder {
+    class ViewHolderLoading extends RecyclerView.ViewHolder {
         public ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
@@ -373,8 +377,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public ImageButton imgAdd, imgMinus;
         TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
-        NetworkImageView imgThumb;
-        ImageView imgFav, imgIndicator;
+        ImageView imgThumb, imgFav, imgIndicator;
         RelativeLayout lytmain;
         AppCompatSpinner spinner;
         LinearLayout qtyLyt;

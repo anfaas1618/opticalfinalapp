@@ -76,7 +76,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
     int position;
     Activity activity;
     int offset = 0;
-    private String For;
+    String For;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -219,7 +219,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         return root;
     }
 
-    private void SetData() {
+    void SetData() {
 
         name = address1.getName();
         mobile = address1.getMobile();
@@ -259,7 +259,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         btnsubmit.setVisibility(View.VISIBLE);
     }
 
-    private void AddUpdateAddress() {
+    void AddUpdateAddress() {
 
 
         String isDefault = chIsDefault.isChecked() ? "1" : "0";
@@ -388,7 +388,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         }
     }
 
-    private void SetSpinnerData() {
+    void SetSpinnerData() {
         try {
             Map<String, String> params = new HashMap<String, String>();
             cityArrayList.clear();
@@ -442,7 +442,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         }
     }
 
-    private void SetAreaSpinnerData() {
+    void SetAreaSpinnerData() {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.CITY_ID, cityId);
         areaList.clear();

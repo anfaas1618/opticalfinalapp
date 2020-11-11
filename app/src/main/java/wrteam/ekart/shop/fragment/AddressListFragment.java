@@ -93,30 +93,17 @@ public class AddressListFragment extends Fragment {
         }
 
         if (getArguments().getString("from").equalsIgnoreCase("process")) {
-            tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(getArguments().getDouble("subtotal")));
+            tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(getArguments().getDouble("total")));
 
             tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View view) {
                     if (!selectedAddress.isEmpty()) {
-                        Fragment fragment = new PaymentFragment();
+                        Fragment fragment = new CheckoutFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putDouble("subtotal", getArguments().getDouble("subtotal"));
-                        bundle.putDouble("total", getArguments().getDouble("total"));
-                        bundle.putDouble("taxAmt", getArguments().getDouble("taxAmt"));
-                        bundle.putDouble("tax", getArguments().getDouble("tax"));
-                        bundle.putDouble("pCodeDiscount", getArguments().getDouble("pCodeDiscount"));
-                        bundle.putString("pCode", getArguments().getString("pCode"));
-                        bundle.putDouble("dCharge", getArguments().getDouble("dCharge"));
+                        bundle.putDouble("dCharge", Constant.SETTING_DELIVERY_CHARGE);
                         bundle.putString("address", selectedAddress);
-                        bundle.putStringArrayList("variantIdList", getArguments().getStringArrayList("variantIdList"));
-                        bundle.putStringArrayList("qtyList", getArguments().getStringArrayList("qtyList"));
-
-                        PaymentFragment.paymentMethod = "";
-                        PaymentFragment.deliveryTime = "";
-                        PaymentFragment.deliveryDay = "";
-
                         fragment.setArguments(bundle);
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                     } else {
@@ -124,14 +111,11 @@ public class AddressListFragment extends Fragment {
                     }
                 }
             });
-
-
             processLyt.setVisibility(View.VISIBLE);
             confirmLyt.setVisibility(View.VISIBLE);
 
         } else {
 
-            //  swipeLayout.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.dimen_50dp));
             processLyt.setVisibility(View.GONE);
             confirmLyt.setVisibility(View.GONE);
         }
@@ -201,11 +185,14 @@ public class AddressListFragment extends Fragment {
                                 if (jsonObject1 != null) {
                                     Address address = g.fromJson(jsonObject1.toString(), Address.class);
                                     if (address.getIs_default().equals("1")) {
+                                        session.setData(Constant.LONGITUDE, address.getLongitude());
+                                        session.setData(Constant.LATITUDE, address.getLatitude());
                                         Constant.selectedAddressId = address.getId();
+                                        if (Constant.SETTING_AREA_WISE_DELIVERY_CHARGE == 1) {
+                                            Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(address.getMinimum_free_delivery_order_amount());
+                                            Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(address.getDelivery_charges());
+                                        }
                                     }
-                                   /* if(jsonObject1.getString("is_default").equals("1")){
-                                        Constant.selectedAddressId=jsonObject1.getString("id");
-                                    }*/
                                     addresses.add(address);
                                 } else {
                                     break;

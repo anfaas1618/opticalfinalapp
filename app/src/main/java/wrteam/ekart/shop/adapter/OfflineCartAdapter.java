@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -81,7 +81,14 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             double price = Double.parseDouble(cart.getItem().get(0).getDiscounted_price());
 
-            holder.imgproduct.setImageUrl(cart.getItem().get(0).getImage(), Constant.imageLoader);
+            Picasso.get()
+                    .load(cart.getItem().get(0).getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgproduct);
+
             holder.txtproductname.setText(cart.getItem().get(0).getName());
             holder.txtmeasurement.setText(cart.getItem().get(0).getMeasurement() + "\u0020" + cart.getItem().get(0).getUnit());
             holder.txtprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(cart.getItem().get(0).getDiscounted_price())));
@@ -99,7 +106,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.txttotalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id()))));
 
             Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + (price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id())));
-            CartFragment.SetOfflineData(Constant.FLOAT_TOTAL_AMOUNT);
+            CartFragment.SetData();
 
             final double finalPrice = price;
             holder.btnaddqty.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +122,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 holder.txttotalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(finalPrice * count));
                                 Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + finalPrice;
                                 databaseHelper.AddOrderData(cart.getId(), cart.getProduct_id(), "" + count);
-                                CartFragment.SetOfflineData(Constant.FLOAT_TOTAL_AMOUNT);
+                                CartFragment.SetData();
                             } else {
                                 Toast.makeText(activity, activity.getString(R.string.limit_alert), Toast.LENGTH_SHORT).show();
                             }
@@ -138,7 +145,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             holder.txttotalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(finalPrice * count));
                             Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT - finalPrice;
                             databaseHelper.AddOrderData(cart.getId(), cart.getProduct_id(), "" + count);
-                            CartFragment.SetOfflineData(Constant.FLOAT_TOTAL_AMOUNT);
+                            CartFragment.SetData();
                         }
                     }
                 }
@@ -162,7 +169,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 notifyItemRemoved(position);
                                 databaseHelper.DeleteOrderData(cart.getId(), cart.getProduct_id());
                                 Constant.FLOAT_TOTAL_AMOUNT = Double.parseDouble(Constant.formater.format(Constant.FLOAT_TOTAL_AMOUNT - (finalPrice * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id())))));
-                                CartFragment.SetOfflineData(Constant.FLOAT_TOTAL_AMOUNT);
+                                CartFragment.SetData();
 
                                 items.remove(cart);
                                 Constant.FLOAT_TOTAL_AMOUNT = 0.00;
@@ -171,7 +178,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 activity.invalidateOptionsMenu();
                                 if (getItemCount() == 0) {
                                     CartFragment.lytempty.setVisibility(View.VISIBLE);
-                                    CartFragment.lyttotal.setVisibility(View.GONE);
+                                    CartFragment.lytTotal.setVisibility(View.GONE);
                                 }
                             }
                         });
@@ -224,8 +231,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public static class ProductHolderItems extends RecyclerView.ViewHolder {
-        NetworkImageView imgproduct;
-        ImageView imgdelete, btnminusqty, btnaddqty;
+        ImageView imgproduct, imgdelete, btnminusqty, btnaddqty;
         TextView txtproductname, txtmeasurement, txtprice, txtoriginalprice, txtQuantity, txttotalprice;
 
         public ProductHolderItems(@NonNull View itemView) {

@@ -81,7 +81,7 @@ public class CategoryFragment extends Fragment {
         return root;
     }
 
-    private void GetCategory() {
+    void GetCategory() {
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<String, String>();
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -107,7 +107,7 @@ public class CategoryFragment extends Fragment {
                                 category.setStatus(jsonObject.getString(Constant.STATUS));
                                 categoryArrayList.add(category);
                             }
-                            categoryrecycleview.setAdapter(new CategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_category));
+                            categoryrecycleview.setAdapter(new CategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory,"category"));
                             progressBar.setVisibility(View.GONE);
                         } else {
                             txtnodata.setVisibility(View.VISIBLE);

@@ -23,8 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +50,6 @@ public class TrackerDetailFragment extends Fragment {
     OrderTracker order;
     TextView txtorderotp, tvItemTotal, tvTaxPercent, tvTaxAmt, tvDeliveryCharge, tvTotal, tvPromoCode, tvPCAmount, tvWallet, tvFinalTotal, tvDPercent, tvDAmount;
     TextView txtcanceldetail, txtotherdetails, txtorderid, txtorderdate;
-    NetworkImageView imgorder;
     RecyclerView recyclerView;
     View l4;
     RelativeLayout relativeLyt;
@@ -88,7 +85,6 @@ public class TrackerDetailFragment extends Fragment {
         txtorderid = root.findViewById(R.id.txtorderid);
         txtorderdate = root.findViewById(R.id.txtorderdate);
         relativeLyt = root.findViewById(R.id.relativeLyt);
-        imgorder = root.findViewById(R.id.imgorder);
         txtotherdetails = root.findViewById(R.id.txtotherdetails);
         txtcanceldetail = root.findViewById(R.id.txtcanceldetail);
         lyttracker = root.findViewById(R.id.lyttracker);

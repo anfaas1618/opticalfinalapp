@@ -106,7 +106,7 @@ public class TrackOrderFragment extends Fragment {
         return root;
     }
 
-    private void GetOrderDetails() {
+    void GetOrderDetails() {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GETORDERS, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Session.KEY_ID));
@@ -256,7 +256,7 @@ public class TrackOrderFragment extends Fragment {
         }, activity, Constant.ORDERPROCESS_URL, params, true);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    void setupViewPager(ViewPager viewPager) {
         adapter = new TrackOrderFragment.ViewPagerAdapter(getFragmentManager());
         adapter.addFrag(new OrderListFragment(), tabs[0]);
         adapter.addFrag(new OrderListFragment(), tabs[1]);
@@ -294,8 +294,8 @@ public class TrackOrderFragment extends Fragment {
     }
 
     public static class ViewPagerAdapter extends FragmentStatePagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        final List<Fragment> mFragmentList = new ArrayList<>();
+        final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

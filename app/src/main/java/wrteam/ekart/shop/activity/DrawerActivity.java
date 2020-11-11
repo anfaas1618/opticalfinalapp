@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.AddressListFragment;
@@ -30,12 +32,12 @@ import wrteam.ekart.shop.fragment.WebViewFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
-import wrteam.ekart.shop.ui.CircleImageView;
+import wrteam.ekart.shop.ui.CircleTransform;
 
 public class DrawerActivity extends AppCompatActivity {
     public static TextView tvName, tvWallet;
     public static DrawerLayout drawer_layout;
-    public static CircleImageView imgProfile;
+    public static ImageView imgProfile;
     public static NavigationView navigationView;
     public ActionBarDrawerToggle drawerToggle;
     public TextView tvMobile;
@@ -61,18 +63,32 @@ public class DrawerActivity extends AppCompatActivity {
         imgProfile = header.findViewById(R.id.imgProfile);
         session = new Session(DrawerActivity.this);
 
-        imgProfile.setDefaultImageResId(R.drawable.logo_login);
-
         if (session.isUserLoggedIn()) {
             tvName.setText(session.getData(Session.KEY_NAME));
             tvMobile.setText(session.getData(Session.KEY_MOBILE));
             tvWallet.setVisibility(View.VISIBLE);
-            imgProfile.setImageUrl(session.getData(Constant.PROFILE), Constant.imageLoader);
+
+            Picasso.get()
+                    .load(session.getData(Constant.PROFILE))
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .transform(new CircleTransform())
+                    .into(imgProfile);
             ApiConfig.getWalletBalance(DrawerActivity.this, session);
         } else {
             tvWallet.setVisibility(View.GONE);
             tvName.setText(getResources().getString(R.string.is_login));
             tvMobile.setText(getResources().getString(R.string.is_mobile));
+            Picasso.get()
+                    .load("-")
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.logo_login)
+                    .error(R.drawable.logo_login)
+                    .transform(new CircleTransform())
+                    .into(imgProfile);
         }
 
         lytProfile.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +105,7 @@ public class DrawerActivity extends AppCompatActivity {
 
     }
 
-    private void setupNavigationDrawer() {
+    void setupNavigationDrawer() {
         Menu nav_Menu = navigationView.getMenu();
         if (session.isUserLoggedIn()) {
             nav_Menu.findItem(R.id.menu_logout).setVisible(true);

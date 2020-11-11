@@ -2,7 +2,7 @@ package wrteam.ekart.shop.model;
 
 public class Transaction {
 
-    private String id, user_id, order_id, type, txn_id, payu_txn_id, amount, status, message, transaction_date, date_created;
+    String id, user_id, order_id, type, txn_id, payu_txn_id, amount, status, message, transaction_date, date_created;
 
     public Transaction() {
     }

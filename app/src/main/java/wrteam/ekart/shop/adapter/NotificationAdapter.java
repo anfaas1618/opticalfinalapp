@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,12 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
-import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Notification;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -73,6 +73,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (!notification.getImage().isEmpty()) {
                 holder.image.setVisibility(View.VISIBLE);
+                Picasso.get()
+                        .load(notification.getImage())
+                        .fit()
+                        .centerInside()
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)
+                        .into(holder.image);
             } else {
                 holder.image.setVisibility(View.GONE);
             }
@@ -89,7 +96,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder.tvMessage.setVisibility(View.GONE);
             }
 
-            holder.image.setImageUrl(notification.getImage(), Constant.imageLoader);
             holder.tvTitle.setText(Html.fromHtml(notification.getName()));
             holder.tvMessage.setText(Html.fromHtml(notification.getSubtitle()));
 
@@ -129,7 +135,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class NotificationItemHolder extends RecyclerView.ViewHolder {
 
-        NetworkImageView image;
+        ImageView image;
         TextView tvTitle, tvMessage;
 
 

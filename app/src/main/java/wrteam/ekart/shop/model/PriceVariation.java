@@ -3,23 +3,23 @@ package wrteam.ekart.shop.model;
 import java.io.Serializable;
 
 public class PriceVariation implements Serializable {
-    private final String id;
-    private final String product_id;
-    private final String type;
-    private final String measurement;
-    private final String measurement_unit_id;
-    private final String price;
-    private final String discounted_price;
-    private final String serve_for;
-    private final String stock;
-    private final String stock_unit_id;
-    private final String measurement_unit_name;
-    private final String stock_unit_name;
-    private final String discountpercent;
-    private String cart_count;
-    private String productPrice;
-    private int qty;
-    private double totalprice;
+    final String id;
+    final String product_id;
+    final String type;
+    final String measurement;
+    final String measurement_unit_id;
+    final String price;
+    final String discounted_price;
+    final String serve_for;
+    final String stock;
+    final String stock_unit_id;
+    final String measurement_unit_name;
+    final String stock_unit_name;
+    final String discountpercent;
+    String cart_count;
+    String productPrice;
+    int qty;
+    double totalprice;
 
     public PriceVariation(String cart_count, String id, String product_id, String type, String measurement, String measurement_unit_id, String productPrice, String price, String discounted_price, String serve_for, String stock, String stock_unit_id, String measurement_unit_name, String stock_unit_name, String discountpercent) {
         this.cart_count = cart_count;

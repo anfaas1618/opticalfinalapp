@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -59,7 +60,15 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
     public void onBindViewHolder(VideoHolder holder, final int position) {
         final Product product = productList.get(position);
         final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
-        holder.thumbnail.setImageUrl(product.getImage(), netImageLoader);
+
+        Picasso.get()
+                .load(product.getImage())
+                .fit()
+                .centerInside()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .into(holder.thumbnail);
+
         holder.v_title.setText(product.getName());
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +108,7 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
 
     public class VideoHolder extends RecyclerView.ViewHolder {
 
-        public NetworkImageView thumbnail;
+        public ImageView thumbnail;
         public TextView v_title, v_date, description;
         public RelativeLayout relativeLayout;
 

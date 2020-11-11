@@ -48,8 +48,8 @@ public class FaqFragment extends Fragment {
     int total = 0;
     Activity activity;
     int offset = 0;
-    private Session session;
-    private boolean isLoadMore = false;
+    Session session;
+    boolean isLoadMore = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class FaqFragment extends Fragment {
     }
 
 
-    private void getFaqData() {
+    void getFaqData() {
         Faqs = new ArrayList<>();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);

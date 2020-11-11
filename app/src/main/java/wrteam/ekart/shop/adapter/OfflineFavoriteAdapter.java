@@ -28,7 +28,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -48,8 +48,8 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
-    private final Context context;
-    private final Activity activity;
+    final Context context;
+    final Activity activity;
     // The minimum amount of items to have below your current scroll position
     // before loading more.
     public boolean isLoading;
@@ -110,10 +110,14 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     holder.imgIndicator.setImageResource(R.drawable.ic_non_veg_icon);
             }
             holder.productName.setText(Html.fromHtml(product.getName()));
-            holder.imgThumb.setDefaultImageResId(R.drawable.placeholder);
-            holder.imgThumb.setErrorImageResId(R.drawable.placeholder);
 
-            holder.imgThumb.setImageUrl(product.getImage(), Constant.imageLoader);
+            Picasso.get()
+                    .load(product.getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgThumb);
 
             CustomAdapter customAdapter = new CustomAdapter(context, priceVariations, holder, product);
             holder.spinner.setAdapter(customAdapter);
@@ -275,7 +279,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     }
 
-    private class ViewHolderLoading extends RecyclerView.ViewHolder {
+    class ViewHolderLoading extends RecyclerView.ViewHolder {
         public ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
@@ -287,7 +291,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public ImageButton imgAdd, imgMinus;
         TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
-        NetworkImageView imgThumb;
+        ImageView imgThumb;
         ImageView imgFav, imgIndicator;
         RelativeLayout lytmain;
         AppCompatSpinner spinner;

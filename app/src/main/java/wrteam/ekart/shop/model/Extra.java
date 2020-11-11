@@ -2,8 +2,8 @@ package wrteam.ekart.shop.model;
 
 public class Extra {
 
-    private String measurement, percent;
-    private int quantity, price, discountedPrice, productPrice;
+    String measurement, percent;
+    int quantity, price, discountedPrice, productPrice;
 
 
     public int getPrice() {

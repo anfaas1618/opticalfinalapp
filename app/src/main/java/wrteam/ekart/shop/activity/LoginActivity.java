@@ -56,11 +56,11 @@ import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.GPSTracker;
-import wrteam.ekart.shop.helper.PinView;
 import wrteam.ekart.shop.helper.ProgressDisplay;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.Utils;
 import wrteam.ekart.shop.helper.VolleyCallback;
+import wrteam.ekart.shop.ui.PinView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -258,7 +258,7 @@ public class LoginActivity extends AppCompatActivity {
                 mCallback);
     }
 
-    private void StartFirebaseLogin() {
+    void StartFirebaseLogin() {
         auth = FirebaseAuth.getInstance();
         mCallback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -516,7 +516,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential, final String otptext) {
+    void signInWithPhoneAuthCredential(PhoneAuthCredential credential, final String otptext) {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -669,9 +669,6 @@ public class LoginActivity extends AppCompatActivity {
                     objectbject.getString(Constant.MOBILE),
                     password,
                     objectbject.getString(Constant.REFERRAL_CODE));
-
-
-            DrawerActivity.imgProfile.setImageUrl(session.getData(Constant.PROFILE), Constant.imageLoader);
 
             ApiConfig.AddMultipleProductInCart(session, activity, databaseHelper.getDataCartList());
             ApiConfig.getCartItemCount(activity, session);

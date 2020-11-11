@@ -11,7 +11,7 @@ import java.nio.charset.Charset;
 @SuppressWarnings("deprecation")
 public class AndroidMultiPartEntity extends MultipartEntity {
 
-    private final ProgressListener listener;
+    final ProgressListener listener;
 
     public AndroidMultiPartEntity(final ProgressListener listener) {
         super();
@@ -41,8 +41,8 @@ public class AndroidMultiPartEntity extends MultipartEntity {
 
     public static class CountingOutputStream extends FilterOutputStream {
 
-        private final ProgressListener listener;
-        private long transferred;
+        final ProgressListener listener;
+        long transferred;
 
         public CountingOutputStream(final OutputStream out,
                                     final ProgressListener listener) {

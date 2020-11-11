@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Favorite extends Product implements Serializable {
 
-    private String id, name, slug, product_id, subcategory_id, image, description, status, date_added, category_id, indicator, manufacturer, made_in, return_status, cancelable_status, till_status;
-    private ArrayList<PriceVariation> priceVariations;
-    private JSONArray other_images;
-    private boolean is_favorite;
+    String id, name, slug, product_id, subcategory_id, image, description, status, date_added, category_id, indicator, manufacturer, made_in, return_status, cancelable_status, till_status;
+    ArrayList<PriceVariation> priceVariations;
+    JSONArray other_images;
+    boolean is_favorite;
 
     public Favorite() {
     }

@@ -6,12 +6,13 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,8 +20,7 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.FullScreenViewFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
-import wrteam.ekart.shop.fragment.SubCategoryFragment;
-import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.fragment.ProductListFragment;
 import wrteam.ekart.shop.model.Slider;
 
 public class SliderAdapter extends PagerAdapter {
@@ -42,12 +42,19 @@ public class SliderAdapter extends PagerAdapter {
         View imageLayout = LayoutInflater.from(activity).inflate(layout, view, false);
 
         assert imageLayout != null;
-        NetworkImageView imgslider = imageLayout.findViewById(R.id.imgslider);
+        ImageView imgslider = imageLayout.findViewById(R.id.imgslider);
         CardView lytmain = imageLayout.findViewById(R.id.lytmain);
 
         final Slider singleItem = dataList.get(position);
 
-        imgslider.setImageUrl(singleItem.getImage(), Constant.imageLoader);
+
+        Picasso.get()
+                .load(singleItem.getImage())
+                .fit()
+                .centerInside()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .into(imgslider);
         view.addView(imageLayout, 0);
 
         lytmain.setOnClickListener(new View.OnClickListener() {
@@ -66,10 +73,11 @@ public class SliderAdapter extends PagerAdapter {
 
                     if (singleItem.getType().equals("category")) {
 
-                        Fragment fragment = new SubCategoryFragment();
+                        Fragment fragment = new ProductListFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("id", singleItem.getType_id());
                         bundle.putString("name", singleItem.getName());
+                        bundle.putString("from", "category");
                         fragment.setArguments(bundle);
 
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();

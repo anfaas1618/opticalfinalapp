@@ -16,18 +16,8 @@
         android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/tvDelivery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10dp"
-            android:drawablePadding="@dimen/margin_10dp"
-            android:text="@string/delivery"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/gray"
-            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
 
         <TextView
             android:id="@+id/tvAddress"
@@ -41,17 +31,26 @@
             app:drawableStartCompat="@drawable/ic_next_process_gray" />
 
         <TextView
+            android:id="@+id/tvSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="@string/checkout"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+
+        <TextView
             android:id="@+id/tvPayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_10dp"
             android:drawablePadding="@dimen/margin_10dp"
             android:text="@string/payment"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/txt_color"
             app:drawableStartCompat="@drawable/ic_next_process" />
     </LinearLayout>
-
 
     <ScrollView
         android:id="@+id/scrollPaymentLyt"
@@ -85,7 +84,6 @@
                     app:srcCompat="@drawable/ic_wallet" />
 
                 <LinearLayout
-                    android:id="@+id/balanceLyt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -94,7 +92,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/balanceTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/wallet_balance"
@@ -132,7 +129,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/lytDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -450,6 +446,100 @@
                             android:layout_weight="1"
                             android:padding="@dimen/margin_10dp"
                             android:tag="@string/paypal"
+                            android:textSize="@dimen/mid_text" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lytMidTrans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/bg_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/margin_5dp"
+                        android:weightSum="10">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            android:src="@drawable/ic_midtrans" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="7"
+                            android:text="@string/midtrans"
+                            android:textColor="@color/txt_color"
+                            android:textSize="@dimen/mid_text" />
+
+                        <RadioButton
+                            android:id="@+id/rbMidTrans"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/margin_10dp"
+                            android:tag="@string/midtrans"
+                            android:textSize="@dimen/mid_text" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lytStripe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/bg_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/margin_5dp"
+                        android:weightSum="10">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            android:src="@drawable/ic_stripe" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="7"
+                            android:text="@string/stripe"
+                            android:textColor="@color/txt_color"
+                            android:textSize="@dimen/mid_text" />
+
+                        <RadioButton
+                            android:id="@+id/rbStripe"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/margin_10dp"
+                            android:tag="@string/stripe"
                             android:textSize="@dimen/mid_text" />
                     </LinearLayout>
 

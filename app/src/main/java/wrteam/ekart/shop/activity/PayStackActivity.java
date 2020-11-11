@@ -44,13 +44,13 @@ public class PayStackActivity extends AppCompatActivity {
     double payableAmount = 0;
     String from;
     //variables
-    private Card card;
-    private Charge charge;
-    private EditText emailField;
-    private CreditCardEditText cardNumberField;
-    private EditText expiryMonthField;
-    private EditText expiryYearField;
-    private EditText cvvField;
+    Card card;
+    Charge charge;
+    EditText emailField;
+    CreditCardEditText cardNumberField;
+    EditText expiryMonthField;
+    EditText expiryYearField;
+    EditText cvvField;
 
     public static void setPaystackKey(String publicKey) {
         PaystackSdk.setPublicKey(publicKey);
@@ -91,7 +91,7 @@ public class PayStackActivity extends AppCompatActivity {
     /**
      * Method to perform the charging of the card
      */
-    private void performCharge() {
+    void performCharge() {
         //create a Charge object
         String[] amount = String.valueOf(payableAmount * 100).split("\\.");
         charge = new Charge();
@@ -128,7 +128,7 @@ public class PayStackActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validateForm() {
+    boolean validateForm() {
         boolean valid = true;
 
         String email = emailField.getText().toString();
@@ -216,12 +216,9 @@ public class PayStackActivity extends AppCompatActivity {
             public void onSuccess(boolean result, String response) {
                 if (result) {
                     try {
-
                         JSONObject jsonObject = new JSONObject(response);
                         String status = jsonObject.getString(Constant.STATUS);
-
-                        paymentModelClass.PlaceOrder(activity, getString(R.string.paypal), reference, status.equalsIgnoreCase("success"), (Map<String, String>) getIntent().getSerializableExtra("params"), status);
-
+                        paymentModelClass.PlaceOrder(activity, getString(R.string.paystack), reference, status.equalsIgnoreCase("success"), (Map<String, String>) getIntent().getSerializableExtra("params"), status);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

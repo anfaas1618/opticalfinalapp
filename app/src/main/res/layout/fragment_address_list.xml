@@ -15,18 +15,8 @@
         android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/tvDelivery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10dp"
-            android:drawablePadding="@dimen/margin_10dp"
-            android:text="@string/delivery"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/gray"
-            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
 
         <TextView
             android:id="@+id/tvAddress"
@@ -40,10 +30,21 @@
             app:drawableStartCompat="@drawable/ic_next_process" />
 
         <TextView
+            android:id="@+id/tvSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="@string/checkout"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+
+
+        <TextView
             android:id="@+id/tvPayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_10dp"
             android:drawablePadding="@dimen/margin_10dp"
             android:text="@string/payment"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"

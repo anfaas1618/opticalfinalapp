@@ -53,8 +53,8 @@ public class TransactionFragment extends Fragment {
     Activity activity;
     TextView tvAlertTitle, tvAlertSubTitle;
     int offset = 0;
-    private Session session;
-    private boolean isLoadMore = false;
+    Session session;
+    boolean isLoadMore = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class TransactionFragment extends Fragment {
     }
 
 
-    private void getTransactionData() {
+    void getTransactionData() {
         transactions = new ArrayList<>();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);

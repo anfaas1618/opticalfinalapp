@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -54,17 +55,35 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
 
         if (productList.size() > 0) {
             holder.tvStyle2_1.setText(productList.get(0).getName());
-            holder.imgStyle2_1.setImageUrl(productList.get(0).getImage(), imageLoader);
+            Picasso.get()
+                    .load(productList.get(0).getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgStyle2_1);
         }
         if (productList.size() > 1) {
             holder.tvStyle2_2.setText(productList.get(1).getName());
-            holder.imgStyle2_2.setImageUrl(productList.get(1).getImage(), imageLoader);
+            Picasso.get()
+                    .load(productList.get(1).getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgStyle2_2);
         }
 
 
         if (productList.size() > 2) {
             holder.tvStyle2_3.setText(productList.get(2).getName());
-            holder.imgStyle2_3.setImageUrl(productList.get(2).getImage(), imageLoader);
+            Picasso.get()
+                    .load(productList.get(2).getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgStyle2_3);
         }
         holder.layoutStyle2_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +148,7 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
 
     public class VideoHolder extends RecyclerView.ViewHolder {
 
-        public NetworkImageView imgStyle2_1, imgStyle2_2, imgStyle2_3;
+        public ImageView imgStyle2_1, imgStyle2_2, imgStyle2_3;
         public TextView tvStyle2_1, tvStyle2_2, tvStyle2_3, tvSubStyle2_1, tvSubStyle2_2, tvSubStyle2_3;
         public RelativeLayout layoutStyle2_1, layoutStyle2_2, layoutStyle2_3;
 

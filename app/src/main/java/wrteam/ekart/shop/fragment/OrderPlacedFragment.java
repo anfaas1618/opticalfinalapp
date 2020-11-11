@@ -102,7 +102,7 @@ public class OrderPlacedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Constant.TOOLBAR_TITLE = getString(R.string.order_placed);
+        MainActivity.toolbar.setVisibility(View.GONE);
         activity.invalidateOptionsMenu();
         hideKeyboard();
     }

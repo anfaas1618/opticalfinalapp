@@ -56,8 +56,8 @@ public class FavoriteFragment extends Fragment {
     boolean isLogin;
     DatabaseHelper databaseHelper;
     int offset = 0;
-    private SwipeRefreshLayout swipeLayout;
-    private boolean isLoadMore = false;
+    SwipeRefreshLayout swipeLayout;
+    boolean isLoadMore = false;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class FavoriteFragment extends Fragment {
         return root;
     }
 
-    private void GetData() {
+    void GetData() {
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_FAVORITES, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -210,7 +210,7 @@ public class FavoriteFragment extends Fragment {
     }
 
 
-    private void GetOfflineData() {
+    void GetOfflineData() {
 
         if (databaseHelper.getFavourite().size() >= 1) {
             Map<String, String> params = new HashMap<>();

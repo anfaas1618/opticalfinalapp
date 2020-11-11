@@ -436,7 +436,7 @@
                         android:text="@string/please_type_verification_code_sent_to"
                         android:textColor="@color/txt_color" />
 
-                    <wrteam.ekart.shop.helper.PinView
+                    <wrteam.ekart.shop.ui.PinView
                         android:id="@+id/edtotp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

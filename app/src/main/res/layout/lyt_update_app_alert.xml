@@ -28,7 +28,7 @@
             android:layout_alignParentEnd="true"
             android:padding="5dp"
             android:visibility="invisible"
-            app:srcCompat="@drawable/ic_close" />
+            app:srcCompat="@drawable/ic_cross" />
     </RelativeLayout>
 
     <LinearLayout

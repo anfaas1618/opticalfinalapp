@@ -59,9 +59,7 @@
     </group>
 
 
-    <group
-        android:id="@+id/group3"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_contact"
             android:icon="@drawable/ic_contact1"
@@ -82,9 +80,7 @@
     </group>
 
 
-    <group
-        android:id="@+id/group4"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_faq"
             android:icon="@drawable/ic_faq"

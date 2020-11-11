@@ -19,11 +19,11 @@ import wrteam.ekart.shop.R;
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
-    private static AppController mInstance;
+    static AppController mInstance;
     AppEnvironment appEnvironment;
-    private RequestQueue mRequestQueue;
-    private SharedPreferences sharedPref;
-    private com.android.volley.toolbox.ImageLoader mImageLoader;
+    RequestQueue mRequestQueue;
+    SharedPreferences sharedPref;
+    com.android.volley.toolbox.ImageLoader mImageLoader;
 
     public static synchronized AppController getInstance() {
         return mInstance;

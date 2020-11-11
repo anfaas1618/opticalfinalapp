@@ -78,7 +78,7 @@ public class CheckoutFragment extends Fragment {
         lytTax = root.findViewById(R.id.lytTax);
         tvTaxAmt = root.findViewById(R.id.tvTaxAmt);
         tvTaxPercent = root.findViewById(R.id.tvTaxPercent);
-        tvDelivery = root.findViewById(R.id.tvDelivery);
+        tvDelivery = root.findViewById(R.id.tvSummary);
         tvPayment = root.findViewById(R.id.tvPayment);
         tvPCAmount = root.findViewById(R.id.tvPCAmount);
         tvPromoCode = root.findViewById(R.id.tvPromoCode);
@@ -106,7 +106,7 @@ public class CheckoutFragment extends Fragment {
         tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new AddressListFragment();
+                Fragment fragment = new PaymentFragment();
                 Bundle bundle = new Bundle();
                 bundle.putDouble("subtotal", Double.parseDouble(Constant.formater.format(subtotal)));
                 bundle.putDouble("total", Double.parseDouble(Constant.formater.format(total)));
@@ -114,11 +114,13 @@ public class CheckoutFragment extends Fragment {
                 bundle.putDouble("tax", Double.parseDouble(Constant.formater.format(((taxAmt * 100) / total))));
                 bundle.putDouble("pCodeDiscount", Double.parseDouble(Constant.formater.format(pCodeDiscount)));
                 bundle.putString("pCode", pCode);
-                bundle.putDouble("dCharge", dCharge);
-                AddressListFragment.selectedAddress = "";
+                bundle.putDouble("dCharge", Constant.SETTING_DELIVERY_CHARGE);
                 bundle.putStringArrayList("variantIdList", variantIdList);
                 bundle.putStringArrayList("qtyList", qtyList);
                 bundle.putString("from", "process");
+                PaymentFragment.paymentMethod = "";
+                PaymentFragment.deliveryTime = "";
+                PaymentFragment.deliveryDay = "";
                 fragment.setArguments(bundle);
                 MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
@@ -152,7 +154,7 @@ public class CheckoutFragment extends Fragment {
     }
 
 
-    private void getCartData() {
+    void getCartData() {
 
         ApiConfig.getCartItemCount(activity, session);
 

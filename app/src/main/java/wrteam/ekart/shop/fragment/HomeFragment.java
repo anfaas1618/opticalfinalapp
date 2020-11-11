@@ -1,6 +1,7 @@
 package wrteam.ekart.shop.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -9,13 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -50,7 +49,6 @@ import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Category;
 import wrteam.ekart.shop.model.Slider;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
 import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
 
 
@@ -58,25 +56,25 @@ public class HomeFragment extends Fragment {
 
     public static Session session;
     public static ArrayList<Category> categoryArrayList, sectionList;
+    ArrayList<Slider> sliderArrayList;
+    private ArrayList<String> offerList;
     Activity activity;
     NestedScrollView nestedScrollView;
-    RelativeLayout progressBar;
     SwipeRefreshLayout swipeLayout;
     View root;
     int timerDelay = 0, timerWaiting = 0;
     SearchView searchview;
-    private RecyclerView categoryRecyclerView, sectionView, offerView;
-    private ArrayList<Slider> sliderArrayList;
-    private ViewPager mPager;
-    private LinearLayout mMarkersLayout;
-    private int size;
-    private Timer swipeTimer;
-    private Handler handler;
-    private Runnable Update;
-    private int currentPage = 0;
-    private LinearLayout lytCategory, lytSearchview;
-    private Menu menu;
-    private boolean searchVisible = false;
+    RecyclerView categoryRecyclerView, sectionView, offerView;
+    ViewPager mPager;
+    LinearLayout mMarkersLayout;
+    int size;
+    Timer swipeTimer;
+    Handler handler;
+    Runnable Update;
+    int currentPage = 0;
+    LinearLayout lytCategory, lytSearchview;
+    Menu menu;
+    boolean searchVisible = false;
 
     public static void UpdateToken(final String token, Activity activity) {
         Map<String, String> params = new HashMap<>();
@@ -114,12 +112,11 @@ public class HomeFragment extends Fragment {
         GetTimeSlotConfig(session, activity);
         setHasOptionsMenu(true);
 
-        progressBar = root.findViewById(R.id.progressBar);
         swipeLayout = root.findViewById(R.id.swipeLayout);
 
         categoryRecyclerView = root.findViewById(R.id.categoryrecycleview);
-        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-//        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext (), LinearLayoutManager.HORIZONTAL, false));
+//        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         sectionView = root.findViewById(R.id.sectionView);
         sectionView.setLayoutManager(new LinearLayoutManager(getContext()));
         sectionView.setNestedScrollingEnabled(false);
@@ -186,6 +183,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        categoryArrayList = new ArrayList<>();
+
         swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -195,10 +194,7 @@ public class HomeFragment extends Fragment {
                     swipeTimer.cancel();
                 }
                 if (AppController.isConnected(getActivity())) {
-                    GetSlider();
-                    GetCategory();
-                    SectionProductRequest();
-                    GetOfferImage();
+                    GetHomeData();
                 }
                 swipeLayout.setRefreshing(false);
             }
@@ -216,128 +212,103 @@ public class HomeFragment extends Fragment {
         });
 
         if (AppController.isConnected(getActivity())) {
-            ApiConfig.GetSettings(getActivity());
-            GetSlider();
-            GetCategory();
-            SectionProductRequest();
-            GetOfferImage();
+            GetHomeData();
         }
 
         return root;
     }
 
-    public void GetOfferImage() {
-        progressBar.setVisibility(View.VISIBLE);
+
+    public void GetHomeData() {
         Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.GET_OFFER_IMAGE, Constant.GetVal);
+        if (session.isUserLoggedIn()) {
+            params.put(Constant.USER_ID, session.getData(Constant.ID));
+        }
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
                 if (result) {
                     try {
-                        ArrayList<String> offerList = new ArrayList<>();
-                        JSONObject objectbject = new JSONObject(response);
-                        if (!objectbject.getBoolean(Constant.ERROR)) {
-                            JSONArray jsonArray = objectbject.getJSONArray(Constant.DATA);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject object = jsonArray.getJSONObject(i);
-                                offerList.add(object.getString(Constant.IMAGE));
-                            }
-                            offerView.setAdapter(new OfferAdapter(offerList, R.layout.offer_lyt));
-
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        progressBar.setVisibility(View.GONE);
-                    }
-                }
-            }
-        }, getActivity(), Constant.OFFER_URL, params, false);
-    }
-
-    private void GetCategory() {
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<String, String>();
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-//                System.out.println ("======cate " + response);
-                if (result) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        categoryArrayList = new ArrayList<>();
-                        categoryArrayList.clear();
-                        if (!object.getBoolean(Constant.ERROR)) {
-                            JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            Gson gson = new Gson();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Category category = gson.fromJson(jsonObject.toString(), Category.class);
-                                categoryArrayList.add(category);
-                            }
-                            categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category));
-
-                            progressBar.setVisibility(View.GONE);
-                        } else {
-                            lytCategory.setVisibility(View.GONE);
-                        }
-                        progressBar.setVisibility(View.GONE);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, getActivity(), Constant.CategoryUrl, params, false);
-    }
-
-    public void SectionProductRequest() {  //json request for product search
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-        params.put(Constant.GET_ALL_SECTIONS, Constant.GetVal);
-        params.put(Constant.USER_ID, session.getData(Constant.ID));
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject object1 = new JSONObject(response);
-                        if (!object1.getBoolean(Constant.ERROR)) {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (!jsonObject.getBoolean(Constant.ERROR)) {
+                            offerList = new ArrayList<>();
+                            sliderArrayList = new ArrayList<>();
+                            categoryArrayList = new ArrayList<>();
                             sectionList = new ArrayList<>();
-                            JSONArray jsonArray = object1.getJSONArray(Constant.SECTIONS);
-                            for (int j = 0; j < jsonArray.length(); j++) {
-                                Category section = new Category();
-                                JSONObject jsonObject = jsonArray.getJSONObject(j);
-                                section.setName(jsonObject.getString(Constant.TITLE));
-                                section.setStyle(jsonObject.getString(Constant.SECTION_STYLE));
-                                section.setSubtitle(jsonObject.getString(Constant.SHORT_DESC));
-                                JSONArray productArray = jsonObject.getJSONArray(Constant.PRODUCTS);
-                                section.setProductList(ApiConfig.GetProductList(productArray));
-                                sectionList.add(section);
 
-                                progressBar.setVisibility(View.GONE);
-                            }
-                            sectionView.setVisibility(View.VISIBLE);
-                            SectionAdapter sectionAdapter = new SectionAdapter(getContext(), getActivity(), sectionList);
-                            sectionView.setAdapter(sectionAdapter);
+                            offerList.clear();
+                            sliderArrayList.clear();
+                            categoryArrayList.clear();
+                            sectionList.clear();
 
-                            progressBar.setVisibility(View.GONE);
-
+                            GetOfferImage(jsonObject.getJSONArray(Constant.OFFER_IMAGES));
+                            GetCategory(jsonObject.getJSONArray(Constant.CATEGORIES));
+                            SectionProductRequest(jsonObject.getJSONArray(Constant.SECTIONS));
+                            GetSlider(jsonObject.getJSONArray(Constant.SLIDER_IMAGES));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-
-                        progressBar.setVisibility(View.GONE);
                     }
                 }
             }
-        }, getActivity(), Constant.FeaturedProductUrl, params, false);
+        }, getActivity(), Constant.GET_ALL_DATA_URL, params, true);
     }
 
-    private void GetSlider() {
+    public void GetOfferImage(JSONArray jsonArray) {
+        try {
+            if (jsonArray != null && jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    offerList.add(object.getString(Constant.IMAGE));
+                }
+                offerView.setAdapter(new OfferAdapter(offerList, R.layout.offer_lyt));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    void GetCategory(JSONArray jsonArray) {
+        try {
+            if (jsonArray != null && jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Category category = new Gson().fromJson(jsonObject.toString(), Category.class);
+                    categoryArrayList.add(category);
+                }
+                categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category, "home"));
+            } else {
+                lytCategory.setVisibility(View.GONE);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void SectionProductRequest(JSONArray jsonArray) {  //json request for product search
+
+        try {
+            for (int j = 0; j < jsonArray.length(); j++) {
+                Category section = new Category();
+                JSONObject jsonObject = jsonArray.getJSONObject(j);
+                section.setName(jsonObject.getString(Constant.TITLE));
+                section.setStyle(jsonObject.getString(Constant.SECTION_STYLE));
+                section.setSubtitle(jsonObject.getString(Constant.SHORT_DESC));
+                JSONArray productArray = jsonObject.getJSONArray(Constant.PRODUCTS);
+                section.setProductList(ApiConfig.GetProductList(productArray));
+                sectionList.add(section);
+            }
+            sectionView.setVisibility(View.VISIBLE);
+            SectionAdapter sectionAdapter = new SectionAdapter(getContext(), getActivity(), sectionList);
+            sectionView.setAdapter(sectionAdapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void GetSlider(JSONArray jsonArray) {
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_SLIDER_IMAGE, Constant.GetVal);
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -379,12 +350,8 @@ public class HomeFragment extends Fragment {
                             }, timerDelay, timerWaiting);
                         }
 //                        System.out.println("TIMING : : : " + timerDelay + " , " + timerWaiting);
-
-                        progressBar.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
-
-                        progressBar.setVisibility(View.GONE);
                     }
                 }
             }
@@ -402,7 +369,7 @@ public class HomeFragment extends Fragment {
 
     public void hideKeyboard() {
         try {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {

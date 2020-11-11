@@ -87,6 +87,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                 if (from.equalsIgnoreCase("address")) {
                     AddressAddUpdateFragment.latitude = latitude;
                     AddressAddUpdateFragment.longitude = longitude;
+                    session.setData(Constant.LATITUDE, "" + latitude);
+                    session.setData(Constant.LONGITUDE, "" + longitude);
                     AddressAddUpdateFragment.tvCurrent.setText(getAddress(latitude, longitude, activity));
                     AddressAddUpdateFragment.mapFragment.getMapAsync(AddressAddUpdateFragment.mapReadyCallback);
                 }
@@ -201,7 +203,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                 moveMap(false);
             }
         });
-        // text.setText("Latitude - " + latitude + "\nLongitude - " + longitude);
         tvLocation.setText(getString(R.string.location_1) + getAddress(latitude, longitude, activity));
     }
 
@@ -216,6 +217,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                         .setTitle(getString(R.string.location_permission))
                         .setMessage(getString(R.string.location_permission_message))
                         .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 ActivityCompat.requestPermissions(activity,
@@ -340,6 +342,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onResume() {
         super.onResume();
+        getCurrentLocation();
         mapFragment.getMapAsync(this);
         Constant.TOOLBAR_TITLE = getString(R.string.app_name);
         activity.invalidateOptionsMenu();

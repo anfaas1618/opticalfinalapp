@@ -2,9 +2,9 @@ package wrteam.ekart.shop.model;
 
 
 public class City {
-    private final String city_name;
-    private final String city_id;
-    private String pincode;
+    final String city_name;
+    final String city_id;
+    String pincode;
 
     /*  public City(String city_id, String city_name, String pincode) {
           this.city_name = city_name;

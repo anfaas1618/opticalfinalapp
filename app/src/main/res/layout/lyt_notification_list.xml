@@ -5,7 +5,7 @@
     android:background="@drawable/card_shadow"
     android:padding="@dimen/margin_10dp">
 
-    <com.android.volley.toolbox.NetworkImageView
+    <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

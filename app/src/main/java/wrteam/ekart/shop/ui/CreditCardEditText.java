@@ -15,11 +15,11 @@ import wrteam.ekart.shop.R;
 
 public class CreditCardEditText extends AppCompatEditText {
 
-    private final char mSeparator = ' ';
-    private final int mDefaultDrawableResId = R.drawable.ic_credit_cards; //default credit card image
-    private SparseArray<Pattern> mCCPatterns = null;
-    private int mCurrentDrawableResId = 0;
-    private Drawable mCurrentDrawable;
+    final char mSeparator = ' ';
+    final int mDefaultDrawableResId = R.drawable.ic_credit_cards; //default credit card image
+    SparseArray<Pattern> mCCPatterns = null;
+    int mCurrentDrawableResId = 0;
+    Drawable mCurrentDrawable;
 
     public CreditCardEditText(Context context) {
         super(context);
@@ -36,7 +36,7 @@ public class CreditCardEditText extends AppCompatEditText {
         init();
     }
 
-    private void init() {
+    void init() {
         if (mCCPatterns == null) {
             mCCPatterns = new SparseArray<>();
             // Without spaces for credit card masking

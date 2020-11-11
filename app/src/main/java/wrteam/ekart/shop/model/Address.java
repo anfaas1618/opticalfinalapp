@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Address implements Serializable {
 
-    String id, user_id, type, name, country_code, mobile, alternate_mobile, address, landmark, area_id, city_id, pincode, state, country, date_created, city_name, area_name, is_default, latitude, longitude;
+    String id, user_id, type, name, country_code, mobile, alternate_mobile, address, landmark, area_id, city_id, pincode, state, country, date_created, city_name, area_name, is_default, latitude, longitude, minimum_free_delivery_order_amount, delivery_charges;
     boolean isSelected;
 
     public Address(boolean isSelected, String id, String user_id, String type, String name, String country_code, String mobile, String alternate_mobile, String address, String landmark,
                    String area_id, String city_id, String pincode, String state, String country, String date_created, String city_name, String area_name, String is_default,
-                   String latitude, String longitude) {
+                   String latitude, String longitude,String minimum_free_delivery_order_amount,String  delivery_charges) {
         this.isSelected = isSelected;
         this.id = id;
         this.user_id = user_id;
@@ -31,6 +31,24 @@ public class Address implements Serializable {
         this.is_default = is_default;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.minimum_free_delivery_order_amount = minimum_free_delivery_order_amount;
+        this.delivery_charges = delivery_charges;
+    }
+
+    public String getMinimum_free_delivery_order_amount() {
+        return minimum_free_delivery_order_amount;
+    }
+
+    public void setMinimum_free_delivery_order_amount(String minimum_free_delivery_order_amount) {
+        this.minimum_free_delivery_order_amount = minimum_free_delivery_order_amount;
+    }
+
+    public String getDelivery_charges() {
+        return delivery_charges;
+    }
+
+    public void setDelivery_charges(String delivery_charges) {
+        this.delivery_charges = delivery_charges;
     }
 
     public String getLatitude() {

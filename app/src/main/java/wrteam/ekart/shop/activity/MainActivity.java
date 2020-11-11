@@ -36,8 +36,8 @@ import wrteam.ekart.shop.fragment.HomeFragment;
 import wrteam.ekart.shop.fragment.OrderPlacedFragment;
 import wrteam.ekart.shop.fragment.PaymentFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
+import wrteam.ekart.shop.fragment.ProductListFragment;
 import wrteam.ekart.shop.fragment.SearchFragment;
-import wrteam.ekart.shop.fragment.SubCategoryFragment;
 import wrteam.ekart.shop.fragment.TrackOrderFragment;
 import wrteam.ekart.shop.fragment.TrackerDetailFragment;
 import wrteam.ekart.shop.fragment.WalletTransactionFragment;
@@ -51,7 +51,7 @@ import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 public class MainActivity extends DrawerActivity implements OnMapReadyCallback, PaymentResultListener {
 
-    private static final String TAG = "MAIN ACTIVITY";
+    static final String TAG = "MAIN ACTIVITY";
     public static Toolbar toolbar;
     public static BottomNavigationView bottomNavigationView;
     public static Fragment active;
@@ -111,9 +111,6 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             categoryClicked = false;
             fm.beginTransaction().add(R.id.container, homeFragment).commit();
         }
-
-
-        DrawerActivity.imgProfile.setImageUrl(session.getData(Constant.PROFILE), Constant.imageLoader);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -185,10 +182,11 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 break;
             }
             case "category": {
-                Fragment fragment = new SubCategoryFragment();
+                Fragment fragment = new ProductListFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("id", getIntent().getStringExtra("id"));
                 bundle.putString("name", getIntent().getStringExtra("name"));
+                bundle.putString("from", "category");
                 fragment.setArguments(bundle);
                 fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 break;
@@ -243,7 +241,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 ApiConfig.updateNavItemCounter(DrawerActivity.navigationView, R.id.menu_transaction_history, Session.getCount(Constant.UNREAD_TRANSACTION_COUNT, getApplicationContext()));
                 ApiConfig.updateNavItemCounter(DrawerActivity.navigationView, R.id.menu_wallet_history, Session.getCount(Constant.UNREAD_WALLET_COUNT, getApplicationContext()));
                 ApiConfig.updateNavItemCounter(DrawerActivity.navigationView, R.id.menu_notifications, Session.getCount(Constant.UNREAD_NOTIFICATION_COUNT, getApplicationContext()));
-
+                toolbar.setVisibility(View.VISIBLE);
                 Fragment currentFragment = fm.findFragmentById(R.id.container);
                 currentFragment.onResume();
             }
@@ -332,7 +330,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
 
             bottomNavigationView.setVisibility(View.GONE);
 
-            toolbar.setNavigationIcon(R.drawable.ic_back);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
             toolbar.setTitle(Constant.TOOLBAR_TITLE);
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

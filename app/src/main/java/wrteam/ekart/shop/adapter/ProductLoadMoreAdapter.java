@@ -28,7 +28,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,8 +50,8 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
-    private final Context context;
-    private final Activity activity;
+    final Context context;
+    final Activity activity;
     // The minimum amount of items to have below your current scroll position
     // before loading more.
     public boolean isLoading;
@@ -61,7 +61,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     Session session;
     boolean isLogin;
     DatabaseHelper databaseHelper;
-    private boolean isFavorite;
+    boolean isFavorite;
 
 
     public ProductLoadMoreAdapter(Context context, ArrayList<Product> myDataset, int resource) {
@@ -116,10 +116,14 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     holder.imgIndicator.setImageResource(R.drawable.ic_non_veg_icon);
             }
             holder.productName.setText(Html.fromHtml(product.getName()));
-            holder.imgThumb.setDefaultImageResId(R.drawable.placeholder);
-            holder.imgThumb.setErrorImageResId(R.drawable.placeholder);
 
-            holder.imgThumb.setImageUrl(product.getImage(), Constant.imageLoader);
+            Picasso.get().
+                    load(product.getImage())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(holder.imgThumb);
 
             CustomAdapter customAdapter = new CustomAdapter(context, priceVariations, holder, product);
             holder.spinner.setAdapter(customAdapter);
@@ -258,8 +262,9 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         holder.txtstatus.setText(extra.getServe_for());
 
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
-            holder.originalPrice.setVisibility(View.INVISIBLE);
-            holder.showDiscount.setVisibility(View.INVISIBLE);
+            holder.originalPrice.setVisibility(View.GONE);
+            holder.showDiscount.setVisibility(View.GONE);
+            holder.lytDiscount.setVisibility(View.GONE);
 
             holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
         } else {
@@ -378,7 +383,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     }
 
-    private class ViewHolderLoading extends RecyclerView.ViewHolder {
+    class ViewHolderLoading extends RecyclerView.ViewHolder {
         public ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
@@ -390,9 +395,9 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public ImageButton imgAdd, imgMinus;
         TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
-        NetworkImageView imgThumb;
+        ImageView imgThumb;
         ImageView imgFav, imgIndicator;
-        RelativeLayout lytmain;
+        RelativeLayout lytmain,lytDiscount;
         AppCompatSpinner spinner;
         LinearLayout qtyLyt;
 
@@ -413,6 +418,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             imgFav = itemView.findViewById(R.id.imgFav);
             lytmain = itemView.findViewById(R.id.lytmain);
             spinner = itemView.findViewById(R.id.spinner);
+            lytDiscount = itemView.findViewById(R.id.lytDiscount);
 
         }
 

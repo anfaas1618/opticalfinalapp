@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -59,7 +61,7 @@ import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
-import wrteam.ekart.shop.ui.CircleImageView;
+import wrteam.ekart.shop.ui.CircleTransform;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -69,8 +71,8 @@ public class ProfileFragment extends Fragment {
 
     public static int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     public static int SELECT_FILE = 110;
-    private final File output = null;
-    public CircleImageView imgProfile;
+    final File output = null;
+    public ImageView imgProfile;
     public FloatingActionButton fabProfile;
     public int reqWritePermission = 2;
     public ProgressBar progressBar;
@@ -83,7 +85,7 @@ public class ProfileFragment extends Fragment {
     File sourceFile;
     long totalSize = 0;
     EditText edtname, edtemail, edtMobile;
-    private String filePath = null;
+    String filePath = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,8 +109,15 @@ public class ProfileFragment extends Fragment {
         ApiConfig.getLocation(activity);
 
         imgProfile = root.findViewById(R.id.imgProfile);
-        imgProfile.setDefaultImageResId(R.drawable.logo_login);
-        imgProfile.setImageUrl(session.getData(Constant.PROFILE), Constant.imageLoader);
+
+        Picasso.get()
+                .load(session.getData(Constant.PROFILE))
+                .fit()
+                .centerInside()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .transform(new CircleTransform())
+                .into(imgProfile);
 
         fabProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,7 +299,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private class UploadFileToServer extends AsyncTask<Void, Integer, String> {
+    class UploadFileToServer extends AsyncTask<Void, Integer, String> {
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
@@ -303,7 +312,7 @@ public class ProfileFragment extends Fragment {
         }
 
         @SuppressWarnings("deprecation")
-        private String uploadFile() {
+        String uploadFile() {
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
@@ -360,8 +369,16 @@ public class ProfileFragment extends Fragment {
                 boolean error = jsonObject.getBoolean("error");
                 if (!error) {
                     session.setData(Constant.PROFILE, jsonObject.getString(Constant.PROFILE));
-                    imgProfile.setImageUrl(session.getData(Constant.PROFILE), Constant.imageLoader);
-                    DrawerActivity.imgProfile.setImageUrl(session.getData(Constant.PROFILE), Constant.imageLoader);
+
+                    Picasso.get()
+                            .load(session.getData(Constant.PROFILE))
+                            .fit()
+                            .centerInside()
+                            .placeholder(R.drawable.placeholder)
+                            .error(R.drawable.placeholder)
+                            .transform(new CircleTransform())
+                            .into(imgProfile);
+
                 }
                 Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 

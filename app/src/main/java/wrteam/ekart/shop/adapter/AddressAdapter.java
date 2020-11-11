@@ -25,22 +25,19 @@ import wrteam.ekart.shop.fragment.AddressAddUpdateFragment;
 import wrteam.ekart.shop.fragment.AddressListFragment;
 import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Address;
 
 import static wrteam.ekart.shop.helper.ApiConfig.removeAddress;
 
 public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-
     Activity activity;
     ArrayList<Address> addresses;
     String id = "0";
 
-
     public AddressAdapter(Activity activity, ArrayList<Address> addresses) {
         this.activity = activity;
         this.addresses = addresses;
-
     }
 
     public void add(int position, Address item) {
@@ -48,13 +45,10 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyItemInserted(position);
     }
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
-
         View view = LayoutInflater.from(activity).inflate(R.layout.lyt_address_list, parent, false);
         return new AddressItemHolder(view);
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -77,7 +71,6 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             holder.imgSelect.setImageResource(R.drawable.ic_check_circle);
             holder.lytMain.setBackgroundResource(R.drawable.selected_shadow);
-
 
         } else {
 
@@ -145,6 +138,12 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(View view) {
                 Constant.selectedAddressId = address.getId();
+                new Session(activity).setData(Constant.LONGITUDE, address.getLongitude());
+                new Session(activity).setData(Constant.LATITUDE, address.getLatitude());
+                if (Constant.SETTING_AREA_WISE_DELIVERY_CHARGE == 1) {
+                    Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(address.getMinimum_free_delivery_order_amount());
+                    Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(address.getDelivery_charges());
+                }
                 notifyDataSetChanged();
 
             }

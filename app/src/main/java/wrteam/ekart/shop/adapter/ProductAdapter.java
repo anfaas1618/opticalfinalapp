@@ -28,7 +28,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -85,7 +85,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                 holder.imgIndicator.setImageResource(R.drawable.ic_non_veg_icon);
         }
         holder.productName.setText(Html.fromHtml("<font color='#000000'><b>" + product.getName() + "</b></font> - <small>" + product.getDescription().replaceFirst("<p>", "").replaceFirst("</p>", "") + "</small>"));
-        holder.imgThumb.setImageUrl(product.getImage(), Constant.imageLoader);
+
+        Picasso.get().
+                load(product.getImage())
+                .fit()
+                .centerInside()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .into(holder.imgThumb);
 
         CustomAdapter customAdapter = new CustomAdapter(activity, priceVariations, holder, product);
         holder.spinner.setAdapter(customAdapter);
@@ -198,6 +205,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.originalPrice.setText("");
             holder.showDiscount.setText("");
+            holder.lytDiscount.setVisibility(View.GONE);
         } else {
             spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getPrice());
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -382,9 +390,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     public class ProductHolder extends RecyclerView.ViewHolder {
         public ImageButton imgAdd, imgMinus;
         TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
-        NetworkImageView imgThumb;
+        ImageView imgThumb;
         ImageView imgFav, imgIndicator;
-        RelativeLayout lytmain;
+        RelativeLayout lytmain, lytDiscount;
         AppCompatSpinner spinner;
         LinearLayout qtyLyt;
 
@@ -405,6 +413,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             imgFav = itemView.findViewById(R.id.imgFav);
             lytmain = itemView.findViewById(R.id.lytmain);
             spinner = itemView.findViewById(R.id.spinner);
+            lytDiscount = itemView.findViewById(R.id.lytDiscount);
         }
     }
 }

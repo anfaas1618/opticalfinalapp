@@ -2,7 +2,7 @@ package wrteam.ekart.shop.model;
 
 public class Notification {
 
-    private String id, name, subtitle, type, type_id, image;
+    String id, name, subtitle, type, type_id, image;
 
     public Notification() {
 

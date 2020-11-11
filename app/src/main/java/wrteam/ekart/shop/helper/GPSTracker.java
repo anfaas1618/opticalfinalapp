@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class GPSTracker extends Service implements LocationListener {
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     public double latitude; // latitude
     public double longitude; // longitude
     protected LocationManager locationManager;
@@ -33,7 +33,7 @@ public class GPSTracker extends Service implements LocationListener {
     int geocoderMaxResults = 1;
     Location location; // location
     boolean isGPSTrackingEnabled = false;
-    private Context mContext;
+    Context mContext;
 
     public GPSTracker() {
     }

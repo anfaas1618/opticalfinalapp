@@ -3,9 +3,9 @@ package wrteam.ekart.shop.model;
 import java.util.ArrayList;
 
 public class Category {
-    private String id, name, subtitle, image, slug, category_id, payType, status, date, amountReq, month, year, email;
-    private String style;
-    private ArrayList<Product> productList;
+    String id, name, subtitle, image, slug, category_id, payType, status, date, amountReq, month, year, email;
+    String style;
+    ArrayList<Product> productList;
 
     public String getSlug() {
         return slug;

@@ -15,7 +15,7 @@ import wrteam.ekart.shop.activity.MainActivity;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyFirebaseMsgService";
+    static final String TAG = "MyFirebaseMsgService";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -30,7 +30,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void sendPushNotification(JSONObject json) {
+    void sendPushNotification(JSONObject json) {
         try {
 
             JSONObject data = json.getJSONObject(Constant.DATA);

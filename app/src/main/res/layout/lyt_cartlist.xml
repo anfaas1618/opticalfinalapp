@@ -8,7 +8,7 @@
     android:padding="@dimen/margin_5dp">
 
 
-    <com.android.volley.toolbox.NetworkImageView
+    <ImageView
         android:id="@+id/imgproduct"
         android:layout_width="@dimen/c_thumb_width"
         android:layout_height="@dimen/c_thumb_width"
@@ -34,7 +34,7 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="center"
         android:padding="5dp"
-        app:srcCompat="@drawable/ic_close" />
+        app:srcCompat="@drawable/ic_cross" />
 
     <LinearLayout
         android:id="@+id/lytprice"

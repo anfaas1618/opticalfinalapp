@@ -52,8 +52,8 @@ public class NotificationFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     Activity activity;
     int offset = 0;
-    private Session session;
-    private boolean isLoadMore = false;
+    Session session;
+    boolean isLoadMore = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class NotificationFragment extends Fragment {
     }
 
 
-    private void getNotificationData() {
+    void getNotificationData() {
         notifications = new ArrayList<>();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);

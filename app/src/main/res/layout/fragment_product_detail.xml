@@ -13,10 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_50dp"
         android:scrollbars="none"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
-            android:id="@+id/lytContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -96,7 +95,6 @@
                         android:paddingBottom="5dp">
 
                         <ImageView
-                            android:id="@+id/imgshare"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_share" />
@@ -119,7 +117,6 @@
                         android:paddingBottom="5dp">
 
                         <ImageView
-                            android:id="@+id/imgSimilar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_similar" />
@@ -265,7 +262,6 @@
                 </RelativeLayout>
 
                 <View
-                    android:id="@+id/view1"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:background="@color/bggray" />

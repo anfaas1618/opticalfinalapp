@@ -30,7 +30,7 @@ public class OrderListFragment extends Fragment {
     Session session;
     int pos;
     View root;
-    private ArrayList<OrderTracker> orderTrackerArrayList;
+    ArrayList<OrderTracker> orderTrackerArrayList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

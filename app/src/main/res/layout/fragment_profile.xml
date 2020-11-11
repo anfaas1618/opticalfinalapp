@@ -16,7 +16,6 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/imgLayout"
             android:layout_width="@dimen/profile_size"
             android:layout_height="@dimen/profile_size"
             android:layout_gravity="center_horizontal"
@@ -25,7 +24,7 @@
             android:background="@drawable/circle_bg"
             android:padding="2dp">
 
-            <wrteam.ekart.shop.ui.CircleImageView
+            <ImageView
                 android:id="@+id/imgProfile"
                 android:layout_width="@dimen/profile_size"
                 android:layout_height="@dimen/profile_size"

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Product implements Serializable {
 
-    private String tax_percentage, id, name, slug, subcategory_id, row_order, image, description, status, date_added, category_id, indicator, manufacturer, made_in, return_status, cancelable_status, till_status;
-    private ArrayList<PriceVariation> priceVariations;
-    private JSONArray other_images;
-    private boolean is_favorite;
+    String tax_percentage, id, name, slug, subcategory_id, row_order, image, description, status, date_added, category_id, indicator, manufacturer, made_in, return_status, cancelable_status, till_status;
+    ArrayList<PriceVariation> priceVariations;
+    JSONArray other_images;
+    boolean is_favorite;
 
     public Product() {
     }

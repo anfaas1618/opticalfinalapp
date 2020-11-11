@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,13 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductListFragment;
-import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Category;
 
 public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.ViewHolder> {
@@ -51,9 +51,13 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final Category model = categorylist.get(position);
         holder.txttitle.setText(model.getName());
-        holder.imgcategory.setDefaultImageResId(R.drawable.placeholder);
-        holder.imgcategory.setErrorImageResId(R.drawable.placeholder);
-        holder.imgcategory.setImageUrl(model.getImage(), Constant.imageLoader);
+
+        Picasso.get()
+                .load(model.getImage())
+                .fit()
+                .placeholder(R.drawable.placeholder)
+                .centerInside()
+                .into(holder.imgcategory);
 
         holder.lytMain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +82,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txttitle;
-        NetworkImageView imgcategory;
+        ImageView imgcategory;
         LinearLayout lytMain;
 
         public ViewHolder(View itemView) {

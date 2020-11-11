@@ -10,14 +10,17 @@ public class Constant {
 
     public static final String PROFILE = "profile";
     public static final String UPLOAD_PROFILE = "upload_profile";
-    public static String MAINBASEUrl = "https://ekart.wrteam.in/"; //Admin panel url
+    public static String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
     //set your jwt secret key here...key must same in PHP and Android
     public static String JWT_KEY = "replace_with_your_strong_jwt_secret_key";
     //MODIFICATION PART END
-    public static int GRIDCOLUMN = 2; //Category View Number Of Grid Per Line
+
+    public static int GRIDCOLUMN = 3; //Category View Number Of Grid Per Line
     public static int LOAD_ITEM_LIMIT = 10; //Load items limit in listing ,Maximum load item once
+
     //Do not change anything in this link
     public static String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=";
+
     public static String BaseUrl = MAINBASEUrl + "api-firebase/";
     public static ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     public static String FAQ_URL = BaseUrl + "get-faqs.php";
@@ -25,16 +28,16 @@ public class Constant {
     public static String CategoryUrl = BaseUrl + "get-categories.php";
     public static String Get_RazorPay_OrderId = BaseUrl + "create-razorpay-order.php";
     public static String SubcategoryUrl = BaseUrl + "get-subcategories-by-category-id.php";
-    public static String FeaturedProductUrl = BaseUrl + "sections.php";
     public static String GET_SECTION_URL = BaseUrl + "sections.php";
     public static String GET_ADDRESS_URL = BaseUrl + "user-addresses.php";
     public static String RegisterUrl = BaseUrl + "user-registration.php";
     public static String PAPAL_URL = MAINBASEUrl + "paypal/create-payment.php";
     public static String LoginUrl = BaseUrl + "login.php";
-    public static String OFFER_URL = BaseUrl + "offer-images.php";
+    public static String GET_ALL_DATA_URL = BaseUrl + "get-all-data.php";
     public static String PRODUCT_SEARCH_URL = BaseUrl + "products-search.php";
     public static String SETTING_URL = BaseUrl + "settings.php";
     public static String GET_PRODUCT_BY_SUB_CATE = BaseUrl + "get-products-by-subcategory-id.php";
+    public static String GET_PRODUCT_BY_CATE = BaseUrl + "get-products-by-category-id.php";
     public static String GET_FAVORITES_URL = BaseUrl + "favorites.php";
     public static String GET_OFFLINE_FAVORITES_URL = BaseUrl + "get-products-offline.php";
     public static String GET_OFFLINE_CART_URL = BaseUrl + "get-variants-offline.php";
@@ -66,8 +69,6 @@ public class Constant {
     public static String GET_CONTACT = "get_contact";
     public static String GET_ABOUT_US = "get_about_us";
     public static String NEW_BALANCE = "new_balance";
-    public static String GET_OFFER_IMAGE = "get-offer-images";
-    public static String GET_ALL_SECTIONS = "get-all-sections";
     public static String ADD_TO_FAVORITES = "add_to_favorites";
     public static String REMOVE_FROM_FAVORITES = "remove_from_favorites";
     public static String CANCELLED = "cancelled";
@@ -112,6 +113,17 @@ public class Constant {
     public static String flutterwave_public_key = "flutterwave_public_key";
     public static String flutterwave_secret_key = "flutterwave_secret_key";
     public static String flutterwave_encryption_key = "flutterwave_encryption_key";
+
+//    public static String stripe_publishable_key = "stripe_publishable_key";
+//    public static String STRIPE_SECRET_KEY = "stripe_secret_key";
+//    public static String STRIPE_CURRENCYz = "inr";
+//    public static String STRIPE_BASE_URL = "https://netsofters.com/stripe/";
+//
+//    public static String midtrans_merchant_id = "midtrans_merchant_id";
+//    public static String midtrans_client_key = "midtrans_client_key";
+//    public static String midtrans_server_key = "midtrans_server_key";
+//    public static String MIDTRANS_MERCHANT_BASE_URL = "https://netsofters.com/charge/index.php/";
+
     public static String CITY_ID = "city_id";
     public static String AREA_ID = "area_id";
     public static String REFERRAL_CODE = "referral_code";
@@ -171,6 +183,10 @@ public class Constant {
     public static String EDIT_PROFILE = "edit-profile";
     public static String CHANGE_PASSWORD = "change-password";
     public static String CATEGORY_ID = "category_id";
+    public static String CATEGORIES = "categories";
+    public static String SLIDER_IMAGES = "slider_images";
+    public static String SECTIONS = "sections";
+    public static String OFFER_IMAGES = "offer_images";
     public static String INDICATOR = "indicator";
     public static String MADE_IN = "made_in";
     public static String MANUFACTURER = "manufacturer";
@@ -189,7 +205,6 @@ public class Constant {
     public static String GET_ORDERS = "get_orders";
     public static String CONTACT = "contact";
     public static String DATA = "data";
-    public static String SECTIONS = "sections";
     public static String VARIANT = "variants";
     public static String PRODUCT_ID = "product_id";
     public static String GET_SIMILAR_PRODUCT = "get_similar_products";
@@ -219,6 +234,8 @@ public class Constant {
     public static String cod_payment_method = "cod_payment_method";
     public static String paystack_method = "paystack_payment_method";
     public static String flutterwave_payment_method = "flutterwave_payment_method";
+    public static String midtrans_payment_method = "midtrans_payment_method";
+    public static String stripe_payment_method = "stripe_payment_method";
     public static String KEY_REFER_EARN_METHOD = "refer-earn-method";
     public static String KEY_MIN_REFER_ORDER_AMOUNT = "min-refer-earn-order-amount";
     public static String REFER_EARN_ORDER_AMOUNT = "";
@@ -228,7 +245,8 @@ public class Constant {
     public static Double SETTING_DELIVERY_CHARGE = 0.0;
     public static Double SETTING_TAX = 0.0;
     public static Double SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = 0.0;
-    public static Double SETTINGS_MINIMUM_ORDER_AMOUNT = 0.0;
+    public static Double SETTING_MINIMUM_ORDER_AMOUNT = 0.0;
+    public static Double SETTING_AREA_WISE_DELIVERY_CHARGE = 0.0;
     public static String SETTING_CURRENCY_SYMBOL = "";
     public static String SETTING_MAIL_ID = "";
     public static Double WALLET_BALANCE = 0.0;
@@ -239,6 +257,7 @@ public class Constant {
     public static String REPLY_TO = "reply_to";
     public static String MINIMUM_AMOUNT = "min_amount";
     public static String DELIEVERY_CHARGE = "delivery_charge";
+    public static String AREA_WISE_DELIVERY_CHARGE = "area-wise-delivery-charge";
     public static String CURRENCY = "currency";
     public static String TAX = "tax";
     public static String GET_FAQS = "get_faqs";
@@ -298,6 +317,8 @@ public class Constant {
     public static String COD = "";
     public static String PAYSTACK = "";
     public static String FLUTTERWAVE = "";
+    public static String STRIPE = "";
+    public static String MIDTRANS = "";
 
     public static String MERCHANT_ID = "";
     public static String MERCHANT_KEY = "";
@@ -308,6 +329,14 @@ public class Constant {
     public static String FLUTTERWAVE_PUBLIC_KEY_VAL = "";
     public static String FLUTTERWAVE_SECRET_KEY_VAL = "";
     public static String FLUTTERWAVE_ENCRYPTION_KEY_VAL = "";
+
+    public static String STRIPE_PUBLISHABLE_KEY = "";
+    public static String STRIPE_SECRET_KEY = "";
+    public static String STRIPE_CURRENCY = "inr";
+    public static String STRIPE_BASE_URL = BaseUrl + "/stripe/"; //https://netsofters.com/stripe/";
+
+    public static String MIDTRANS_CLIENT_KEY = "SB-Mid-client-48IA7XuBPRpC1s-F";
+    public static String MIDTRANS_MERCHANT_BASE_URL = BaseUrl + "https://netsofters.com/charge/index.php/";
 
     public static String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();

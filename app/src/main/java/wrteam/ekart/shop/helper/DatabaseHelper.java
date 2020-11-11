@@ -20,12 +20,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_FAVOURITE_NAME = "tblfavourite";
     public static final String KEY_ID = "pid";
 
-    private final String TABLE_ORDER_NAME = "tblorder";
-    private final String PID = "pid";
-    private final String VID = "vid";
-    private final String QTY = "qty";
-    private final String FavouriteTableInfo = TABLE_FAVOURITE_NAME + "(" + KEY_ID + " TEXT" + ")";
-    private final String OrderTableInfo = TABLE_ORDER_NAME + "(" + VID + " TEXT ," + PID + " TEXT ," + QTY + " TEXT)";
+    final String TABLE_ORDER_NAME = "tblorder";
+    final String PID = "pid";
+    final String VID = "vid";
+    final String QTY = "qty";
+    final String FavouriteTableInfo = TABLE_FAVOURITE_NAME + "(" + KEY_ID + " TEXT" + ")";
+    final String OrderTableInfo = TABLE_ORDER_NAME + "(" + VID + " TEXT ," + PID + " TEXT ," + QTY + " TEXT)";
 
 
     public DatabaseHelper(Context context) {
@@ -45,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private void replaceDataToNewTable(SQLiteDatabase db, String tableName, String tableString) {
+    void replaceDataToNewTable(SQLiteDatabase db, String tableName, String tableString) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableString);
 
         List<String> columns = getColumns(db, tableName);
@@ -59,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE temp_" + tableName);
     }
 
-    private List<String> getColumns(SQLiteDatabase db, String tableName) {
+    List<String> getColumns(SQLiteDatabase db, String tableName) {
         List<String> ar = null;
         Cursor c = null;
         try {
@@ -76,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return ar;
     }
 
-    private String join(List<String> list, String divider) {
+    String join(List<String> list, String divider) {
         StringBuilder buf = new StringBuilder();
         int num = list.size();
         for (int i = 0; i < num; i++) {

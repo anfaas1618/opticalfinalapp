@@ -47,7 +47,7 @@ public class ReferEarnFragment extends Fragment {
         } else {
             preText = Constant.REFER_EARN_BONUS + "% ";
         }
-        txtrefercoin.setText("Refer a friend and earn upto " + preText + " when your friend's first order is successfully delivered. Minimum Order amount should be " + Constant.SETTING_CURRENCY_SYMBOL + Constant.REFER_EARN_ORDER_AMOUNT + ". which allows you to earn upto " + Constant.SETTING_CURRENCY_SYMBOL + Constant.MAX_EARN_AMOUNT + ".");
+        txtrefercoin.setText(getString(R.string.refer_text_1) + preText + getString(R.string.refer_text_2) + Constant.SETTING_CURRENCY_SYMBOL + Constant.REFER_EARN_ORDER_AMOUNT + getString(R.string.refer_text_3) + Constant.SETTING_CURRENCY_SYMBOL + Constant.MAX_EARN_AMOUNT + ".");
         txtcode = root.findViewById(R.id.txtcode);
         txtcopy = root.findViewById(R.id.txtcopy);
         txtinvite = root.findViewById(R.id.txtinvite);

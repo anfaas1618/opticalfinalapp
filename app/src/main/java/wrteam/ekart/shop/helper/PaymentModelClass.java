@@ -31,7 +31,7 @@ import wrteam.ekart.shop.fragment.CheckoutFragment;
 import wrteam.ekart.shop.fragment.WalletTransactionFragment;
 
 public class PaymentModelClass {
-    private final String TAG = CheckoutFragment.class.getSimpleName();
+    final String TAG = CheckoutFragment.class.getSimpleName();
     public Activity activity;
     public PayUmoneySdkInitializer.PaymentParam mPaymentParams;
     public String status, udf5, udf4, udf3, udf2, udf1, email, firstName, productInfo, amount, txnId, key, addedOn, msg, Product, address;
