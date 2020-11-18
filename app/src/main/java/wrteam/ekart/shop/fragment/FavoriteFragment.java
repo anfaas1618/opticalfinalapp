@@ -98,7 +98,7 @@ public class FavoriteFragment extends Fragment {
                 if (AppController.isConnected(activity)) {
                     if (isLogin) {
                         if (Constant.CartValues.size() > 0) {
-                            AddMultipleProductInCart(session, activity, Constant.CartValues);
+                            ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                         }
                         offset = 0;
                         GetData();

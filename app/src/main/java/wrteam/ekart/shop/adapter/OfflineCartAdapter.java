@@ -103,6 +103,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
 
             holder.txtQuantity.setText(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id()));
+
             holder.txttotalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id()))));
 
             Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + (price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id())));

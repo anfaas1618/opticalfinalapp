@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,9 +90,15 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.txtproductname.setText(cart.getItems().get(0).getName());
 
             holder.txtmeasurement.setText(cart.getItems().get(0).getMeasurement() + "\u0020" + cart.getItems().get(0).getUnit());
-            
+
             holder.txtprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getDiscounted_price())));
 
+            if (cart.getItems().get(0).getIsAvailable().equals("false")) {
+                holder.txtstatus.setVisibility(View.VISIBLE);
+                holder.txtstatus.setText(activity.getString(R.string.sold_out));
+                holder.lytqty.setVisibility(View.GONE);
+                CartFragment.isSoldOut = true;
+            }
 
             if (cart.getItems().get(0).getDiscounted_price().equals("0")) {
                 holder.txtprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getPrice())));
@@ -194,6 +201,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 CartFragment.SetData();
 
                                 items.remove(cart);
+                                CartFragment.isSoldOut = false;
                                 notifyDataSetChanged();
                                 Constant.TOTAL_CART_ITEM = getItemCount();
                                 CartFragment.SetData();
@@ -254,7 +262,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class ProductHolderItems extends RecyclerView.ViewHolder {
         ImageView imgproduct, imgdelete, btnminusqty, btnaddqty;
-        TextView txtproductname, txtmeasurement, txtprice, txtoriginalprice, txtQuantity, txttotalprice;
+        TextView txtproductname, txtmeasurement, txtprice, txtoriginalprice, txtQuantity, txttotalprice, txtstatus;
+        LinearLayout lytqty;
 
         public ProductHolderItems(@NonNull View itemView) {
             super(itemView);
@@ -270,6 +279,9 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             txtoriginalprice = itemView.findViewById(R.id.txtoriginalprice);
             txtQuantity = itemView.findViewById(R.id.txtQuantity);
             txttotalprice = itemView.findViewById(R.id.txttotalprice);
+            txtstatus = itemView.findViewById(R.id.txtstatus);
+
+            lytqty = itemView.findViewById(R.id.lytqty);
         }
     }
 }

@@ -158,7 +158,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
                 if (Constant.CartValues.size() > 0) {
                     Session session = new Session(activity);
-                    AddMultipleProductInCart(session, activity, Constant.CartValues);
+                    ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                 }
 
                 Session session = new Session(activity);

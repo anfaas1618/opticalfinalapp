@@ -424,7 +424,7 @@ public class WalletTransactionFragment extends Fragment {
                 Intent intent = new Intent(getContext(), PayPalWebActivity.class);
                 intent.putExtra("url", response);
                 intent.putExtra("item_no", params.get(Constant.ITEM_NUMBER));
-                intent.putExtra("params", (Serializable) sendParams);
+                intent.putExtra(Constant.PARAMS, (Serializable) sendParams);
                 startActivity(intent);
             }
         }, getActivity(), Constant.PAPAL_URL, params, true);
@@ -432,7 +432,7 @@ public class WalletTransactionFragment extends Fragment {
 
     public void callPayStack(final Map<String, String> sendParams) {
         Intent intent = new Intent(activity, PayStackActivity.class);
-        intent.putExtra("params", (Serializable) sendParams);
+        intent.putExtra(Constant.PARAMS, (Serializable) sendParams);
         startActivity(intent);
     }
 

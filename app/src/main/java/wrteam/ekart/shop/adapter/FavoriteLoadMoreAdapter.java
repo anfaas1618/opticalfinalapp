@@ -46,7 +46,6 @@ import wrteam.ekart.shop.model.PriceVariation;
 
 import static wrteam.ekart.shop.fragment.FavoriteFragment.recyclerView;
 import static wrteam.ekart.shop.fragment.FavoriteFragment.tvAlert;
-import static wrteam.ekart.shop.helper.ApiConfig.AddMultipleProductInCart;
 import static wrteam.ekart.shop.helper.ApiConfig.AddOrRemoveFavorite;
 
 public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -138,7 +137,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 public void onClick(View v) {
 
                     if (Constant.CartValues.size() > 0) {
-                        AddMultipleProductInCart(session, activity, Constant.CartValues);
+                        ApiConfig.AddMultipleProductInCart( session, activity, Constant.CartValues);
                     }
 
                     AppCompatActivity activity1 = (AppCompatActivity) context;
@@ -292,7 +291,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                             } else {
                                 Constant.CartValues.put(extra.getId(), "" + count);
                             }
-                            ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
+                            ApiConfig.AddMultipleProductInCart( session, activity, Constant.CartValues);
                         } else {
                             Toast.makeText(activity, activity.getString(R.string.limit_alert), Toast.LENGTH_SHORT).show();
                         }
@@ -318,7 +317,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 Constant.CartValues.put(extra.getId(), "" + count);
                             }
                         }
-                        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
+                        ApiConfig.AddMultipleProductInCart( session, activity, Constant.CartValues);
                     }
                 }
             });

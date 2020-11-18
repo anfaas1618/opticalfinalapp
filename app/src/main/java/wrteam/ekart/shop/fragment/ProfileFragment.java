@@ -55,6 +55,7 @@ import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.DrawerActivity;
+import wrteam.ekart.shop.activity.LoginActivity;
 import wrteam.ekart.shop.helper.AndroidMultiPartEntity;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.AppController;
@@ -123,6 +124,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SelectProfileImage();
+            }
+        });
+
+        txtchangepassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "").putExtra("from", "changepsw"));
             }
         });
 

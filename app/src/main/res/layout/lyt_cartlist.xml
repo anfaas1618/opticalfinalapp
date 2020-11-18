@@ -8,10 +8,24 @@
     android:padding="@dimen/margin_5dp">
 
 
+    <TextView
+        android:id="@+id/txtstatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/logout"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/imgproduct"
         android:layout_width="@dimen/c_thumb_width"
         android:layout_height="@dimen/c_thumb_width"
+        android:layout_below="@+id/txtstatus"
         android:layout_centerVertical="true"
         android:layout_margin="5dp" />
 
@@ -20,6 +34,7 @@
         android:id="@+id/txtproductname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtstatus"
         android:layout_toStartOf="@+id/imgdelete"
         android:layout_toEndOf="@+id/imgproduct"
         android:text="@string/name"

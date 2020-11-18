@@ -298,7 +298,7 @@ public class ProductDetailFragment extends Fragment {
                                     Constant.CartValues.put(priceVariationslist.get(vpos).getId(), "" + count);
                                 }
 
-                                AddMultipleProductInCart(session, activity, Constant.CartValues);
+                                ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                             } else {
                                 databaseHelper.AddOrderData(priceVariationslist.get(vpos).getId(), priceVariation.getProduct_id(), "" + count);
                             }
@@ -333,7 +333,7 @@ public class ProductDetailFragment extends Fragment {
                                 } else {
                                     Constant.CartValues.put(priceVariationslist.get(vpos).getId(), "" + count);
                                 }
-                                AddMultipleProductInCart(session, activity, Constant.CartValues);
+                                ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                             } else {
                                 databaseHelper.AddOrderData(priceVariationslist.get(vpos).getId(), priceVariation.getProduct_id(), "" + count);
 
@@ -681,7 +681,7 @@ public class ProductDetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        AddMultipleProductInCart(session, activity, Constant.CartValues);
+        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
     }
 
     public class ShareProduct extends AsyncTask<String, String, String> {

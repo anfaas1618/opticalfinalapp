@@ -72,6 +72,7 @@ public class CartFragment extends Fragment {
     int offset = 0;
     private boolean isLoadMore = false;
     private DatabaseHelper databaseHelper;
+    public static boolean isSoldOut = false;
 
     @SuppressLint("SetTextI18n")
     public static void SetData() {
@@ -117,24 +118,27 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (AppController.isConnected(getActivity())) {
-                    if (Constant.SETTING_MINIMUM_ORDER_AMOUNT <= Constant.FLOAT_TOTAL_AMOUNT) {
-                        if (session.isUserLoggedIn()) {
-                            if (values.size() > 0) {
-                                AddMultipleProductInCart(session, getActivity(), values);
+                    if (!isSoldOut) {
+                        if (Constant.SETTING_MINIMUM_ORDER_AMOUNT <= Constant.FLOAT_TOTAL_AMOUNT) {
+                            if (session.isUserLoggedIn()) {
+                                if (values.size() > 0) {
+                                    ApiConfig.AddMultipleProductInCart(session, getActivity(), values);
+                                }
+                                Fragment fragment = new AddressListFragment();
+                                final Bundle bundle = new Bundle();
+                                bundle.putString("from", "process");
+                                bundle.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);
+                                fragment.setArguments(bundle);
+                                MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                            } else {
+                                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra("from", "checkout"));
                             }
-                            Fragment fragment = new AddressListFragment();
-                            final Bundle bundle = new Bundle();
-                            bundle.putString("from", "process");
-                            bundle.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);
-                            fragment.setArguments(bundle);
-                            MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                         } else {
-                            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra("from", "checkout"));
+                            Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, getString(R.string.msg_sold_out), Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         });
@@ -337,7 +341,7 @@ public class CartFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (values.size() > 0) {
-            AddMultipleProductInCart(session, getActivity(), values);
+            ApiConfig.AddMultipleProductInCart(session, getActivity(), values);
         }
     }
 

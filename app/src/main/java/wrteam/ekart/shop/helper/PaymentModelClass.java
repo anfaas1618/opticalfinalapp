@@ -227,7 +227,7 @@ public class PaymentModelClass {
 
                 //when app is live with real merchant id and salt we will compare both side hash
                 if (hash_from_response.equals(hash)) {
-                    if (status.equals("success")) {
+                    if (status.equals(Constant.SUCCESS)) {
                         if (from.equals("payment")) {
                             PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, true, sendparams, status);
                         } else if (from.equals("wallet")) {
@@ -257,7 +257,6 @@ public class PaymentModelClass {
 
     public void PlaceOrder(final Activity activity, final String paymentType, final String txnid, boolean issuccess, final Map<String, String> sendparams, final String status) {
         showProgressDialog();
-
         if (issuccess) {
             ApiConfig.RequestToVolley(new VolleyCallback() {
                 @Override
@@ -311,8 +310,9 @@ public class PaymentModelClass {
                         hideProgressDialog();
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-                            if (status.equals("Failed"))
+                            if (!status.equals(Constant.SUCCESS)) {
                                 activity.finish();
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -17,6 +17,7 @@
     <dimen name="large_text">20sp</dimen>
     <dimen name="xlarge_text">25sp</dimen>
     <dimen name="small_size">12sp</dimen>
+    <dimen name="mid_small_size">13sp</dimen>
     <dimen name="margin_10dp">10dp</dimen>
     <dimen name="margin_5dp">5dp</dimen>
     <dimen name="dimen_3dp">3dp</dimen>

@@ -76,7 +76,7 @@ public class PayPalWebActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         String status = jsonObject.getString("status");
-                        paymentModelClass.PlaceOrder(PayPalWebActivity.this, getString(R.string.paypal), itemNo, status.equals("Completed"), (Map<String, String>) getIntent().getSerializableExtra("params"), status);
+                        paymentModelClass.PlaceOrder(PayPalWebActivity.this, getString(R.string.paypal), itemNo, status.equals("Completed"), (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS), status);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -123,7 +123,7 @@ public class PayPalWebActivity extends AppCompatActivity {
                         getString(R.string.paypal),
                         "none",
                         false,
-                        (Map<String, String>) getIntent().getSerializableExtra("params"),
+                        (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS),
                         "canceled");
 
                 alertDialog1.dismiss();

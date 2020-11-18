@@ -133,7 +133,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View v) {
 
                     if (Constant.CartValues.size() > 0) {
-                        AddMultipleProductInCart(session, activity, Constant.CartValues);
+                        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                     }
 
                     AppCompatActivity activity1 = (AppCompatActivity) context;

@@ -64,15 +64,19 @@ dependencies {
     //flutterwave
     implementation 'com.github.Flutterwave:rave-android:1.0.49.1'
 
-    //Stripe
-    implementation 'com.stripe:stripe-android:16.1.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+//    //Stripe
+//    implementation 'com.stripe:stripe-android:16.1.0'
+//    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
+    implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
+    implementation 'com.stripe:stripe-android:+'
 
     //Midtrans
     //implementation 'com.midtrans:uikit:1.25.0' //  compiling production
     implementation 'com.midtrans:uikit:1.25.0-SANDBOX' // compiling sandbox
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
 }
 apply plugin: 'com.google.gms.google-services'

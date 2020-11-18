@@ -550,7 +550,7 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        AddMultipleProductInCart(session, activity, Constant.CartValues);
+        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
     }
 
     void ReLoadData() {

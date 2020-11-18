@@ -50,8 +50,10 @@ import java.util.Objects;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
+import wrteam.ekart.shop.activity.MidtransActivity;
 import wrteam.ekart.shop.activity.PayPalWebActivity;
 import wrteam.ekart.shop.activity.PayStackActivity;
+import wrteam.ekart.shop.activity.StripePaymentActivity;
 import wrteam.ekart.shop.adapter.DateAdapter;
 import wrteam.ekart.shop.adapter.SlotAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
@@ -398,7 +400,7 @@ public class PaymentFragment extends Fragment {
                 rbPayPal.setChecked(false);
                 rbRazorPay.setChecked(false);
                 rbPayStack.setChecked(false);
-                rbFlutterWave.setChecked(true);
+                rbFlutterWave.setChecked(false);
                 rbStripe.setChecked(true);
                 rbMidTrans.setChecked(false);
                 paymentMethod = rbStripe.getTag().toString();
@@ -537,7 +539,7 @@ public class PaymentFragment extends Fragment {
         alertDialog.setCancelable(true);
         final AlertDialog dialog = alertDialog.create();
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        TextView tvDialogCancel, tvDialogConfirm, tvDialogItemTotal, tvDialogTaxPercent, tvDialogTaxAmt, tvDialogDeliveryCharge, tvDialogTotal, tvDialogPromoCode, tvDialogPCAmount, tvDialogWallet, tvDialogFinalTotal;
+        TextView tvDialogCancel, tvDialogConfirm, tvDialogItemTotal, tvDialogTaxPercent, tvDialogTaxAmt, tvDialogDeliveryCharge, tvDialogTotal, tvDialogPCAmount, tvDialogWallet, tvDialogFinalTotal;
         LinearLayout lytDialogPromo, lytDialogWallet;
 
         lytDialogPromo = dialogView.findViewById(R.id.lytDialogPromo);
@@ -610,7 +612,21 @@ public class PaymentFragment extends Fragment {
                 } else if (paymentMethod.equals(getString(R.string.paystack))) {
                     dialog.dismiss();
                     sendparams.put("from", "payment");
-                    callPayStack(sendparams);
+                    Intent intent = new Intent(activity, PayStackActivity.class);
+                    intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+                    startActivity(intent);
+                } else if (paymentMethod.equals(getString(R.string.midtrans))) {
+                    dialog.dismiss();
+                    sendparams.put("from", "payment");
+                    Intent intent = new Intent(activity, MidtransActivity.class);
+                    intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+                    startActivity(intent);
+                } else if (paymentMethod.equals(getString(R.string.stripe))) {
+                    dialog.dismiss();
+                    sendparams.put("from", "payment");
+                    Intent intent = new Intent(activity, StripePaymentActivity.class);
+                    intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+                    startActivity(intent);
                 } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
                     dialog.dismiss();
                     StartFlutterWavePayment();
@@ -625,12 +641,6 @@ public class PaymentFragment extends Fragment {
             }
         });
         dialog.show();
-    }
-
-    public void callPayStack(final Map<String, String> sendParams) {
-        Intent intent = new Intent(activity, PayStackActivity.class);
-        intent.putExtra("params", (Serializable) sendParams);
-        startActivity(intent);
     }
 
     public void CreateOrderId(double payble) {
@@ -728,7 +738,7 @@ public class PaymentFragment extends Fragment {
                     try {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-                            if (status.equals("Failed")) {
+                            if (status.equals(Constant.FAILED)) {
 
                             }
                         }
@@ -757,7 +767,7 @@ public class PaymentFragment extends Fragment {
                 Intent intent = new Intent(getContext(), PayPalWebActivity.class);
                 intent.putExtra("url", response);
                 intent.putExtra("item_no", params.get(Constant.ITEM_NUMBER));
-                intent.putExtra("params", (Serializable) sendParams);
+                intent.putExtra(Constant.PARAMS, (Serializable) sendParams);
                 startActivity(intent);
             }
         }, getActivity(), Constant.PAPAL_URL, params, true);
@@ -831,12 +841,12 @@ public class PaymentFragment extends Fragment {
 
                 if (resultCode == RavePayActivity.RESULT_SUCCESS) {
                     Toast.makeText(getContext(), getString(R.string.order_placed1), Toast.LENGTH_LONG).show();
-                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), jsonObject.getString("paymentType"), jsonObject.getString("txRef"), true, sendparams, "Success");
+                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), jsonObject.getString("paymentType"), jsonObject.getString("txRef"), true, sendparams, Constant.SUCCESS);
                 } else if (resultCode == RavePayActivity.RESULT_ERROR) {
-                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), "", "", false, sendparams, "Failed");
+                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), "", "", false, sendparams, Constant.PENDING);
                     Toast.makeText(getContext(), getString(R.string.order_error), Toast.LENGTH_LONG).show();
                 } else if (resultCode == RavePayActivity.RESULT_CANCELLED) {
-                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), "", "", false, sendparams, "Failed");
+                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), "", "", false, sendparams, Constant.FAILED);
                     Toast.makeText(getContext(), getString(R.string.order_cancel), Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {

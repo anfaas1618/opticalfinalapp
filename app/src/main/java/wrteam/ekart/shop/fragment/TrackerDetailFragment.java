@@ -44,7 +44,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class TrackerDetailFragment extends Fragment {
     public static ProgressBar pBar;
-    public static Button btnCancel;
+    public static Button btnCancel, btnreorder;
     public static LinearLayout lyttracker;
     View root;
     OrderTracker order;
@@ -58,6 +58,7 @@ public class TrackerDetailFragment extends Fragment {
     Activity activity;
     String id;
     Session session;
+    HashMap<String, String> hashMap;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -92,9 +93,11 @@ public class TrackerDetailFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setNestedScrollingEnabled(false);
         btnCancel = root.findViewById(R.id.btncancel);
+        btnreorder = root.findViewById(R.id.btnreorder);
         l4 = root.findViewById(R.id.l4);
         returnLyt = root.findViewById(R.id.returnLyt);
         txtorderotp = root.findViewById(R.id.txtorderotp);
+        hashMap = new HashMap<>();
 
         id = getArguments().getString("id");
         if (id.equals("")) {
@@ -106,6 +109,30 @@ public class TrackerDetailFragment extends Fragment {
 
 
         setHasOptionsMenu(true);
+
+        btnreorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.re_order))
+                        .setMessage(getString(R.string.reorder_msg))
+                        .setPositiveButton(getString(R.string.proceed), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (getContext() != null) {
+                                    ApiConfig.AddMultipleProductInCart(session, activity, hashMap);
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+        });
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,7 +317,6 @@ public class TrackerDetailFragment extends Fragment {
         txtorderdate.setText(date[0]);
         txtotherdetails.setText(getString(R.string.name_1) + order.getUsername() + getString(R.string.mobile_no_1) + order.getMobile() + getString(R.string.address_1) + order.getAddress());
         totalAfterTax = (Double.parseDouble(order.getTotal()) + Double.parseDouble(order.getDelivery_charge()) + Double.parseDouble(order.getTax_amt()));
-
         tvItemTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + order.getTotal());
         tvDeliveryCharge.setText("+ " + Constant.SETTING_CURRENCY_SYMBOL + order.getDelivery_charge());
         tvTaxPercent.setText(getString(R.string.tax) + "(" + order.getTax_percent() + "%) :");
@@ -304,7 +330,6 @@ public class TrackerDetailFragment extends Fragment {
         if (!order.getStatus().equalsIgnoreCase("delivered") && !order.getStatus().equalsIgnoreCase("cancelled") && !order.getStatus().equalsIgnoreCase("returned")) {
             btnCancel.setVisibility(View.VISIBLE);
         } else {
-
             btnCancel.setVisibility(View.GONE);
         }
         if (order.getStatus().equalsIgnoreCase("cancelled")) {
@@ -320,7 +345,13 @@ public class TrackerDetailFragment extends Fragment {
                 returnLyt.setVisibility(View.VISIBLE);
             }
             lyttracker.setVisibility(View.VISIBLE);
+
+            for (int i = 0; i < order.getItemsList().size(); i++) {
+                hashMap.put(order.getItemsList().get(i).getProduct_variant_id(), order.getItemsList().get(i).getQuantity());
+            }
+
             for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
+
                 int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());
                 int view = getResources().getIdentifier("l" + i, "id", activity.getPackageName());
                 int txt = getResources().getIdentifier("txt" + i, "id", activity.getPackageName());

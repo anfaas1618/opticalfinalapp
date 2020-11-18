@@ -1,15 +1,10 @@
 package wrteam.ekart.shop.helper;
 
-import com.android.volley.toolbox.ImageLoader;
-
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
 public class Constant {
     //MODIFICATION PART
-
-    public static final String PROFILE = "profile";
-    public static final String UPLOAD_PROFILE = "upload_profile";
     public static String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
     //set your jwt secret key here...key must same in PHP and Android
     public static String JWT_KEY = "replace_with_your_strong_jwt_secret_key";
@@ -22,7 +17,6 @@ public class Constant {
     public static String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=";
 
     public static String BaseUrl = MAINBASEUrl + "api-firebase/";
-    public static ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     public static String FAQ_URL = BaseUrl + "get-faqs.php";
     public static String SliderUrl = BaseUrl + "slider-images.php";
     public static String CategoryUrl = BaseUrl + "get-categories.php";
@@ -58,8 +52,11 @@ public class Constant {
     public static String REGISTER_DEVICE = "register-device";
     public static String AccessKey = "accesskey";
     public static String AccessKeyVal = "90336";
+    public static final String PROFILE = "profile";
+    public static final String UPLOAD_PROFILE = "upload_profile";
     public static String GetVal = "1";
     public static String AUTHORIZATION = "Authorization";
+    public static String PARAMS = Constant.PARAMS;
     public static String GET_PRIVACY = "get_privacy";
     public static String GET_TERMS = "get_terms";
     public static String GET_ADDRESSES = "get_addresses";
@@ -114,15 +111,16 @@ public class Constant {
     public static String flutterwave_secret_key = "flutterwave_secret_key";
     public static String flutterwave_encryption_key = "flutterwave_encryption_key";
 
-//    public static String stripe_publishable_key = "stripe_publishable_key";
-//    public static String STRIPE_SECRET_KEY = "stripe_secret_key";
-//    public static String STRIPE_CURRENCYz = "inr";
-//    public static String STRIPE_BASE_URL = "https://netsofters.com/stripe/";
-//
-//    public static String midtrans_merchant_id = "midtrans_merchant_id";
-//    public static String midtrans_client_key = "midtrans_client_key";
-//    public static String midtrans_server_key = "midtrans_server_key";
-//    public static String MIDTRANS_MERCHANT_BASE_URL = "https://netsofters.com/charge/index.php/";
+    public static String stripe_publishable_key = "stripe_publishable_key";
+    public static String STRIPE_SECRET_KEY = "stripe_secret_key";
+    public static String STRIPE_CURRENCY = "inr";
+    public static String STRIPE_BASE_URL = "https://newekart.wrteam.in/library/stripe/";
+
+    public static String midtrans_merchant_id = "midtrans_merchant_id";
+    public static String midtrans_client_key = "midtrans_client_key";
+    public static String midtrans_server_key = "midtrans_server_key";
+    public static String MIDTRANS_CLIENT_KEY = "SB-Mid-client-roooHrl0UI6xDJ7-";
+    public static String MIDTRANS_MERCHANT_BASE_URL = "https://newekart.wrteam.in/library/midtrans/index.php/";
 
     public static String CITY_ID = "city_id";
     public static String AREA_ID = "area_id";
@@ -140,6 +138,8 @@ public class Constant {
     public static String TYPE_TRANSACTION = "transactions";
     public static String TYPE_WALLET_TRANSACTION = "wallet_transactions";
     public static String SUCCESS = "success";
+    public static String FAILED = "failed";
+    public static String PENDING = "pending";
     public static String CREDIT = "credit";
     public static HashMap<String, String> CartValues = new HashMap<>();
     public static boolean CLICK = false;
@@ -329,14 +329,6 @@ public class Constant {
     public static String FLUTTERWAVE_PUBLIC_KEY_VAL = "";
     public static String FLUTTERWAVE_SECRET_KEY_VAL = "";
     public static String FLUTTERWAVE_ENCRYPTION_KEY_VAL = "";
-
-    public static String STRIPE_PUBLISHABLE_KEY = "";
-    public static String STRIPE_SECRET_KEY = "";
-    public static String STRIPE_CURRENCY = "inr";
-    public static String STRIPE_BASE_URL = BaseUrl + "/stripe/"; //https://netsofters.com/stripe/";
-
-    public static String MIDTRANS_CLIENT_KEY = "SB-Mid-client-48IA7XuBPRpC1s-F";
-    public static String MIDTRANS_MERCHANT_BASE_URL = BaseUrl + "https://netsofters.com/charge/index.php/";
 
     public static String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();

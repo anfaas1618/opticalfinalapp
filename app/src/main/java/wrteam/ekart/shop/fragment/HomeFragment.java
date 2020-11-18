@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -74,6 +75,7 @@ public class HomeFragment extends Fragment {
     int currentPage = 0;
     LinearLayout lytCategory, lytSearchview;
     Menu menu;
+    TextView tvMore;
     boolean searchVisible = false;
 
     public static void UpdateToken(final String token, Activity activity) {
@@ -129,6 +131,7 @@ public class HomeFragment extends Fragment {
         mMarkersLayout = root.findViewById(R.id.layout_markers);
         lytCategory = root.findViewById(R.id.lytCategory);
         lytSearchview = root.findViewById(R.id.lytSearchview);
+        tvMore = root.findViewById(R.id.tvMore);
 
         searchview = root.findViewById(R.id.searchview);
 
@@ -150,6 +153,20 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
+
+        tvMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!MainActivity.categoryClicked) {
+                    MainActivity.fm.beginTransaction().add(R.id.container, MainActivity.categoryFragment).show(MainActivity.categoryFragment).hide(MainActivity.active).commit();
+                    MainActivity.categoryClicked = true;
+                } else {
+                    MainActivity.fm.beginTransaction().show(MainActivity.categoryFragment).hide(MainActivity.active).commit();
+                }
+                MainActivity.bottomNavigationView.setSelectedItemId(R.id.navigation_category);
+                MainActivity.active = MainActivity.categoryFragment;
+            }
+        });
 
         searchview.setOnSearchClickListener(new View.OnClickListener() {
             @Override

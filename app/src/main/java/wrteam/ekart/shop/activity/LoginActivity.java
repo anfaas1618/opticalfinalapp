@@ -268,7 +268,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(@NotNull FirebaseException e) {
-                setSnackBar(e.getLocalizedMessage(), getString(R.string.btn_ok), "failed");
+                setSnackBar(e.getLocalizedMessage(), getString(R.string.btn_ok), Constant.FAILED);
             }
 
             @Override
@@ -670,8 +670,8 @@ public class LoginActivity extends AppCompatActivity {
                     password,
                     objectbject.getString(Constant.REFERRAL_CODE));
 
-            ApiConfig.AddMultipleProductInCart(session, activity, databaseHelper.getDataCartList());
-            ApiConfig.getCartItemCount(activity, session);
+            ApiConfig.AddMultipleProductInCart( session, activity, databaseHelper.getDataCartList());
+            ApiConfig.getCartItemCount( activity, session);
 
             ArrayList<String> favorites = databaseHelper.getFavourite();
             for (int i = 0; i < favorites.size(); i++) {

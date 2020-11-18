@@ -82,7 +82,7 @@ public class SearchFragment extends Fragment {
                     newText.length();
                 }
                 if (Constant.CartValues.size() > 0) {
-                    AddMultipleProductInCart(session, activity, Constant.CartValues);
+                    ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                 }
                 return false;
             }
@@ -157,7 +157,7 @@ public class SearchFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (Constant.CartValues.size() > 0) {
-            AddMultipleProductInCart(session, activity, Constant.CartValues);
+            ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
         }
     }
 }

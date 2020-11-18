@@ -1,7 +1,6 @@
 package wrteam.ekart.shop.activity;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +10,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentIntentResult;
 import com.stripe.android.Stripe;
@@ -25,9 +22,11 @@ import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,13 +38,15 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import wrteam.ekart.shop.R;
+import wrteam.ekart.shop.fragment.WalletTransactionFragment;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.PaymentModelClass;
+import wrteam.ekart.shop.helper.Session;
 
 public class StripePaymentActivity extends AppCompatActivity {
     /**
-     *
      * This example collects card payments, implementing the guide here: https://stripe.com/docs/payments/accept-a-payment#android
-     *
+     * <p>
      * To run this app, follow the steps here: https://github.com/stripe-samples/accept-a-card-payment#how-to-run-locally
      */
     // 10.0.2.2 is the Android emulator's alias to localhost
@@ -55,11 +56,20 @@ public class StripePaymentActivity extends AppCompatActivity {
     private String paymentIntentClientSecret;
     private Stripe stripe;
     private ProgressDialog progressDialog;
+    Map<String, String> sendParams;
+    PaymentModelClass paymentModelClass;
+    double payableAmount = 0;
+    String from;
+    String id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stripe_payment);
+        paymentModelClass = new PaymentModelClass(this);
+        sendParams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);
+        payableAmount = Double.parseDouble(sendParams.get(Constant.FINAL_TOTAL));
+        from = sendParams.get(Constant.FROM);
         startCheckout();
     }
 
@@ -68,11 +78,11 @@ public class StripePaymentActivity extends AppCompatActivity {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         String json = "{"
                 + "\"currency\":\"" + Constant.STRIPE_CURRENCY + "\","
-                    + "\"items\":["
-                        + "{\"id\":\"photo_subscription\"}"
-                    + "]"
+                + "\"items\":["
+                + "{\"id\":\"photo_subscription\"}"
+                + "]"
                 + "}";
-        RequestBody body = RequestBody.create(json, mediaType);
+        RequestBody body = RequestBody.create(mediaType, json);
         Request request = new Request.Builder()
                 .url(BACKEND_URL + "create-payment-intent.php")
                 .post(body)
@@ -93,20 +103,20 @@ public class StripePaymentActivity extends AppCompatActivity {
         });
     }
 
-    private void displayAlert(@NonNull String title,
-                              @Nullable String message,
-                              boolean retry) {
+    private void displayAlert(@NonNull String title, @Nullable String message, boolean retry) {
         dismissProgressDialog();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message);
-        if (retry) {
-            builder.setPositiveButton("OK",
-                    (DialogInterface dialog, int index) -> this.finish());
-        } else {
-            builder.setPositiveButton("Ok", null);
+        try {
+            JSONObject jsonObject = new JSONObject(message);
+            if (from.equals("wallet")) {
+                onBackPressed();
+                new WalletTransactionFragment().AddWalletBalance(StripePaymentActivity.this, new Session(StripePaymentActivity.this), WalletTransactionFragment.amount, WalletTransactionFragment.msg, jsonObject.getString(Constant.ID));
+            } else if (from.equals("payment")) {
+                paymentModelClass.PlaceOrder(StripePaymentActivity.this, getString(R.string.paystack), jsonObject.getString(Constant.ID), true, sendParams, Constant.SUCCESS);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        builder.create().show();
+
     }
 
     @Override
@@ -118,29 +128,23 @@ public class StripePaymentActivity extends AppCompatActivity {
     }
 
     private void onPaymentSuccess(@NonNull final Response response) throws IOException {
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
-        Map<String, String> responseMap = gson.fromJson(
-                Objects.requireNonNull(response.body()).string(),
-                type
-        );
-        Log.d("Stripe", "response.body() : " + responseMap.toString());
-
-        // The response from the server includes the Stripe publishable key and
-        // PaymentIntent details.
-        // For added security, our sample app gets the publishable key from the server
-        String stripePublishableKey = responseMap.get("publishableKey");
-        paymentIntentClientSecret = responseMap.get("clientSecret");
-
-        // Configure the SDK with your Stripe publishable key so that it can make requests to the Stripe API
-        stripe = new Stripe(
-                getApplicationContext(),
-                Objects.requireNonNull(stripePublishableKey)
-        );
+        try {
+            dismissProgressDialog();
+            JSONObject jsonObject = new JSONObject(response.toString());
+            if (from.equals("wallet")) {
+                onBackPressed();
+                new WalletTransactionFragment().AddWalletBalance(StripePaymentActivity.this, new Session(StripePaymentActivity.this), WalletTransactionFragment.amount, WalletTransactionFragment.msg, jsonObject.getString(Constant.ID));
+            } else if (from.equals("payment")) {
+                paymentModelClass.PlaceOrder(StripePaymentActivity.this, getString(R.string.paystack), jsonObject.getString(Constant.ID), true, sendParams, "success");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static final class PayCallback implements Callback {
-        @NonNull private final WeakReference<StripePaymentActivity> activityRef;
+    private final class PayCallback implements Callback {
+        @NonNull
+        private final WeakReference<StripePaymentActivity> activityRef;
 
         PayCallback(@NonNull StripePaymentActivity activity) {
             activityRef = new WeakReference<>(activity);
@@ -168,13 +172,7 @@ public class StripePaymentActivity extends AppCompatActivity {
                 return;
             }
             Log.d("Stripe", "Response : " + response.toString());
-            if (!response.isSuccessful()) {
-                activity.runOnUiThread(() ->
-                        Toast.makeText(
-                                activity, "Error: " + response.toString(), Toast.LENGTH_LONG
-                        ).show()
-                );
-            } else {
+            if (response.isSuccessful()) {
                 activity.onPaymentSuccess(response);
             }
         }
@@ -182,7 +180,8 @@ public class StripePaymentActivity extends AppCompatActivity {
 
     private static final class PaymentResultCallback
             implements ApiResultCallback<PaymentIntentResult> {
-        @NonNull private final WeakReference<StripePaymentActivity> activityRef;
+        @NonNull
+        private final WeakReference<StripePaymentActivity> activityRef;
 
         PaymentResultCallback(@NonNull StripePaymentActivity activity) {
             activityRef = new WeakReference<>(activity);

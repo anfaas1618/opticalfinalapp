@@ -23,6 +23,6 @@ android:orientation="vertical">
     android:paddingStart="@dimen/dimen_5dp"
     android:paddingEnd="@dimen/dimen_5dp"
     android:textColor="@color/black"
-    android:textSize="@dimen/small_size" />
+    android:textSize="@dimen/mid_small_size" />
 </LinearLayout>
 

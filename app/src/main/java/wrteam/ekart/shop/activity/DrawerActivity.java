@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class DrawerActivity extends AppCompatActivity {
     protected FrameLayout frameLayout;
     Session session;
     LinearLayout lytProfile;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,8 @@ public class DrawerActivity extends AppCompatActivity {
         tvMobile = header.findViewById(R.id.tvMobile);
         lytProfile = header.findViewById(R.id.lytProfile);
         imgProfile = header.findViewById(R.id.imgProfile);
-        session = new Session(DrawerActivity.this);
+        activity = DrawerActivity.this;
+        session = new Session(activity);
 
         if (session.isUserLoggedIn()) {
             tvName.setText(session.getData(Session.KEY_NAME));
@@ -76,7 +79,7 @@ public class DrawerActivity extends AppCompatActivity {
                     .error(R.drawable.placeholder)
                     .transform(new CircleTransform())
                     .into(imgProfile);
-            ApiConfig.getWalletBalance(DrawerActivity.this, session);
+            ApiConfig.getWalletBalance(activity, session);
         } else {
             tvWallet.setVisibility(View.GONE);
             tvName.setText(getResources().getString(R.string.is_login));
@@ -171,7 +174,7 @@ public class DrawerActivity extends AppCompatActivity {
                         MainActivity.categoryClicked = false;
                         MainActivity.favoriteClicked = false;
                         MainActivity.trackingClicked = false;
-                        Intent intent = new Intent(DrawerActivity.this, MainActivity.class);
+                        Intent intent = new Intent(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("from", "");
@@ -179,7 +182,7 @@ public class DrawerActivity extends AppCompatActivity {
                         finish();
                         break;
                     case R.id.menu_tracker:
-                        startActivity(new Intent(DrawerActivity.this, MainActivity.class).putExtra("from", "track_order").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity(new Intent(activity, MainActivity.class).putExtra("from", "track_order").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         break;
                     case R.id.menu_refer:
                         if (session.isUserLoggedIn())
@@ -219,8 +222,8 @@ public class DrawerActivity extends AppCompatActivity {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constant.PLAY_STORE_LINK + getPackageName())));
                         break;
                     case R.id.menu_logout:
-                        session.logoutUser(DrawerActivity.this);
-                        ApiConfig.clearFCM(DrawerActivity.this, session);
+                        session.logoutUserConfirmation(activity);
+                        ApiConfig.clearFCM(activity, session);
                         break;
                 }
 

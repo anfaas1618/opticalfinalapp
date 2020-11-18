@@ -88,6 +88,14 @@
             android:name=".activity.PayPalWebActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.MidtransActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.StripePaymentActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

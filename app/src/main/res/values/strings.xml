@@ -21,7 +21,7 @@
     <string name="via">Via&#160;</string>
     <string name="cod">C.O.D.</string>
     <string name="faq">FAQ</string>
-    <string name="logout">LogOut</string>
+    <string name="logout">Logout</string>
     <string name="shopbycategory">Shop by Category</string>
     <string name="search">Search</string>
     <string name="no_category_found">No Category Found</string>
@@ -156,6 +156,7 @@
     <string name="ordered_id">Ordered Id:&#160;</string>
     <string name="order_date">Order Date:&#160;</string>
     <string name="cancel_order">Cancel Order</string>
+    <string name="re_order">Re-Order!</string>
     <string name="cancel_item">Cancel Item</string>
     <string name="cancel">Cancel</string>
     <string name="no_track_msg">No Tracking Found..!!</string>
@@ -172,6 +173,7 @@
     <string name="order_status">Order Status</string>
     <string name="cancel_order_detail">Cancel Order ?</string>
     <string name="cancel_msg">Are you sure, you want to cancel this item ?</string>
+    <string name="reorder_msg">You want to re-order?\nAll products will be added to cart.</string>
     <string name="return_msg">Are you sure, you want to return this item ?</string>
     <string name="rate">Rate Us</string>
     <string name="notifications">Notifications</string>
@@ -216,7 +218,7 @@
     <string name="select_delivery_time">Please select delivery time!</string>
     <string name="select_payment_method">Please select payment method!</string>
     <string name="processing">Processing&#8230;</string>
-    <string name="order_failed">Order Failed</string>
+    <string name="order_failed">Order Failed!!!</string>
 
     <!--invite friend msg-->
     <string name="invite_frnd_title">Invite Friend Using</string>
@@ -253,6 +255,7 @@
     <string name="default_address">Default</string>
     <string name="select_delivery_address">Please select delivery address !</string>
     <string name="msg_minimum_order_amount">"Minimum order amount should be\u0020</string>
+    <string name="msg_sold_out">"You can not buy sold-out items. </string>
     <string name="title_manufacturer">Manufacturer</string>
     <string name="title_made_in">Made In</string>
     <string name="from_library">" Choose from Library"</string>
@@ -301,4 +304,8 @@
     <string name="refer_text_1">"Refer a friend and earn upto "</string>
     <string name="refer_text_2">\" when your friend\'s first order is successfully delivered. Minimum Order amount should be \"</string>
     <string name="refer_text_3">. which allows you to earn upto</string>
+    <string name="sold_out">Sold Out</string>
+    <string name="reorder">Re-Order</string>
+    <string name="logout_msg">Are you sure, You want to logout?</string>
+    <string name="msg_reorder">Items added in cart, You can proceed now!</string>
 </resources>

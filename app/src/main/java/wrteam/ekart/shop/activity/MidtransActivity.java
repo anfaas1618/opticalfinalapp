@@ -1,11 +1,9 @@
-
 package wrteam.ekart.shop.activity;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
@@ -19,33 +17,19 @@ import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.helper.Constant;
-import wrteam.ekart.shop.helper.PaymentModelClass;
 
 public class MidtransActivity extends AppCompatActivity implements TransactionFinishedCallback {
-    PaymentModelClass paymentModelClass;
-    Map<String, String> sendParams;
-    double payableAmount = 0;
-    String from;
-    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_midtrans);
-        activity = MidtransActivity.this;
 
         String client_key = Constant.MIDTRANS_CLIENT_KEY;
         String base_url = Constant.MIDTRANS_MERCHANT_BASE_URL;
-
-
-        paymentModelClass = new PaymentModelClass(activity);
-        sendParams = (Map<String, String>) getIntent().getSerializableExtra("params");
-        payableAmount = Double.parseDouble(sendParams.get(Constant.FINAL_TOTAL));
-        from = sendParams.get(Constant.FROM);
 
         SdkUIFlowBuilder.init()
                 .setClientKey(client_key) // client_key is mandatory
@@ -104,14 +88,12 @@ public class MidtransActivity extends AppCompatActivity implements TransactionFi
         if (result.getResponse() != null) {
             switch (result.getStatus()) {
                 case TransactionResult.STATUS_SUCCESS:
-                    paymentModelClass.PlaceOrder(activity, getString(R.string.midtrans), result.getResponse().getTransactionId(), true, (Map<String, String>) getIntent().getSerializableExtra("params"), "success");
                     Toast.makeText(this, "Transaction Finished. ID: " + result.getResponse().getTransactionId(), Toast.LENGTH_LONG).show();
                     break;
                 case TransactionResult.STATUS_PENDING:
                     Toast.makeText(this, "Transaction Pending. ID: " + result.getResponse().getTransactionId(), Toast.LENGTH_LONG).show();
                     break;
                 case TransactionResult.STATUS_FAILED:
-                    paymentModelClass.PlaceOrder(activity, getString(R.string.midtrans), result.getResponse().getTransactionId(), false, (Map<String, String>) getIntent().getSerializableExtra("params"), "failed");
                     Toast.makeText(this, "Transaction Failed. ID: " + result.getResponse().getTransactionId() + ". Message: " + result.getResponse().getStatusMessage(), Toast.LENGTH_LONG).show();
                     break;
             }

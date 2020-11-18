@@ -4,8 +4,16 @@ import java.util.ArrayList;
 
 public class Cart {
 
-    String id, user_id, product_id, product_variant_id, qty, date_created;
+    String id, user_id, product_id, product_variant_id, qty, date_created, ready_to_cart;
     ArrayList<CartItems> item;
+
+    public String getReady_to_cart() {
+        return ready_to_cart;
+    }
+
+    public void setReady_to_cart(String ready_to_cart) {
+        this.ready_to_cart = ready_to_cart;
+    }
 
     public String getId() {
         return id;

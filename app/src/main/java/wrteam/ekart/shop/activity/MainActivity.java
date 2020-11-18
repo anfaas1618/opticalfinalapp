@@ -305,7 +305,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 MainActivity.fm.beginTransaction().add(R.id.container, new SearchFragment()).addToBackStack(null).commit();
                 break;
             case R.id.toolbar_logout:
-                session.logoutUser(activity);
+                session.logoutUserConfirmation(activity);
                 ApiConfig.clearFCM(activity, session);
                 break;
         }
@@ -397,7 +397,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, razorpayPaymentID);
             } else {
                 PaymentFragment.razorPayId = razorpayPaymentID;
-                new PaymentFragment().PlaceOrder(MainActivity.this, PaymentFragment.paymentMethod, PaymentFragment.razorPayId, true, PaymentFragment.sendparams, "Success");
+                new PaymentFragment().PlaceOrder(MainActivity.this, PaymentFragment.paymentMethod, PaymentFragment.razorPayId, true, PaymentFragment.sendparams, Constant.SUCCESS);
             }
         } catch (Exception e) {
             Log.d(TAG, "onPaymentSuccess  ", e);
@@ -408,7 +408,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     public void onPaymentError(int code, String response) {
         try {
             if (!WalletTransactionFragment.payFromWallet) {
-                new PaymentFragment().PlaceOrder(MainActivity.this, PaymentFragment.paymentMethod, "", false, PaymentFragment.sendparams, "Failed");
+                new PaymentFragment().PlaceOrder(MainActivity.this, PaymentFragment.paymentMethod, "", false, PaymentFragment.sendparams, Constant.FAILED);
             }
             Toast.makeText(activity, getString(R.string.order_cancel), Toast.LENGTH_LONG).show();
         } catch (Exception e) {

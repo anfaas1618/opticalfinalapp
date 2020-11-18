@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.FavoriteFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
@@ -127,7 +128,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View v) {
 
                     if (Constant.CartValues.size() > 0) {
-                        AddMultipleProductInCart(session, activity, Constant.CartValues);
+                        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                     }
 
                     AppCompatActivity activity1 = (AppCompatActivity) context;

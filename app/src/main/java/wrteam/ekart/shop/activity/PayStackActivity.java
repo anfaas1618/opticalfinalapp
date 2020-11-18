@@ -67,7 +67,7 @@ public class PayStackActivity extends AppCompatActivity {
         activity = PayStackActivity.this;
         session = new Session(activity);
         paymentModelClass = new PaymentModelClass(activity);
-        sendParams = (Map<String, String>) getIntent().getSerializableExtra("params");
+        sendParams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);
         payableAmount = Double.parseDouble(sendParams.get(Constant.FINAL_TOTAL));
         from = sendParams.get(Constant.FROM);
 
@@ -218,7 +218,7 @@ public class PayStackActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         String status = jsonObject.getString(Constant.STATUS);
-                        paymentModelClass.PlaceOrder(activity, getString(R.string.paystack), reference, status.equalsIgnoreCase("success"), (Map<String, String>) getIntent().getSerializableExtra("params"), status);
+                        paymentModelClass.PlaceOrder(activity, getString(R.string.paystack), reference, status.equalsIgnoreCase(Constant.SUCCESS), (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS), status);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
