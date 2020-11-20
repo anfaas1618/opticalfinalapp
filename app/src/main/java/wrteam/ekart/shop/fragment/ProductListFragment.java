@@ -1,7 +1,6 @@
 package wrteam.ekart.shop.fragment;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,8 +19,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +40,6 @@ import wrteam.ekart.shop.model.Category;
 import wrteam.ekart.shop.model.Product;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static wrteam.ekart.shop.helper.ApiConfig.AddMultipleProductInCart;
 import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 
@@ -110,7 +106,6 @@ public class ProductListFragment extends Fragment {
         } else if (from.equals("section")) {
             if (AppController.isConnected(activity)) {
                 isSort = false;
-
                 position = getArguments().getInt("position", 0);
                 productArrayList = HomeFragment.sectionList.get(position).getProductList();
                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, R.layout.lyt_item_list);
@@ -130,7 +125,7 @@ public class ProductListFragment extends Fragment {
                 } else if (from.equals("category")) {
                     GetCategory();
                     GetProducts();
-                } else {
+                } else if (from.equals("similar")) {
                     GetSimilarData();
                 }
 
@@ -145,32 +140,30 @@ public class ProductListFragment extends Fragment {
         if (item.getItemId() == R.id.toolbar_sort) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle(activity.getResources().getString(R.string.filterby));
-            builder.setSingleChoiceItems(Constant.filtervalues, filterIndex, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                    filterIndex = item;
-                    switch (item) {
-                        case 0:
-                            filterBy = Constant.NEW;
-                            break;
-                        case 1:
-                            filterBy = Constant.OLD;
-                            break;
-                        case 2:
-                            filterBy = Constant.HIGH;
-                            break;
-                        case 3:
-                            filterBy = Constant.LOW;
-                            break;
-                    }
-                    if (item != -1)
-                        ReLoadData();
-                    dialog.dismiss();
+            builder.setSingleChoiceItems(Constant.filtervalues, filterIndex, (dialog, item1) -> {
+                filterIndex = item1;
+                switch (item1) {
+                    case 0:
+                        filterBy = Constant.NEW;
+                        break;
+                    case 1:
+                        filterBy = Constant.OLD;
+                        break;
+                    case 2:
+                        filterBy = Constant.HIGH;
+                        break;
+                    case 3:
+                        filterBy = Constant.LOW;
+                        break;
                 }
+                if (item1 != -1)
+                    ReLoadData();
+                dialog.dismiss();
             });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
@@ -407,7 +400,6 @@ public class ProductListFragment extends Fragment {
                         if (!object.getBoolean(Constant.ERROR)) {
 
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            Gson gson = new Gson();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 Category category = new Category();
@@ -420,10 +412,8 @@ public class ProductListFragment extends Fragment {
                                 categoryArrayList.add(category);
                             }
                             subCategoryrecycleview.setAdapter(new SubCategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory, "sub_cate"));
-
                             progressBar.setVisibility(View.GONE);
                         } else {
-                            tvAlert.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
@@ -442,6 +432,9 @@ public class ProductListFragment extends Fragment {
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
         params.put(Constant.OFFSET, "" + offset);
+        if (filterIndex != -1) {
+            params.put(Constant.SORT, filterBy);
+        }
 
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
@@ -462,7 +455,6 @@ public class ProductListFragment extends Fragment {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, R.layout.lyt_item_list);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
-
                                 progressBar.setVisibility(View.GONE);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
@@ -484,6 +476,9 @@ public class ProductListFragment extends Fragment {
                                                         params.put(Constant.USER_ID, session.getData(Constant.ID));
                                                         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
                                                         params.put(Constant.OFFSET, offset + "");
+                                                        if (filterIndex != -1) {
+                                                            params.put(Constant.SORT, filterBy);
+                                                        }
 
                                                         ApiConfig.RequestToVolley(new VolleyCallback() {
                                                             @Override
@@ -518,9 +513,11 @@ public class ProductListFragment extends Fragment {
                                     }
                                 });
                             }
+                        } else {
+                            isSort = false;
+                            activity.invalidateOptionsMenu();
                         }
                     } catch (JSONException e) {
-
                         progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                     }

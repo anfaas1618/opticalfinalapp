@@ -9,7 +9,6 @@
     android:theme="@style/AppTheme"
     tools:context=".fragment.WalletTransactionFragment">
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"

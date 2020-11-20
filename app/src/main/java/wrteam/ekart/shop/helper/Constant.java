@@ -147,7 +147,7 @@ public class Constant {
     public static String REMOVE_FROM_CART = "remove_from_cart";
     public static String selectedAddressId = "";
     public static int selectedDatePosition = 0;
-    public static DecimalFormat formater = new DecimalFormat("0.00");
+    public static DecimalFormat formater = new DecimalFormat("#.00");
     public static int MAX_PRODUCT_LIMIT = 0;
     public static String SORT = "sort";
     public static String TYPE = "type";

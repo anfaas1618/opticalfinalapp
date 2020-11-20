@@ -144,7 +144,6 @@ public class AddressListFragment extends Fragment {
         return root;
     }
 
-
     public void addNewAddress() {
         Fragment fragment = new AddressAddUpdateFragment();
         Bundle bundle = new Bundle();

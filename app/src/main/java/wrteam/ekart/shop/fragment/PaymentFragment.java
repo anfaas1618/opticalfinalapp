@@ -575,18 +575,18 @@ public class PaymentFragment extends Fragment {
         tvDialogTaxAmt.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(taxAmt));
         tvDialogTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(totalAfterTax));
         tvDialogFinalTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
-
         tvDialogConfirm.setOnClickListener(v -> {
+            System.out.println("sendparams >>>>>>>>>> "+sendparams);
             if (paymentMethod.equals(getResources().getString(R.string.codpaytype)) || paymentMethod.equals(getString(R.string.wallettype))) {
                 ApiConfig.RequestToVolley((result, response) -> {
                     if (result) {
                         try {
                             JSONObject object = new JSONObject(response);
                             if (!object.getBoolean(Constant.ERROR)) {
-                                if (chWallet.getTag().toString().equals("true"))
+                                if (chWallet.getTag().toString().equals("true")) {
                                     ApiConfig.getWalletBalance(getActivity(), session);
+                                }
                                 dialog.dismiss();
-
                                 MainActivity.fm.beginTransaction().add(R.id.container, new OrderPlacedFragment()).commit();
                             } else {
                                 Toast.makeText(getActivity(), object.getString(Constant.MESSAGE), Toast.LENGTH_SHORT).show();

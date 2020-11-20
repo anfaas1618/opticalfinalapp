@@ -51,7 +51,7 @@ public class CheckoutFragment extends Fragment {
     public TextView tvConfirmOrder, tvPayment, tvDelivery;
     public ArrayList<String> variantIdList, qtyList;
     public TextView tvTaxPercent, tvTaxAmt, tvAlert, tvTotalBeforeTax, tvDeliveryCharge, tvSubTotal, tvPromoCode, tvPCAmount, tvPreTotal;
-    public LinearLayout lytTax, processLyt;
+    public LinearLayout lytTax, processLyt,lytPromo;
     RecyclerView recyclerView;
     View root;
     RelativeLayout confirmLyt;
@@ -89,6 +89,7 @@ public class CheckoutFragment extends Fragment {
         confirmLyt = root.findViewById(R.id.confirmLyt);
         tvConfirmOrder = root.findViewById(R.id.tvConfirmOrder);
         processLyt = root.findViewById(R.id.processLyt);
+        lytPromo = root.findViewById(R.id.lytPromo);
         imgRefresh = root.findViewById(R.id.imgRefresh);
         tvTotalBeforeTax = root.findViewById(R.id.tvTotalBeforeTax);
 
@@ -98,8 +99,6 @@ public class CheckoutFragment extends Fragment {
         carts = new ArrayList<>();
 
         setHasOptionsMenu(true);
-
-
         tvPreTotal = root.findViewById(R.id.tvPreTotal);
         btnApply = root.findViewById(R.id.btnApply);
 
@@ -118,6 +117,7 @@ public class CheckoutFragment extends Fragment {
                 bundle.putStringArrayList("variantIdList", variantIdList);
                 bundle.putStringArrayList("qtyList", qtyList);
                 bundle.putString("from", "process");
+                bundle.putString("address", getArguments().getString("address"));
                 PaymentFragment.paymentMethod = "";
                 PaymentFragment.deliveryTime = "";
                 PaymentFragment.deliveryDay = "";
@@ -133,12 +133,14 @@ public class CheckoutFragment extends Fragment {
                     btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                     btnApply.setText("Apply");
                     edtPromoCode.setText("");
-                    tvPromoCode.setVisibility(View.GONE);
-                    tvPCAmount.setVisibility(View.GONE);
+                    lytPromo.setVisibility(View.GONE);
                     isApplied = false;
                     appliedCode = "";
                     pCode = "";
                     SetDataTotal();
+                }
+                else{
+                    lytPromo.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -276,14 +278,13 @@ public class CheckoutFragment extends Fragment {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_green));
                                         btnApply.setText("Applied");
                                         isApplied = true;
+                                        lytPromo.setVisibility(View.VISIBLE);
                                         appliedCode = edtPromoCode.getText().toString();
-                                        tvPCAmount.setVisibility(View.VISIBLE);
-                                        tvPromoCode.setVisibility(View.VISIBLE);
                                         dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
                                         subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT) + taxAmt + dCharge);
                                         pCodeDiscount = Double.parseDouble(object.getString(Constant.DISCOUNT));
                                         tvPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + pCodeDiscount);
-                                        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + subtotal);
+                                        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble("" + subtotal)));
                                     } else {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                                         btnApply.setText("Apply");

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_50dp"
         android:scrollbars="none"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
+                android:layout_margin="@dimen/dimen_5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -272,7 +272,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="10dp"
                     android:text="@string/product_details"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -368,7 +367,6 @@
                     android:id="@+id/tvReturnable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:layout_marginBottom="5dp"
                     android:textAlignment="gravity"
                     android:textColor="@color/colorPrimary"
@@ -378,7 +376,6 @@
                     android:id="@+id/tvCancellable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:layout_marginBottom="5dp"
                     android:textAlignment="gravity"
                     android:textColor="@color/colorPrimary"
@@ -388,7 +385,6 @@
                     android:id="@+id/tvTaxPercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:layout_marginBottom="5dp"
                     android:textAlignment="gravity"
                     android:textColor="@color/colorPrimary"
@@ -398,27 +394,24 @@
                     android:id="@+id/txtDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:textAlignment="gravity"
-                    android:textSize="14sp" />
+                    android:textAlignment="gravity"/>
 
 
             </LinearLayout>
 
 
             <RelativeLayout
+                android:padding="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_5dp"
                 android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_10dp"
                 android:visibility="visible">
 
                 <View
                     android:id="@+id/viewSimilar"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
                     android:background="@color/bggray" />
 
                 <RelativeLayout
@@ -436,7 +429,6 @@
                         android:layout_marginEnd="@dimen/margin_10dp"
                         android:layout_toStartOf="@+id/tvMore"
                         android:gravity="center_vertical"
-                        android:padding="5dp"
                         android:text="@string/similarproduct"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/mid_text"
@@ -462,7 +454,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/titleLyt1"
-                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:layout_marginTop="@dimen/dimen_5dp"
                     android:background="@drawable/default_bg"
                     android:nestedScrollingEnabled="false" />
             </RelativeLayout>

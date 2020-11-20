@@ -53,7 +53,7 @@ public class TrackerDetailFragment extends Fragment {
     RecyclerView recyclerView;
     View l4;
     RelativeLayout relativeLyt;
-    LinearLayout returnLyt, lytPromo, lytWallet, lytPriceDetail;
+    LinearLayout returnLyt, lytPromo, lytWallet, lytPriceDetail, lytotp;
     double totalAfterTax = 0.0;
     Activity activity;
     String id;
@@ -97,6 +97,7 @@ public class TrackerDetailFragment extends Fragment {
         l4 = root.findViewById(R.id.l4);
         returnLyt = root.findViewById(R.id.returnLyt);
         txtorderotp = root.findViewById(R.id.txtorderotp);
+        lytotp = root.findViewById(R.id.lytotp);
         hashMap = new HashMap<>();
 
         id = getArguments().getString("id");
@@ -313,7 +314,11 @@ public class TrackerDetailFragment extends Fragment {
     public void SetData(OrderTracker order) {
         String[] date = order.getDate_added().split("\\s+");
         txtorderid.setText(order.getOrder_id());
-        txtorderotp.setText(order.getOtp());
+        if (order.getOtp().equals("0")) {
+            lytotp.setVisibility(View.GONE);
+        } else {
+            txtorderotp.setText(order.getOtp());
+        }
         txtorderdate.setText(date[0]);
         txtotherdetails.setText(getString(R.string.name_1) + order.getUsername() + getString(R.string.mobile_no_1) + order.getMobile() + getString(R.string.address_1) + order.getAddress());
         totalAfterTax = (Double.parseDouble(order.getTotal()) + Double.parseDouble(order.getDelivery_charge()) + Double.parseDouble(order.getTax_amt()));

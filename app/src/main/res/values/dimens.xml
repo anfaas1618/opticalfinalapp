@@ -11,6 +11,15 @@
     <dimen name="common_padding">5dp</dimen>
     <dimen name="slider_height">150dp</dimen>
     <dimen name="default_margin">10dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="dimen_3dp">3dp</dimen>
+    <dimen name="margin_15dp">15dp</dimen>
+    <dimen name="profile_size">130dp</dimen>
+    <dimen name="margin_dp">15dp</dimen>
+
+    <dimen name="txt_size_8">8sp</dimen>
+    <dimen name="txt_size_6">6sp</dimen>
     <dimen name="p_text_size">12sp</dimen>
     <dimen name="txt_size">10sp</dimen>
     <dimen name="mid_text">16sp</dimen>
@@ -18,12 +27,4 @@
     <dimen name="xlarge_text">25sp</dimen>
     <dimen name="small_size">12sp</dimen>
     <dimen name="mid_small_size">13sp</dimen>
-    <dimen name="margin_10dp">10dp</dimen>
-    <dimen name="margin_5dp">5dp</dimen>
-    <dimen name="dimen_3dp">3dp</dimen>
-    <dimen name="margin_15dp">15dp</dimen>
-    <dimen name="profile_size">130dp</dimen>
-    <dimen name="margin_dp">15dp</dimen>
-    <dimen name="txt_size_8">8sp</dimen>
-    <dimen name="txt_size_6">6sp</dimen>
 </resources>
