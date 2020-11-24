@@ -262,7 +262,7 @@ public class CheckoutFragment extends Fragment {
                     params.put(Constant.VALIDATE_PROMO_CODE, Constant.GetVal);
                     params.put(Constant.USER_ID, session.getData(Session.KEY_ID));
                     params.put(Constant.PROMO_CODE, promoCode);
-                    params.put(Constant.TOTAL, String.valueOf(total));
+                    params.put(Constant.TOTAL, String.valueOf((total + taxAmt + dCharge)));
 
                     ApiConfig.RequestToVolley(new VolleyCallback() {
                         @SuppressLint("SetTextI18n")
@@ -281,7 +281,7 @@ public class CheckoutFragment extends Fragment {
                                         lytPromo.setVisibility(View.VISIBLE);
                                         appliedCode = edtPromoCode.getText().toString();
                                         dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
-                                        subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT) + taxAmt + dCharge);
+                                        subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT));
                                         pCodeDiscount = Double.parseDouble(object.getString(Constant.DISCOUNT));
                                         tvPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + pCodeDiscount);
                                         tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble("" + subtotal)));

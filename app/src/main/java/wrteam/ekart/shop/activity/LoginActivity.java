@@ -177,26 +177,69 @@ public class LoginActivity extends AppCompatActivity {
             switch (from) {
                 case "forgot":
                     lytforgot.setVisibility(View.VISIBLE);
+                    lytchangpsw.setVisibility(View.GONE);
+                    lytResetPass.setVisibility(View.GONE);
+                    lytverify.setVisibility(View.GONE);
+                    lytotp.setVisibility(View.GONE);
+                    lytlogin.setVisibility(View.GONE);
+                    signUpLyt.setVisibility(View.GONE);
                     break;
                 case "changepsw":
+                    lytforgot.setVisibility(View.GONE);
                     lytchangpsw.setVisibility(View.VISIBLE);
+                    lytResetPass.setVisibility(View.GONE);
+                    lytverify.setVisibility(View.GONE);
+                    lytotp.setVisibility(View.GONE);
+                    lytlogin.setVisibility(View.GONE);
+                    signUpLyt.setVisibility(View.GONE);
                     break;
                 case "reset_pass":
+                    lytforgot.setVisibility(View.GONE);
+                    lytchangpsw.setVisibility(View.GONE);
                     lytResetPass.setVisibility(View.VISIBLE);
+                    lytverify.setVisibility(View.GONE);
+                    lytotp.setVisibility(View.GONE);
+                    lytlogin.setVisibility(View.GONE);
+                    signUpLyt.setVisibility(View.GONE);
                     break;
                 case "register":
+                    lytforgot.setVisibility(View.GONE);
+                    lytchangpsw.setVisibility(View.GONE);
+                    lytResetPass.setVisibility(View.GONE);
                     lytverify.setVisibility(View.VISIBLE);
+                    lytotp.setVisibility(View.GONE);
+                    lytlogin.setVisibility(View.GONE);
+                    signUpLyt.setVisibility(View.GONE);
                     break;
                 case "otp_verify":
                 case "otp_forgot":
+                    lytforgot.setVisibility(View.GONE);
+                    lytchangpsw.setVisibility(View.GONE);
+                    lytResetPass.setVisibility(View.GONE);
+                    lytverify.setVisibility(View.GONE);
                     lytotp.setVisibility(View.VISIBLE);
+                    lytlogin.setVisibility(View.GONE);
+                    signUpLyt.setVisibility(View.GONE);
                     txtmobileno.setText(getResources().getString(R.string.please_type_verification_code_sent_to) + "  +" + Constant.country_code + " - " + mobile);
                     break;
                 case "drawer":
                 case "checkout":
+                case "tracker":
+                    lytforgot.setVisibility(View.GONE);
+                    lytchangpsw.setVisibility(View.GONE);
+                    lytResetPass.setVisibility(View.GONE);
+                    lytverify.setVisibility(View.GONE);
+                    lytotp.setVisibility(View.GONE);
                     lytlogin.setVisibility(View.VISIBLE);
+                    signUpLyt.setVisibility(View.GONE);
                     break;
                 default:
+                    lytforgot.setVisibility(View.GONE);
+                    lytchangpsw.setVisibility(View.GONE);
+                    lytResetPass.setVisibility(View.GONE);
+                    lytverify.setVisibility(View.GONE);
+                    lytotp.setVisibility(View.GONE);
+                    lytlogin.setVisibility(View.GONE);
                     signUpLyt.setVisibility(View.VISIBLE);
                     edtmobile.setText(mobile);
                     edtRefer.setText(Constant.FRND_CODE);
@@ -204,8 +247,13 @@ public class LoginActivity extends AppCompatActivity {
             }
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
+            lytforgot.setVisibility(View.GONE);
+            lytchangpsw.setVisibility(View.GONE);
+            lytResetPass.setVisibility(View.GONE);
+            lytverify.setVisibility(View.GONE);
+            lytotp.setVisibility(View.GONE);
             lytlogin.setVisibility(View.VISIBLE);
-
+            signUpLyt.setVisibility(View.GONE);
         }
         StartFirebaseLogin();
         PrivacyPolicy();
@@ -451,10 +499,13 @@ public class LoginActivity extends AppCompatActivity {
         final String password = edtloginpassword.getText().toString();
 
         if (ApiConfig.CheckValidattion(email, false, false)) {
+            edtLoginMobile.requestFocus();
             edtLoginMobile.setError(getString(R.string.enter_mobile_no));
         } else if (ApiConfig.CheckValidattion(email, false, true)) {
+            edtLoginMobile.requestFocus();
             edtLoginMobile.setError(getString(R.string.enter_valid_mobile_no));
         } else if (ApiConfig.CheckValidattion(password, false, false)) {
+            edtloginpassword.requestFocus();
             edtloginpassword.setError(getString(R.string.enter_pass));
         } else if (AppController.isConnected(activity)) {
             Map<String, String> params = new HashMap<String, String>();
@@ -554,24 +605,24 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if (ApiConfig.CheckValidattion(name, false, false)) {
+            edtname.requestFocus();
             edtname.setError(getString(R.string.enter_name));
-            scrollView.scrollTo(0, edtname.getBottom());
-        } else if (ApiConfig.CheckValidattion(email, false, false))
+        } else if (ApiConfig.CheckValidattion(email, false, false)) {
+            edtemail.requestFocus();
             edtemail.setError(getString(R.string.enter_email));
-        else if (ApiConfig.CheckValidattion(email, true, false)) {
+        } else if (ApiConfig.CheckValidattion(email, true, false)) {
+            edtemail.requestFocus();
             edtemail.setError(getString(R.string.enter_valid_email));
         } else if (ApiConfig.CheckValidattion(password, false, false)) {
+            edtcpsw.requestFocus();
             edtpsw.setError(getString(R.string.enter_pass));
-            scrollView.scrollTo(0, edtpsw.getBottom());
         } else if (ApiConfig.CheckValidattion(cpassword, false, false)) {
+            edtcpsw.requestFocus();
             edtcpsw.setError(getString(R.string.enter_confirm_pass));
-            scrollView.scrollTo(0, edtcpsw.getBottom());
         } else if (!password.equals(cpassword)) {
+            edtcpsw.requestFocus();
             edtcpsw.setError(getString(R.string.pass_not_match));
-            scrollView.scrollTo(0, edtcpsw.getBottom());
-        } else if (latitude.equals("0") || longitude.equals("0"))
-            Toast.makeText(activity, getString(R.string.alert_select_location), Toast.LENGTH_LONG).show();
-        else if (!chPrivacy.isChecked()) {
+        } else if (!chPrivacy.isChecked()) {
             Toast.makeText(activity, getString(R.string.alert_privacy_msg), Toast.LENGTH_LONG).show();
         } else if (AppController.isConnected(activity)) {
             Map<String, String> params = new HashMap<String, String>();
@@ -584,11 +635,9 @@ public class LoginActivity extends AppCompatActivity {
             params.put(Constant.FCM_ID, "" + AppController.getInstance().getDeviceToken());
             params.put(Constant.REFERRAL_CODE, Constant.randomAlphaNumeric(8));
             params.put(Constant.FRIEND_CODE, edtRefer.getText().toString().trim());
-            System.out.println("==========params " + params);
             ApiConfig.RequestToVolley(new VolleyCallback() {
                 @Override
                 public void onSuccess(boolean result, String response) {
-                    System.out.println("==========params *register " + response);
                     if (result) {
                         try {
                             JSONObject objectbject = new JSONObject(response);
@@ -670,8 +719,8 @@ public class LoginActivity extends AppCompatActivity {
                     password,
                     objectbject.getString(Constant.REFERRAL_CODE));
 
-            ApiConfig.AddMultipleProductInCart( session, activity, databaseHelper.getDataCartList());
-            ApiConfig.getCartItemCount( activity, session);
+            ApiConfig.AddMultipleProductInCart(session, activity, databaseHelper.getDataCartList());
+            ApiConfig.getCartItemCount(activity, session);
 
             ArrayList<String> favorites = databaseHelper.getFavourite();
             for (int i = 0; i < favorites.size(); i++) {
@@ -694,6 +743,8 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("from", "");
             if (fromto != null && fromto.equals("checkout")) {
                 intent.putExtra("from", "checkout");
+            } else if (from != null && from.equals("tracker")) {
+                intent.putExtra("from", "tracker");
             }
             startActivity(intent);
 

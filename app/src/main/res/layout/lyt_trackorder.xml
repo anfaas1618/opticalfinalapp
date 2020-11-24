@@ -12,99 +12,77 @@
         app:cardCornerRadius="5dp">
 
         <RelativeLayout
+            android:id="@+id/lytoidinfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
 
-            <RelativeLayout
-                android:id="@+id/lytoidinfo"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/lytoid"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/lytoid"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="@string/ordered_id"
+                    android:textColor="@color/dark_gray" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/ordered_id"
-                        android:textColor="@color/dark_gray" />
-
-                    <TextView
-                        android:id="@+id/txtorderid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/ordered_id"
-                        android:textColor="@color/dark_gray" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lytodate"
+                <TextView
+                    android:id="@+id/txtorderid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/lytoid"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="3dp"
+                    android:text="@string/ordered_id"
+                    android:textColor="@color/dark_gray" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/order_date"
-                        android:textColor="@color/dark_gray" />
+            <LinearLayout
+                android:id="@+id/lytodate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lytoid"
+                android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txtorderdate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/ordered_id"
-                        android:textColor="@color/dark_gray" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true">
+                    android:text="@string/order_date"
+                    android:textColor="@color/dark_gray" />
 
-                    <TextView
-                        android:id="@+id/carddetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dimen_5dp"
-                        android:background="@drawable/bg_btn"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:text="@string/view_details"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/txtorderdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="@string/ordered_id"
+                    android:textColor="@color/dark_gray" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/reorder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dimen_5dp"
-                        android:background="@drawable/bg_btn"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:text="@string/reorder"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
-                </LinearLayout>
+            <TextView
+                android:id="@+id/carddetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/dimen_5dp"
+                android:background="@drawable/bg_btn"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/view_details"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
-            </RelativeLayout><!--item lyt-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/lytoidinfo" />
+                android:layout_below="@+id/carddetail" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@+id/lytoidinfo"
+                android:layout_below="@+id/carddetail"
                 android:background="@color/tracking_gray" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

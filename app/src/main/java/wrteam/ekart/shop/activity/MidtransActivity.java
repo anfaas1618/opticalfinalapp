@@ -1,14 +1,13 @@
 package wrteam.ekart.shop.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
 import com.midtrans.sdk.corekit.core.TransactionRequest;
-import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
 import com.midtrans.sdk.corekit.models.BankType;
 import com.midtrans.sdk.corekit.models.CustomerDetails;
 import com.midtrans.sdk.corekit.models.ItemDetails;
@@ -17,16 +16,25 @@ import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 
 public class MidtransActivity extends AppCompatActivity implements TransactionFinishedCallback {
+
+    Map<String, String> sendParams;
+    double payableAmount = 0;
+    String from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_midtrans);
+        sendParams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);
+        payableAmount = Double.parseDouble(sendParams.get(Constant.FINAL_TOTAL));
+        from = sendParams.get(Constant.FROM);
 
         String client_key = Constant.MIDTRANS_CLIENT_KEY;
         String base_url = Constant.MIDTRANS_MERCHANT_BASE_URL;
@@ -37,7 +45,6 @@ public class MidtransActivity extends AppCompatActivity implements TransactionFi
                 .setTransactionFinishedCallback(this) // set transaction finish callback (sdk callback)
                 .setMerchantBaseUrl(base_url) //set merchant url
                 .enableLog(true) // enable sdk log
-                .setColorTheme(new CustomColorTheme("#FFE51255", "#B61548", "#FFE51255")) // will replace theme on snap theme on MAP
                 .buildSDK();
 
         MidtransSDK.getInstance().setTransactionRequest(initTransactionRequest());
@@ -48,14 +55,13 @@ public class MidtransActivity extends AppCompatActivity implements TransactionFi
     private TransactionRequest initTransactionRequest() {
         // Create new Transaction Request
         TransactionRequest transactionRequestNew = new
-                TransactionRequest(System.currentTimeMillis() + "", 20000);
+                TransactionRequest(System.currentTimeMillis() + "", payableAmount);
 
         //set customer details
         transactionRequestNew.setCustomerDetails(initCustomerDetails());
 
-
         // set item details
-        ItemDetails itemDetails = new ItemDetails("1", 20000, 1, "Trekking Shoes");
+        ItemDetails itemDetails = new ItemDetails("" + System.currentTimeMillis(), payableAmount, 1, getString(R.string.app_name) + " " + getString(R.string.shopping));
 
         // Add item details into item detail list.
         ArrayList<ItemDetails> itemDetailsArrayList = new ArrayList<>();
@@ -77,9 +83,9 @@ public class MidtransActivity extends AppCompatActivity implements TransactionFi
 
         //define customer detail (mandatory for coreflow)
         CustomerDetails mCustomerDetails = new CustomerDetails();
-        mCustomerDetails.setPhone("085310102020");
-        mCustomerDetails.setFirstName("user fullname");
-        mCustomerDetails.setEmail("mail@mail.com");
+        mCustomerDetails.setPhone(sendParams.get(Constant.MOBILE));
+        mCustomerDetails.setFirstName(new Session(getApplicationContext()).getData(Constant.NAME));
+        mCustomerDetails.setEmail(sendParams.get(Constant.EMAIL));
         return mCustomerDetails;
     }
 

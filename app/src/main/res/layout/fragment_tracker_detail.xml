@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:visibility="visible">
+    android:visibility="gone">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -592,7 +592,7 @@
         <Button
             android:id="@+id/btnreorder"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_3dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn"

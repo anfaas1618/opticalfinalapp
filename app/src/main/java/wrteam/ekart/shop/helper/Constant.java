@@ -15,7 +15,6 @@ public class Constant {
 
     //Do not change anything in this link
     public static String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=";
-
     public static String BaseUrl = MAINBASEUrl + "api-firebase/";
     public static String FAQ_URL = BaseUrl + "get-faqs.php";
     public static String SliderUrl = BaseUrl + "slider-images.php";

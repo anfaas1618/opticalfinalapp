@@ -60,7 +60,6 @@ public class StripePaymentActivity extends AppCompatActivity {
     PaymentModelClass paymentModelClass;
     double payableAmount = 0;
     String from;
-    String id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

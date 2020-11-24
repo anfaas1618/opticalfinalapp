@@ -14,7 +14,7 @@
 
     <group
         android:id="@+id/group1"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
 
         <item
@@ -40,7 +40,7 @@
 
     <group
         android:id="@+id/group2"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/menu_change_pass"
@@ -59,7 +59,7 @@
     </group>
 
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/menu_contact"
             android:icon="@drawable/ic_contact1"
@@ -80,7 +80,7 @@
     </group>
 
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/menu_faq"
             android:icon="@drawable/ic_faq"

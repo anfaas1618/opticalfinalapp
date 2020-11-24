@@ -69,7 +69,7 @@ dependencies {
 //    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
     implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
-    implementation 'com.stripe:stripe-android:+'
+    implementation 'com.stripe:stripe-android:16.1.0'
 
     //Midtrans
     //implementation 'com.midtrans:uikit:1.25.0' //  compiling production

@@ -77,7 +77,7 @@ public class OrderPlacedFragment extends Fragment {
                                     MainActivity.favoriteClicked = false;
                                     MainActivity.trackingClicked = false;
                                     MainActivity.active = null;
-                                    startActivity(new Intent(activity, MainActivity.class).putExtra("from", "track_order").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                    startActivity(new Intent(activity, MainActivity.class).putExtra("from", "tracker").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                 }
                             });
 

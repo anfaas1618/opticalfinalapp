@@ -2,6 +2,7 @@ package wrteam.ekart.shop.activity;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -94,7 +96,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         favoriteFragment = new FavoriteFragment();
         trackOrderFragment = new TrackOrderFragment();
 
-        if (from.equals("track_order")) {
+        if (from.equals("tracker")) {
             bottomNavigationView.setSelectedItemId(R.id.navigation_track_order);
             active = trackOrderFragment;
             trackingClicked = true;
@@ -102,7 +104,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             favoriteClicked = false;
             categoryClicked = false;
             fm.beginTransaction().add(R.id.container, trackOrderFragment).commit();
-        } else if (!from.equals("splash")) {
+        } else {
             bottomNavigationView.setSelectedItemId(R.id.navigation_home);
             active = homeFragment;
             homeClicked = true;
@@ -153,9 +155,37 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             } else {
                                 fm.beginTransaction().show(trackOrderFragment).hide(active).commit();
                             }
-                            active = trackOrderFragment;
                         } else {
-                            Toast.makeText(activity, getString(R.string.track_login_msg), Toast.LENGTH_SHORT).show();
+                            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+                            // Setting Dialog Message
+                            alertDialog.setTitle(getString(R.string.login));
+                            alertDialog.setMessage(getString(R.string.login_msg));
+                            alertDialog.setCancelable(false);
+                            final AlertDialog alertDialog1 = alertDialog.create();
+                            // Setting OK Button
+                            alertDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent i = new Intent(activity, LoginActivity.class);
+                                    i.putExtra("from", "tracker");
+                                    activity.startActivity(i);
+                                }
+                            });
+                            alertDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (active == homeFragment) {
+                                        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+                                    }
+                                    if (active == categoryFragment) {
+                                        bottomNavigationView.setSelectedItemId(R.id.navigation_category);
+                                    }
+                                    if (active == favoriteFragment) {
+                                        bottomNavigationView.setSelectedItemId(R.id.navigation_favorite);
+                                    }
+                                    fm.beginTransaction().show(active).commit();
+                                    alertDialog1.dismiss();
+                                }
+                            });
+                            alertDialog.show();
                         }
                         return true;
                 }

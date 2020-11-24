@@ -31,8 +31,6 @@ import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Product;
 
-import static wrteam.ekart.shop.helper.ApiConfig.AddMultipleProductInCart;
-
 
 public class SearchFragment extends Fragment {
     public static ArrayList<Product> productArrayList;
@@ -76,10 +74,11 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.equals("")) {
+                if (newText.length() > 0) {
                     SearchRequest(newText);
                 } else {
-                    newText.length();
+                    productArrayList.clear();
+                    productAdapter.notifyDataSetChanged();
                 }
                 if (Constant.CartValues.size() > 0) {
                     ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
@@ -98,7 +97,6 @@ public class SearchFragment extends Fragment {
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.SEARCH, query);
 
-
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
@@ -107,7 +105,6 @@ public class SearchFragment extends Fragment {
                         productArrayList = new ArrayList<>();
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-
 
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);

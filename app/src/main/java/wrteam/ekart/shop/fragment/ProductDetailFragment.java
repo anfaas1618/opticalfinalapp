@@ -68,7 +68,6 @@ import wrteam.ekart.shop.model.Product;
 import wrteam.ekart.shop.model.Slider;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static wrteam.ekart.shop.helper.ApiConfig.AddMultipleProductInCart;
 import static wrteam.ekart.shop.helper.ApiConfig.AddOrRemoveFavorite;
 import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
@@ -316,10 +315,10 @@ public class ProductDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (AppController.isConnected(activity)) {
-                    if (!(count > Float.parseFloat(priceVariationslist.get(vpos).getStock()))) {
+                    count = Integer.parseInt(txtqty.getText().toString());
+                    if (!(count >= Float.parseFloat(priceVariationslist.get(vpos).getStock()))) {
                         if (count < Constant.MAX_PRODUCT_LIMIT) {
                             Constant.CLICK = true;
-                            count = Integer.parseInt(txtqty.getText().toString());
                             count++;
                             txtqty.setText("" + count);
                             if (isLogin) {
@@ -336,7 +335,6 @@ public class ProductDetailFragment extends Fragment {
                                 ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                             } else {
                                 databaseHelper.AddOrderData(priceVariationslist.get(vpos).getId(), priceVariation.getProduct_id(), "" + count);
-
                             }
                         } else {
                             Toast.makeText(getContext(), getString(R.string.limit_alert), Toast.LENGTH_SHORT).show();

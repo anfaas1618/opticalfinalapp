@@ -182,7 +182,7 @@ public class DrawerActivity extends AppCompatActivity {
                         finish();
                         break;
                     case R.id.menu_tracker:
-                        startActivity(new Intent(activity, MainActivity.class).putExtra("from", "track_order").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity(new Intent(activity, MainActivity.class).putExtra("from", "tracker").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         break;
                     case R.id.menu_refer:
                         if (session.isUserLoggedIn())
