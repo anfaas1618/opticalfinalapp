@@ -155,6 +155,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             } else {
                                 fm.beginTransaction().show(trackOrderFragment).hide(active).commit();
                             }
+                            active = trackOrderFragment;
                         } else {
                             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
                             // Setting Dialog Message

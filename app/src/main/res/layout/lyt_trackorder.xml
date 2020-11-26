@@ -3,99 +3,104 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/dimen_10dp"
     android:background="@drawable/card_shadow"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
+        android:id="@+id/lytoidinfo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="5dp">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/lytoidinfo"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/lytoid"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-
-            <LinearLayout
-                android:id="@+id/lytoid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ordered_id"
-                    android:textColor="@color/dark_gray" />
-
-                <TextView
-                    android:id="@+id/txtorderid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:text="@string/ordered_id"
-                    android:textColor="@color/dark_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lytodate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/lytoid"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/order_date"
-                    android:textColor="@color/dark_gray" />
-
-                <TextView
-                    android:id="@+id/txtorderdate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:text="@string/ordered_id"
-                    android:textColor="@color/dark_gray" />
-            </LinearLayout>
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/carddetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="@dimen/dimen_5dp"
-                android:background="@drawable/bg_btn"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="@string/view_details"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:text="@string/ordered_id"
+                android:textColor="@color/dark_gray" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/txtorderid"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/carddetail" />
+                android:layout_marginStart="3dp"
+                android:text="@string/ordered_id"
+                android:textColor="@color/dark_gray" />
+        </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@+id/carddetail"
-                android:background="@color/tracking_gray" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:id="@+id/lytodate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lytoid"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_date"
+                android:textColor="@color/dark_gray" />
+
+            <TextView
+                android:id="@+id/txtorderdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:text="@string/ordered_id"
+                android:textColor="@color/dark_gray" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/carddetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/dimen_5dp"
+            android:background="@drawable/bg_btn"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/view_details"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_below="@+id/carddetail"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/bggray" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_below="@id/view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_5dp" />
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/recyclerView"
+        android:layout_marginTop="10dp"
+        android:background="@color/bggray" />
 
     <LinearLayout
         android:id="@+id/lyttracker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="@dimen/margin_5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -104,31 +109,36 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txt0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/order_placed"
                 android:textAlignment="center"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
 
             <ImageView
+                android:id="@+id/img0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_tracker_btn" />
 
             <TextView
+                android:id="@+id/txt00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
         </LinearLayout>
 
         <View
+            android:id="@+id/l1"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@color/tracking_gray" />
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -137,31 +147,36 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txt1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/processed"
                 android:textAlignment="center"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
 
             <ImageView
+                android:id="@+id/img1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_tracker_btn" />
 
             <TextView
+                android:id="@+id/txt11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
         </LinearLayout>
 
         <View
+            android:id="@+id/l2"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@color/tracking_gray" />
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -170,26 +185,31 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txt2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shipped"
                 android:textAlignment="center"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
 
             <ImageView
+                android:id="@+id/img2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_tracker_btn" />
 
             <TextView
+                android:id="@+id/txt22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
         </LinearLayout>
 
+
         <View
+            android:id="@+id/l3"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_gravity="center_vertical"
@@ -203,23 +223,26 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txt3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delivered"
                 android:textAlignment="center"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
 
             <ImageView
+                android:id="@+id/img3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_tracker_btn" />
 
             <TextView
+                android:id="@+id/txt33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
         </LinearLayout>
 
         <View
@@ -240,23 +263,27 @@
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/txt4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/returned"
                 android:textAlignment="center"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
 
             <ImageView
+                android:id="@+id/img4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_tracker_btn" />
 
             <TextView
+                android:id="@+id/txt44"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

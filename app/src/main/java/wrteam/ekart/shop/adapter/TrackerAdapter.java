@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
@@ -75,7 +77,6 @@ public class TrackerAdapter extends RecyclerView.Adapter<TrackerAdapter.CartItem
 
     @Override
     public int getItemCount() {
-
         return orderTrackerArrayList.size();
     }
 
@@ -91,6 +92,7 @@ public class TrackerAdapter extends RecyclerView.Adapter<TrackerAdapter.CartItem
 
     public class CartItemHolder extends RecyclerView.ViewHolder {
         TextView txtorderid, txtorderdate, carddetail;
+        NetworkImageView imgorder;
         LinearLayout lyttracker, returnLyt;
         RecyclerView recyclerView;
         View l4;
@@ -99,6 +101,7 @@ public class TrackerAdapter extends RecyclerView.Adapter<TrackerAdapter.CartItem
             super(itemView);
             txtorderid = itemView.findViewById(R.id.txtorderid);
             txtorderdate = itemView.findViewById(R.id.txtorderdate);
+            imgorder = itemView.findViewById(R.id.imgorder);
             lyttracker = itemView.findViewById(R.id.lyttracker);
             l4 = itemView.findViewById(R.id.l4);
             returnLyt = itemView.findViewById(R.id.returnLyt);

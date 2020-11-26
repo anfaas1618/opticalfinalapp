@@ -57,7 +57,6 @@ public class PayPalWebActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                 if (url.startsWith(Constant.MAINBASEUrl)) {
-
                     GetTransactionResponse(url);
                     return true;
                 } else

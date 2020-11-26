@@ -87,6 +87,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         holder.txtstatusdate.setText(order.getActiveStatusDate());
         holder.txtname.setText(order.getName() + "(" + order.getMeasurement() + order.getUnit() + ")");
 
+        System.out.println(">>>>>>>>>>>>>>>>> " + order.getImage());
+
         Picasso.get().
                 load(order.getImage())
                 .fit()
@@ -94,10 +96,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
                 .into(holder.imgorder);
-
-//        holder.imgorder.setDefaultImageResId(R.drawable.placeholder);
-//        holder.imgorder.setErrorImageResId(R.drawable.placeholder);
-//        holder.imgorder.setImageUrl(order.getImage(), Constant.imageLoader);
 
         holder.carddetail.setOnClickListener(new View.OnClickListener() {
             @Override
