@@ -576,7 +576,7 @@ public class PaymentFragment extends Fragment {
         tvDialogTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(totalAfterTax));
         tvDialogFinalTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
         tvDialogConfirm.setOnClickListener(v -> {
-            System.out.println("sendparams >>>>>>>>>> "+sendparams);
+            System.out.println("sendparams >>>>>>>>>> " + sendparams);
             if (paymentMethod.equals(getResources().getString(R.string.codpaytype)) || paymentMethod.equals(getString(R.string.wallettype))) {
                 ApiConfig.RequestToVolley((result, response) -> {
                     if (result) {
@@ -617,10 +617,8 @@ public class PaymentFragment extends Fragment {
                     startActivity(intent);
                 } else if (paymentMethod.equals(getString(R.string.midtrans))) {
                     dialog.dismiss();
-                    sendparams.put("from", "payment");
-                    Intent intent = new Intent(activity, MidtransActivity.class);
-                    intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
-                    startActivity(intent);
+                    sendparams.put(Constant.STATUS, Constant.AWAITING_PAYMENT);
+                    PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, Constant.AWAITING_PAYMENT);
                 } else if (paymentMethod.equals(getString(R.string.stripe))) {
                     dialog.dismiss();
                     sendparams.put("from", "payment");
@@ -641,6 +639,9 @@ public class PaymentFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+
+    public void StartStripePayment() {
     }
 
     public void CreateOrderId(double payble) {
@@ -689,18 +690,23 @@ public class PaymentFragment extends Fragment {
         }
     }
 
+
     public void PlaceOrder(final Activity activity, final String paymentType, final String txnid, boolean issuccess, final Map<String, String> sendparams, final String status) {
         if (issuccess) {
             ApiConfig.RequestToVolley(new VolleyCallback() {
                 @Override
                 public void onSuccess(boolean result, String response) {
-
+                    System.out.println(">>>>>> " + sendparams.toString());
                     if (result) {
                         try {
                             JSONObject object = new JSONObject(response);
                             if (!object.getBoolean(Constant.ERROR)) {
-                                AddTransaction(activity, object.getString(Constant.ORDER_ID), paymentType, txnid, status, activity.getString(R.string.order_success), sendparams);
-                                MainActivity.fm.beginTransaction().add(R.id.container, new OrderPlacedFragment()).commit();
+                                if (status.equals(Constant.AWAITING_PAYMENT)) {
+                                    CreateMidtransPayment(object.getString(Constant.ORDER_ID), Constant.formater.format(subtotal));
+                                } else {
+                                    AddTransaction(activity, object.getString(Constant.ORDER_ID), paymentType, txnid, status, activity.getString(R.string.order_success), sendparams);
+                                    MainActivity.fm.beginTransaction().add(R.id.container, new OrderPlacedFragment()).commit();
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -712,6 +718,30 @@ public class PaymentFragment extends Fragment {
 
             AddTransaction(activity, "", getString(R.string.razor_pay), txnid, status, getString(R.string.order_failed), sendparams);
         }
+    }
+
+    public void CreateMidtransPayment(String orderId, String grossAmount) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.ORDER_ID, orderId);
+        params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (!jsonObject.getBoolean(Constant.ERROR)) {
+                            Intent intent = new Intent(activity, MidtransActivity.class);
+                            intent.putExtra(Constant.URL, jsonObject.getJSONObject(Constant.DATA).getString(Constant.REDIRECT_URL));
+                            intent.putExtra(Constant.ORDER_ID, orderId);
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.CREATE_PAYMENT, params, true);
     }
 
     public void AddTransaction(Activity activity, String orderId, String paymentType, String txnid, final String status, String message, Map<String, String> sendparams) {

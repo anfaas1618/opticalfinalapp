@@ -30,7 +30,6 @@
     <string name="password_">Password</string>
     <string name="verify">Verify</string>
 
-    <string name="track_login_msg">You have to login if you want to show order tracker.</string>
     <string name="mobile_send_msg">We will send you an OTP on this mobile number to verify. </string>
     <string name="please_type_verification_code_sent_to">Please Enter OTP sent via SMS on</string>
     <string name="personal_info">Personal Info</string>
@@ -205,7 +204,6 @@
     <string name="share_via">Share via</string>
     <string name="set_location">Set Location</string>
     <string name="exit_msg">Please click BACK again to exit</string>
-    <string name="alert_select_location">Please select your location</string>
     <string name="alert_privacy_msg">please, agree privacy policy and terms &amp; condition</string>
     <string name="take_a_look">Take a Look at&#160;</string>
     <string name="all">All</string>
@@ -307,7 +305,5 @@
     <string name="sold_out">Sold Out</string>
     <string name="reorder">Re-Order</string>
     <string name="logout_msg">Are you sure, You want to logout?</string>
-    <string name="msg_reorder">Items added in cart, You can proceed now!</string>
-    <string name="shopping">Shopping</string>
     <string name="login_msg">If you want to check your orders, you have to login.</string>
 </resources>

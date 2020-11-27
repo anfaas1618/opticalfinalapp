@@ -33,6 +33,7 @@ public class Constant {
     public static String GET_PRODUCT_BY_CATE = BaseUrl + "get-products-by-category-id.php";
     public static String GET_FAVORITES_URL = BaseUrl + "favorites.php";
     public static String GET_OFFLINE_FAVORITES_URL = BaseUrl + "get-products-offline.php";
+    public static String CREATE_PAYMENT = MAINBASEUrl + "midtrans/create-payment.php";
     public static String GET_OFFLINE_CART_URL = BaseUrl + "get-variants-offline.php";
     public static String GET_PRODUCT_DETAIL_URL = BaseUrl + "get-product-by-id.php";
     public static String CITY_URL = BaseUrl + "get-cities.php";
@@ -54,6 +55,7 @@ public class Constant {
     public static final String PROFILE = "profile";
     public static final String UPLOAD_PROFILE = "upload_profile";
     public static String GetVal = "1";
+    public static final String GROSS_AMOUNT = "gross_amount";
     public static String AUTHORIZATION = "Authorization";
     public static String PARAMS = Constant.PARAMS;
     public static String GET_PRIVACY = "get_privacy";
@@ -73,6 +75,7 @@ public class Constant {
     public static String GET_USER_DATA = "get_user_data";
     public static String REMOVE_FCM_ID = "remove_fcm_id";
     public static String KEY_BALANCE = "balance";
+    public static String AWAITING_PAYMENT = "awaiting_payment";
     public static String KEY_REFER_EARN_BONUS = "refer-earn-bonus";
     public static String KEY_REFER_EARN_STATUS = "is-refer-earn-on";
     public static String KEY_MAX_EARN_AMOUNT = "max-refer-earn-amount";
@@ -81,6 +84,8 @@ public class Constant {
     public static String KEY_WALLET_BALANCE = "wallet_balance";
     public static String KEY_VERSION_CODE = "current_version";
     public static String KEY_UPDATE_STATUS = "is-version-system-on";
+    public static String REDIRECT_URL = "redirect_url";
+    public static String URL = "url";
     public static String KEY_ORDER_RETURN_DAY_LIMIT = "max-product-return-days";
     public static String ADD_MULTIPLE_ITEMS = "add_multiple_items";
     public static String MAX_CART_ITEMS_COUNT = "max_cart_items_count";

@@ -20,12 +20,11 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="2dp"
-            android:background="@drawable/drawer_profile"
-            android:padding="@dimen/dimen_5dp" />
+            android:background="@drawable/drawer_profile" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_60dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
             <TextView

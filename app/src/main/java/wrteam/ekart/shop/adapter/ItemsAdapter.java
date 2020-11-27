@@ -19,6 +19,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
@@ -86,8 +87,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         holder.txtstatus.setText(activeStatus);
         holder.txtstatusdate.setText(order.getActiveStatusDate());
         holder.txtname.setText(order.getName() + "(" + order.getMeasurement() + order.getUnit() + ")");
-
-        System.out.println(">>>>>>>>>>>>>>>>> " + order.getImage());
 
         Picasso.get().
                 load(order.getImage())
@@ -211,7 +210,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         }
     }
 
-    void updateOrderStatus(final Activity activity, final OrderTracker order, final String status, final CartItemHolder holder, final String from) {
+    private void updateOrderStatus(final Activity activity, final OrderTracker order, final String status, final CartItemHolder holder, final String from) {
 
         final Map<String, String> params = new HashMap<>();
         params.put(Constant.UPDATE_ORDER_ITEM_STATUS, Constant.GetVal);

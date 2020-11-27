@@ -115,8 +115,8 @@ public class ProfileFragment extends Fragment {
                 .load(session.getData(Constant.PROFILE))
                 .fit()
                 .centerInside()
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.ic_profile_placeholder)
+                .error(R.drawable.ic_profile_placeholder)
                 .transform(new CircleTransform())
                 .into(imgProfile);
 

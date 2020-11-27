@@ -48,7 +48,6 @@ public class PayPalWebActivity extends AppCompatActivity {
         paymentModelClass = new PaymentModelClass(PayPalWebActivity.this);
         url = getIntent().getStringExtra("url");
         itemNo = getIntent().getStringExtra("item_no");
-//        System.out.println("=====url paypal " + url);
 
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);

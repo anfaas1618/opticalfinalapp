@@ -166,11 +166,10 @@ public class LoginActivity extends AppCompatActivity {
 
         progress = new ProgressDisplay(this);
 
-//        edtCode.setCountryForNameCode("BD");
-//        edtFCode.setCountryForNameCode("BD");
+//        edtCode.setCountryForNameCode("IN");
+//        edtFCode.setCountryForNameCode("IN");
 //        Constant.country_code = edtCode.getSelectedCountryCode(); // your country code
 //        session.setData(Constant.COUNTRY_CODE, Constant.country_code);
-//        you will find the code name of your country from : https://countrycode.org/
 
 
         if (from != null) {

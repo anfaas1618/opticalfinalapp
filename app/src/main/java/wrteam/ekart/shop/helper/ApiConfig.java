@@ -560,7 +560,7 @@ public class ApiConfig {
             int view = activity.getResources().getIdentifier("l" + i, "id", activity.getPackageName());
             int txt = activity.getResources().getIdentifier("txt" + i, "id", activity.getPackageName());
             int textview = activity.getResources().getIdentifier("txt" + i + "" + i, "id", activity.getPackageName());
-            // System.out.println("===============" + img + " == " + view);
+            System.out.println("=============== " + order.getOrderStatusArrayList().get(i).toString());
             View v = holder.itemView;
             if (img != 0 && v.findViewById(img) != null) {
                 ImageView imageView = v.findViewById(img);
@@ -588,8 +588,6 @@ public class ApiConfig {
         LayoutInflater inflater = LayoutInflater.from(activity);
         View view = inflater.inflate(R.layout.counter_menuitem_layout, null);
         view.setBackgroundResource(backgroundImageId);
-
-        // System.out.println("=============count " + count);
         if (count == 0) {
             View counterTextPanel = view.findViewById(R.id.counterValuePanel);
             counterTextPanel.setVisibility(View.GONE);
