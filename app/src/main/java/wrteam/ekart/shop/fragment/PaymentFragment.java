@@ -69,37 +69,33 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
 
 public class PaymentFragment extends Fragment {
+    public LinearLayout paymentLyt, deliveryTimeLyt, lytPayOption, lytTax, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
     public static String razorPayId, paymentMethod = "", deliveryTime = "", deliveryDay = "", pCode = "", TAG = CheckoutFragment.class.getSimpleName();
-    public static RecyclerView recyclerView;
-    public static SlotAdapter adapter;
-    public static Map<String, String> sendparams;
-    public TextView tvSelectDeliveryDate, tvPreTotal, tvWltBalance;
-    public TextView tvProceedOrder, tvConfirmOrder, tvPayment, tvDelivery;
+    TextView tvSubTotal, txttotalitems, tvSelectDeliveryDate, tvWltBalance, tvProceedOrder, tvConfirmOrder, tvPayment, tvDelivery;
+    double subtotal = 0.0, usedBalance = 0.0, totalAfterTax = 0.0, taxAmt = 0.0, pCodeDiscount = 0.0, dCharge = 0.0;
+    RadioButton rbCod, rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe;
     public ArrayList<String> variantIdList, qtyList, dateList;
-    public LinearLayout paymentLyt;
-    public LinearLayout deliveryTimeLyt, lytPayOption, lytTax, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
-    RelativeLayout confirmLyt;
-    View root;
-    double total;
-    RelativeLayout lytWallet;
+    public static Map<String, String> sendparams;
+    public static RecyclerView recyclerView;
     PaymentModelClass paymentModelClass;
-    CheckBox chWallet;
-    ImageView imgRefresh;
-    ProgressBar pBar;
+    ArrayList<BookingDate> bookingDates;
+    RelativeLayout confirmLyt, lytWallet;
+    public static SlotAdapter adapter;
+    RecyclerView recyclerViewDates;
     Calendar StartDate, EndDate;
+    ScrollView scrollPaymentLyt;
     ArrayList<Slot> slotList;
+    DateAdapter dateAdapter;
     int mYear, mMonth, mDay;
+    String address = null;
+    ImageView imgRefresh;
+    Activity activity;
+    CheckBox chWallet;
+    ProgressBar pBar;
     Button btnApply;
     Session session;
-    String address = null;
-    ScrollView scrollPaymentLyt;
-    Activity activity;
-    DateAdapter dateAdapter;
-    ArrayList<BookingDate> bookingDates;
-    RecyclerView recyclerViewDates;
-    RadioButton rbCod, rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe;
-    TextView tvSubTotal;
-    double subtotal = 0.0, usedBalance = 0.0, totalAfterTax = 0.0, taxAmt = 0.0, pCodeDiscount = 0.0, dCharge = 0.0;
+    double total;
+    View root;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -124,6 +120,7 @@ public class PaymentFragment extends Fragment {
         qtyList = getArguments().getStringArrayList("qtyList");
 
         tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
+        txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
 
         if (AppController.isConnected(getActivity())) {
             ApiConfig.getWalletBalance(getActivity(), session);
@@ -147,7 +144,7 @@ public class PaymentFragment extends Fragment {
                     if (Constant.WALLET_BALANCE >= subtotal) {
                         usedBalance = subtotal;
                         tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format((Constant.WALLET_BALANCE - usedBalance)));
-                        paymentMethod = "wallet";
+                        paymentMethod = Constant.WALLET;
                         lytPayOption.setVisibility(View.GONE);
                     } else {
                         usedBalance = Constant.WALLET_BALANCE;
@@ -212,10 +209,10 @@ public class PaymentFragment extends Fragment {
         imgRefresh = root.findViewById(R.id.imgRefresh);
         recyclerViewDates = root.findViewById(R.id.recyclerViewDates);
         tvSubTotal = root.findViewById(R.id.tvSubTotal);
+        txttotalitems = root.findViewById(R.id.txttotalitems);
         confirmLyt = root.findViewById(R.id.confirmLyt);
         scrollPaymentLyt = root.findViewById(R.id.scrollPaymentLyt);
         tvWltBalance = root.findViewById(R.id.tvWltBalance);
-        tvPreTotal = root.findViewById(R.id.tvPreTotal);
         btnApply = root.findViewById(R.id.btnApply);
     }
 
@@ -611,7 +608,7 @@ public class PaymentFragment extends Fragment {
 
                 } else if (paymentMethod.equals(getString(R.string.paystack))) {
                     dialog.dismiss();
-                    sendparams.put("from", "payment");
+                    sendparams.put(Constant.FROM, Constant.PAYMENT);
                     Intent intent = new Intent(activity, PayStackActivity.class);
                     intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
                     startActivity(intent);
@@ -621,7 +618,7 @@ public class PaymentFragment extends Fragment {
                     PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, Constant.AWAITING_PAYMENT);
                 } else if (paymentMethod.equals(getString(R.string.stripe))) {
                     dialog.dismiss();
-                    sendparams.put("from", "payment");
+                    sendparams.put(Constant.FROM, Constant.PAYMENT);
                     Intent intent = new Intent(activity, StripePaymentActivity.class);
                     intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
                     startActivity(intent);
@@ -696,7 +693,6 @@ public class PaymentFragment extends Fragment {
             ApiConfig.RequestToVolley(new VolleyCallback() {
                 @Override
                 public void onSuccess(boolean result, String response) {
-                    System.out.println(">>>>>> " + sendparams.toString());
                     if (result) {
                         try {
                             JSONObject object = new JSONObject(response);
@@ -734,6 +730,8 @@ public class PaymentFragment extends Fragment {
                             Intent intent = new Intent(activity, MidtransActivity.class);
                             intent.putExtra(Constant.URL, jsonObject.getJSONObject(Constant.DATA).getString(Constant.REDIRECT_URL));
                             intent.putExtra(Constant.ORDER_ID, orderId);
+                            intent.putExtra(Constant.FROM, Constant.PAYMENT);
+                            intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
                             startActivity(intent);
                         }
                     } catch (JSONException e) {
@@ -863,7 +861,7 @@ public class PaymentFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode != RaveConstants.RAVE_REQUEST_CODE && data != null) {
-            paymentModelClass.TrasactionMethod(data, getActivity(), "payment");
+            paymentModelClass.TrasactionMethod(data, getActivity(), Constant.PAYMENT);
         } else if (requestCode == RaveConstants.RAVE_REQUEST_CODE && data != null && data.getStringExtra("response") != null) {
             try {
                 JSONObject details = new JSONObject(data.getStringExtra("response"));
@@ -871,7 +869,7 @@ public class PaymentFragment extends Fragment {
 
                 if (resultCode == RavePayActivity.RESULT_SUCCESS) {
                     Toast.makeText(getContext(), getString(R.string.order_placed1), Toast.LENGTH_LONG).show();
-                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), jsonObject.getString("paymentType"), jsonObject.getString("txRef"), true, sendparams, Constant.SUCCESS);
+                    new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), getString(R.string.flutterwave), jsonObject.getString("txRef"), true, sendparams, Constant.SUCCESS);
                 } else if (resultCode == RavePayActivity.RESULT_ERROR) {
                     new PaymentModelClass(getActivity()).PlaceOrder(getActivity(), "", "", false, sendparams, Constant.PENDING);
                     Toast.makeText(getContext(), getString(R.string.order_error), Toast.LENGTH_LONG).show();

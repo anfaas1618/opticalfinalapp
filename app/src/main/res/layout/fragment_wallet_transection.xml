@@ -39,7 +39,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="@dimen/dimen_5dp"
                         android:text="@string/your_balance"
-                        android:textColor="@color/colorPrimaryLight"
+                        android:textColor="@color/light_blue"
                         android:textSize="@dimen/large_text" />
 
                     <TextView

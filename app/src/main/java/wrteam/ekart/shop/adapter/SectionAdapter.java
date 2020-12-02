@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.ProductListFragment;
+import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Category;
 
 
@@ -71,8 +72,8 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionH
 
                 Fragment fragment = new ProductListFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("from", "section");
-                bundle.putString("name", section.getName());
+                bundle.putString(Constant.FROM, "section");
+                bundle.putString(Constant.NAME, section.getName());
                 bundle.putInt("position", position);
                 fragment.setArguments(bundle);
 

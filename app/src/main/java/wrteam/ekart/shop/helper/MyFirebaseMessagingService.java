@@ -47,20 +47,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 intent.putExtra("id", id);
                 intent.putExtra("name", title);
-                intent.putExtra("from", type);
+                intent.putExtra(Constant.FROM, type);
 
             } else if (type.equals("product")) {
 
                 intent.putExtra("id", id);
                 intent.putExtra("vpos", 0);
-                intent.putExtra("from", type);
+                intent.putExtra(Constant.FROM, type);
 
             } else if (type.equals("order")) {
-                intent.putExtra("from", type);
+                intent.putExtra(Constant.FROM, type);
                 intent.putExtra("model", "");
                 intent.putExtra("id", id);
             } else {
-                intent.putExtra("from", "");
+                intent.putExtra(Constant.FROM, "");
             }
             if (type.equals("payment_transaction")) {
                 Session.setCount(Constant.UNREAD_TRANSACTION_COUNT, (Session.getCount(Constant.UNREAD_TRANSACTION_COUNT, getApplicationContext()) + 1), getApplicationContext());

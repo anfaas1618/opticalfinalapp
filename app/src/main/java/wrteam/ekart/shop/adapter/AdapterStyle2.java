@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.helper.AppController;
+import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Product;
 
 
@@ -92,9 +93,9 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
                 AppCompatActivity activity1 = (AppCompatActivity) context;
                 Fragment fragment = new ProductDetailFragment();
                 final Bundle bundle = new Bundle();
-                bundle.putString("from", "section");
+                bundle.putString(Constant.FROM, "section");
                 bundle.putInt("vpos", 0);
-                bundle.putString("id", productList.get(0).getId());
+                bundle.putString(Constant.ID, productList.get(0).getId());
                 fragment.setArguments(bundle);
                 activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
@@ -106,9 +107,9 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
                 AppCompatActivity activity1 = (AppCompatActivity) context;
                 Fragment fragment = new ProductDetailFragment();
                 final Bundle bundle = new Bundle();
-                bundle.putString("from", "section");
+                bundle.putString(Constant.FROM, "section");
                 bundle.putInt("vpos", 0);
-                bundle.putString("id", productList.get(1).getId());
+                bundle.putString(Constant.ID, productList.get(1).getId());
                 fragment.setArguments(bundle);
                 activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
@@ -120,9 +121,9 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
                 AppCompatActivity activity1 = (AppCompatActivity) context;
                 Fragment fragment = new ProductDetailFragment();
                 final Bundle bundle = new Bundle();
-                bundle.putString("from", "section");
+                bundle.putString(Constant.FROM, "section");
                 bundle.putInt("vpos", 0);
-                bundle.putString("id", productList.get(2).getId());
+                bundle.putString(Constant.ID, productList.get(2).getId());
                 fragment.setArguments(bundle);
                 activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }

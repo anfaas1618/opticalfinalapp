@@ -115,6 +115,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             removeAddress(activity, address.getId());
                         }
                         if (addresses.size() == 0) {
+                            AddressListFragment.selectedAddress = "";
                             AddressListFragment.tvAlert.setVisibility(View.VISIBLE);
                         } else {
                             AddressListFragment.tvAlert.setVisibility(View.GONE);

@@ -73,7 +73,7 @@ public class ProductListFragment extends Fragment {
 
         session = new Session(activity);
 
-        from = getArguments().getString("from");
+        from = getArguments().getString(Constant.FROM);
         id = getArguments().getString("id");
 
         swipeLayout = root.findViewById(R.id.swipeLayout);

@@ -146,7 +146,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                     bundle.putInt("vpos", priceVariations.size() == 1 ? 0 : holder.spinner.getSelectedItemPosition());
                     bundle.putString("id", product.getProduct_id());
                     bundle.putInt("position", position);
-                    bundle.putString("from", "favorite");
+                    bundle.putString(Constant.FROM, "favorite");
                     fragment.setArguments(bundle);
                     activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 }

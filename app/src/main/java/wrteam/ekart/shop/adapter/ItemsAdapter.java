@@ -19,7 +19,6 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 

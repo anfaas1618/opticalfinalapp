@@ -15,11 +15,11 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -63,7 +63,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
     View root;
     String city = "0", area = "0", cityId, areaId;
     ArrayList<City> cityArrayList, areaList;
-    AppCompatSpinner cityspinner, areaSpinner;
+    Spinner cityspinner, areaSpinner;
     Button btnsubmit;
     ProgressBar progressBar;
     CheckBox chIsDefault;
@@ -193,7 +193,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
 
                     Fragment fragment = new MapFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("from", "address");
+                    bundle.putString(Constant.FROM, "address");
                     bundle.putDouble("latitude", latitude);
                     bundle.putDouble("longitude", longitude);
                     fragment.setArguments(bundle);
@@ -271,28 +271,28 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
             areaSpinner.performClick();
 
         } else if (edtName.getText().toString().trim().isEmpty()) {
-            edtName.setError("Please enter name!");
             edtName.requestFocus();
+            edtName.setError("Please enter name!");
         } else if (edtMobile.getText().toString().trim().isEmpty()) {
-            edtMobile.setError("Please enter mobile!");
             edtMobile.requestFocus();
+            edtMobile.setError("Please enter mobile!");
 
         } else if (edtAddress.getText().toString().trim().isEmpty()) {
-            edtAddress.setError("Please enter address!");
             edtAddress.requestFocus();
+            edtAddress.setError("Please enter address!");
         } else if (edtLanmark.getText().toString().trim().isEmpty()) {
-            edtLanmark.setError("Please enter landmark!");
             edtLanmark.requestFocus();
+            edtLanmark.setError("Please enter landmark!");
         } else if (edtPinCode.getText().toString().trim().isEmpty()) {
-            edtPinCode.setError("Please enter pin code!");
             edtPinCode.requestFocus();
+            edtPinCode.setError("Please enter pin code!");
         } else if (edtState.getText().toString().trim().isEmpty()) {
-            edtState.setError("Please enter state!");
             edtState.requestFocus();
+            edtState.setError("Please enter state!");
 
         } else if (edtCounty.getText().toString().trim().isEmpty()) {
-            edtCounty.setError("Please enter country");
             edtCounty.requestFocus();
+            edtCounty.setError("Please enter country");
         } else {
             Map<String, String> params = new HashMap<String, String>();
             if (For.equalsIgnoreCase("add")) {

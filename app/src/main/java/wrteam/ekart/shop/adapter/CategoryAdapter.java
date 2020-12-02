@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductListFragment;
+import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Category;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
@@ -65,9 +66,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onClick(View v) {
                 Fragment fragment = new ProductListFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", model.getId());
-                bundle.putString("name", model.getName());
-                bundle.putString("from", "category");
+                bundle.putString(Constant.ID, model.getId());
+                bundle.putString(Constant.NAME, model.getName());
+                bundle.putString(Constant.FROM, "category");
                 fragment.setArguments(bundle);
                 ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }

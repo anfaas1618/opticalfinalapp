@@ -64,7 +64,7 @@ public class SearchFragment extends Fragment {
         Constant.CartValues = new HashMap<>();
 
         recycleview.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -77,8 +77,10 @@ public class SearchFragment extends Fragment {
                 if (newText.length() > 0) {
                     SearchRequest(newText);
                 } else {
-                    productArrayList.clear();
-                    productAdapter.notifyDataSetChanged();
+                    if (activity != null && productArrayList.size() > 0) {
+                        productArrayList.clear();
+                        productAdapter.notifyDataSetChanged();
+                    }
                 }
                 if (Constant.CartValues.size() > 0) {
                     ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);

@@ -42,8 +42,6 @@ import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 
-import static wrteam.ekart.shop.helper.ApiConfig.AddMultipleProductInCart;
-
 public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // for load more
@@ -137,7 +135,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     bundle.putInt("vpos", priceVariations.size() == 1 ? 0 : holder.spinner.getSelectedItemPosition());
                     bundle.putString("id", product.getId());
                     bundle.putInt("position", position);
-                    bundle.putString("from", "fragment");
+                    bundle.putString(Constant.FROM, "fragment");
 
                     fragment.setArguments(bundle);
 

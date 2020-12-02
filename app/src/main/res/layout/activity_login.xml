@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -101,15 +101,27 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/confirm_new_pass">
+
+                        <EditText
+                            android:id="@+id/edtcnewpsw"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
                     <Button
                         android:id="@+id/btnchangepsw"
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_margin="@dimen/dimen_10dp"
                         android:onClick="OnBtnClick"
                         android:text="@string/change_pass"
                         android:textColor="@color/white" />
@@ -165,10 +177,7 @@
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_margin="@dimen/dimen_10dp"
                         android:onClick="OnBtnClick"
                         android:text="@string/reset_pass"
                         android:textColor="@color/white" />
@@ -195,26 +204,33 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/country_list_bg"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/dimen_1dp"
+                        android:weightSum="15">
 
                         <com.hbb20.CountryCodePicker
                             android:id="@+id/edtFCode"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_10dp"
-                            android:layout_marginTop="25dp"
-                            android:background="@color/light_gray"
-                            app:ccp_textSize="@dimen/mid_text" />
+                            android:layout_height="match_parent"
+                            android:layout_weight="10"
+                            app:ccpDialog_showFastScroller="true"
+                            app:ccp_showArrow="false"
+                            app:ccp_showNameCode="false"
+                            app:ccp_textSize="@dimen/mid_small_size" />
 
                         <EditText
                             android:id="@+id/edtforgotmobile"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="5"
+                            android:background="@color/transparent"
                             android:hint="@string/forgot_message_hint"
                             android:inputType="phone"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
                     </LinearLayout>
 
                     <Button
@@ -222,46 +238,20 @@
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_margin="@dimen/dimen_10dp"
                         android:onClick="OnBtnClick"
                         android:text="@string/recover_pass"
                         android:textColor="@color/white" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_10dp"
                         android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-
-                            android:paddingTop="7dp"
-                            android:paddingBottom="7dp"
-                            android:text="@string/verify_message"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/tvResendPass"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/open_sans_semibold"
-                            android:gravity="center"
-                            android:onClick="OnBtnClick"
-                            android:padding="7dp"
-                            android:text="@string/resend"
-                            android:textAllCaps="true"
-                            android:textColor="@color/colorPrimary"
-                            android:visibility="gone" />
-                    </LinearLayout>
+                        android:paddingTop="7dp"
+                        android:paddingBottom="7dp"
+                        android:text="@string/verify_message"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
 
                 </LinearLayout>
 
@@ -319,10 +309,7 @@
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_margin="@dimen/dimen_10dp"
                         android:onClick="OnBtnClick"
                         android:text="@string/login_"
                         android:textColor="@color/white" />
@@ -350,6 +337,7 @@
                     android:id="@+id/lytverify"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10dp"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -365,23 +353,30 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/country_list_bg"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/dimen_1dp"
+                        android:weightSum="15">
 
                         <com.hbb20.CountryCodePicker
                             android:id="@+id/edtCode"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_10dp"
-                            android:layout_marginTop="25dp"
-                            android:background="@color/light_gray"
-                            app:ccp_textSize="@dimen/mid_text" />
+                            android:layout_height="match_parent"
+                            android:layout_weight="10"
+                            app:ccpDialog_showFastScroller="true"
+                            app:ccp_showArrow="false"
+                            app:ccp_showNameCode="false"
+                            app:ccp_textSize="@dimen/mid_small_size" />
+
 
                         <EditText
                             android:id="@+id/edtMobVerify"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_10dp"
-                            android:layout_marginTop="25dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="5"
+                            android:background="@color/transparent"
                             android:hint="@string/mobile"
                             android:inputType="phone"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
@@ -401,9 +396,7 @@
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_margin="@dimen/dimen_10dp"
                         android:onClick="OnBtnClick"
                         android:text="@string/next"
                         android:textColor="@color/white" />
@@ -453,37 +446,52 @@
                         app:lineColor="@color/colorPrimary"
                         app:viewType="line" />
 
-                    <TextView
-                        android:id="@+id/tvResend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:onClick="OnBtnClick"
-                        android:padding="@dimen/margin_10dp"
-                        android:text="@string/resend"
-                        android:textColor="@color/txt_color" />
-
-                    <TextView
-                        android:id="@+id/tvTime"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="50dp"
-                        android:gravity="center"
-                        android:textColor="@color/dark_gray"
-                        android:textSize="@dimen/mid_text"
-                        android:visibility="gone" />
+                        android:layout_margin="@dimen/dimen_10dp">
+
+                        <ImageView
+                            android:id="@+id/img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_message" />
+
+                        <TextView
+                            android:id="@+id/tvResend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="@dimen/dimen_7dp"
+                            android:layout_toEndOf="@id/img"
+                            android:text="@string/resend"
+                            android:textColor="@color/gray"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvTimer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:paddingEnd="@dimen/dimen_10dp"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/gray"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
 
                     <Button
                         android:id="@+id/btnotpverify"
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="@dimen/margin_10dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_margin="@dimen/dimen_10dp"
                         android:onClick="OnBtnClick"
                         android:text="@string/verify"
                         android:textColor="@color/white" />
+
                 </LinearLayout>
 
                 <!--SignUp lyt-->
@@ -616,10 +624,7 @@
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="40dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="@dimen/margin_10dp"
                         android:onClick="OnBtnClick"
                         android:text="@string/submit"
                         android:textColor="@color/white" />

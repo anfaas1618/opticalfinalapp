@@ -106,10 +106,10 @@ public class StripePaymentActivity extends AppCompatActivity {
         dismissProgressDialog();
         try {
             JSONObject jsonObject = new JSONObject(message);
-            if (from.equals("wallet")) {
+            if (from.equals(Constant.WALLET)) {
                 onBackPressed();
                 new WalletTransactionFragment().AddWalletBalance(StripePaymentActivity.this, new Session(StripePaymentActivity.this), WalletTransactionFragment.amount, WalletTransactionFragment.msg, jsonObject.getString(Constant.ID));
-            } else if (from.equals("payment")) {
+            } else if (from.equals(Constant.PAYMENT)) {
                 paymentModelClass.PlaceOrder(StripePaymentActivity.this, getString(R.string.paystack), jsonObject.getString(Constant.ID), true, sendParams, Constant.SUCCESS);
             }
         } catch (JSONException e) {
@@ -130,10 +130,10 @@ public class StripePaymentActivity extends AppCompatActivity {
         try {
             dismissProgressDialog();
             JSONObject jsonObject = new JSONObject(response.toString());
-            if (from.equals("wallet")) {
+            if (from.equals(Constant.WALLET)) {
                 onBackPressed();
                 new WalletTransactionFragment().AddWalletBalance(StripePaymentActivity.this, new Session(StripePaymentActivity.this), WalletTransactionFragment.amount, WalletTransactionFragment.msg, jsonObject.getString(Constant.ID));
-            } else if (from.equals("payment")) {
+            } else if (from.equals(Constant.PAYMENT)) {
                 paymentModelClass.PlaceOrder(StripePaymentActivity.this, getString(R.string.paystack), jsonObject.getString(Constant.ID), true, sendParams, "success");
             }
         } catch (JSONException e) {

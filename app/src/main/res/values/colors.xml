@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#0470C3</color>
-    <color name="colorPrimaryLight">#B2E3F6</color>
-    <color name="colorPrimaryDark">#0362aa</color>
+    <color name="colorPrimaryLight">#0470C3</color>
+    <color name="colorPrimaryDark">#0470C3</color>
     <color name="colorAccent">#0470C3</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
@@ -22,11 +22,9 @@
     <color name="dark_gray">#313030</color>
     <color name="light_gray">#dbdada</color>
     <color name="light_green">#14c167</color>
-
-    <color name="cart_highlighted_txt_color">#0470C3</color>
+    <color name="light_blue">#B2E3F6</color>
 
     <color name="status_text">#FFFFFF</color>
-
 
     <color name="tx_fail_bg">#dd4b39</color>
     <color name="tx_success_bg">#00a65a</color>

@@ -73,16 +73,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final Transaction transaction = transactions.get(position);
             id = transaction.getId();
 
-
             holder.tvTxDateAndTime.setText(transaction.getDate_created());
-            holder.tvTxMessage.setText("#" + transaction.getOrder_id() + " " + transaction.getMessage());
-            holder.tvTxAmount.setText("Amount : " + Float.parseFloat(transaction.getAmount()));
-            holder.tvTxNo.setText("#" + transaction.getTxn_id());
-            holder.tvPaymentMethod.setText("Via " + transaction.getType());
+            holder.tvTxMessage.setText(activity.getString(R.string.hash) + transaction.getOrder_id() + " " + transaction.getMessage());
+            holder.tvTxAmount.setText(activity.getString(R.string.amount_) + Float.parseFloat(transaction.getAmount()));
+            holder.tvTxNo.setText(activity.getString(R.string.hash) + transaction.getTxn_id());
+            holder.tvPaymentMethod.setText(activity.getString(R.string.via) + transaction.getType());
 
             holder.tvTxStatus.setText(toTitleCase(transaction.getStatus()));
 
-            if (transaction.getStatus().equalsIgnoreCase(Constant.CREDIT) || transaction.getStatus().equalsIgnoreCase(Constant.SUCCESS)) {
+            if (transaction.getStatus().equalsIgnoreCase(Constant.CREDIT) || transaction.getStatus().equalsIgnoreCase(Constant.SUCCESS) || transaction.getStatus().equalsIgnoreCase("capture") || transaction.getStatus().equalsIgnoreCase("challenge") || transaction.getStatus().equalsIgnoreCase("pending")) {
                 holder.cardViewTxStatus.setCardBackgroundColor(ContextCompat.getColor(activity, R.color.tx_success_bg));
             } else {
                 holder.cardViewTxStatus.setCardBackgroundColor(ContextCompat.getColor(activity, R.color.tx_fail_bg));

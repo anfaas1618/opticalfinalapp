@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_50dp"
         android:scrollbars="none"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -180,14 +180,20 @@
                             android:textColor="@color/black" />
                     </LinearLayout>
 
-                    <Spinner
-                        android:id="@+id/spinner"
+                    <LinearLayout
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:background="@drawable/bg_border"
-                        android:spinnerMode="dropdown" />
+                        android:layout_height="wrap_content">
+
+                        <Spinner
+                            android:id="@+id/spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:spinnerMode="dropdown" />
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -394,18 +400,18 @@
                     android:id="@+id/txtDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="gravity"/>
+                    android:textAlignment="gravity" />
 
 
             </LinearLayout>
 
 
             <RelativeLayout
-                android:padding="@dimen/dimen_5dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
                 android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:padding="@dimen/dimen_5dp"
                 android:visibility="visible">
 
                 <View

@@ -119,7 +119,7 @@ public class ProductDetailFragment extends Fragment {
         databaseHelper = new DatabaseHelper(activity);
 
 
-        from = getArguments().getString("from");
+        from = getArguments().getString(Constant.FROM);
         vpos = getArguments().getInt("vpos", 0);
         id = getArguments().getString("id");
 
@@ -355,7 +355,7 @@ public class ProductDetailFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("id", product.getId());
         bundle.putString("cat_id", product.getCategory_id());
-        bundle.putString("from", "similar");
+        bundle.putString(Constant.FROM, "similar");
         bundle.putString("name", "Similar Products");
         fragment.setArguments(bundle);
         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.helper.AppController;
+import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 
@@ -78,8 +79,8 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
                 AppCompatActivity activity1 = (AppCompatActivity) context;
                 Fragment fragment = new ProductDetailFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", product.getId());
-                bundle.putString("from", "section");
+                bundle.putString(Constant.ID, product.getId());
+                bundle.putString(Constant.FROM, "section");
                 bundle.putInt("vpos", 0);
                 fragment.setArguments(bundle);
                 activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();

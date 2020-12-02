@@ -56,7 +56,7 @@ public class AddressListFragment extends Fragment {
     View root;
     SwipeRefreshLayout swipeLayout;
     LinearLayoutManager linearLayoutManager;
-    TextView tvSubTotal, tvConfirmOrder, tvUpdate, tvCurrent;
+    TextView txttotalitems, tvSubTotal, tvConfirmOrder, tvUpdate, tvCurrent;
     LinearLayout lytCLocation, processLyt;
     RelativeLayout confirmLyt;
     int offset = 0;
@@ -82,6 +82,7 @@ public class AddressListFragment extends Fragment {
         tvUpdate = root.findViewById(R.id.tvUpdate);
         tvCurrent = root.findViewById(R.id.tvCurrent);
         tvSubTotal = root.findViewById(R.id.tvSubTotal);
+        txttotalitems = root.findViewById(R.id.txttotalitems);
         confirmLyt = root.findViewById(R.id.confirmLyt);
         linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
@@ -92,9 +93,9 @@ public class AddressListFragment extends Fragment {
             getAddresses();
         }
 
-        if (getArguments().getString("from").equalsIgnoreCase("process")) {
+        if (getArguments().getString(Constant.FROM).equalsIgnoreCase("process")) {
             tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(getArguments().getDouble("total")));
-
+            txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
             tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
@@ -111,11 +112,7 @@ public class AddressListFragment extends Fragment {
                     }
                 }
             });
-            processLyt.setVisibility(View.VISIBLE);
-            confirmLyt.setVisibility(View.VISIBLE);
-
         } else {
-
             processLyt.setVisibility(View.GONE);
             confirmLyt.setVisibility(View.GONE);
         }
@@ -200,6 +197,7 @@ public class AddressListFragment extends Fragment {
                             }
                             addressAdapter = new AddressAdapter(activity, addresses);
                             recyclerView.setAdapter(addressAdapter);
+                            confirmLyt.setVisibility(View.VISIBLE);
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             tvAlert.setVisibility(View.VISIBLE);

@@ -35,12 +35,13 @@
     <string name="personal_info">Personal Info</string>
     <string name="not_registered">Not Registered yet? Click Here to SignUp</string>
     <string name="forgottext">Forgot password ?</string>
-    <string name="forgot_message_hint">Enter registered mobile number</string>
+    <string name="forgot_message_hint">Registered mobile number</string>
     <string name="changepswtext">Change Password </string>
     <string name="old_pass">Old Password </string>
     <string name="reset_pass_text">Reset Your Password</string>
     <string name="changepsw">Change Password ?</string>
     <string name="confirm_pass">Confirm Password</string>
+    <string name="confirm_new_pass">Confirm New Password</string>
     <string name="update">Update</string>
     <string name="confirm_order_amt">Confirm Order Amount</string>
     <string name="profile">Profile</string>
@@ -109,7 +110,7 @@
     <string name="pay_u">PayUMoney</string>
 
     <string name="paypal">PayPal</string>
-    <string name="resend">Resend</string>
+    <string name="resend">Resend OTP</string>
     <string name="resend_cap">RE-SEND</string>
     <string name="verify_message">Verify your registered number and reset your password. </string>
     <string name="alert_register_num1">Mobile number is not registered on&#160;</string>
@@ -217,7 +218,6 @@
     <string name="select_payment_method">Please select payment method!</string>
     <string name="processing">Processing&#8230;</string>
     <string name="order_failed">Order Failed!!!</string>
-
     <!--invite friend msg-->
     <string name="invite_frnd_title">Invite Friend Using</string>
     <string name="refer_code_copied">Refer Code Copied to Clipboard</string>
@@ -306,4 +306,6 @@
     <string name="reorder">Re-Order</string>
     <string name="logout_msg">Are you sure, You want to logout?</string>
     <string name="login_msg">If you want to check your orders, you have to login.</string>
+    <string name="amount_">"Amount : </string>
+    <string name="hash">#</string>
 </resources>

@@ -101,7 +101,7 @@ public class DrawerActivity extends AppCompatActivity {
                 if (session.isUserLoggedIn())
                     MainActivity.fm.beginTransaction().add(R.id.container, new ProfileFragment()).addToBackStack(null).commit();
                 else
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class).putExtra("from", "drawer"));
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class).putExtra(Constant.FROM, "drawer"));
             }
         });
         setupNavigationDrawer();
@@ -177,12 +177,12 @@ public class DrawerActivity extends AppCompatActivity {
                         Intent intent = new Intent(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("from", "");
+                        intent.putExtra(Constant.FROM, "");
                         startActivity(intent);
                         finish();
                         break;
                     case R.id.menu_tracker:
-                        startActivity(new Intent(activity, MainActivity.class).putExtra("from", "tracker").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity(new Intent(activity, MainActivity.class).putExtra(Constant.FROM, "tracker").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         break;
                     case R.id.menu_refer:
                         if (session.isUserLoggedIn())
@@ -193,14 +193,14 @@ public class DrawerActivity extends AppCompatActivity {
                     case R.id.menu_manage_address:
                         fragment = new AddressListFragment();
                         bundle = new Bundle();
-                        bundle.putString("from", "MainActivity");
+                        bundle.putString(Constant.FROM, "MainActivity");
                         fragment.setArguments(bundle);
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                         break;
                     case R.id.menu_cart:
                         fragment = new CartFragment();
                         bundle = new Bundle();
-                        bundle.putString("from", "mainActivity");
+                        bundle.putString(Constant.FROM, "mainActivity");
                         fragment.setArguments(bundle);
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                         break;
@@ -208,7 +208,7 @@ public class DrawerActivity extends AppCompatActivity {
                     case R.id.menu_change_pass:
                         Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
                         if (session.isUserLoggedIn())
-                            intent1.putExtra("from", "changepsw");
+                            intent1.putExtra(Constant.FROM, "changepsw");
                         startActivity(intent1);
                         break;
                     case R.id.menu_share:

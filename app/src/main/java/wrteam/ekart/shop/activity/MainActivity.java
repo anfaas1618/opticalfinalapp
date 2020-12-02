@@ -77,7 +77,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         activity = MainActivity.this;
         session = new Session(activity);
-        from = getIntent().getStringExtra("from");
+        from = getIntent().getStringExtra(Constant.FROM);
         databaseHelper = new DatabaseHelper(activity);
 
 
@@ -167,7 +167,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             alertDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent i = new Intent(activity, LoginActivity.class);
-                                    i.putExtra("from", "tracker");
+                                    i.putExtra(Constant.FROM, "tracker");
                                     activity.startActivity(i);
                                 }
                             });
@@ -207,7 +207,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 Bundle bundle = new Bundle();
                 bundle.putInt("vpos", getIntent().getIntExtra("vpos", 0));
                 bundle.putString("id", getIntent().getStringExtra("id"));
-                bundle.putString("from", "share");
+                bundle.putString(Constant.FROM, "share");
                 fragment.setArguments(bundle);
                 fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 break;
@@ -217,7 +217,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 Bundle bundle = new Bundle();
                 bundle.putString("id", getIntent().getStringExtra("id"));
                 bundle.putString("name", getIntent().getStringExtra("name"));
-                bundle.putString("from", "category");
+                bundle.putString(Constant.FROM, "category");
                 fragment.setArguments(bundle);
                 fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 break;

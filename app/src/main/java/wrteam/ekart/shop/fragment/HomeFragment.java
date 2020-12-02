@@ -107,6 +107,7 @@ public class HomeFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         session = new Session(getContext());
 
+
         timerDelay = 3000;
         timerWaiting = 3000;
 
@@ -136,7 +137,6 @@ public class HomeFragment extends Fragment {
         searchview = root.findViewById(R.id.searchview);
 
         if (nestedScrollView != null) {
-
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {

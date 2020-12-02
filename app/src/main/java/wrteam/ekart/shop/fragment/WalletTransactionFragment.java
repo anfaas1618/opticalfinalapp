@@ -47,6 +47,7 @@ import java.util.Objects;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.DrawerActivity;
+import wrteam.ekart.shop.activity.MidtransActivity;
 import wrteam.ekart.shop.activity.PayPalWebActivity;
 import wrteam.ekart.shop.activity.PayStackActivity;
 import wrteam.ekart.shop.adapter.WalletTransactionAdapter;
@@ -204,10 +205,6 @@ public class WalletTransactionFragment extends Fragment {
                                         }
                                         if (object.has(Constant.midtrans_payment_method)) {
                                             Constant.MIDTRANS = object.getString(Constant.midtrans_payment_method);
-//                                            "stripe_payment_method":"1",
-//                                                    "stripe_publishable_key":
-//                                            "pk_test_51Hh90WLYfObhNTTwooBHwynrlfiPo2uwxyCVqGNNCWGmpdOHuaW4rYS9cDldKJ1hxV5ik52UXUDSYgEM66OX45550065US7tRX",
-//                                                    "stripe_secret_key": "sk_test_51Hh90WLYfObhNTTwO8kCsbdnMdmLxiGHEpiQPGBkYlahlBAQ3RnXPIKGn3YsGIEMoIQ5bNfxye4kzE6wfLiINzNk00xOYprnZt"
                                         }
                                         if (object.has(Constant.stripe_payment_method)) {
 //                                            Constant.STRIPE = object.getString(Constant.stripe_payment_method);
@@ -221,7 +218,7 @@ public class WalletTransactionFragment extends Fragment {
                                             lytPayOption.setVisibility(View.GONE);
                                         } else {
                                             lytPayOption.setVisibility(View.VISIBLE);
-                                            
+
                                             if (Constant.PAYUMONEY.equals("1")) {
                                                 lytPayU.setVisibility(View.VISIBLE);
                                             }
@@ -344,12 +341,12 @@ public class WalletTransactionFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (edtAmount.getText().toString().equals("")) {
-                            edtAmount.setError(getString(R.string.alert_enter_amount));
                             edtAmount.requestFocus();
+                            edtAmount.setError(getString(R.string.alert_enter_amount));
                         } else {
                             if (Double.parseDouble(edtAmount.getText().toString().trim()) <= 0) {
-                                edtAmount.setError(getString(R.string.alert_recharge));
                                 edtAmount.requestFocus();
+                                edtAmount.setError(getString(R.string.alert_recharge));
                             } else {
                                 if (paymentMethod != null) {
                                     amount = edtAmount.getText().toString().trim();
@@ -461,7 +458,7 @@ public class WalletTransactionFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode != RaveConstants.RAVE_REQUEST_CODE && data != null) {
-            new PaymentModelClass(getActivity()).TrasactionMethod(data, getActivity(), "wallet");
+            new PaymentModelClass(getActivity()).TrasactionMethod(data, getActivity(), Constant.WALLET);
         } else if (requestCode == RaveConstants.RAVE_REQUEST_CODE && data != null) {
             try {
                 JSONObject details = new JSONObject(data.getStringExtra("response"));
@@ -505,6 +502,11 @@ public class WalletTransactionFragment extends Fragment {
             callPayStack(sendparams);
         } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
             StartFlutterWavePayment();
+        } else if (paymentMethod.equals(getString(R.string.midtrans))) {
+            System.out.println();
+            sendparams.put(Constant.FINAL_TOTAL, amount);
+            sendparams.put(Constant.USER_ID, session.getData(Constant.ID));
+            CreateMidtransPayment(System.currentTimeMillis() + Constant.randomNumeric(3), amount, sendparams);
         }
     }
 
@@ -688,6 +690,33 @@ public class WalletTransactionFragment extends Fragment {
             }
         }, activity, Constant.TRANSACTION_URL, params, true);
 
+    }
+
+
+    public void CreateMidtransPayment(String orderId, String grossAmount, Map<String, String> sendparams) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.ORDER_ID, orderId);
+        params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (!jsonObject.getBoolean(Constant.ERROR)) {
+                            Intent intent = new Intent(activity, MidtransActivity.class);
+                            intent.putExtra(Constant.URL, jsonObject.getJSONObject(Constant.DATA).getString(Constant.REDIRECT_URL));
+                            intent.putExtra(Constant.ORDER_ID, orderId);
+                            intent.putExtra(Constant.FROM, Constant.WALLET);
+                            intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.CREATE_PAYMENT, params, true);
     }
 
     @Override

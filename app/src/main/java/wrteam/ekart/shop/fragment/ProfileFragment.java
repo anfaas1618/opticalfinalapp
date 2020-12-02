@@ -130,7 +130,7 @@ public class ProfileFragment extends Fragment {
         txtchangepassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "").putExtra("from", "changepsw"));
+                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "").putExtra(Constant.FROM, "changepsw"));
             }
         });
 
@@ -141,13 +141,18 @@ public class ProfileFragment extends Fragment {
                 final String email = edtemail.getText().toString();
                 final String mobile = edtMobile.getText().toString();
 
-                if (ApiConfig.CheckValidattion(name, false, false))
+                if (ApiConfig.CheckValidattion(name, false, false)) {
+                    edtname.requestFocus();
                     edtname.setError(getString(R.string.enter_name));
-                if (ApiConfig.CheckValidattion(email, false, false))
+                }
+                if (ApiConfig.CheckValidattion(email, false, false)) {
+                    edtemail.requestFocus();
                     edtemail.setError(getString(R.string.enter_email));
-                else if (ApiConfig.CheckValidattion(email, true, false))
+                }
+                else if (ApiConfig.CheckValidattion(email, true, false)) {
+                    edtemail.requestFocus();
                     edtemail.setError(getString(R.string.enter_valid_email));
-
+                }
                 else if (AppController.isConnected(activity)) {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(Constant.TYPE, Constant.EDIT_PROFILE);

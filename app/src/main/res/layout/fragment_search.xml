@@ -20,8 +20,7 @@
             android:layout_marginStart="@dimen/dimen_10dp"
             android:layout_marginEnd="@dimen/dimen_10dp"
             android:layout_marginBottom="@dimen/dimen_10dp"
-            android:background="@drawable/bg_search"
-            android:queryHint="Search Here" />
+            android:background="@drawable/bg_search" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

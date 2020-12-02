@@ -40,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("id", data.getPath().split("/")[2]);
-                    intent.putExtra("from", "share");
+                    intent.putExtra(Constant.FROM, "share");
                     intent.putExtra("vpos", 0);
                     startActivity(intent);
                     finish();
@@ -55,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
                     Toast.makeText(SplashActivity.this, R.string.refer_code_copied, Toast.LENGTH_LONG).show();
 
                     Intent referIntent = new Intent(this, LoginActivity.class);
-                    referIntent.putExtra("from", "register");
+                    referIntent.putExtra(Constant.FROM, "register");
                     startActivity(referIntent);
                     finish();
                     break;
@@ -75,7 +75,7 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("from", "");
+                    intent.putExtra(Constant.FROM, "");
                     startActivity(intent);
                     finish();
                 }

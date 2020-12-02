@@ -68,21 +68,23 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
         Calendar calendar = Calendar.getInstance();
         isToday = PaymentFragment.deliveryDay.equals(calendar.get(Calendar.DATE) + "-" + getMonth((calendar.get(Calendar.MONTH) + 1)) + "-" + calendar.get(Calendar.YEAR));
 
-        if (isToday) {
-            if (currentTime.compareTo(SlotTime) > 0) {
-                holder.rdBtn.setChecked(false);
-                holder.rdBtn.setClickable(false);
-                holder.rdBtn.setTextColor(ContextCompat.getColor(activity, R.color.gray));
-                holder.rdBtn.setButtonDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_uncheck_circle));
+        if (activity != null) {
+            if (isToday) {
+                if (currentTime.compareTo(SlotTime) > 0) {
+                    holder.rdBtn.setChecked(false);
+                    holder.rdBtn.setClickable(false);
+                    holder.rdBtn.setTextColor(ContextCompat.getColor(activity, R.color.gray));
+                    holder.rdBtn.setButtonDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_uncheck_circle));
+                } else {
+                    holder.rdBtn.setClickable(true);
+                    holder.rdBtn.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                    holder.rdBtn.setButtonDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_active_circle));
+                }
             } else {
                 holder.rdBtn.setClickable(true);
                 holder.rdBtn.setTextColor(ContextCompat.getColor(activity, R.color.black));
                 holder.rdBtn.setButtonDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_active_circle));
             }
-        } else {
-            holder.rdBtn.setClickable(true);
-            holder.rdBtn.setTextColor(ContextCompat.getColor(activity, R.color.black));
-            holder.rdBtn.setButtonDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_active_circle));
         }
 
         holder.rdBtn.setOnClickListener(new View.OnClickListener() {

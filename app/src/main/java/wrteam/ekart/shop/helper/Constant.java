@@ -82,6 +82,8 @@ public class Constant {
     public static String KEY_MIN_WIDRAWAL = "minimum-withdrawal-amount";
     public static String KEY_WALLET_USED = "wallet_used";
     public static String KEY_WALLET_BALANCE = "wallet_balance";
+    public static String WALLET = "wallet";
+    public static String PAYMENT = "payment";
     public static String KEY_VERSION_CODE = "current_version";
     public static String KEY_UPDATE_STATUS = "is-version-system-on";
     public static String REDIRECT_URL = "redirect_url";
@@ -111,20 +113,13 @@ public class Constant {
     public static String UNREAD_NOTIFICATION_COUNT = "unread_notification_count";
     public static String UNREAD_WALLET_COUNT = "unread_wallet_count";
     public static String UNREAD_TRANSACTION_COUNT = "unread_transaction_count";
+
     public static String flutterwave_public_key = "flutterwave_public_key";
     public static String flutterwave_secret_key = "flutterwave_secret_key";
     public static String flutterwave_encryption_key = "flutterwave_encryption_key";
 
-    public static String stripe_publishable_key = "stripe_publishable_key";
-    public static String STRIPE_SECRET_KEY = "stripe_secret_key";
     public static String STRIPE_CURRENCY = "inr";
     public static String STRIPE_BASE_URL = "https://newekart.wrteam.in/library/stripe/";
-
-    public static String midtrans_merchant_id = "midtrans_merchant_id";
-    public static String midtrans_client_key = "midtrans_client_key";
-    public static String midtrans_server_key = "midtrans_server_key";
-    public static String MIDTRANS_CLIENT_KEY = "SB-Mid-client-roooHrl0UI6xDJ7-";
-    public static String MIDTRANS_MERCHANT_BASE_URL = "https://newekart.wrteam.in/library/midtrans/index.php/";
 
     public static String CITY_ID = "city_id";
     public static String AREA_ID = "area_id";
@@ -138,6 +133,7 @@ public class Constant {
     public static String QTY = "qty";
     public static String GET_USER_CART = "get_user_cart";
     public static String CART_ITEM_COUNT = "cart_count";
+    public static final String DELETE_ORDER = "delete_order";
     public static String GET_USER_TRANSACTION = "get_user_transactions";
     public static String TYPE_TRANSACTION = "transactions";
     public static String TYPE_WALLET_TRANSACTION = "wallet_transactions";
@@ -314,7 +310,6 @@ public class Constant {
     public static String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghjiklmnopqrstuvwxyz";
     public static String NUMERIC_STRING = "123456789";
 
-    public static String verificationCode;
     public static String PAYPAL = "";
     public static String PAYUMONEY = "";
     public static String RAZORPAY = "";

@@ -21,6 +21,7 @@ import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.FullScreenViewFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.fragment.ProductListFragment;
+import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Slider;
 
 public class SliderAdapter extends PagerAdapter {
@@ -75,9 +76,9 @@ public class SliderAdapter extends PagerAdapter {
 
                         Fragment fragment = new ProductListFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putString("id", singleItem.getType_id());
-                        bundle.putString("name", singleItem.getName());
-                        bundle.putString("from", "category");
+                        bundle.putString(Constant.ID, singleItem.getType_id());
+                        bundle.putString(Constant.NAME, singleItem.getName());
+                        bundle.putString(Constant.FROM, "category");
                         fragment.setArguments(bundle);
 
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
@@ -87,8 +88,8 @@ public class SliderAdapter extends PagerAdapter {
 
                         Fragment fragment = new ProductDetailFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putString("id", singleItem.getType_id());
-                        bundle.putString("from", "share");
+                        bundle.putString(Constant.ID, singleItem.getType_id());
+                        bundle.putString(Constant.FROM, "share");
                         bundle.putInt("vpos", 0);
                         fragment.setArguments(bundle);
 

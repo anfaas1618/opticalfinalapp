@@ -102,7 +102,7 @@ public class Session {
         Intent intent = new Intent(activity, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("from", "");
+        intent.putExtra(Constant.FROM, "");
         activity.startActivity(intent);
 
     }
@@ -130,7 +130,7 @@ public class Session {
                 Intent i = new Intent(activity, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("from", "");
+                i.putExtra(Constant.FROM, "");
                 activity.startActivity(i);
                 activity.finish();
             }

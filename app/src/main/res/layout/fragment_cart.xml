@@ -18,50 +18,48 @@
             android:layout_height="match_parent" />
     </androidx.core.widget.NestedScrollView>
 
-
     <RelativeLayout
         android:id="@+id/lytTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/bg_button"
-        android:paddingStart="5dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="5dp"
-        android:paddingBottom="8dp"
+        android:layout_marginTop="@dimen/dimen_5dp"
+        android:background="@drawable/card_shadow"
+        android:padding="@dimen/dimen_10dp"
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/txttotal"
+            android:id="@+id/txttotalamount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/txtcheckout"
+            android:layout_toStartOf="@id/tvConfirmOrder"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/white"
-            android:textStyle="bold|italic" />
+            android:textColor="@color/txt_color" />
 
         <TextView
-            android:id="@+id/txtcheckout"
-            android:layout_width="wrap_content"
+            android:id="@+id/txttotalitems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/imgcheckout"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="@string/checkout"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:layout_below="@id/txttotalamount"
+            android:layout_toStartOf="@id/tvConfirmOrder"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/gray" />
 
-        <ImageView
-            android:id="@+id/imgcheckout"
+
+        <TextView
+            android:id="@+id/tvConfirmOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_checkout" />
+            android:background="@drawable/confirm_bg"
+            android:gravity="center"
+            android:padding="@dimen/dimen_12dp"
+            android:text="@string/btn_continue"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/margin_10dp"
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <LinearLayout

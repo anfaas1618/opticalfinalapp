@@ -50,8 +50,8 @@ public class CheckoutFragment extends Fragment {
     public double pCodeDiscount = 0.0, subtotal = 0.0, dCharge = 0.0, taxAmt = 0.0, total = 0.0;
     public TextView tvConfirmOrder, tvPayment, tvDelivery;
     public ArrayList<String> variantIdList, qtyList;
-    public TextView tvTaxPercent, tvTaxAmt, tvAlert, tvTotalBeforeTax, tvDeliveryCharge, tvSubTotal, tvPromoCode, tvPCAmount, tvPreTotal;
-    public LinearLayout lytTax, processLyt,lytPromo;
+    public TextView tvTaxPercent, tvTaxAmt, tvAlert, tvTotalBeforeTax, tvDeliveryCharge, tvSubTotal, tvPromoCode, tvPCAmount, txttotalitems;
+    public LinearLayout lytTax, processLyt, lytPromo;
     RecyclerView recyclerView;
     View root;
     RelativeLayout confirmLyt;
@@ -85,6 +85,7 @@ public class CheckoutFragment extends Fragment {
         tvAlert = root.findViewById(R.id.tvAlert);
         edtPromoCode = root.findViewById(R.id.edtPromoCode);
         tvSubTotal = root.findViewById(R.id.tvSubTotal);
+        txttotalitems = root.findViewById(R.id.txttotalitems);
         tvDeliveryCharge = root.findViewById(R.id.tvDeliveryCharge);
         confirmLyt = root.findViewById(R.id.confirmLyt);
         tvConfirmOrder = root.findViewById(R.id.tvConfirmOrder);
@@ -92,15 +93,14 @@ public class CheckoutFragment extends Fragment {
         lytPromo = root.findViewById(R.id.lytPromo);
         imgRefresh = root.findViewById(R.id.imgRefresh);
         tvTotalBeforeTax = root.findViewById(R.id.tvTotalBeforeTax);
-
+        btnApply = root.findViewById(R.id.btnApply);
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         carts = new ArrayList<>();
 
         setHasOptionsMenu(true);
-        tvPreTotal = root.findViewById(R.id.tvPreTotal);
-        btnApply = root.findViewById(R.id.btnApply);
+        txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
 
         tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +116,7 @@ public class CheckoutFragment extends Fragment {
                 bundle.putDouble("dCharge", Constant.SETTING_DELIVERY_CHARGE);
                 bundle.putStringArrayList("variantIdList", variantIdList);
                 bundle.putStringArrayList("qtyList", qtyList);
-                bundle.putString("from", "process");
+                bundle.putString(Constant.FROM, "process");
                 bundle.putString("address", getArguments().getString("address"));
                 PaymentFragment.paymentMethod = "";
                 PaymentFragment.deliveryTime = "";
@@ -130,6 +130,7 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (isApplied) {
+                    btnApply.setEnabled(true);
                     btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                     btnApply.setText("Apply");
                     edtPromoCode.setText("");
@@ -138,8 +139,7 @@ public class CheckoutFragment extends Fragment {
                     appliedCode = "";
                     pCode = "";
                     SetDataTotal();
-                }
-                else{
+                } else {
                     lytPromo.setVisibility(View.VISIBLE);
                 }
             }
@@ -197,8 +197,6 @@ public class CheckoutFragment extends Fragment {
 
                             taxAmt += itemTaxAmt;
                             total += itemTotal;
-
-//                            total += price * (Integer.parseInt(cart.getQty()));
 
                             carts.add(cart);
                         }
@@ -277,6 +275,7 @@ public class CheckoutFragment extends Fragment {
                                         tvPromoCode.setText(getString(R.string.promo_code) + "(" + pCode + ")");
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_green));
                                         btnApply.setText("Applied");
+                                        btnApply.setEnabled(false);
                                         isApplied = true;
                                         lytPromo.setVisibility(View.VISIBLE);
                                         appliedCode = edtPromoCode.getText().toString();
@@ -288,8 +287,10 @@ public class CheckoutFragment extends Fragment {
                                     } else {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                                         btnApply.setText("Apply");
+                                        btnApply.setEnabled(true);
                                         tvAlert.setVisibility(View.VISIBLE);
                                         tvAlert.setText(object.getString("message"));
+                                        SetDataTotal();
                                     }
                                     progressBar.setVisibility(View.GONE);
                                     btnApply.setVisibility(View.VISIBLE);

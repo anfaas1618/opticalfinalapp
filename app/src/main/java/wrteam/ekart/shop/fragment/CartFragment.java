@@ -47,9 +47,7 @@ import wrteam.ekart.shop.model.Cart;
 import wrteam.ekart.shop.model.OfflineCart;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static wrteam.ekart.shop.helper.ApiConfig.AddMultipleProductInCart;
 import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
-
 
 public class CartFragment extends Fragment {
     public static LinearLayout lytempty;
@@ -57,7 +55,7 @@ public class CartFragment extends Fragment {
     public static ArrayList<Cart> carts;
     public static ArrayList<OfflineCart> offlineCarts;
     public static HashMap<String, String> values;
-    static TextView txtcheckout, txttotal;
+    static TextView txttotalamount, txttotalitems, tvConfirmOrder;
     static CartAdapter cartAdapter;
     static OfflineCartAdapter offlineCartAdapter;
     static Activity activity;
@@ -69,14 +67,13 @@ public class CartFragment extends Fragment {
     double total;
     ProgressBar progressBar;
     Button btnShowNow;
-    int offset = 0;
-    private boolean isLoadMore = false;
     private DatabaseHelper databaseHelper;
     public static boolean isSoldOut = false;
 
     @SuppressLint("SetTextI18n")
     public static void SetData() {
-        txttotal.setText("Total " + Constant.TOTAL_CART_ITEM + " Items " + Constant.formater.format(Constant.FLOAT_TOTAL_AMOUNT));
+        txttotalamount.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.FLOAT_TOTAL_AMOUNT));
+        txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
     }
 
     @Override
@@ -91,10 +88,11 @@ public class CartFragment extends Fragment {
         lytTotal = root.findViewById(R.id.lytTotal);
         lytempty = root.findViewById(R.id.lytempty);
         btnShowNow = root.findViewById(R.id.btnShowNow);
-        txttotal = root.findViewById(R.id.txttotal);
-        txtcheckout = root.findViewById(R.id.txtcheckout);
+        txttotalamount = root.findViewById(R.id.txttotalamount);
+        txttotalitems = root.findViewById(R.id.txttotalitems);
         scrollView = root.findViewById(R.id.scrollView);
         cartrecycleview = root.findViewById(R.id.cartrecycleview);
+        tvConfirmOrder = root.findViewById(R.id.tvConfirmOrder);
         databaseHelper = new DatabaseHelper(activity);
 
         ApiConfig.GetSettings(activity);
@@ -114,7 +112,7 @@ public class CartFragment extends Fragment {
             }
         }
 
-        txtcheckout.setOnClickListener(new View.OnClickListener() {
+        tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (AppController.isConnected(getActivity())) {
@@ -126,12 +124,12 @@ public class CartFragment extends Fragment {
                                 }
                                 Fragment fragment = new AddressListFragment();
                                 final Bundle bundle = new Bundle();
-                                bundle.putString("from", "process");
+                                bundle.putString(Constant.FROM, "process");
                                 bundle.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);
                                 fragment.setArguments(bundle);
                                 MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                             } else {
-                                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra("from", "checkout"));
+                                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra(Constant.FROM, "checkout"));
                             }
                         } else {
                             Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();
@@ -215,8 +213,8 @@ public class CartFragment extends Fragment {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_USER_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
-        params.put(Constant.OFFSET, "" + offset);
-        params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
+//        params.put(Constant.OFFSET, "" + offset);
+//        params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
 
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @SuppressLint("SetTextI18n")
@@ -228,12 +226,9 @@ public class CartFragment extends Fragment {
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-
                             Gson g = new Gson();
-
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
                                 if (jsonObject1 != null) {
                                     Cart cart = g.fromJson(jsonObject1.toString(), Cart.class);
                                     carts.add(cart);
@@ -241,88 +236,16 @@ public class CartFragment extends Fragment {
                                     break;
                                 }
                             }
-
-                            if (offset == 0) {
-                                cartAdapter = new CartAdapter(getActivity(), carts);
-                                cartAdapter.setHasStableIds(true);
-                                cartrecycleview.setAdapter(cartAdapter);
-                                lytTotal.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.GONE);
-                                total = Double.parseDouble(objectbject.getString(Constant.TOTAL));
-                                session.setData(Constant.TOTAL, String.valueOf(total));
-                                Constant.FLOAT_TOTAL_AMOUNT = objectbject.getDouble(Constant.TOTAL_AMOUNT);
-                                Constant.TOTAL_CART_ITEM = Integer.parseInt(objectbject.getString(Constant.TOTAL));
-                                SetData();
-
-                                progressBar.setVisibility(View.GONE);
-
-                                scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-                                    @Override
-                                    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                                        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                                            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) cartrecycleview.getLayoutManager();
-                                            if (carts.size() < total) {
-                                                if (!isLoadMore) {
-                                                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == carts.size() - 1) {
-                                                        //bottom of list!
-                                                        carts.add(null);
-                                                        cartAdapter.notifyItemInserted(carts.size() - 1);
-                                                        offset += Constant.LOAD_ITEM_LIMIT;
-                                                        Map<String, String> params = new HashMap<>();
-                                                        params.put(Constant.GET_USER_CART, Constant.GetVal);
-                                                        params.put(Constant.USER_ID, session.getData(Constant.ID));
-                                                        params.put(Constant.OFFSET, "" + offset);
-                                                        params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
-
-                                                        ApiConfig.RequestToVolley(new VolleyCallback() {
-                                                            @Override
-                                                            public void onSuccess(boolean result, String response) {
-
-                                                                if (result) {
-                                                                    try {
-
-                                                                        JSONObject objectbject1 = new JSONObject(response);
-                                                                        if (!objectbject1.getBoolean(Constant.ERROR)) {
-                                                                            session.setData(Constant.TOTAL, objectbject1.getString(Constant.TOTAL));
-
-                                                                            carts.remove(carts.size() - 1);
-                                                                            cartAdapter.notifyItemRemoved(carts.size());
-
-                                                                            JSONObject object = new JSONObject(response);
-                                                                            JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-
-                                                                            Gson g = new Gson();
-
-
-                                                                            for (int i = 0; i < jsonArray.length(); i++) {
-                                                                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                                                                if (jsonObject1 != null) {
-                                                                                    Cart cart = g.fromJson(jsonObject1.toString(), Cart.class);
-                                                                                    carts.add(cart);
-                                                                                } else {
-                                                                                    break;
-                                                                                }
-                                                                            }
-                                                                            cartAdapter.notifyDataSetChanged();
-                                                                            cartAdapter.setLoaded();
-                                                                            isLoadMore = false;
-                                                                        }
-                                                                    } catch (JSONException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                }
-                                                            }
-                                                        }, getActivity(), Constant.CART_URL, params, false);
-                                                        isLoadMore = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                            }
+                            cartAdapter = new CartAdapter(getActivity(), carts);
+                            cartAdapter.setHasStableIds(true);
+                            cartrecycleview.setAdapter(cartAdapter);
+                            lytTotal.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            total = Double.parseDouble(objectbject.getString(Constant.TOTAL));
+                            session.setData(Constant.TOTAL, String.valueOf(total));
+                            Constant.FLOAT_TOTAL_AMOUNT = objectbject.getDouble(Constant.TOTAL_AMOUNT);
+                            Constant.TOTAL_CART_ITEM = Integer.parseInt(objectbject.getString(Constant.TOTAL));
+                            SetData();
                         } else {
                             progressBar.setVisibility(View.GONE);
                             lytempty.setVisibility(View.VISIBLE);

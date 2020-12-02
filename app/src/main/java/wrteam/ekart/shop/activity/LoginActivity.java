@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -44,6 +46,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,12 +70,12 @@ public class LoginActivity extends AppCompatActivity {
 
     ProgressDisplay progress;
     LinearLayout lytchangpsw, lytforgot, lytlogin, signUpLyt, lytotp, lytverify, lytResetPass, lytPrivacy;
-    EditText edtResetPass, edtResetCPass, edtnewpsw, edtRefer, edtoldpsw, edtforgotmobile, edtloginpassword, edtLoginMobile, edtname, edtemail, edtmobile, edtpsw, edtcpsw, edtMobVerify;
+    EditText edtResetPass, edtResetCPass, edtnewpsw, edtcnewpsw, edtRefer, edtoldpsw, edtforgotmobile, edtloginpassword, edtLoginMobile, edtname, edtemail, edtmobile, edtpsw, edtcpsw, edtMobVerify;
     Button btnotpverify, btnEmailVerify, btnsubmit, btnResetPass;
     CountryCodePicker edtCode, edtFCode;
     String from, mobile, fromto;
     PinView edtotp;
-    TextView txtmobileno, tvResend, tvSignUp, tvForgotPass, tvPrivacyPolicy, tvResendPass, tvTime;
+    TextView txtmobileno, tvTimer, tvResend, tvSignUp, tvForgotPass, tvPrivacyPolicy;
     ScrollView scrollView;
     GPSTracker gps;
     Session session;
@@ -83,6 +87,8 @@ public class LoginActivity extends AppCompatActivity {
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
     DatabaseHelper databaseHelper;
     Activity activity;
+    boolean timerOn;
+    ImageView img;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -95,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         databaseHelper = new DatabaseHelper(activity);
 
-        from = getIntent().getStringExtra("from");
+        from = getIntent().getStringExtra(Constant.FROM);
         fromto = getIntent().getStringExtra("fromto");
         mobile = getIntent().getStringExtra("txtmobile");
         firebase_otp = getIntent().getStringExtra("OTP");
@@ -105,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         chPrivacy = findViewById(R.id.chPrivacy);
         txtmobileno = findViewById(R.id.txtmobileno);
         edtnewpsw = findViewById(R.id.edtnewpsw);
+        edtcnewpsw = findViewById(R.id.edtcnewpsw);
         edtoldpsw = findViewById(R.id.edtoldpsw);
         edtCode = findViewById(R.id.edtCode);
         edtFCode = findViewById(R.id.edtFCode);
@@ -136,31 +143,32 @@ public class LoginActivity extends AppCompatActivity {
         edtcpsw = findViewById(R.id.edtcpsw);
         edtRefer = findViewById(R.id.edtRefer);
         tvResend = findViewById(R.id.tvResend);
+        tvTimer = findViewById(R.id.tvTimer);
         tvSignUp = findViewById(R.id.tvSignUp);
         tvForgotPass = findViewById(R.id.tvForgotPass);
         tvPrivacyPolicy = findViewById(R.id.tvPrivacy);
-
-        tvResendPass = findViewById(R.id.tvResendPass);
-        tvTime = findViewById(R.id.tvTime);
+        img = findViewById(R.id.img);
         tvSignUp.setText(underlineSpannable(getString(R.string.not_registered)));
         tvForgotPass.setText(underlineSpannable(getString(R.string.forgottext)));
-        tvResendPass.setText(underlineSpannable(getString(R.string.resend_cap)));
 
         edtLoginMobile.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_phone, 0, 0, 0);
 
         edtoldpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
         edtnewpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
+        edtcnewpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
 
         edtloginpassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
         edtpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
         edtcpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
         edtResetPass.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
         edtResetCPass.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
+
         Utils.setHideShowPassword(edtpsw);
         Utils.setHideShowPassword(edtcpsw);
         Utils.setHideShowPassword(edtloginpassword);
         Utils.setHideShowPassword(edtoldpsw);
         Utils.setHideShowPassword(edtnewpsw);
+        Utils.setHideShowPassword(edtcnewpsw);
         Utils.setHideShowPassword(edtResetPass);
         Utils.setHideShowPassword(edtResetCPass);
 
@@ -170,7 +178,6 @@ public class LoginActivity extends AppCompatActivity {
 //        edtFCode.setCountryForNameCode("IN");
 //        Constant.country_code = edtCode.getSelectedCountryCode(); // your country code
 //        session.setData(Constant.COUNTRY_CODE, Constant.country_code);
-
 
         if (from != null) {
             switch (from) {
@@ -220,6 +227,62 @@ public class LoginActivity extends AppCompatActivity {
                     lytlogin.setVisibility(View.GONE);
                     signUpLyt.setVisibility(View.GONE);
                     txtmobileno.setText(getResources().getString(R.string.please_type_verification_code_sent_to) + "  +" + Constant.country_code + " - " + mobile);
+                    new CountDownTimer(120000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            timerOn = true;
+                            // Used for formatting digit to be in 2 digits only
+                            NumberFormat f = new DecimalFormat("00");
+                            long min = (millisUntilFinished / 60000) % 60;
+                            long sec = (millisUntilFinished / 1000) % 60;
+                            tvTimer.setText(f.format(min) + ":" + f.format(sec));
+                        }
+
+                        public void onFinish() {
+                            timerOn = false;
+                            tvTimer.setVisibility(View.GONE);
+                            img.setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary));
+                            tvResend.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
+
+                            tvResend.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    otpFor = "resend";
+                                    sentRequest("+" + Constant.country_code + mobile);
+
+                                    new CountDownTimer(120000, 1000) {
+                                        public void onTick(long millisUntilFinished) {
+
+                                            tvTimer.setVisibility(View.VISIBLE);
+                                            img.setColorFilter(ContextCompat.getColor(activity, R.color.gray));
+                                            tvResend.setTextColor(activity.getResources().getColor(R.color.gray));
+
+                                            timerOn = true;
+                                            // Used for formatting digit to be in 2 digits only
+                                            NumberFormat f = new DecimalFormat("00");
+                                            long min = (millisUntilFinished / 60000) % 60;
+                                            long sec = (millisUntilFinished / 1000) % 60;
+                                            tvTimer.setText(f.format(min) + ":" + f.format(sec));
+                                        }
+
+                                        public void onFinish() {
+                                            timerOn = false;
+                                            tvTimer.setVisibility(View.GONE);
+                                            img.setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary));
+                                            tvResend.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
+
+                                            tvResend.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    otpFor = "resend";
+                                                    sentRequest("+" + Constant.country_code + mobile);
+                                                }
+                                            });
+                                        }
+                                    }.start();
+                                }
+                            });
+                        }
+                    }.start();
                     break;
                 case "drawer":
                 case "checkout":
@@ -262,8 +325,10 @@ public class LoginActivity extends AppCompatActivity {
         final String mobile = edtMobVerify.getText().toString().trim();
         final String code = edtCode.getSelectedCountryCode();
         if (ApiConfig.CheckValidattion(mobile, false, false)) {
+            edtMobVerify.requestFocus();
             edtMobVerify.setError(getString(R.string.enter_mobile_no));
         } else if (ApiConfig.CheckValidattion(mobile, false, true)) {
+            edtMobVerify.requestFocus();
             edtMobVerify.setError(getString(R.string.enter_valid_mobile_no));
         } else if (AppController.isConnected(activity)) {
             session.setData(Constant.COUNTRY_CODE, code);
@@ -321,10 +386,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
-                Constant.verificationCode = s;
                 String mobileno = "";
 
                 if (otpFor.equals("resend")) {
+                    firebase_otp = s;
                     Toast.makeText(getApplicationContext(), getString(R.string.otp_resend_alert), Toast.LENGTH_SHORT).show();
                 } else {
                     if (otpFor.equals("otp_forgot")) {
@@ -333,7 +398,7 @@ public class LoginActivity extends AppCompatActivity {
                         mobileno = edtMobVerify.getText().toString();
                     }
                     startActivity(new Intent(activity, LoginActivity.class)
-                            .putExtra("from", otpFor)
+                            .putExtra(Constant.FROM, otpFor)
                             .putExtra("txtmobile", mobileno)
                             .putExtra("OTP", s));
                 }
@@ -345,12 +410,19 @@ public class LoginActivity extends AppCompatActivity {
         final Session sessionpsw = new Session(activity);
         String oldpsw = edtoldpsw.getText().toString();
         String password = edtnewpsw.getText().toString();
+        String cpassword = edtcnewpsw.getText().toString();
 
-        if (ApiConfig.CheckValidattion(oldpsw, false, false)) {
+        if (!password.equals(cpassword)) {
+            edtcnewpsw.requestFocus();
+            edtcnewpsw.setError(getString(R.string.pass_not_match));
+        } else if (ApiConfig.CheckValidattion(oldpsw, false, false)) {
+            edtoldpsw.requestFocus();
             edtoldpsw.setError(getString(R.string.enter_old_pass));
         } else if (ApiConfig.CheckValidattion(password, false, false)) {
+            edtnewpsw.requestFocus();
             edtnewpsw.setError(getString(R.string.enter_new_pass));
         } else if (!oldpsw.equals(sessionpsw.getData(Session.KEY_Password))) {
+            edtoldpsw.requestFocus();
             edtoldpsw.setError(getString(R.string.no_match_old_pass));
         } else if (AppController.isConnected(activity)) {
             final Map<String, String> params = new HashMap<String, String>();
@@ -404,11 +476,14 @@ public class LoginActivity extends AppCompatActivity {
         String reset_c_psw = edtResetCPass.getText().toString();
 
         if (ApiConfig.CheckValidattion(reset_psw, false, false)) {
+            edtResetPass.requestFocus();
             edtResetPass.setError(getString(R.string.enter_new_pass));
         } else if (ApiConfig.CheckValidattion(reset_c_psw, false, false)) {
+            edtResetCPass.requestFocus();
             edtResetCPass.setError(getString(R.string.enter_confirm_pass));
         } else if (!reset_psw.equals(reset_c_psw)) {
-            edtResetPass.setError(getString(R.string.pass_not_match));
+            edtResetCPass.requestFocus();
+            edtResetCPass.setError(getString(R.string.pass_not_match));
         } else if (AppController.isConnected(activity)) {
             final Map<String, String> params = new HashMap<String, String>();
             params.put(Constant.TYPE, Constant.CHANGE_PASSWORD);
@@ -459,8 +534,10 @@ public class LoginActivity extends AppCompatActivity {
         final String mobile = edtforgotmobile.getText().toString().trim();
         String code = edtFCode.getSelectedCountryCode();
         if (ApiConfig.CheckValidattion(mobile, false, false)) {
+            edtforgotmobile.requestFocus();
             edtforgotmobile.setError(getString(R.string.enter_mobile_no));
         } else if (mobile.length() != 0 && ApiConfig.CheckValidattion(mobile, false, true)) {
+            edtforgotmobile.requestFocus();
             edtforgotmobile.setError(getString(R.string.enter_valid_mobile_no));
 
         } else {
@@ -557,13 +634,12 @@ public class LoginActivity extends AppCompatActivity {
         String otptext = edtotp.getText().toString().trim();
 
         if (ApiConfig.CheckValidattion(otptext, false, false)) {
+            edtotp.requestFocus();
             edtotp.setError(getString(R.string.enter_otp));
         } else {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(firebase_otp, otptext);
             signInWithPhoneAuthCredential(credential, otptext);
-
         }
-
     }
 
     void signInWithPhoneAuthCredential(PhoneAuthCredential credential, final String otptext) {
@@ -574,9 +650,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             //verification successful we will start the profile activity
                             if (from.equalsIgnoreCase("otp_verify")) {
-                                startActivity(new Intent(activity, LoginActivity.class).putExtra("from", "info").putExtra("txtmobile", mobile).putExtra("OTP", otptext));
+                                startActivity(new Intent(activity, LoginActivity.class).putExtra(Constant.FROM, "info").putExtra("txtmobile", mobile).putExtra("OTP", otptext));
                             } else {
-                                startActivity(new Intent(activity, LoginActivity.class).putExtra("from", "reset_pass"));
+                                startActivity(new Intent(activity, LoginActivity.class).putExtra(Constant.FROM, "reset_pass"));
                             }
                             edtotp.setError(null);
                         } else {
@@ -587,6 +663,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 message = "Invalid code entered...";
                             }
+                            edtotp.requestFocus();
                             edtotp.setError(message);
 
                         }
@@ -659,9 +736,9 @@ public class LoginActivity extends AppCompatActivity {
         int id = view.getId();
 
         if (id == R.id.tvSignUp) {
-            startActivity(new Intent(activity, LoginActivity.class).putExtra("from", "register").putExtra("from", "register"));
+            startActivity(new Intent(activity, LoginActivity.class).putExtra(Constant.FROM, "register").putExtra(Constant.FROM, "register"));
         } else if (id == R.id.tvForgotPass) {
-            startActivity(new Intent(activity, LoginActivity.class).putExtra("from", "forgot"));
+            startActivity(new Intent(activity, LoginActivity.class).putExtra(Constant.FROM, "forgot"));
         } else if (id == R.id.btnchangepsw) {
 
             ChangePassword();
@@ -671,10 +748,6 @@ public class LoginActivity extends AppCompatActivity {
             ResetPassword();
 
         } else if (id == R.id.btnrecover) {
-            hideKeyboard(activity, view);
-            RecoverPassword();
-
-        } else if (id == R.id.tvResendPass) {
             hideKeyboard(activity, view);
             RecoverPassword();
 
@@ -739,11 +812,11 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(activity, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("from", "");
+            intent.putExtra(Constant.FROM, "");
             if (fromto != null && fromto.equals("checkout")) {
-                intent.putExtra("from", "checkout");
+                intent.putExtra(Constant.FROM, "checkout");
             } else if (from != null && from.equals("tracker")) {
-                intent.putExtra("from", "tracker");
+                intent.putExtra(Constant.FROM, "tracker");
             }
             startActivity(intent);
 

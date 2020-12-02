@@ -112,7 +112,7 @@
                     android:layout_alignBaseline="@+id/edtPromoCode"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="@dimen/margin_10dp"
-                    android:background="@color/colorAccent"
+                    android:background="@drawable/confirm_bg"
                     android:minHeight="0dp"
                     android:padding="@dimen/margin_5dp"
                     android:text="@string/apply"
@@ -146,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/relLayoutPromoCode"
                 android:layout_gravity="center_vertical"
-                android:padding="2dp"
+                android:padding="@dimen/dimen_5dp"
                 android:text="@string/order_list"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/mid_text" />
@@ -156,7 +156,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:nestedScrollingEnabled="false" />
 
         </RelativeLayout>
 
@@ -167,148 +168,137 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/dimen_5dp"
-        android:background="@drawable/card_shadow"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
-            android:id="@+id/lytamtbeforetax"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/margin_10dp"
-            android:paddingEnd="@dimen/margin_10dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/total_amt" />
-
-            <TextView
-                android:id="@+id/tvTotalBeforeTax"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lytTax"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lytamtbeforetax"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/margin_10dp"
-            android:paddingEnd="@dimen/margin_10dp">
-
-            <TextView
-                android:id="@+id/tvTaxPercent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/tax" />
-
-            <TextView
-                android:id="@+id/tvTaxAmt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lytdelivery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lytTax"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/margin_10dp"
-            android:paddingEnd="@dimen/margin_10dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/delivery_charge" />
-
-            <TextView
-                android:id="@+id/tvDeliveryCharge"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lytPromo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lytdelivery"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/margin_10dp"
-            android:paddingEnd="@dimen/margin_10dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tvPromoCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorPrimary" />
-
-            <TextView
-                android:id="@+id/tvPCAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorPrimary" />
-        </LinearLayout>
-
-        <TextView
             android:id="@+id/formula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lytPromo"
-            android:paddingStart="@dimen/margin_10dp"
-            android:paddingEnd="@dimen/margin_10dp"
-            android:text="@string/tax_formula"
-            android:textColor="@color/green"
-            android:textSize="@dimen/small_size" />
+            android:layout_alignParentTop="true"
+            android:background="@drawable/card_shadow"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_10dp">
+
+            <LinearLayout
+                android:id="@+id/lytamtbeforetax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/total_amt" />
+
+                <TextView
+                    android:id="@+id/tvTotalBeforeTax"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lytTax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTaxPercent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/tax" />
+
+                <TextView
+                    android:id="@+id/tvTaxAmt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lytdelivery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/delivery_charge" />
+
+                <TextView
+                    android:id="@+id/tvDeliveryCharge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lytPromo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvPromoCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvPCAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tax_formula"
+                android:textColor="@color/green"
+                android:textSize="@dimen/small_size" />
+
+        </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/lytTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/formula"
-            android:layout_marginTop="@dimen/dimen_5dp"
             android:background="@drawable/card_shadow"
-            android:padding="@dimen/dimen_10dp">
-
-            <TextView
-                android:id="@+id/tvPreTotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:drawablePadding="@dimen/margin_5dp"
-                android:text="@string/total"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:drawableStartCompat="@drawable/ic_info" />
+            android:padding="@dimen/dimen_10dp"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/tvSubTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/tvConfirmOrder"
-                android:layout_toEndOf="@+id/tvPreTotal"
+                android:layout_toStartOf="@id/tvConfirmOrder"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black" />
+                android:textColor="@color/txt_color" />
+
+            <TextView
+                android:id="@+id/txttotalitems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvSubTotal"
+                android:layout_toStartOf="@id/tvConfirmOrder"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/gray" />
 
             <TextView
                 android:id="@+id/tvConfirmOrder"
@@ -317,16 +307,13 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/confirm_bg"
-                android:drawablePadding="@dimen/margin_10dp"
                 android:gravity="center"
-                android:paddingStart="@dimen/margin_10dp"
-                android:paddingTop="7dp"
-                android:paddingEnd="@dimen/margin_10dp"
-                android:paddingBottom="7dp"
+                android:padding="@dimen/dimen_12dp"
                 android:text="@string/btn_continue"
+                android:layout_marginStart="@dimen/margin_10dp"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                app:drawableEndCompat="@drawable/ic_confirm" />
+                android:textStyle="bold" />
         </RelativeLayout>
 
     </RelativeLayout>

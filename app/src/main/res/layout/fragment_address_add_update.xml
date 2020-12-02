@@ -110,57 +110,77 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="4dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/select_city"
-                        android:textSize="@dimen/small_size" />
-
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/cityspinner"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/gray" />
+                        <TextView
+                            android:id="@+id/title_city"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/select_city"
+                            android:textSize="@dimen/small_size" />
+
+                        <Spinner
+                            android:id="@+id/cityspinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/title_city"
+                            android:layout_margin="4dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1.5dp"
+                            android:layout_below="@id/cityspinner"
+                            android:background="@color/gray" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="4dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/select_area"
-                        android:textSize="@dimen/small_size" />
-
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/areaSpinner"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/gray" />
+                        <TextView
+                            android:id="@+id/title_area"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/select_city"
+                            android:textSize="@dimen/small_size" />
+
+                        <Spinner
+                            android:id="@+id/areaSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/title_area"
+                            android:layout_margin="4dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1.5dp"
+                            android:layout_below="@id/areaSpinner"
+                            android:background="@color/gray" />
+                    </RelativeLayout>
                 </LinearLayout>
 
             </LinearLayout>

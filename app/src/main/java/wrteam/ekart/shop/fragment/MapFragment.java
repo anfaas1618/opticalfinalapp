@@ -72,7 +72,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         mapFragment.getMapAsync(this);
         btnUpdateLocation = root.findViewById(R.id.btnUpdateLocation);
 
-        from = getArguments().getString("from");
+        from = getArguments().getString(Constant.FROM);
         setHasOptionsMenu(true);
 
 

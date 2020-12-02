@@ -81,7 +81,7 @@ public class TrackOrderFragment extends Fragment {
                 GetOrderDetails();
             }
         } else {
-            startActivity(new Intent(activity, LoginActivity.class).putExtra("from", "tracker"));
+            startActivity(new Intent(activity, LoginActivity.class).putExtra(Constant.FROM, "tracker"));
         }
 
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

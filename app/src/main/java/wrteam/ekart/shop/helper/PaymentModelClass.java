@@ -228,9 +228,9 @@ public class PaymentModelClass {
                 //when app is live with real merchant id and salt we will compare both side hash
                 if (hash_from_response.equals(hash)) {
                     if (status.equals(Constant.SUCCESS)) {
-                        if (from.equals("payment")) {
+                        if (from.equals(Constant.PAYMENT)) {
                             PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, true, sendparams, status);
-                        } else if (from.equals("wallet")) {
+                        } else if (from.equals(Constant.WALLET)) {
                             new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, txnId);
                         }
                     } else if (status.equals("failure")) {
@@ -270,10 +270,12 @@ public class PaymentModelClass {
                                 Intent intent = new Intent(activity, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra("from", "payment_success");
+                                intent.putExtra(Constant.FROM, "payment_success");
                                 activity.startActivity(intent);
                             }
-                            hideProgressDialog();
+                            else{
+                                hideProgressDialog();
+                            }
                         } catch (JSONException e) {
                             hideProgressDialog();
                             e.printStackTrace();
@@ -310,7 +312,7 @@ public class PaymentModelClass {
                         hideProgressDialog();
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-                            if (!status.equals(Constant.SUCCESS)) {
+                            if (!status.equals(Constant.SUCCESS) || !status.equals("capture") || !status.equals("challenge") || !status.equals("pending")) {
                                 activity.finish();
                             }
                         }

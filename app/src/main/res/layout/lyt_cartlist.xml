@@ -147,7 +147,7 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="center"
         android:layout_margin="3dp"
-        android:textColor="@color/cart_highlighted_txt_color"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold" />
 </RelativeLayout>
 

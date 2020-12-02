@@ -105,10 +105,10 @@ public class PayStackActivity extends AppCompatActivity {
                 // Retrieve the transaction, and send its reference to your server
                 // for verification.
                 String paymentReference = transaction.getReference();
-                if (from.equals("wallet")) {
+                if (from.equals(Constant.WALLET)) {
                     onBackPressed();
                     new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, paymentReference);
-                } else if (from.equals("payment")) {
+                } else if (from.equals(Constant.PAYMENT)) {
                     verifyReference(String.valueOf(charge.getAmount()), paymentReference, charge.getEmail());
                 }
 
@@ -133,14 +133,17 @@ public class PayStackActivity extends AppCompatActivity {
 
         String email = emailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
+            emailField.requestFocus();
             emailField.setError("Required.");
             valid = false;
         } else {
+            emailField.requestFocus();
             emailField.setError(null);
         }
 
         String cardNumber = cardNumberField.getText().toString();
         if (TextUtils.isEmpty(cardNumber)) {
+            cardNumberField.requestFocus();
             cardNumberField.setError("Required.");
             valid = false;
         } else {
@@ -150,6 +153,7 @@ public class PayStackActivity extends AppCompatActivity {
 
         String expiryMonth = expiryMonthField.getText().toString();
         if (TextUtils.isEmpty(expiryMonth)) {
+            expiryMonthField.requestFocus();
             expiryMonthField.setError("Required.");
             valid = false;
         } else {
@@ -158,6 +162,7 @@ public class PayStackActivity extends AppCompatActivity {
 
         String expiryYear = expiryYearField.getText().toString();
         if (TextUtils.isEmpty(expiryYear)) {
+            expiryYearField.requestFocus();
             expiryYearField.setError("Required.");
             valid = false;
         } else {
@@ -166,6 +171,7 @@ public class PayStackActivity extends AppCompatActivity {
 
         String cvv = cvvField.getText().toString();
         if (TextUtils.isEmpty(cvv)) {
+            cvvField.requestFocus();
             cvvField.setError("Required.");
             valid = false;
         } else {
