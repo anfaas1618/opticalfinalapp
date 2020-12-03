@@ -37,7 +37,6 @@ import wrteam.ekart.shop.model.Favorite;
 import wrteam.ekart.shop.model.Product;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static wrteam.ekart.shop.helper.ApiConfig.AddMultipleProductInCart;
 import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 
@@ -85,6 +84,7 @@ public class FavoriteFragment extends Fragment {
 
         if (AppController.isConnected(activity)) {
             if (isLogin) {
+                ApiConfig.getWalletBalance(activity, new Session(activity));
                 GetData();
             } else {
                 GetOfflineData();
@@ -96,6 +96,10 @@ public class FavoriteFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (AppController.isConnected(activity)) {
+
+                    if (new Session(activity).isUserLoggedIn()) {
+                        ApiConfig.getWalletBalance(activity, new Session(activity));
+                    }
                     if (isLogin) {
                         if (Constant.CartValues.size() > 0) {
                             ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);

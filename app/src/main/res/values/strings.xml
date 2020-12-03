@@ -216,6 +216,7 @@
     <string name="select_delivery_day">Please select delivery day!</string>
     <string name="select_delivery_time">Please select delivery time!</string>
     <string name="select_payment_method">Please select payment method!</string>
+    <string name="max_wallet_amt_error">Sorry max limit reached!</string>
     <string name="processing">Processing&#8230;</string>
     <string name="order_failed">Order Failed!!!</string>
     <!--invite friend msg-->

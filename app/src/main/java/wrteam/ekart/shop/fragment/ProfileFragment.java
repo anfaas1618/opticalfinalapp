@@ -144,16 +144,13 @@ public class ProfileFragment extends Fragment {
                 if (ApiConfig.CheckValidattion(name, false, false)) {
                     edtname.requestFocus();
                     edtname.setError(getString(R.string.enter_name));
-                }
-                if (ApiConfig.CheckValidattion(email, false, false)) {
+                } else if (ApiConfig.CheckValidattion(email, false, false)) {
                     edtemail.requestFocus();
                     edtemail.setError(getString(R.string.enter_email));
-                }
-                else if (ApiConfig.CheckValidattion(email, true, false)) {
+                } else if (ApiConfig.CheckValidattion(email, true, false)) {
                     edtemail.requestFocus();
                     edtemail.setError(getString(R.string.enter_valid_email));
-                }
-                else if (AppController.isConnected(activity)) {
+                } else if (AppController.isConnected(activity)) {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(Constant.TYPE, Constant.EDIT_PROFILE);
                     params.put(Constant.ID, session.getData(Session.KEY_ID));

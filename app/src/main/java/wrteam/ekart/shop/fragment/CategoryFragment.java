@@ -31,6 +31,7 @@ import wrteam.ekart.shop.adapter.CategoryAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Category;
 
@@ -68,6 +69,9 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (AppController.isConnected(activity)) {
+                    if (new Session(activity).isUserLoggedIn()) {
+                        ApiConfig.getWalletBalance(activity, new Session(activity));
+                    }
                     GetCategory();
                 }
                 swipeLayout.setRefreshing(false);
@@ -75,6 +79,9 @@ public class CategoryFragment extends Fragment {
         });
 
         if (AppController.isConnected(activity)) {
+            if (new Session(activity).isUserLoggedIn()) {
+                ApiConfig.getWalletBalance(activity, new Session(activity));
+            }
             GetCategory();
         }
 
@@ -107,7 +114,7 @@ public class CategoryFragment extends Fragment {
                                 category.setStatus(jsonObject.getString(Constant.STATUS));
                                 categoryArrayList.add(category);
                             }
-                            categoryrecycleview.setAdapter(new CategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory,"category"));
+                            categoryrecycleview.setAdapter(new CategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory, "category"));
                             progressBar.setVisibility(View.GONE);
                         } else {
                             txtnodata.setVisibility(View.VISIBLE);

@@ -119,6 +119,7 @@ public class ProductListFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(false);
+                productArrayList.clear();
                 offset = 0;
                 if (from.equals("regular")) {
                     GetData();
@@ -189,7 +190,6 @@ public class ProductListFragment extends Fragment {
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
-
                 if (result) {
                     try {
                         JSONObject objectbject = new JSONObject(response);
@@ -215,7 +215,7 @@ public class ProductListFragment extends Fragment {
                                         // if (diff == 0) {
                                         if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                                             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                                            if (productArrayList.size() < total) {
+                                            if (productArrayList.size() <= total) {
                                                 if (!isLoadMore) {
                                                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == productArrayList.size() - 1) {
                                                         //bottom of list!
@@ -249,6 +249,8 @@ public class ProductListFragment extends Fragment {
                                                                             mAdapter.notifyDataSetChanged();
                                                                             mAdapter.setLoaded();
                                                                             isLoadMore = false;
+                                                                        } else {
+                                                                            isLoadMore = true;
                                                                         }
                                                                     } catch (JSONException e) {
                                                                         e.printStackTrace();
@@ -266,7 +268,6 @@ public class ProductListFragment extends Fragment {
                             }
                         } else {
                             if (offset == 0) {
-
                                 progressBar.setVisibility(View.GONE);
                                 tvAlert.setVisibility(View.VISIBLE);
                             }

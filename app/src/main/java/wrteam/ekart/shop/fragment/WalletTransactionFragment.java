@@ -343,6 +343,8 @@ public class WalletTransactionFragment extends Fragment {
                         if (edtAmount.getText().toString().equals("")) {
                             edtAmount.requestFocus();
                             edtAmount.setError(getString(R.string.alert_enter_amount));
+                        } else if (Double.parseDouble(edtAmount.getText().toString()) > 10000) {
+                            Toast.makeText(activity, getString(R.string.max_wallet_amt_error), Toast.LENGTH_SHORT).show();
                         } else {
                             if (Double.parseDouble(edtAmount.getText().toString().trim()) <= 0) {
                                 edtAmount.requestFocus();

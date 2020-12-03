@@ -211,6 +211,10 @@ public class HomeFragment extends Fragment {
                     swipeTimer.cancel();
                 }
                 if (AppController.isConnected(getActivity())) {
+                    ApiConfig.getWalletBalance(activity, session);
+                    if (new Session(activity).isUserLoggedIn()) {
+                        ApiConfig.getWalletBalance(activity, new Session(activity));
+                    }
                     GetHomeData();
                 }
                 swipeLayout.setRefreshing(false);
@@ -230,6 +234,9 @@ public class HomeFragment extends Fragment {
 
         if (AppController.isConnected(getActivity())) {
             GetHomeData();
+            if (new Session(activity).isUserLoggedIn()) {
+                ApiConfig.getWalletBalance(activity, new Session(activity));
+            }
         }
 
         return root;

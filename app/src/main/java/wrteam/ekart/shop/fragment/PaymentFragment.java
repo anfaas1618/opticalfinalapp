@@ -53,7 +53,6 @@ import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.activity.MidtransActivity;
 import wrteam.ekart.shop.activity.PayPalWebActivity;
 import wrteam.ekart.shop.activity.PayStackActivity;
-import wrteam.ekart.shop.activity.StripePaymentActivity;
 import wrteam.ekart.shop.adapter.DateAdapter;
 import wrteam.ekart.shop.adapter.SlotAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
@@ -573,7 +572,6 @@ public class PaymentFragment extends Fragment {
         tvDialogTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(totalAfterTax));
         tvDialogFinalTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
         tvDialogConfirm.setOnClickListener(v -> {
-            System.out.println("sendparams >>>>>>>>>> " + sendparams);
             if (paymentMethod.equals(getResources().getString(R.string.codpaytype)) || paymentMethod.equals(getString(R.string.wallettype))) {
                 ApiConfig.RequestToVolley((result, response) -> {
                     if (result) {
@@ -615,13 +613,11 @@ public class PaymentFragment extends Fragment {
                 } else if (paymentMethod.equals(getString(R.string.midtrans))) {
                     dialog.dismiss();
                     sendparams.put(Constant.STATUS, Constant.AWAITING_PAYMENT);
-                    PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, Constant.AWAITING_PAYMENT);
+                    PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "midtrans");
                 } else if (paymentMethod.equals(getString(R.string.stripe))) {
                     dialog.dismiss();
                     sendparams.put(Constant.FROM, Constant.PAYMENT);
-                    Intent intent = new Intent(activity, StripePaymentActivity.class);
-                    intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
-                    startActivity(intent);
+                    PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "stripe");
                 } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
                     dialog.dismiss();
                     StartFlutterWavePayment();
@@ -636,9 +632,6 @@ public class PaymentFragment extends Fragment {
             }
         });
         dialog.show();
-    }
-
-    public void StartStripePayment() {
     }
 
     public void CreateOrderId(double payble) {
@@ -697,7 +690,9 @@ public class PaymentFragment extends Fragment {
                         try {
                             JSONObject object = new JSONObject(response);
                             if (!object.getBoolean(Constant.ERROR)) {
-                                if (status.equals(Constant.AWAITING_PAYMENT)) {
+                                if (status.equals("stripe")) {
+                                    CreateStripePayment(object.getString(Constant.ORDER_ID), Constant.formater.format(subtotal));
+                                } else if (status.equals("midtrans")) {
                                     CreateMidtransPayment(object.getString(Constant.ORDER_ID), Constant.formater.format(subtotal));
                                 } else {
                                     AddTransaction(activity, object.getString(Constant.ORDER_ID), paymentType, txnid, status, activity.getString(R.string.order_success), sendparams);
@@ -711,12 +706,46 @@ public class PaymentFragment extends Fragment {
                 }
             }, activity, Constant.ORDERPROCESS_URL, sendparams, false);
         } else {
-
             AddTransaction(activity, "", getString(R.string.razor_pay), txnid, status, getString(R.string.order_failed), sendparams);
         }
     }
 
     public void CreateMidtransPayment(String orderId, String grossAmount) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.ORDER_ID, orderId);
+        params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (!jsonObject.getBoolean(Constant.ERROR)) {
+                            Intent intent = new Intent(activity, MidtransActivity.class);
+                            intent.putExtra(Constant.URL, jsonObject.getJSONObject(Constant.DATA).getString(Constant.REDIRECT_URL));
+                            intent.putExtra(Constant.ORDER_ID, orderId);
+                            intent.putExtra(Constant.FROM, Constant.PAYMENT);
+                            intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.CREATE_PAYMENT, params, true);
+    }
+
+    public void CreateStripePayment(String orderId, String grossAmount) {
+/*        accesskey:90336
+        name:username
+        address_line1:jubeli_circle
+        postal_code:12345 {must be in 5 digit}
+        city:bhuj
+        amount:123456
+
+        https://newekart.wrteam.in/stripe/index.php*/
+
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.ORDER_ID, orderId);
         params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));

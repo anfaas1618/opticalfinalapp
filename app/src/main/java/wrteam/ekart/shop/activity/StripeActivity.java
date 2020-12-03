@@ -35,7 +35,7 @@ import wrteam.ekart.shop.helper.PaymentModelClass;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 
-public class MidtransActivity extends AppCompatActivity {
+public class StripeActivity extends AppCompatActivity {
     Toolbar toolbar;
     WebView webView;
     String url;
@@ -52,9 +52,9 @@ public class MidtransActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_view);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.midtrans));
+        getSupportActionBar().setTitle(getString(R.string.stripe));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        paymentModelClass = new PaymentModelClass(MidtransActivity.this);
+        paymentModelClass = new PaymentModelClass(StripeActivity.this);
         url = getIntent().getStringExtra("url");
         itemNo = getIntent().getStringExtra(Constant.ORDER_ID);
         sendParams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);
@@ -83,7 +83,7 @@ public class MidtransActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         String status = jsonObject.getString("transaction_status");
-                        AddTransaction(MidtransActivity.this, itemNo, getString(R.string.midtrans), itemNo, status, jsonObject.getString(Constant.MESSAGE), sendParams);
+                        AddTransaction(StripeActivity.this, itemNo, getString(R.string.stripe), itemNo, status, jsonObject.getString(Constant.MESSAGE), sendParams);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -118,7 +118,7 @@ public class MidtransActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
-                                new WalletTransactionFragment().AddWalletBalance(MidtransActivity.this, new Session(MidtransActivity.this), WalletTransactionFragment.amount, WalletTransactionFragment.msg, orderId);
+                                new WalletTransactionFragment().AddWalletBalance(StripeActivity.this, new Session(StripeActivity.this), WalletTransactionFragment.amount, WalletTransactionFragment.msg, orderId);
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals("capture") || status.equals("challenge") || status.equals("pending")) {
                                     finish();
@@ -137,7 +137,7 @@ public class MidtransActivity extends AppCompatActivity {
                     }
                 }
             }
-        }, MidtransActivity.this, Constant.ORDERPROCESS_URL, transparams, false);
+        }, StripeActivity.this, Constant.ORDERPROCESS_URL, transparams, false);
     }
 
     @Override
@@ -155,14 +155,14 @@ public class MidtransActivity extends AppCompatActivity {
     }
 
     public void ProcessAlertDialog() {
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MidtransActivity.this);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(StripeActivity.this);
         // Setting Dialog Message
         alertDialog.setMessage(getString(R.string.txn_cancel_msg));
         alertDialog.setCancelable(false);
         final AlertDialog alertDialog1 = alertDialog.create();
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                DeleteTransaction(MidtransActivity.this, itemNo);
+                DeleteTransaction(StripeActivity.this, itemNo);
                 alertDialog1.dismiss();
             }
         }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -183,7 +183,7 @@ public class MidtransActivity extends AppCompatActivity {
             @Override
             public void onSuccess(boolean result, String response) {
                 if (result) {
-                    MidtransActivity.super.onBackPressed();
+                    StripeActivity.super.onBackPressed();
                 }
             }
         }, activity, Constant.ORDERPROCESS_URL, transparams, false);

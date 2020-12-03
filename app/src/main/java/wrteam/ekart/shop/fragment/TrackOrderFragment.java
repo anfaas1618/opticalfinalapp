@@ -78,6 +78,7 @@ public class TrackOrderFragment extends Fragment {
 
         if (session.isUserLoggedIn()) {
             if (AppController.isConnected(activity)) {
+                ApiConfig.getWalletBalance(activity, new Session(activity));
                 GetOrderDetails();
             }
         } else {
@@ -89,6 +90,7 @@ public class TrackOrderFragment extends Fragment {
             public void onRefresh() {
                 if (AppController.isConnected(activity)) {
                     swipeLayout.setRefreshing(false);
+                    ApiConfig.getWalletBalance(activity, new Session(activity));
                     GetOrderDetails();
                 }
             }
