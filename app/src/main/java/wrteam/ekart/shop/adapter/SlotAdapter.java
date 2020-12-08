@@ -34,6 +34,7 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
         this.deliveryTime = deliveryTime;
         this.activity = activity;
         this.categorylist = categorylist;
+        PaymentFragment.deliveryTime = "";
     }
 
     @NonNull

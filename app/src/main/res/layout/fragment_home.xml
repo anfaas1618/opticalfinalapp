@@ -7,31 +7,11 @@
     android:focusable="true">
 
 
-    <LinearLayout
-        android:id="@+id/lytSearchview"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimen_10dp"
-            android:layout_marginEnd="@dimen/dimen_10dp"
-            android:layout_marginBottom="@dimen/dimen_10dp"
-            android:background="@drawable/bg_search"
-            android:clickable="false"
-            android:focusable="false"
-            android:queryHint="Search Here" />
-    </LinearLayout>
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/lytSearchview">
+        android:layout_alignParentTop="true">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
@@ -42,6 +22,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/lytSearchview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:background="@color/colorPrimary">
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_10dp"
+                        android:layout_marginEnd="@dimen/dimen_10dp"
+                        android:layout_marginBottom="@dimen/dimen_10dp"
+                        android:background="@drawable/bg_search"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:queryHint="Search Here" />
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/offerView"

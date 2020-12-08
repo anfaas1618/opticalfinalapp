@@ -33,7 +33,7 @@ public class Constant {
     public static String GET_PRODUCT_BY_CATE = BaseUrl + "get-products-by-category-id.php";
     public static String GET_FAVORITES_URL = BaseUrl + "favorites.php";
     public static String GET_OFFLINE_FAVORITES_URL = BaseUrl + "get-products-offline.php";
-    public static String CREATE_PAYMENT = MAINBASEUrl + "midtrans/create-payment.php";
+    public static String MIDTRANS_PAYMENT_URL = MAINBASEUrl + "midtrans/create-payment.php";
     public static String GET_OFFLINE_CART_URL = BaseUrl + "get-variants-offline.php";
     public static String GET_PRODUCT_DETAIL_URL = BaseUrl + "get-product-by-id.php";
     public static String CITY_URL = BaseUrl + "get-cities.php";
@@ -42,6 +42,7 @@ public class Constant {
     public static String USER_DATA_URL = BaseUrl + "get-user-data.php";
     public static String REMOVE_FCM_URL = BaseUrl + "remove-fcm-id.php";
     public static String CART_URL = BaseUrl + "cart.php";
+    public static String STRIPE_BASE_URL = MAINBASEUrl + "stripe/create-payment.php";
     public static String GET_SIMILAR_PRODUCT_URL = BaseUrl + "get-similar-products.php";
     public static String TRANSACTION_URL = BaseUrl + "get-user-transactions.php";
     public static String PROMO_CODE_CHECK_URL = BaseUrl + "validate-promo-code.php";
@@ -57,7 +58,7 @@ public class Constant {
     public static String GetVal = "1";
     public static final String GROSS_AMOUNT = "gross_amount";
     public static String AUTHORIZATION = "Authorization";
-    public static String PARAMS = Constant.PARAMS;
+    public static String PARAMS = "params";
     public static String GET_PRIVACY = "get_privacy";
     public static String GET_TERMS = "get_terms";
     public static String GET_ADDRESSES = "get_addresses";
@@ -70,6 +71,7 @@ public class Constant {
     public static String ADD_TO_FAVORITES = "add_to_favorites";
     public static String REMOVE_FROM_FAVORITES = "remove_from_favorites";
     public static String CANCELLED = "cancelled";
+    public static String ORDER_STATUS = "order_status";
     public static String GET_NOTIFICATIONS = "get-notifications";
     public static String RETURNED = "returned";
     public static String GET_USER_DATA = "get_user_data";
@@ -118,10 +120,8 @@ public class Constant {
     public static String flutterwave_secret_key = "flutterwave_secret_key";
     public static String flutterwave_encryption_key = "flutterwave_encryption_key";
 
-    public static String STRIPE_CURRENCY = "inr";
-    public static String STRIPE_BASE_URL = "https://newekart.wrteam.in/library/stripe/";
-
     public static String CITY_ID = "city_id";
+    public static String CITY = "city";
     public static String AREA_ID = "area_id";
     public static String REFERRAL_CODE = "referral_code";
     public static String FRIEND_CODE = "friends_code";
@@ -155,6 +155,9 @@ public class Constant {
     public static String NAME = "name";
     public static String TYPE_ID = "type_id";
     public static String ID = "id";
+    public static String SHIPPED = "shipped";
+    public static String RECEIVED = "received";
+    public static String DELIVERED = "delivered";
     public static String SUBTITLE = "subtitle";
     public static String PRODUCTS = "products";
     public static String SUC_CATE_ID = "subcategory_id";
@@ -236,6 +239,7 @@ public class Constant {
     public static String flutterwave_payment_method = "flutterwave_payment_method";
     public static String midtrans_payment_method = "midtrans_payment_method";
     public static String stripe_payment_method = "stripe_payment_method";
+    public static String stripe_currency_code = "stripe_currency_code";
     public static String KEY_REFER_EARN_METHOD = "refer-earn-method";
     public static String KEY_MIN_REFER_ORDER_AMOUNT = "min-refer-earn-order-amount";
     public static String REFER_EARN_ORDER_AMOUNT = "";
@@ -283,6 +287,8 @@ public class Constant {
     public static String DELIVERY_TIME = "delivery_time";
     public static String PAYMENT_METHOD = "payment_method";
     public static String ADDRESS = "address";
+    public static String ADDRESS_LINE1 = "address_line1";
+    public static String POSTAL_CODE = "postal_code";
     public static String LANDMARK = "landmark";
     public static String TRANS_ID = "txn_id";
     public static String MESSAGE = "message";
@@ -290,6 +296,8 @@ public class Constant {
     public static String FROM = "from";
     public static String GETORDERS = "get_orders";
     public static String ORDER_ID = "order_id";
+    public static String publishableKey = "publishableKey";
+    public static String clientSecret = "clientSecret";
     public static String UPDATE_ORDER_STATUS = "update_order_status";
     public static String PLACE_ORDER = "place_order";
     public static String NEW = "new";
@@ -316,8 +324,10 @@ public class Constant {
     public static String COD = "";
     public static String PAYSTACK = "";
     public static String FLUTTERWAVE = "";
-    public static String STRIPE = "";
     public static String MIDTRANS = "";
+
+    public static String STRIPE = "";
+    public static String STRIPE_CURRENCY = "";
 
     public static String MERCHANT_ID = "";
     public static String MERCHANT_KEY = "";

@@ -282,12 +282,12 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
 
     }
 
-//    public void setAppLocal(String languageCode){
-//        Resources resources = getResources ();
-//        DisplayMetrics dm = resources.getDisplayMetrics ();
-//        Configuration configuration = resources.getConfiguration ();
-//        configuration.setLocale (new Locale(languageCode.toLowerCase ()));
-//        resources.updateConfiguration (configuration,dm);
+//    public void setAppLocal(String languageCode) {
+//        Resources resources = getResources();
+//        DisplayMetrics dm = resources.getDisplayMetrics();
+//        Configuration configuration = resources.getConfiguration();
+//        configuration.setLocale(new Locale(languageCode.toLowerCase()));
+//        resources.updateConfiguration(configuration, dm);
 //    }
 
     @Override

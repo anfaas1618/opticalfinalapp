@@ -560,7 +560,7 @@ public class ApiConfig {
             int view = activity.getResources().getIdentifier("l" + i, "id", activity.getPackageName());
             int txt = activity.getResources().getIdentifier("txt" + i, "id", activity.getPackageName());
             int textview = activity.getResources().getIdentifier("txt" + i + "" + i, "id", activity.getPackageName());
-            System.out.println("=============== " + order.getOrderStatusArrayList().get(i).toString());
+//            System.out.println("=============== " + order.getOrderStatusArrayList().get(i).toString());
             View v = holder.itemView;
             if (img != 0 && v.findViewById(img) != null) {
                 ImageView imageView = v.findViewById(img);

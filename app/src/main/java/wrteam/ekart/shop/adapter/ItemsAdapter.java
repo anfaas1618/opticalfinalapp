@@ -192,20 +192,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
                     holder.btnCancel.setVisibility(View.GONE);
                 }
             }
-
-            holder.lyttracker.setVisibility(View.VISIBLE);
-
-            if (order.getActiveStatus().equalsIgnoreCase("cancelled")) {
-                holder.lyttracker.setVisibility(View.GONE);
-            } else {
-                if (order.getActiveStatus().equals("returned")) {
-                    holder.l4.setVisibility(View.VISIBLE);
-                    holder.returnLyt.setVisibility(View.VISIBLE);
-                }
-                holder.lyttracker.setVisibility(View.VISIBLE);
-
-                ApiConfig.setOrderTrackerLayout(activity, order, holder);
-            }
         }
     }
 
@@ -247,7 +233,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
                                         holder.btnCancel.setVisibility(View.GONE);
                                         holder.txtstatus.setText(status);
                                         holder.txtstatus.setTextColor(Color.RED);
-                                        holder.lyttracker.setVisibility(View.GONE);
                                         order.status = status;
                                         if (from.equals("detail")) {
                                             if (orderTrackerArrayList.size() == 1) {
@@ -304,8 +289,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         CardView carddetail;
         RecyclerView recyclerView;
         Button btnCancel, btnReturn;
-        View l4;
-        LinearLayout lyttracker, returnLyt;
+        LinearLayout returnLyt;
 
         public CartItemHolder(View itemView) {
             super(itemView);
@@ -321,8 +305,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
             carddetail = itemView.findViewById(R.id.carddetail);
             recyclerView = itemView.findViewById(R.id.recyclerView);
             btnReturn = itemView.findViewById(R.id.btnReturn);
-            lyttracker = itemView.findViewById(R.id.lyttracker);
-            l4 = itemView.findViewById(R.id.l4);
             returnLyt = itemView.findViewById(R.id.returnLyt);
         }
     }

@@ -266,7 +266,6 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         String type = rdHome.isChecked() ? "Home" : rdOffice.isChecked() ? "Office" : "Other";
         if (cityspinner.getSelectedItemId() <= 0) {
             cityspinner.performClick();
-
         } else if (areaSpinner.getSelectedItemId() <= 0) {
             areaSpinner.performClick();
 
@@ -393,7 +392,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
             Map<String, String> params = new HashMap<String, String>();
             cityArrayList.clear();
             Activity activity = getActivity();
-            if (activity != null && isAdded()) {
+            if (activity != null) {
 
 
                 ApiConfig.RequestToVolley((result, response) -> {

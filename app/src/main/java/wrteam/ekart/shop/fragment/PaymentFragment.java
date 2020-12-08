@@ -733,42 +733,15 @@ public class PaymentFragment extends Fragment {
                     }
                 }
             }
-        }, activity, Constant.CREATE_PAYMENT, params, true);
+        }, activity, Constant.MIDTRANS_PAYMENT_URL, params, true);
     }
 
     public void CreateStripePayment(String orderId, String grossAmount) {
-/*        accesskey:90336
-        name:username
-        address_line1:jubeli_circle
-        postal_code:12345 {must be in 5 digit}
-        city:bhuj
-        amount:123456
-
-        https://newekart.wrteam.in/stripe/index.php*/
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.ORDER_ID, orderId);
-        params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        if (!jsonObject.getBoolean(Constant.ERROR)) {
-                            Intent intent = new Intent(activity, MidtransActivity.class);
-                            intent.putExtra(Constant.URL, jsonObject.getJSONObject(Constant.DATA).getString(Constant.REDIRECT_URL));
-                            intent.putExtra(Constant.ORDER_ID, orderId);
-                            intent.putExtra(Constant.FROM, Constant.PAYMENT);
-                            intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
-                            startActivity(intent);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, activity, Constant.CREATE_PAYMENT, params, true);
+        Intent intent = new Intent(activity, MidtransActivity.class);
+        intent.putExtra(Constant.ORDER_ID, orderId);
+        intent.putExtra(Constant.FROM, Constant.PAYMENT);
+        intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+        startActivity(intent);
     }
 
     public void AddTransaction(Activity activity, String orderId, String paymentType, String txnid, final String status, String message, Map<String, String> sendparams) {

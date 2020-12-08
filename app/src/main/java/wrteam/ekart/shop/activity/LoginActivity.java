@@ -174,9 +174,9 @@ public class LoginActivity extends AppCompatActivity {
 
         progress = new ProgressDisplay(this);
 
-//        edtCode.setCountryForNameCode("IN");
-//        edtFCode.setCountryForNameCode("IN");
-//        Constant.country_code = edtCode.getSelectedCountryCode(); // your country code
+//        edtCode.setCountryForNameCode("CODE");
+//        edtFCode.setCountryForNameCode("CODE");
+//        Constant.country_code = edtCode.getSelectedCountryCode();
 //        session.setData(Constant.COUNTRY_CODE, Constant.country_code);
 
         if (from != null) {

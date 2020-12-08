@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">eCart</string>
+
+<!-- ************************************************************************************************************* -->
+    <!--    For privacy policy and terms and condition whatever you set words in privacy_policy and terms_conditions that words must be contain in msg_privacy_terms.Other wise app will crash-->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_conditions">Terms &amp; Conditions</string>
     <string name="msg_privacy_terms">I have read and agree to the Privacy Policy and Terms &amp; Conditions.</string>
+<!-- ************************************************************************************************************* -->
+
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
     <string name="title_home">Home</string>
@@ -309,4 +314,9 @@
     <string name="login_msg">If you want to check your orders, you have to login.</string>
     <string name="amount_">"Amount : </string>
     <string name="hash">#</string>
+    <string name="ordered_on">Placed order on&#160;</string>
+    <string name="order_number">Order No&#160;</string>
+    <string name="for_amount_on">For Amount&#160;</string>
+    <string name="item">&#160;Item(s)</string>
+    <string name="pincode_">Pin&#160;Code&#160;:&#160;</string>
 </resources>

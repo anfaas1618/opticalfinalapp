@@ -138,40 +138,56 @@ public class TrackerDetailFragment extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(getString(R.string.cancel_order))
-                        .setMessage(getString(R.string.cancel_msg))
-                        .setPositiveButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put(Constant.UPDATE_ORDER_STATUS, Constant.GetVal);
-                                params.put(Constant.ID, order.getOrder_id());
-                                params.put(Constant.STATUS, Constant.CANCELLED);
-                                pBar.setVisibility(View.VISIBLE);
-                                ApiConfig.RequestToVolley(new VolleyCallback() {
-                                    @Override
-                                    public void onSuccess(boolean result, String response) {
-                                        // System.out.println("=================*cancelorder- " + response);
-                                        if (result) {
-                                            try {
-                                                JSONObject object = new JSONObject(response);
-                                                if (!object.getBoolean(Constant.ERROR)) {
-                                                    Constant.isOrderCancelled = true;
 
-                                                    ApiConfig.getWalletBalance(activity, new Session(getContext()));
-                                                }
-                                                Toast.makeText(getContext(), object.getString("message"), Toast.LENGTH_LONG).show();
-                                                pBar.setVisibility(View.GONE);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
+                final Map<String, String> params = new HashMap<>();
+                params.put(Constant.UPDATE_ORDER_STATUS, Constant.GetVal);
+                params.put(Constant.ORDER_ITEM_ID, order.getId());
+                params.put(Constant.ORDER_ID, order.getOrder_id());
+                params.put(Constant.STATUS, Constant.CANCELLED);
+
+
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+                // Setting Dialog Message
+                alertDialog.setTitle(activity.getResources().getString(R.string.cancel_order));
+                alertDialog.setMessage(activity.getResources().getString(R.string.cancel_msg));
+                alertDialog.setCancelable(false);
+                final AlertDialog alertDialog1 = alertDialog.create();
+
+                // Setting OK Button
+                alertDialog.setPositiveButton(activity.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (pBar != null)
+                            pBar.setVisibility(View.VISIBLE);
+                        ApiConfig.RequestToVolley(new VolleyCallback() {
+                            @Override
+                            public void onSuccess(boolean result, String response) {
+                                // System.out.println("================= " + response);
+                                if (result) {
+                                    try {
+                                        JSONObject object = new JSONObject(response);
+                                        if (!object.getBoolean(Constant.ERROR)) {
+                                            btnCancel.setVisibility(View.GONE);
+                                            ApiConfig.getWalletBalance(activity, new Session(activity));
                                         }
+                                        Toast.makeText(activity, object.getString(Constant.MESSAGE), Toast.LENGTH_LONG).show();
+                                        if (pBar != null)
+                                            pBar.setVisibility(View.GONE);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                }, activity, Constant.ORDERPROCESS_URL, params, false);
-                                dialog.dismiss();
+                                }
                             }
-                        }).show();
+                        }, activity, Constant.ORDERPROCESS_URL, params, false);
+
+                    }
+                });
+                alertDialog.setNegativeButton(activity.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog1.dismiss();
+                    }
+                });
+                // Showing Alert Message
+                alertDialog.show();
             }
         });
 
@@ -200,7 +216,6 @@ public class TrackerDetailFragment extends Fragment {
                             JSONArray statusarray = jsonObject.getJSONArray("status");
                             ArrayList<OrderTracker> statusarraylist = new ArrayList<>();
 
-                            int cancel = 0, delivered = 0, process = 0, shipped = 0, returned = 0;
                             for (int k = 0; k < statusarray.length(); k++) {
                                 JSONArray sarray = statusarray.getJSONArray(k);
                                 String sname = sarray.getString(0);
@@ -209,29 +224,6 @@ public class TrackerDetailFragment extends Fragment {
                                 statusarraylist.add(new OrderTracker(sname, sdate));
                                 laststatusname = sname;
                                 laststatusdate = sdate;
-
-                                if (sname.equalsIgnoreCase("cancelled")) {
-                                    cancel = 1;
-                                    delivered = 0;
-                                    process = 0;
-                                    shipped = 0;
-                                    returned = 0;
-                                } else if (sname.equalsIgnoreCase("delivered")) {
-                                    delivered = 1;
-                                    process = 0;
-                                    shipped = 0;
-                                    returned = 0;
-                                } else if (sname.equalsIgnoreCase("processed")) {
-                                    process = 1;
-                                    shipped = 0;
-                                    returned = 0;
-                                } else if (sname.equalsIgnoreCase("shipped")) {
-                                    shipped = 1;
-                                    returned = 0;
-                                } else if (sname.equalsIgnoreCase("returned")) {
-
-                                    returned = 1;
-                                }
                             }
 
                             ArrayList<OrderTracker> itemList = new ArrayList<>();

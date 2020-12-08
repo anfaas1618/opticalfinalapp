@@ -50,6 +50,7 @@ import wrteam.ekart.shop.activity.DrawerActivity;
 import wrteam.ekart.shop.activity.MidtransActivity;
 import wrteam.ekart.shop.activity.PayPalWebActivity;
 import wrteam.ekart.shop.activity.PayStackActivity;
+import wrteam.ekart.shop.activity.StripeActivity;
 import wrteam.ekart.shop.adapter.WalletTransactionAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
@@ -503,12 +504,16 @@ public class WalletTransactionFragment extends Fragment {
             sendparams.put(Constant.FINAL_TOTAL, amount);
             callPayStack(sendparams);
         } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
-            StartFlutterWavePayment();
         } else if (paymentMethod.equals(getString(R.string.midtrans))) {
             System.out.println();
             sendparams.put(Constant.FINAL_TOTAL, amount);
             sendparams.put(Constant.USER_ID, session.getData(Constant.ID));
             CreateMidtransPayment(System.currentTimeMillis() + Constant.randomNumeric(3), amount, sendparams);
+        } else if (paymentMethod.equals(getString(R.string.stripe))) {
+            sendparams.put(Constant.FROM, Constant.WALLET);
+            Intent intent = new Intent(activity, StripeActivity.class);
+            intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+            startActivity(intent);
         }
     }
 
@@ -718,7 +723,7 @@ public class WalletTransactionFragment extends Fragment {
                     }
                 }
             }
-        }, activity, Constant.CREATE_PAYMENT, params, true);
+        }, activity, Constant.MIDTRANS_PAYMENT_URL, params, true);
     }
 
     @Override

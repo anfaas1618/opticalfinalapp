@@ -61,7 +61,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.setIsRecyclable(false);
 
         if (Constant.selectedAddressId.equals(id)) {
-            AddressListFragment.selectedAddress = address.getAddress() + "," + address.getLandmark() + "," + address.getCity_name() + "," + address.getArea_name() + "," + address.getState() + "," + address.getCountry() + ",Pin Code : " + address.getPincode();
+            AddressListFragment.selectedAddress = address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", Pin Code : " + address.getPincode();
 
             holder.tvName.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
 
@@ -84,6 +84,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.lytMain.setBackgroundResource(R.drawable.address_card_shadow);
         }
 
+        holder.tvAddress.setText(address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", " + activity.getString(R.string.pincode_) + address.getPincode());
+
         if (address.getIs_default().equals("1")) {
             holder.tvDefaultAddress.setVisibility(View.VISIBLE);
         }
@@ -93,7 +95,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (!address.getType().equalsIgnoreCase("")) {
             holder.tvAddressType.setText(address.getType());
         }
-        holder.tvAddress.setText(address.getAddress() + "," + address.getArea_name() + "," + address.getCity_name() + "," + address.getState() + "," + address.getCountry() + "," + address.getPincode());
+        AddressListFragment.selectedAddress = address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", " + activity.getString(R.string.pincode_) + address.getPincode();
         holder.tvMobile.setText(address.getMobile());
 
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
