@@ -392,7 +392,6 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txt0"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/order_placed"
@@ -400,13 +399,11 @@
                                 android:textSize="8sp" />
 
                             <ImageView
-                                android:id="@+id/img0"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
-                                android:id="@+id/txt00"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
@@ -415,7 +412,6 @@
                         </LinearLayout>
 
                         <View
-                            android:id="@+id/l1"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_gravity="center_vertical"
@@ -430,7 +426,6 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txt1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/processed"
@@ -438,13 +433,11 @@
                                 android:textSize="8sp" />
 
                             <ImageView
-                                android:id="@+id/img1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
-                                android:id="@+id/txt11"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
@@ -453,7 +446,6 @@
                         </LinearLayout>
 
                         <View
-                            android:id="@+id/l2"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_gravity="center_vertical"
@@ -468,7 +460,6 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txt2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/shipped"
@@ -476,13 +467,11 @@
                                 android:textSize="8sp" />
 
                             <ImageView
-                                android:id="@+id/img2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
-                                android:id="@+id/txt22"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
@@ -492,7 +481,6 @@
 
 
                         <View
-                            android:id="@+id/l3"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_gravity="center_vertical"
@@ -506,7 +494,6 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txt3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/delivered"
@@ -514,13 +501,11 @@
                                 android:textSize="8sp" />
 
                             <ImageView
-                                android:id="@+id/img3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
-                                android:id="@+id/txt33"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
@@ -546,7 +531,6 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:id="@+id/txt4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/returned"
@@ -554,13 +538,11 @@
                                 android:textSize="8sp" />
 
                             <ImageView
-                                android:id="@+id/img4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
-                                android:id="@+id/txt44"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"

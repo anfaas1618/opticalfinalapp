@@ -67,8 +67,8 @@ public class DrawerActivity extends AppCompatActivity {
         session = new Session(activity);
 
         if (session.isUserLoggedIn()) {
-            tvName.setText(session.getData(Session.KEY_NAME));
-            tvMobile.setText(session.getData(Session.KEY_MOBILE));
+            tvName.setText(session.getData(Constant.NAME));
+            tvMobile.setText(session.getData(Constant.MOBILE));
             tvWallet.setVisibility(View.VISIBLE);
 
             Picasso.get()

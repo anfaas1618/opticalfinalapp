@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import wrteam.ekart.shop.R;
-import wrteam.ekart.shop.fragment.WalletTransactionFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
@@ -41,7 +41,7 @@ public class MidtransActivity extends AppCompatActivity {
     String url;
     PaymentModelClass paymentModelClass;
     boolean isTxnInProcess = true;
-    String itemNo;
+    String orderId;
     Map<String, String> sendParams;
     String from;
 
@@ -56,7 +56,7 @@ public class MidtransActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         paymentModelClass = new PaymentModelClass(MidtransActivity.this);
         url = getIntent().getStringExtra("url");
-        itemNo = getIntent().getStringExtra(Constant.ORDER_ID);
+        orderId = getIntent().getStringExtra(Constant.ORDER_ID);
         sendParams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);
         from = getIntent().getStringExtra(Constant.FROM);
 
@@ -83,7 +83,7 @@ public class MidtransActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         String status = jsonObject.getString("transaction_status");
-                        AddTransaction(MidtransActivity.this, itemNo, getString(R.string.midtrans), itemNo, status, jsonObject.getString(Constant.MESSAGE), sendParams);
+                        AddTransaction(MidtransActivity.this, orderId, getString(R.string.midtrans), orderId, status, jsonObject.getString(Constant.MESSAGE), sendParams);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -97,7 +97,7 @@ public class MidtransActivity extends AppCompatActivity {
 
     public void AddTransaction(Activity activity, String orderId, String paymentType, String txnid, final String status, String message, Map<String, String> sendparams) {
         Map<String, String> transparams = new HashMap<>();
-        transparams.put(Constant.Add_TRANSACTION, Constant.GetVal);
+        transparams.put(Constant.ADD_TRANSACTION, Constant.GetVal);
         transparams.put(Constant.USER_ID, sendparams.get(Constant.USER_ID));
         transparams.put(Constant.ORDER_ID, orderId);
         transparams.put(Constant.TYPE, paymentType);
@@ -118,7 +118,7 @@ public class MidtransActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
-                                new WalletTransactionFragment().AddWalletBalance(MidtransActivity.this, new Session(MidtransActivity.this), WalletTransactionFragment.amount, WalletTransactionFragment.msg, orderId);
+                                Toast.makeText(activity, "You amount will be credited in wallet very soon.", Toast.LENGTH_SHORT).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals("capture") || status.equals("challenge") || status.equals("pending")) {
                                     finish();
@@ -162,7 +162,7 @@ public class MidtransActivity extends AppCompatActivity {
         final AlertDialog alertDialog1 = alertDialog.create();
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                DeleteTransaction(MidtransActivity.this, itemNo);
+                DeleteTransaction(MidtransActivity.this, orderId);
                 alertDialog1.dismiss();
             }
         }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -183,7 +183,7 @@ public class MidtransActivity extends AppCompatActivity {
             @Override
             public void onSuccess(boolean result, String response) {
                 if (result) {
-                    MidtransActivity.super.onBackPressed();
+                    onBackPressed();
                 }
             }
         }, activity, Constant.ORDERPROCESS_URL, transparams, false);

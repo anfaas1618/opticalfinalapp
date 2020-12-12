@@ -53,6 +53,7 @@ import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.activity.MidtransActivity;
 import wrteam.ekart.shop.activity.PayPalWebActivity;
 import wrteam.ekart.shop.activity.PayStackActivity;
+import wrteam.ekart.shop.activity.StripeActivity;
 import wrteam.ekart.shop.adapter.DateAdapter;
 import wrteam.ekart.shop.adapter.SlotAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
@@ -228,49 +229,44 @@ public class PaymentFragment extends Fragment {
                     try {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-                            JSONObject object = objectbject.getJSONObject(Constant.PAYMENT_METHODS);
-                            if (object.has(Constant.cod_payment_method)) {
-                                Constant.COD = object.getString(Constant.cod_payment_method);
-                            }
-                            if (object.has(Constant.payu_method)) {
-                                Constant.PAYUMONEY = object.getString(Constant.payu_method);
-                                Constant.MERCHANT_KEY = object.getString(Constant.PAY_M_KEY);
-                                Constant.MERCHANT_ID = object.getString(Constant.PAYU_M_ID);
-                                Constant.MERCHANT_SALT = object.getString(Constant.PAYU_SALT);
-                            }
-                            if (object.has(Constant.razor_pay_method)) {
-                                Constant.RAZORPAY = object.getString(Constant.razor_pay_method);
-                                Constant.RAZOR_PAY_KEY_VALUE = object.getString(Constant.RAZOR_PAY_KEY);
-                            }
-                            if (object.has(Constant.paypal_method)) {
-                                Constant.PAYPAL = object.getString(Constant.paypal_method);
-                            }
-                            if (object.has(Constant.paystack_method)) {
-                                Constant.PAYSTACK = object.getString(Constant.paystack_method);
-                                Constant.PAYSTACK_KEY = object.getString(Constant.paystack_public_key);
-                            }
-                            if (object.has(Constant.flutterwave_payment_method)) {
-                                Constant.FLUTTERWAVE = object.getString(Constant.flutterwave_payment_method);
-                                Constant.FLUTTERWAVE_ENCRYPTION_KEY_VAL = object.getString(Constant.flutterwave_encryption_key);
-                                Constant.FLUTTERWAVE_PUBLIC_KEY_VAL = object.getString(Constant.flutterwave_public_key);
-                                Constant.FLUTTERWAVE_SECRET_KEY_VAL = object.getString(Constant.flutterwave_secret_key);
-                            }
-                            if (object.has(Constant.midtrans_payment_method)) {
-                                Constant.MIDTRANS = object.getString(Constant.midtrans_payment_method);
+                            if (objectbject.has("payment_methods")) {
+                                JSONObject object = objectbject.getJSONObject(Constant.PAYMENT_METHODS);
+                                if (object.has(Constant.payu_method)) {
+                                    Constant.PAYUMONEY = object.getString(Constant.payu_method);
+                                    Constant.MERCHANT_KEY = object.getString(Constant.PAY_M_KEY);
+                                    Constant.MERCHANT_ID = object.getString(Constant.PAYU_M_ID);
+                                    Constant.MERCHANT_SALT = object.getString(Constant.PAYU_SALT);
+                                }
+                                if (object.has(Constant.razor_pay_method)) {
+                                    Constant.RAZORPAY = object.getString(Constant.razor_pay_method);
+                                    Constant.RAZOR_PAY_KEY_VALUE = object.getString(Constant.RAZOR_PAY_KEY);
+                                }
+                                if (object.has(Constant.paypal_method)) {
+                                    Constant.PAYPAL = object.getString(Constant.paypal_method);
+                                }
+                                if (object.has(Constant.paystack_method)) {
+                                    Constant.PAYSTACK = object.getString(Constant.paystack_method);
+                                    Constant.PAYSTACK_KEY = object.getString(Constant.paystack_public_key);
+                                }
+                                if (object.has(Constant.flutterwave_payment_method)) {
+                                    Constant.FLUTTERWAVE = object.getString(Constant.flutterwave_payment_method);
+                                    Constant.FLUTTERWAVE_ENCRYPTION_KEY_VAL = object.getString(Constant.flutterwave_encryption_key);
+                                    Constant.FLUTTERWAVE_PUBLIC_KEY_VAL = object.getString(Constant.flutterwave_public_key);
+                                    Constant.FLUTTERWAVE_SECRET_KEY_VAL = object.getString(Constant.flutterwave_secret_key);
+                                    Constant.FLUTTERWAVE_SECRET_KEY_VAL = object.getString(Constant.flutterwave_secret_key);
+                                    Constant.FLUTTERWAVE_CURRENCY_CODE_VAL = object.getString(Constant.flutterwave_currency_code);
+                                }
+                                if (object.has(Constant.midtrans_payment_method)) {
+                                    Constant.MIDTRANS = object.getString(Constant.midtrans_payment_method);
+                                }
+                                if (object.has(Constant.stripe_payment_method)) {
+                                    Constant.STRIPE = object.getString(Constant.stripe_payment_method);
+                                }
 
-//                                "stripe_payment_method": "1",
-//                                        "stripe_publishable_key": "pk_test_51Hh90WLYfObhNTTwooBHwynrlfiPo2uwxyCVqGNNCWGmpdOHuaW4rYS9cDldKJ1hxV5ik52UXUDSYgEM66OX45550065US7tRX",
-//                                        "stripe_secret_key": "sk_test_51Hh90WLYfObhNTTwO8kCsbdnMdmLxiGHEpiQPGBkYlahlBAQ3RnXPIKGn3YsGIEMoIQ5bNfxye4kzE6wfLiINzNk00xOYprnZt"
+                                setPaymentMethod();
+                            } else {
+                                Toast.makeText(activity, getString(R.string.alert_payment_methods_blank), Toast.LENGTH_SHORT).show();
                             }
-                            if (object.has(Constant.stripe_payment_method)) {
-                                Constant.STRIPE = object.getString(Constant.stripe_payment_method);
-//                                Constant.STRIPE_PUBLISHABLE_KEY = "pk_test_0gg61LPlfsTrBeOQJGbaVQ4o";
-//                                Constant.STRIPE_SECRET_KEY = "sk_test_zuIZ9ndSCsycbwnnqgVDd1Kt";
-//                                Constant.STRIPE_CURRENCY = "inr";
-//                                Constant.STRIPE_BASE_URL = "https://netsofters.com/stripe/";
-                            }
-
-                            setPaymentMethod();
                         }
 
                     } catch (JSONException e) {
@@ -506,14 +502,14 @@ public class PaymentFragment extends Fragment {
         }
         sendparams = new HashMap<>();
         sendparams.put(Constant.PLACE_ORDER, Constant.GetVal);
-        sendparams.put(Constant.USER_ID, session.getData(Session.KEY_ID));
+        sendparams.put(Constant.USER_ID, session.getData(Constant.ID));
         sendparams.put(Constant.TAX_AMOUNT, "" + taxAmt);
         sendparams.put(Constant.TOTAL, "" + total);
         sendparams.put(Constant.TAX_PERCENT, "" + Constant.SETTING_TAX);
         sendparams.put(Constant.FINAL_TOTAL, "" + Constant.formater.format(subtotal));
         sendparams.put(Constant.PRODUCT_VARIANT_ID, String.valueOf(variantIdList));
         sendparams.put(Constant.QUANTITY, String.valueOf(qtyList));
-        sendparams.put(Constant.MOBILE, session.getData(Session.KEY_MOBILE));
+        sendparams.put(Constant.MOBILE, session.getData(Constant.MOBILE));
         sendparams.put(Constant.DELIVERY_CHARGE, "" + dCharge);
         sendparams.put(Constant.DELIVERY_TIME, (deliveryDay + " - " + deliveryTime));
         sendparams.put(Constant.KEY_WALLET_USED, chWallet.getTag().toString());
@@ -524,9 +520,9 @@ public class PaymentFragment extends Fragment {
             sendparams.put(Constant.PROMO_DISCOUNT, Constant.formater.format(pCodeDiscount));
         }
         sendparams.put(Constant.ADDRESS, address);
-        sendparams.put(Constant.LONGITUDE, session.getCoordinates(Session.KEY_LONGITUDE));
-        sendparams.put(Constant.LATITUDE, session.getCoordinates(Session.KEY_LATITUDE));
-        sendparams.put(Constant.EMAIL, session.getData(Session.KEY_EMAIL));
+        sendparams.put(Constant.LONGITUDE, session.getCoordinates(Constant.LONGITUDE));
+        sendparams.put(Constant.LATITUDE, session.getCoordinates(Constant.LATITUDE));
+        sendparams.put(Constant.EMAIL, session.getData(Constant.EMAIL));
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -593,13 +589,14 @@ public class PaymentFragment extends Fragment {
                 }, getActivity(), Constant.ORDERPROCESS_URL, sendparams, true);
                 dialog.dismiss();
             } else {
-                sendparams.put(Constant.USER_NAME, session.getData(Session.KEY_NAME));
+                sendparams.put(Constant.USER_NAME, session.getData(Constant.NAME));
                 if (paymentMethod.equals(getString(R.string.pay_u))) {
                     dialog.dismiss();
                     paymentModelClass.OnPayClick(getActivity(), sendparams, "Cart Order", String.valueOf(sendparams.get(Constant.FINAL_TOTAL)));
                 } else if (paymentMethod.equals(getString(R.string.paypal))) {
                     dialog.dismiss();
-                    StartPayPalPayment(sendparams);
+                    sendparams.put(Constant.STATUS, Constant.AWAITING_PAYMENT);
+                    PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "paypal");
                 } else if (paymentMethod.equals(getString(R.string.razor_pay))) {
                     dialog.dismiss();
                     CreateOrderId(subtotal);
@@ -617,7 +614,7 @@ public class PaymentFragment extends Fragment {
                 } else if (paymentMethod.equals(getString(R.string.stripe))) {
                     dialog.dismiss();
                     sendparams.put(Constant.FROM, Constant.PAYMENT);
-                    PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "stripe");
+                    PlaceOrder(activity, getString(R.string.stripe), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "stripe");
                 } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
                     dialog.dismiss();
                     StartFlutterWavePayment();
@@ -664,14 +661,14 @@ public class PaymentFragment extends Fragment {
 
         try {
             JSONObject options = new JSONObject();
-            options.put(Constant.NAME, session.getData(Session.KEY_NAME));
+            options.put(Constant.NAME, session.getData(Constant.NAME));
             options.put(Constant.ORDER_ID, orderId);
             options.put(Constant.CURRENCY, "INR");
             options.put(Constant.AMOUNT, payAmount);
 
             JSONObject preFill = new JSONObject();
-            preFill.put(Constant.EMAIL, session.getData(Session.KEY_EMAIL));
-            preFill.put(Constant.CONTACT, session.getData(Session.KEY_MOBILE));
+            preFill.put(Constant.EMAIL, session.getData(Constant.EMAIL));
+            preFill.put(Constant.CONTACT, session.getData(Constant.MOBILE));
             options.put("prefill", preFill);
 
             checkout.open(getActivity(), options);
@@ -694,6 +691,8 @@ public class PaymentFragment extends Fragment {
                                     CreateStripePayment(object.getString(Constant.ORDER_ID), Constant.formater.format(subtotal));
                                 } else if (status.equals("midtrans")) {
                                     CreateMidtransPayment(object.getString(Constant.ORDER_ID), Constant.formater.format(subtotal));
+                                } else if (status.equals("paypal")) {
+                                    StartPayPalPayment(sendparams);
                                 } else {
                                     AddTransaction(activity, object.getString(Constant.ORDER_ID), paymentType, txnid, status, activity.getString(R.string.order_success), sendparams);
                                     MainActivity.fm.beginTransaction().add(R.id.container, new OrderPlacedFragment()).commit();
@@ -737,16 +736,17 @@ public class PaymentFragment extends Fragment {
     }
 
     public void CreateStripePayment(String orderId, String grossAmount) {
-        Intent intent = new Intent(activity, MidtransActivity.class);
+        Intent intent = new Intent(activity, StripeActivity.class);
         intent.putExtra(Constant.ORDER_ID, orderId);
         intent.putExtra(Constant.FROM, Constant.PAYMENT);
+        intent.putExtra(Constant.AMOUNT, grossAmount);
         intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
         startActivity(intent);
     }
 
     public void AddTransaction(Activity activity, String orderId, String paymentType, String txnid, final String status, String message, Map<String, String> sendparams) {
         Map<String, String> transparams = new HashMap<>();
-        transparams.put(Constant.Add_TRANSACTION, Constant.GetVal);
+        transparams.put(Constant.ADD_TRANSACTION, Constant.GetVal);
         transparams.put(Constant.USER_ID, sendparams.get(Constant.USER_ID));
         transparams.put(Constant.ORDER_ID, orderId);
         transparams.put(Constant.TYPE, paymentType);
@@ -789,15 +789,14 @@ public class PaymentFragment extends Fragment {
         params.put(Constant.ITEM_NAME, "Card Order");
         params.put(Constant.ITEM_NUMBER, System.currentTimeMillis() + Constant.randomNumeric(3));
         params.put(Constant.AMOUNT, sendParams.get(Constant.FINAL_TOTAL));
-        // System.out.println("======params paypal "+params.toString());
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
-                //System.out.println("=====url paypal == "+response );
                 Intent intent = new Intent(getContext(), PayPalWebActivity.class);
-                intent.putExtra("url", response);
-                intent.putExtra("item_no", params.get(Constant.ITEM_NUMBER));
-                intent.putExtra(Constant.PARAMS, (Serializable) sendParams);
+                intent.putExtra(Constant.URL, response);
+                intent.putExtra(Constant.ORDER_ID, params.get(Constant.ITEM_NUMBER));
+                intent.putExtra(Constant.FROM, Constant.PAYMENT);
+                intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
                 startActivity(intent);
             }
         }, getActivity(), Constant.PAPAL_URL, params, true);
@@ -841,22 +840,31 @@ public class PaymentFragment extends Fragment {
         new RavePayManager(this)
                 .setAmount(subtotal)
                 .setEmail(session.getData(Constant.EMAIL))
-                .setCountry("KE")
-                .setCurrency("KES")
+                .setCurrency(Constant.FLUTTERWAVE_CURRENCY_CODE_VAL)
                 .setfName(session.getData(Constant.FIRST_NAME))
                 .setlName(session.getData(Constant.LAST_NAME))
-                .setNarration(getString(R.string.app_name) + " Shopping")
+                .setNarration(getString(R.string.app_name) + getString(R.string.shopping))
                 .setPublicKey(Constant.FLUTTERWAVE_PUBLIC_KEY_VAL)
                 .setEncryptionKey(Constant.FLUTTERWAVE_ENCRYPTION_KEY_VAL)
                 .setTxRef(System.currentTimeMillis() + "Ref")
                 .acceptAccountPayments(true)
                 .acceptCardPayments(true)
+                .acceptAccountPayments(true)
+                .acceptAchPayments(true)
+                .acceptBankTransferPayments(true)
+                .acceptBarterPayments(true)
+                .acceptGHMobileMoneyPayments(true)
+                .acceptRwfMobileMoneyPayments(true)
+                .acceptSaBankPayments(true)
+                .acceptFrancMobileMoneyPayments(true)
+                .acceptZmMobileMoneyPayments(true)
+                .acceptUssdPayments(true)
+                .acceptUkPayments(true)
                 .acceptMpesaPayments(true)
-                .onStagingEnv(true)
                 .shouldDisplayFee(true)
-                .showStagingLabel(true)
+                .onStagingEnv(false)
+                .showStagingLabel(false)
                 .initialize();
-
     }
 
     @Override

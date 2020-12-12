@@ -109,12 +109,12 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
 
         session = new Session(activity);
 
-        edtName.setText(session.getData(Session.KEY_NAME));
-        edtAddress.setText(session.getData(Session.KEY_ADDRESS));
-        edtPinCode.setText(session.getData(Session.KEY_PINCODE));
-        edtMobile.setText(session.getData(Session.KEY_MOBILE));
-        cityId = session.getData(Session.KEY_CITY_ID);
-        areaId = session.getData(Session.KEY_AREA_ID);
+        edtName.setText(session.getData(Constant.NAME));
+        edtAddress.setText(session.getData(Constant.ADDRESS));
+        edtPinCode.setText(session.getData(Constant.PINCODE));
+        edtMobile.setText(session.getData(Constant.MOBILE));
+        cityId = session.getData(Constant.CITY_ID);
+        areaId = session.getData(Constant.AREA_ID);
 
 
         ApiConfig.getLocation(activity);
@@ -125,8 +125,8 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                 final GoogleMap mMap = googleMap;
                 double saveLatitude, saveLongitude;
                 if (latitude <= 0 || longitude <= 0) {
-                    saveLatitude = Double.parseDouble(session.getCoordinates(Session.KEY_LATITUDE));
-                    saveLongitude = Double.parseDouble(session.getCoordinates(Session.KEY_LONGITUDE));
+                    saveLatitude = Double.parseDouble(session.getCoordinates(Constant.LATITUDE));
+                    saveLongitude = Double.parseDouble(session.getCoordinates(Constant.LONGITUDE));
                 } else {
                     saveLatitude = latitude;
                     saveLongitude = longitude;
@@ -317,8 +317,8 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
             params.put(Constant.IS_DEFAULT, isDefault);
             if (address1 != null) {
                 if (address1.getLongitude() != null || address1.getLatitude() != null) {
-                    params.put(Constant.LONGITUDE, session.getCoordinates(Session.KEY_LONGITUDE));
-                    params.put(Constant.LATITUDE, session.getCoordinates(Session.KEY_LATITUDE));
+                    params.put(Constant.LONGITUDE, session.getCoordinates(Constant.LONGITUDE));
+                    params.put(Constant.LATITUDE, session.getCoordinates(Constant.LATITUDE));
                 } else {
                     params.put(Constant.LONGITUDE, "" + longitude);
                     params.put(Constant.LATITUDE, "" + latitude);
@@ -526,8 +526,8 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
             longitude = Double.parseDouble(address1.getLongitude());
         }
         if (latitude <= 0 || longitude <= 0) {
-            saveLatitude = Double.parseDouble(session.getCoordinates(Session.KEY_LATITUDE));
-            saveLongitude = Double.parseDouble(session.getCoordinates(Session.KEY_LONGITUDE));
+            saveLatitude = Double.parseDouble(session.getCoordinates(Constant.LATITUDE));
+            saveLongitude = Double.parseDouble(session.getCoordinates(Constant.LONGITUDE));
         } else {
             saveLatitude = latitude;
             saveLongitude = longitude;

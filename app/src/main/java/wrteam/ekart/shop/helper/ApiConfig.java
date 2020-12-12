@@ -756,7 +756,7 @@ public class ApiConfig {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_USER_DATA, Constant.GetVal);
-        params.put(Constant.USER_ID, session.getData(Session.KEY_ID));
+        params.put(Constant.USER_ID, session.getData(Constant.ID));
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -781,7 +781,7 @@ public class ApiConfig {
     public static void clearFCM(Activity activity, Session session) {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.REMOVE_FCM_ID, Constant.GetVal);
-        params.put(Constant.USER_ID, session.getData(Session.KEY_ID));
+        params.put(Constant.USER_ID, session.getData(Constant.ID));
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @SuppressLint("SetTextI18n")
             @Override

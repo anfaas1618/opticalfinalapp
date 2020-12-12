@@ -118,9 +118,9 @@ public class ProductListFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                offset = 0;
                 swipeLayout.setRefreshing(false);
                 productArrayList.clear();
-                offset = 0;
                 if (from.equals("regular")) {
                     GetData();
                 } else if (from.equals("category")) {
@@ -446,9 +446,6 @@ public class ProductListFragment extends Fragment {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             total = Integer.parseInt(objectbject.getString(Constant.TOTAL));
-                            if (offset == 0) {
-                                productArrayList = new ArrayList<>();
-                            }
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
                             productArrayList.addAll(ApiConfig.GetProductList(jsonArray));
@@ -460,7 +457,6 @@ public class ProductListFragment extends Fragment {
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
                                         // if (diff == 0) {
                                         if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                                             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();

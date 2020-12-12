@@ -41,7 +41,6 @@ import wrteam.ekart.shop.model.OrderTracker;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-
 public class TrackerDetailFragment extends Fragment {
     public static ProgressBar pBar;
     public static Button btnCancel, btnreorder;
@@ -289,7 +288,8 @@ public class TrackerDetailFragment extends Fragment {
                                     jsonObject.getString(Constant.PROMO_DISCOUNT),
                                     jsonObject.getString(Constant.DISCOUNT),
                                     jsonObject.getString(Constant.DISCOUNT_AMT),
-                                    jsonObject.getString(Constant.USER_NAME), itemList);
+                                    jsonObject.getString(Constant.USER_NAME), itemList,
+                                    jsonObject.getString(Constant.ACTIVE_STATUS));
 
                             SetData(orderTracker);
 

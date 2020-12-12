@@ -2,12 +2,12 @@
 <resources>
     <string name="app_name">eCart</string>
 
-<!-- ************************************************************************************************************* -->
+    <!-- ************************************************************************************************************* -->
     <!--    For privacy policy and terms and condition whatever you set words in privacy_policy and terms_conditions that words must be contain in msg_privacy_terms.Other wise app will crash-->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_conditions">Terms &amp; Conditions</string>
     <string name="msg_privacy_terms">I have read and agree to the Privacy Policy and Terms &amp; Conditions.</string>
-<!-- ************************************************************************************************************* -->
+    <!-- ************************************************************************************************************* -->
 
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
@@ -116,7 +116,6 @@
 
     <string name="paypal">PayPal</string>
     <string name="resend">Resend OTP</string>
-    <string name="resend_cap">RE-SEND</string>
     <string name="verify_message">Verify your registered number and reset your password. </string>
     <string name="alert_register_num1">Mobile number is not registered on&#160;</string>
     <string name="alert_register_num2">. Please register to continue. Return to Log In screen and select Sign Up.</string>
@@ -168,6 +167,7 @@
     <string name="return_order">Return Item</string>
     <string name="quantity_tracking">Qty:</string>
     <string name="view_details">View Details</string>
+    <string name="view_detail">View Detail</string>
     <string name="order_placed">Order\nPlaced</string>
     <string name="processed">Order\nProcessed</string>
     <string name="shipped">Order\nShipped</string>
@@ -319,4 +319,6 @@
     <string name="for_amount_on">For Amount&#160;</string>
     <string name="item">&#160;Item(s)</string>
     <string name="pincode_">Pin&#160;Code&#160;:&#160;</string>
+    <string name="shopping">&#160;Shopping</string>
+    <string name="wallet_recharge_">&#160;Wallet&#160;Recharge</string>
 </resources>

@@ -105,14 +105,14 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:src="@drawable/ic_payu" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="6"
+                            android:layout_weight="7"
                             android:text="@string/pay_u_pay"
                             android:textColor="@color/txt_color"
                             android:textSize="@dimen/mid_text" />
@@ -151,14 +151,14 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:src="@drawable/ic_razorpay" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="6"
+                            android:layout_weight="7"
                             android:text="@string/razor_payment"
                             android:textColor="@color/txt_color"
                             android:textSize="@dimen/mid_text" />
@@ -197,14 +197,14 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:src="@drawable/ic_paystack" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="6"
+                            android:layout_weight="7"
                             android:text="@string/paystack"
                             android:textColor="@color/txt_color"
                             android:textSize="@dimen/mid_text" />
@@ -243,14 +243,14 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:src="@drawable/ic_flutterwave" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="6"
+                            android:layout_weight="7"
                             android:text="@string/flutterwave"
                             android:textColor="@color/txt_color"
                             android:textSize="@dimen/mid_text" />
@@ -289,14 +289,14 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:src="@drawable/ic_paypal" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="6"
+                            android:layout_weight="7"
                             android:text="@string/paypal_pay"
                             android:textColor="@color/txt_color"
                             android:textSize="@dimen/mid_text" />
@@ -308,6 +308,100 @@
                             android:layout_weight="1"
                             android:padding="@dimen/margin_10dp"
                             android:tag="@string/paypal"
+                            android:textSize="@dimen/mid_text" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lytMidTrans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/bg_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/margin_5dp"
+                        android:weightSum="10">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            android:src="@drawable/ic_midtrans" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="7"
+                            android:text="@string/midtrans"
+                            android:textColor="@color/txt_color"
+                            android:textSize="@dimen/mid_text" />
+
+                        <RadioButton
+                            android:id="@+id/rbMidTrans"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/margin_10dp"
+                            android:tag="@string/midtrans"
+                            android:textSize="@dimen/mid_text" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lytStripe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/bg_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/margin_5dp"
+                        android:weightSum="10">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            android:src="@drawable/ic_stripe" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="7"
+                            android:text="@string/stripe"
+                            android:textColor="@color/txt_color"
+                            android:textSize="@dimen/mid_text" />
+
+                        <RadioButton
+                            android:id="@+id/rbStripe"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/margin_10dp"
+                            android:tag="@string/stripe"
                             android:textSize="@dimen/mid_text" />
                     </LinearLayout>
 

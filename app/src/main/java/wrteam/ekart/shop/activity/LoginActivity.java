@@ -421,14 +421,14 @@ public class LoginActivity extends AppCompatActivity {
         } else if (ApiConfig.CheckValidattion(password, false, false)) {
             edtnewpsw.requestFocus();
             edtnewpsw.setError(getString(R.string.enter_new_pass));
-        } else if (!oldpsw.equals(sessionpsw.getData(Session.KEY_Password))) {
+        } else if (!oldpsw.equals(sessionpsw.getData(Constant.PASSWORD))) {
             edtoldpsw.requestFocus();
             edtoldpsw.setError(getString(R.string.no_match_old_pass));
         } else if (AppController.isConnected(activity)) {
             final Map<String, String> params = new HashMap<String, String>();
             params.put(Constant.TYPE, Constant.CHANGE_PASSWORD);
             params.put(Constant.PASSWORD, password);
-            params.put(Constant.ID, sessionpsw.getData(Session.KEY_ID));
+            params.put(Constant.ID, sessionpsw.getData(Constant.ID));
 
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
             // Setting Dialog Message
@@ -488,7 +488,7 @@ public class LoginActivity extends AppCompatActivity {
             final Map<String, String> params = new HashMap<String, String>();
             params.put(Constant.TYPE, Constant.CHANGE_PASSWORD);
             params.put(Constant.PASSWORD, reset_c_psw);
-            //params.put(Constant.ID, session.getData(Session.KEY_ID));
+            //params.put(Constant.ID, session.getData(Constant.ID));
             params.put(Constant.ID, Constant.U_ID);
 
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
@@ -591,6 +591,7 @@ public class LoginActivity extends AppCompatActivity {
             ApiConfig.RequestToVolley(new VolleyCallback() {
                 @Override
                 public void onSuccess(boolean result, String response) {
+
                     //System.out.println ("============login res " + response);
                     if (result) {
                         try {
@@ -671,7 +672,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void UserSignUpSubmit(String latitude, String longitude) {
+    public void UserSignUpSubmit() {
 
         String name = edtname.getText().toString().trim();
         String email = "" + edtemail.getText().toString().trim();
@@ -768,13 +769,13 @@ public class LoginActivity extends AppCompatActivity {
             OTP_Varification();
 
         } else if (id == R.id.btnsubmit) {
-            double saveLatitude = Double.parseDouble(new Session(getApplicationContext()).getCoordinates(Session.KEY_LATITUDE));
-            double saveLongitude = Double.parseDouble(new Session(getApplicationContext()).getCoordinates(Session.KEY_LONGITUDE));
+            double saveLatitude = Double.parseDouble(new Session(getApplicationContext()).getCoordinates(Constant.LATITUDE));
+            double saveLongitude = Double.parseDouble(new Session(getApplicationContext()).getCoordinates(Constant.LONGITUDE));
 
             if (saveLatitude == 0 || saveLongitude == 0) {
-                UserSignUpSubmit(String.valueOf(gps.latitude), String.valueOf(gps.longitude));
+                UserSignUpSubmit();
             } else {
-                UserSignUpSubmit(new Session(getApplicationContext()).getCoordinates(Session.KEY_LATITUDE), new Session(getApplicationContext()).getCoordinates(Session.KEY_LONGITUDE));
+                UserSignUpSubmit();
             }
         }
 
@@ -790,6 +791,8 @@ public class LoginActivity extends AppCompatActivity {
                     objectbject.getString(Constant.MOBILE),
                     password,
                     objectbject.getString(Constant.REFERRAL_CODE));
+
+            Toast.makeText(activity, session.getData(Constant.SETTING_MAIL_ID), Toast.LENGTH_SHORT).show();
 
             ApiConfig.AddMultipleProductInCart(session, activity, databaseHelper.getDataCartList());
             ApiConfig.getCartItemCount(activity, session);

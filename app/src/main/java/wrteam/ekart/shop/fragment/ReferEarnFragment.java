@@ -53,7 +53,7 @@ public class ReferEarnFragment extends Fragment {
         txtinvite = root.findViewById(R.id.txtinvite);
 
         txtinvite.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(), R.drawable.ic_share), null, null, null);
-        txtcode.setText(session.getData(Session.KEY_REFER_CODE));
+        txtcode.setText(session.getData(Constant.REFERRAL_CODE));
         txtcopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

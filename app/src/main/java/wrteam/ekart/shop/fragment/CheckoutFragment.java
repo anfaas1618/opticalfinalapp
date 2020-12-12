@@ -258,7 +258,7 @@ public class CheckoutFragment extends Fragment {
                     progressBar.setVisibility(View.VISIBLE);
                     Map<String, String> params = new HashMap<>();
                     params.put(Constant.VALIDATE_PROMO_CODE, Constant.GetVal);
-                    params.put(Constant.USER_ID, session.getData(Session.KEY_ID));
+                    params.put(Constant.USER_ID, session.getData(Constant.ID));
                     params.put(Constant.PROMO_CODE, promoCode);
                     params.put(Constant.TOTAL, String.valueOf((total + taxAmt + dCharge)));
 

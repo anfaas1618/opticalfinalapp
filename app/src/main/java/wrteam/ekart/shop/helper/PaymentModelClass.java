@@ -291,7 +291,7 @@ public class PaymentModelClass {
 
     public void AddTransaction(String orderId, String paymentType, String txnid, final String status, String message, Map<String, String> sendparams) {
         Map<String, String> transparams = new HashMap<>();
-        transparams.put(Constant.Add_TRANSACTION, Constant.GetVal);
+        transparams.put(Constant.ADD_TRANSACTION, Constant.GetVal);
         transparams.put(Constant.USER_ID, sendparams.get(Constant.USER_ID));
         transparams.put(Constant.ORDER_ID, orderId);
         transparams.put(Constant.TYPE, paymentType);

@@ -400,7 +400,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.clear();
-        LatLng latLng = new LatLng(Double.parseDouble(session.getCoordinates(Session.KEY_LATITUDE)), Double.parseDouble(session.getCoordinates(Session.KEY_LONGITUDE)));
+        LatLng latLng = new LatLng(Double.parseDouble(session.getCoordinates(Constant.LATITUDE)), Double.parseDouble(session.getCoordinates(Constant.LONGITUDE)));
         googleMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .draggable(true)

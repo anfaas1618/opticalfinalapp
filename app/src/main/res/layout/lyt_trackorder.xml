@@ -88,11 +88,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/dimen_5dp"
-        android:background="@drawable/bg_btn"
         android:gravity="center"
         android:padding="5dp"
-        android:text="@string/view_details"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:text="@string/view_detail"
+        android:textColor="@color/colorPrimary" />
 
 </RelativeLayout>

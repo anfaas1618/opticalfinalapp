@@ -153,12 +153,12 @@ public class ProfileFragment extends Fragment {
                 } else if (AppController.isConnected(activity)) {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(Constant.TYPE, Constant.EDIT_PROFILE);
-                    params.put(Constant.ID, session.getData(Session.KEY_ID));
+                    params.put(Constant.ID, session.getData(Constant.ID));
                     params.put(Constant.NAME, name);
                     params.put(Constant.EMAIL, email);
                     params.put(Constant.MOBILE, mobile);
-                    params.put(Constant.LONGITUDE, session.getCoordinates(Session.KEY_LONGITUDE));
-                    params.put(Constant.LATITUDE, session.getCoordinates(Session.KEY_LATITUDE));
+                    params.put(Constant.LONGITUDE, session.getCoordinates(Constant.LONGITUDE));
+                    params.put(Constant.LATITUDE, session.getCoordinates(Constant.LATITUDE));
                     params.put(Constant.FCM_ID, AppController.getInstance().getDeviceToken());
                     //System.out.println("====update res " + params.toString());
                     ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -169,9 +169,9 @@ public class ProfileFragment extends Fragment {
                                 try {
                                     JSONObject objectbject = new JSONObject(response);
                                     if (!objectbject.getBoolean(Constant.ERROR)) {
-                                        session.setData(Session.KEY_NAME, name);
-                                        session.setData(Session.KEY_EMAIL, email);
-                                        session.setData(Session.KEY_MOBILE, mobile);
+                                        session.setData(Constant.NAME, name);
+                                        session.setData(Constant.EMAIL, email);
+                                        session.setData(Constant.MOBILE, mobile);
                                         DrawerActivity.tvName.setText(name);
 
                                     }
@@ -188,9 +188,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        edtname.setText(session.getData(Session.KEY_NAME));
-        edtemail.setText(session.getData(Session.KEY_EMAIL));
-        edtMobile.setText(session.getData(Session.KEY_MOBILE));
+        edtname.setText(session.getData(Constant.NAME));
+        edtemail.setText(session.getData(Constant.EMAIL));
+        edtMobile.setText(session.getData(Constant.MOBILE));
 
         return root;
     }
@@ -389,6 +389,14 @@ public class ProfileFragment extends Fragment {
                             .transform(new CircleTransform())
                             .into(imgProfile);
 
+                    Picasso.get()
+                            .load(session.getData(Constant.PROFILE))
+                            .fit()
+                            .centerInside()
+                            .placeholder(R.drawable.placeholder)
+                            .error(R.drawable.placeholder)
+                            .transform(new CircleTransform())
+                            .into(DrawerActivity.imgProfile);
                 }
                 Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 

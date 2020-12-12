@@ -210,7 +210,6 @@ public class AddressListFragment extends Fragment {
         }, activity, Constant.GET_ADDRESS_URL, params, true);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();

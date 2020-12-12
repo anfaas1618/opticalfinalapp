@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -15,20 +16,6 @@ import wrteam.ekart.shop.activity.MainActivity;
 
 public class Session {
     public static final String PREFER_NAME = "eKart";
-    public static final String IS_USER_LOGIN = "IsUserLoggedIn";
-    public static final String KEY_ID = "id";
-    public static final String KEY_FCM_ID = "fcm_id";
-    public static final String KEY_EMAIL = "txtemail";
-    public static final String KEY_MOBILE = "mobileno";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_ADDRESS = "address";
-    public static final String KEY_CITY_ID = "city_id";
-    public static final String KEY_AREA_ID = "area_id";
-    public static final String KEY_PINCODE = "pincode";
-    public static final String KEY_Password = "password";
-    public static final String KEY_REFER_CODE = "refer_code";
-    public static final String KEY_LATITUDE = "latitude";
-    public static final String KEY_LONGITUDE = "longitude";
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -68,31 +55,18 @@ public class Session {
     }
 
     public void createUserLoginSession(String profile, String fcmId, String id, String name, String email, String mobile, String password, String referCode) {
-        editor.putBoolean(IS_USER_LOGIN, true);
-        editor.putString(KEY_FCM_ID, fcmId);
-        editor.putString(KEY_ID, id);
-        editor.putString(KEY_NAME, name);
-        editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_MOBILE, mobile);
-        editor.putString(KEY_Password, password);
-        editor.putString(KEY_REFER_CODE, referCode);
+        editor.putBoolean(Constant.IS_USER_LOGIN, true);
+        editor.putString(Constant.FCM_ID, fcmId);
+        editor.putString(Constant.ID, id);
+        editor.putString(Constant.NAME, name);
+        Toast.makeText(_context, email, Toast.LENGTH_SHORT).show();
+        editor.putString(Constant.EMAIL, email);
+        editor.putString(Constant.MOBILE, mobile);
+        editor.putString(Constant.PASSWORD, password);
+        editor.putString(Constant.REFERRAL_CODE, referCode);
         editor.putString(Constant.PROFILE, profile);
         editor.commit();
     }
-
-//String dob, String city, String area, String cityId, String areaId, String address, String pincode, String status, String apikey, String latitude, String longitude,String createdat, ;
-//editor.putString(KEY_LATITUDE, latitude);
-//editor.putString(KEY_LONGITUDE, longitude);
-//editor.putString(KEY_DOB, dob);
-//editor.putString(KEY_ADDRESS, address);
-//editor.putString(KEY_PINCODE, pincode);
-//editor.putString(KEY_STATUS, status);
-//editor.putString(KEY_CREATEDAT, createdat);
-//editor.putString(KEY_APIKEY, apikey);
-//editor.putString(KEY_CITY, city);
-//editor.putString(KEY_AREA, area);
-//editor.putString(KEY_CITY_ID, cityId);
-//editor.putString(KEY_AREA_ID, areaId);
 
     public void logoutUser(Activity activity) {
 
@@ -108,7 +82,7 @@ public class Session {
     }
 
     public boolean isUserLoggedIn() {
-        return pref.getBoolean(IS_USER_LOGIN, false);
+        return pref.getBoolean(Constant.IS_USER_LOGIN, false);
     }
 
 

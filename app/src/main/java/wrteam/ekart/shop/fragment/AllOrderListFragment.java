@@ -13,6 +13,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 
@@ -47,6 +48,7 @@ public class AllOrderListFragment extends Fragment {
     private int offset = 0;
     private int total = 0;
     private NestedScrollView scrollView;
+    SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +61,18 @@ public class AllOrderListFragment extends Fragment {
         scrollView = root.findViewById(R.id.scrollView);
         nodata = root.findViewById(R.id.nodata);
         setHasOptionsMenu(true);
+
+        SwipeRefreshLayout swipeLayout;
+        swipeLayout = root.findViewById(R.id.swipeLayout);
+        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                offset = 0;
+                swipeLayout.setRefreshing(false);
+                getAllOrders();
+            }
+        });
 
         getAllOrders();
 
@@ -169,7 +183,8 @@ public class AllOrderListFragment extends Fragment {
                                                 jsonObject.getString(Constant.PROMO_DISCOUNT),
                                                 jsonObject.getString(Constant.DISCOUNT),
                                                 jsonObject.getString(Constant.DISCOUNT_AMT),
-                                                jsonObject.getString(Constant.USER_NAME), itemList);
+                                                jsonObject.getString(Constant.USER_NAME), itemList,
+                                                jsonObject.getString(Constant.ACTIVE_STATUS));
                                         orderTrackerArrayList.add(orderTracker);
                                     }
                                 } else {
@@ -305,7 +320,8 @@ public class AllOrderListFragment extends Fragment {
                                                                                             jsonObject.getString(Constant.PROMO_DISCOUNT),
                                                                                             jsonObject.getString(Constant.DISCOUNT),
                                                                                             jsonObject.getString(Constant.DISCOUNT_AMT),
-                                                                                            jsonObject.getString(Constant.USER_NAME), itemList);
+                                                                                            jsonObject.getString(Constant.USER_NAME), itemList,
+                                                                                            jsonObject.getString(Constant.ACTIVE_STATUS));
                                                                                     orderTrackerArrayList.add(orderTracker);
                                                                                 } else {
                                                                                     break;

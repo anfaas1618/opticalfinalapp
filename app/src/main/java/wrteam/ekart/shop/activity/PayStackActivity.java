@@ -74,7 +74,7 @@ public class PayStackActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getString(R.string.paystack));
-        emailField.setText(session.getData(Session.KEY_EMAIL));
+        emailField.setText(session.getData(Constant.EMAIL));
         tvPayable.setText(Constant.SETTING_CURRENCY_SYMBOL + payableAmount);
     }
 

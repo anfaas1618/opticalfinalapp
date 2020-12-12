@@ -180,7 +180,6 @@
             android:padding="@dimen/dimen_10dp">
 
             <LinearLayout
-                android:id="@+id/lytamtbeforetax"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -221,7 +220,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lytdelivery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">

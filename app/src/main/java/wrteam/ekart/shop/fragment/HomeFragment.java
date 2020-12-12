@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
         params.put(Constant.TYPE, Constant.REGISTER_DEVICE);
         params.put(Constant.TOKEN, token);
-        params.put(Constant.USER_ID, session.getData(Session.KEY_ID));
+        params.put(Constant.USER_ID, session.getData(Constant.ID));
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
                     try {
                         JSONObject object = new JSONObject(response);
                         if (!object.getBoolean(Constant.ERROR)) {
-                            session.setData(Session.KEY_FCM_ID, token);
+                            session.setData(Constant.FCM_ID, token);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -226,7 +226,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
                 String token = instanceIdResult.getToken();
-                if (!token.equals(session.getData(Session.KEY_FCM_ID))) {
+                if (!token.equals(session.getData(Constant.FCM_ID))) {
                     UpdateToken(token, getActivity());
                 }
             }

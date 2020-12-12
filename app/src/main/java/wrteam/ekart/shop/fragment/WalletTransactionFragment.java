@@ -57,6 +57,7 @@ import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.PaymentModelClass;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
+import wrteam.ekart.shop.model.Address;
 import wrteam.ekart.shop.model.WalletTransaction;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -177,10 +178,6 @@ public class WalletTransactionFragment extends Fragment {
                                 if (!objectbject.getBoolean(Constant.ERROR)) {
                                     if (objectbject.has("payment_methods")) {
                                         JSONObject object = objectbject.getJSONObject(Constant.PAYMENT_METHODS);
-
-                                        if (object.has(Constant.cod_payment_method)) {
-                                            Constant.COD = object.getString(Constant.cod_payment_method);
-                                        }
                                         if (object.has(Constant.payu_method)) {
                                             Constant.PAYUMONEY = object.getString(Constant.payu_method);
                                             Constant.MERCHANT_KEY = object.getString(Constant.PAY_M_KEY);
@@ -203,16 +200,15 @@ public class WalletTransactionFragment extends Fragment {
                                             Constant.FLUTTERWAVE_ENCRYPTION_KEY_VAL = object.getString(Constant.flutterwave_encryption_key);
                                             Constant.FLUTTERWAVE_PUBLIC_KEY_VAL = object.getString(Constant.flutterwave_public_key);
                                             Constant.FLUTTERWAVE_SECRET_KEY_VAL = object.getString(Constant.flutterwave_secret_key);
+                                            Constant.FLUTTERWAVE_SECRET_KEY_VAL = object.getString(Constant.flutterwave_secret_key);
+                                            Constant.FLUTTERWAVE_CURRENCY_CODE_VAL = object.getString(Constant.flutterwave_currency_code);
                                         }
                                         if (object.has(Constant.midtrans_payment_method)) {
                                             Constant.MIDTRANS = object.getString(Constant.midtrans_payment_method);
                                         }
                                         if (object.has(Constant.stripe_payment_method)) {
-//                                            Constant.STRIPE = object.getString(Constant.stripe_payment_method);
-//                                            Constant.STRIPE_PUBLISHABLE_KEY = "pk_test_0gg61LPlfsTrBeOQJGbaVQ4o";
-//                                            Constant.STRIPE_SECRET_KEY = "sk_test_zuIZ9ndSCsycbwnnqgVDd1Kt";
-//                                            Constant.STRIPE_CURRENCY = "inr";
-//                                            Constant.STRIPE_BASE_URL = "https://netsofters.com/stripe/";
+                                            Constant.STRIPE = object.getString(Constant.stripe_payment_method);
+                                            isAddressAvailable();
                                         }
 
                                         if (Constant.FLUTTERWAVE.equals("0") && Constant.PAYPAL.equals("0") && Constant.PAYUMONEY.equals("0") && Constant.COD.equals("0") && Constant.RAZORPAY.equals("0") && Constant.PAYSTACK.equals("0") && Constant.MIDTRANS.equals("0") && Constant.STRIPE.equals("0")) {
@@ -307,11 +303,10 @@ public class WalletTransactionFragment extends Fragment {
                                                 rbPayPal.setChecked(false);
                                                 rbRazorPay.setChecked(false);
                                                 rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(true);
+                                                rbFlutterWave.setChecked(false);
                                                 rbStripe.setChecked(true);
                                                 rbMidTrans.setChecked(false);
                                                 paymentMethod = rbStripe.getTag().toString();
-
                                             });
 
                                             rbMidTrans.setOnClickListener(v -> {
@@ -323,7 +318,6 @@ public class WalletTransactionFragment extends Fragment {
                                                 rbStripe.setChecked(false);
                                                 rbMidTrans.setChecked(true);
                                                 paymentMethod = rbMidTrans.getTag().toString();
-
                                             });
                                         }
                                     } else {
@@ -379,6 +373,42 @@ public class WalletTransactionFragment extends Fragment {
         return root;
     }
 
+
+    public void isAddressAvailable() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.GET_ADDRESSES, Constant.GetVal);
+        params.put(Constant.USER_ID, session.getData(Constant.ID));
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (!jsonObject.getBoolean(Constant.ERROR)) {
+                            total = Integer.parseInt(jsonObject.getString(Constant.TOTAL));
+                            session.setData(Constant.TOTAL, String.valueOf(total));
+                            JSONObject object = new JSONObject(response);
+                            JSONArray jsonArray = object.getJSONArray(Constant.DATA);
+                            Gson g = new Gson();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                if (jsonObject1 != null) {
+                                    Address address = g.fromJson(jsonObject1.toString(), Address.class);
+                                    if (address.getIs_default().equals("1")) {
+                                        Constant.DefaultAddress = address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", " + activity.getString(R.string.pincode_) + address.getPincode();
+                                    }
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.GET_ADDRESS_URL, params, false);
+    }
+
     public void AddWalletBalance(Activity activity, Session session, String amount, String msg, String txID) {
 
         Map<String, String> params = new HashMap<>();
@@ -389,14 +419,15 @@ public class WalletTransactionFragment extends Fragment {
         params.put(Constant.MESSAGE, msg + ", Transaction ID : " + txID);
 
         ApiConfig.RequestToVolley(new VolleyCallback() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onSuccess(boolean result, String response) {
                 if (result) {
                     try {
                         JSONObject object = new JSONObject(response);
                         if (!object.getBoolean(Constant.ERROR)) {
-                            DrawerActivity.tvWallet.setText(Constant.SETTING_CURRENCY_SYMBOL + object.getString(Constant.NEW_BALANCE));
-                            tvBalance.setText(Constant.SETTING_CURRENCY_SYMBOL + object.getString(Constant.NEW_BALANCE));
+                            DrawerActivity.tvWallet.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(object.getString(Constant.NEW_BALANCE)));
+                            tvBalance.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(object.getString(Constant.NEW_BALANCE)));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -408,7 +439,6 @@ public class WalletTransactionFragment extends Fragment {
 
 
     public void StartPayPalPayment(final Map<String, String> sendParams) {
-
         final Map<String, String> params = new HashMap<>();
         params.put(Constant.FIRST_NAME, sendParams.get(Constant.USER_NAME));
         params.put(Constant.LAST_NAME, sendParams.get(Constant.USER_NAME));
@@ -416,14 +446,13 @@ public class WalletTransactionFragment extends Fragment {
         params.put(Constant.ITEM_NAME, "Wallet Recharge");
         params.put(Constant.ITEM_NUMBER, System.currentTimeMillis() + Constant.randomNumeric(3));
         params.put(Constant.AMOUNT, sendParams.get(Constant.FINAL_TOTAL));
-        // System.out.println("======params paypal "+params.toString());
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
-                //System.out.println("=====url paypal == "+response );
                 Intent intent = new Intent(getContext(), PayPalWebActivity.class);
-                intent.putExtra("url", response);
-                intent.putExtra("item_no", params.get(Constant.ITEM_NUMBER));
+                intent.putExtra(Constant.URL, response);
+                intent.putExtra(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID));
+                intent.putExtra(Constant.FROM, Constant.WALLET);
                 intent.putExtra(Constant.PARAMS, (Serializable) sendParams);
                 startActivity(intent);
             }
@@ -437,23 +466,34 @@ public class WalletTransactionFragment extends Fragment {
     }
 
     void StartFlutterWavePayment() {
+
         new RavePayManager(this)
                 .setAmount(Double.parseDouble(amount))
                 .setEmail(session.getData(Constant.EMAIL))
-                .setCountry("KE")
-                .setCurrency("KES")
+                .setCurrency(Constant.FLUTTERWAVE_CURRENCY_CODE_VAL)
                 .setfName(session.getData(Constant.FIRST_NAME))
                 .setlName(session.getData(Constant.LAST_NAME))
-                .setNarration(getString(R.string.app_name) + " Wallet Recharge")
+                .setNarration(getString(R.string.app_name) + getString(R.string.wallet_recharge_))
                 .setPublicKey(Constant.FLUTTERWAVE_PUBLIC_KEY_VAL)
                 .setEncryptionKey(Constant.FLUTTERWAVE_ENCRYPTION_KEY_VAL)
-                .setTxRef(System.currentTimeMillis() + Constant.randomNumeric(3))
+                .setTxRef(System.currentTimeMillis() + "Ref")
                 .acceptAccountPayments(true)
                 .acceptCardPayments(true)
+                .acceptAccountPayments(true)
+                .acceptAchPayments(true)
+                .acceptBankTransferPayments(true)
+                .acceptBarterPayments(true)
+                .acceptGHMobileMoneyPayments(true)
+                .acceptRwfMobileMoneyPayments(true)
+                .acceptSaBankPayments(true)
+                .acceptFrancMobileMoneyPayments(true)
+                .acceptZmMobileMoneyPayments(true)
+                .acceptUssdPayments(true)
+                .acceptUkPayments(true)
                 .acceptMpesaPayments(true)
-                .onStagingEnv(true)
                 .shouldDisplayFee(true)
-                .showStagingLabel(true)
+                .onStagingEnv(false)
+                .showStagingLabel(false)
                 .initialize();
     }
 
@@ -485,16 +525,16 @@ public class WalletTransactionFragment extends Fragment {
     public void RechargeWallet() {
         HashMap<String, String> sendparams = new HashMap();
         if (paymentMethod.equals(getString(R.string.pay_u))) {
-            sendparams.put(Constant.MOBILE, session.getData(Session.KEY_MOBILE));
-            sendparams.put(Constant.USER_NAME, session.getData(Session.KEY_NAME));
-            sendparams.put(Constant.EMAIL, session.getData(Session.KEY_EMAIL));
-            new PaymentModelClass(getActivity()).OnPayClick(getActivity(), sendparams, "Wallet Recharge", amount);
+            sendparams.put(Constant.MOBILE, session.getData(Constant.MOBILE));
+            sendparams.put(Constant.USER_NAME, session.getData(Constant.NAME));
+            sendparams.put(Constant.EMAIL, session.getData(Constant.EMAIL));
+            new PaymentModelClass(getActivity()).OnPayClick(getActivity(), sendparams, getString(R.string.wallet_recharge_), amount);
         } else if (paymentMethod.equals(getString(R.string.paypal))) {
             sendparams.put(Constant.AMOUNT, amount);
             sendparams.put(Constant.FIRST_NAME, session.getData(Constant.NAME));
             sendparams.put(Constant.LAST_NAME, session.getData(Constant.NAME));
             sendparams.put(Constant.PAYER_EMAIL, session.getData(Constant.EMAIL));
-            sendparams.put(Constant.ITEM_NAME, "Wallet Recharge");
+            sendparams.put(Constant.ITEM_NAME, getString(R.string.wallet_recharge_));
             sendparams.put(Constant.ITEM_NUMBER, System.currentTimeMillis() + Constant.randomNumeric(3));
             StartPayPalPayment(sendparams);
         } else if (paymentMethod.equals(getString(R.string.razor_pay))) {
@@ -504,16 +544,25 @@ public class WalletTransactionFragment extends Fragment {
             sendparams.put(Constant.FINAL_TOTAL, amount);
             callPayStack(sendparams);
         } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
+            StartFlutterWavePayment();
         } else if (paymentMethod.equals(getString(R.string.midtrans))) {
-            System.out.println();
             sendparams.put(Constant.FINAL_TOTAL, amount);
             sendparams.put(Constant.USER_ID, session.getData(Constant.ID));
             CreateMidtransPayment(System.currentTimeMillis() + Constant.randomNumeric(3), amount, sendparams);
         } else if (paymentMethod.equals(getString(R.string.stripe))) {
-            sendparams.put(Constant.FROM, Constant.WALLET);
-            Intent intent = new Intent(activity, StripeActivity.class);
-            intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
-            startActivity(intent);
+            if (!Constant.DefaultAddress.equals("")) {
+                sendparams.put(Constant.FINAL_TOTAL, amount);
+                sendparams.put(Constant.USER_ID, session.getData(Constant.ID));
+                Intent intent = new Intent(activity, StripeActivity.class);
+                intent.putExtra(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID));
+                intent.putExtra(Constant.FROM, Constant.WALLET);
+                intent.putExtra(Constant.AMOUNT, amount);
+                intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+                startActivity(intent);
+            } else {
+                Toast.makeText(activity, "Please set default address in Manage Address.", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
@@ -549,14 +598,14 @@ public class WalletTransactionFragment extends Fragment {
 
         try {
             JSONObject options = new JSONObject();
-            options.put(Constant.NAME, session.getData(Session.KEY_NAME));
+            options.put(Constant.NAME, session.getData(Constant.NAME));
             options.put(Constant.ORDER_ID, orderId);
             options.put(Constant.CURRENCY, "INR");
             options.put(Constant.AMOUNT, payAmount);
 
             JSONObject preFill = new JSONObject();
-            preFill.put(Constant.EMAIL, session.getData(Session.KEY_EMAIL));
-            preFill.put(Constant.CONTACT, session.getData(Session.KEY_MOBILE));
+            preFill.put(Constant.EMAIL, session.getData(Constant.EMAIL));
+            preFill.put(Constant.CONTACT, session.getData(Constant.MOBILE));
             options.put("prefill", preFill);
 
             checkout.open(getActivity(), options);
@@ -702,7 +751,7 @@ public class WalletTransactionFragment extends Fragment {
 
     public void CreateMidtransPayment(String orderId, String grossAmount, Map<String, String> sendparams) {
         Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.ORDER_ID, orderId);
+        params.put(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID));
         params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
@@ -713,7 +762,7 @@ public class WalletTransactionFragment extends Fragment {
                         if (!jsonObject.getBoolean(Constant.ERROR)) {
                             Intent intent = new Intent(activity, MidtransActivity.class);
                             intent.putExtra(Constant.URL, jsonObject.getJSONObject(Constant.DATA).getString(Constant.REDIRECT_URL));
-                            intent.putExtra(Constant.ORDER_ID, orderId);
+                            intent.putExtra(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID));
                             intent.putExtra(Constant.FROM, Constant.WALLET);
                             intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
                             startActivity(intent);

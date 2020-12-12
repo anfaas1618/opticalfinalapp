@@ -10,7 +10,7 @@ public class OrderTracker implements Serializable {
     public ArrayList<OrderTracker> itemsList;
 
 
-    public OrderTracker(String otp, String user_id, String order_id, String date_added, String status, String statusdate, ArrayList<OrderTracker> orderStatusArrayList, String mobile, String delivery_charge, String payment_method, String address, String total, String final_total, String tax_amt, String tax_percent, String walletBalance, String promoCode, String promoDiscount, String dPercent, String dAmount, String username, ArrayList<OrderTracker> itemsList) {
+    public OrderTracker(String otp, String user_id, String order_id, String date_added, String status, String statusdate, ArrayList<OrderTracker> orderStatusArrayList, String mobile, String delivery_charge, String payment_method, String address, String total, String final_total, String tax_amt, String tax_percent, String walletBalance, String promoCode, String promoDiscount, String dPercent, String dAmount, String username, ArrayList<OrderTracker> itemsList, String activeStatus) {
         this.otp = otp;
         this.user_id = user_id;
         this.order_id = order_id;
@@ -33,6 +33,7 @@ public class OrderTracker implements Serializable {
         this.dPercent = dPercent;
         this.username = username;
         this.itemsList = itemsList;
+        this.activeStatus = activeStatus;
     }
 
     public OrderTracker(String id, String order_id, String product_variant_id, String quantity, String price, String discount, String sub_total, String deliver_by, String name, String image, String measurement, String unit, String payment_method, String activeStatus, String activeStatusDate, ArrayList<OrderTracker> orderStatusArrayList, String return_status, String cancelable_status, String till_status) {
