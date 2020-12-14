@@ -553,8 +553,7 @@ public class ApiConfig {
         }
     }
 
-    public static void setOrderTrackerLayout(Activity activity, OrderTracker
-            order, RecyclerView.ViewHolder holder) {
+    public static void setOrderTrackerLayout(Activity activity, OrderTracker order, RecyclerView.ViewHolder holder) {
         for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
             int img = activity.getResources().getIdentifier("img" + i, "id", activity.getPackageName());
             int view = activity.getResources().getIdentifier("l" + i, "id", activity.getPackageName());

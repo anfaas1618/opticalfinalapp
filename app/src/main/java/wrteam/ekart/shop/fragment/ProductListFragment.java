@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,16 +51,14 @@ public class ProductListFragment extends Fragment {
     int total;
     int position;
     NestedScrollView nestedScrollView;
-    boolean isSort = true;
     Activity activity;
-    ProgressBar progressBar;
     int offset = 0;
     String id, filterBy, from;
     RecyclerView recyclerView, subCategoryrecycleview;
     SwipeRefreshLayout swipeLayout;
     int filterIndex;
     TextView tvAlert;
-    boolean isLoadMore = false;
+    boolean isSort = false, isLoadMore = false;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,13 +76,11 @@ public class ProductListFragment extends Fragment {
         swipeLayout = root.findViewById(R.id.swipeLayout);
         tvAlert = root.findViewById(R.id.tvAlert);
         nestedScrollView = root.findViewById(R.id.nestedScrollView);
-        progressBar = root.findViewById(R.id.progressBar);
         subCategoryrecycleview = root.findViewById(R.id.subCategoryrecycleview);
         subCategoryrecycleview.setLayoutManager(new GridLayoutManager(getContext(), Constant.GRIDCOLUMN));
 
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-
 
         GetSettings(activity);
 
@@ -94,24 +89,22 @@ public class ProductListFragment extends Fragment {
         if (from.equals("regular")) {
             if (AppController.isConnected(activity)) {
                 GetData();
+                isSort = true;
             }
         } else if (from.equals("category")) {
             GetCategory();
             GetProducts();
         } else if (from.equals("similar")) {
-            isSort = false;
             if (AppController.isConnected(activity)) {
                 GetSimilarData();
             }
         } else if (from.equals("section")) {
             if (AppController.isConnected(activity)) {
-                isSort = false;
                 position = getArguments().getInt("position", 0);
                 productArrayList = HomeFragment.sectionList.get(position).getProductList();
                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, R.layout.lyt_item_list);
                 recyclerView.setAdapter(mAdapter);
             }
-
         }
 
         swipeLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -129,7 +122,6 @@ public class ProductListFragment extends Fragment {
                 } else if (from.equals("similar")) {
                     GetSimilarData();
                 }
-
             }
         });
 
@@ -138,31 +130,33 @@ public class ProductListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.toolbar_sort) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle(activity.getResources().getString(R.string.filterby));
-            builder.setSingleChoiceItems(Constant.filtervalues, filterIndex, (dialog, item1) -> {
-                filterIndex = item1;
-                switch (item1) {
-                    case 0:
-                        filterBy = Constant.NEW;
-                        break;
-                    case 1:
-                        filterBy = Constant.OLD;
-                        break;
-                    case 2:
-                        filterBy = Constant.HIGH;
-                        break;
-                    case 3:
-                        filterBy = Constant.LOW;
-                        break;
-                }
-                if (item1 != -1)
-                    ReLoadData();
-                dialog.dismiss();
-            });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+        if (isSort) {
+            if (item.getItemId() == R.id.toolbar_sort) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(activity.getResources().getString(R.string.filterby));
+                builder.setSingleChoiceItems(Constant.filtervalues, filterIndex, (dialog, item1) -> {
+                    filterIndex = item1;
+                    switch (item1) {
+                        case 0:
+                            filterBy = Constant.NEW;
+                            break;
+                        case 1:
+                            filterBy = Constant.OLD;
+                            break;
+                        case 2:
+                            filterBy = Constant.HIGH;
+                            break;
+                        case 3:
+                            filterBy = Constant.LOW;
+                            break;
+                    }
+                    if (item1 != -1)
+                        GetData();
+                    dialog.dismiss();
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
         }
         return false;
     }
@@ -177,7 +171,6 @@ public class ProductListFragment extends Fragment {
     }
 
     void GetData() {
-        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put(Constant.SUB_CATEGORY_ID, id);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -190,6 +183,7 @@ public class ProductListFragment extends Fragment {
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
+
                 if (result) {
                     try {
                         JSONObject objectbject = new JSONObject(response);
@@ -207,7 +201,6 @@ public class ProductListFragment extends Fragment {
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
 
-                                progressBar.setVisibility(View.GONE);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -215,7 +208,7 @@ public class ProductListFragment extends Fragment {
                                         // if (diff == 0) {
                                         if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                                             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                                            if (productArrayList.size() <= total) {
+                                            if (productArrayList.size() < total) {
                                                 if (!isLoadMore) {
                                                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == productArrayList.size() - 1) {
                                                         //bottom of list!
@@ -227,9 +220,10 @@ public class ProductListFragment extends Fragment {
                                                         params.put(Constant.SUB_CATEGORY_ID, id);
                                                         params.put(Constant.USER_ID, session.getData(Constant.ID));
                                                         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
-                                                        params.put(Constant.OFFSET, offset + "");
-                                                        if (filterIndex != -1)
+                                                        params.put(Constant.OFFSET, "" + offset);
+                                                        if (filterIndex != -1) {
                                                             params.put(Constant.SORT, filterBy);
+                                                        }
 
                                                         ApiConfig.RequestToVolley(new VolleyCallback() {
                                                             @Override
@@ -249,8 +243,6 @@ public class ProductListFragment extends Fragment {
                                                                             mAdapter.notifyDataSetChanged();
                                                                             mAdapter.setLoaded();
                                                                             isLoadMore = false;
-                                                                        } else {
-                                                                            isLoadMore = true;
                                                                         }
                                                                     } catch (JSONException e) {
                                                                         e.printStackTrace();
@@ -268,22 +260,18 @@ public class ProductListFragment extends Fragment {
                             }
                         } else {
                             if (offset == 0) {
-                                progressBar.setVisibility(View.GONE);
                                 tvAlert.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (JSONException e) {
-
-                        progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                     }
                 }
             }
-        }, activity, Constant.GET_PRODUCT_BY_SUB_CATE, params, false);
+        }, activity, Constant.GET_PRODUCT_BY_SUB_CATE, params, true);
     }
 
     void GetSimilarData() {
-        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_SIMILAR_PRODUCT, Constant.GetVal);
         params.put(Constant.PRODUCT_ID, id);
@@ -312,8 +300,6 @@ public class ProductListFragment extends Fragment {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, R.layout.lyt_item_list);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
-
-                                progressBar.setVisibility(View.GONE);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -372,22 +358,18 @@ public class ProductListFragment extends Fragment {
                             }
                         } else {
                             if (offset == 0) {
-                                progressBar.setVisibility(View.GONE);
                                 tvAlert.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (JSONException e) {
-
-                        progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                     }
                 }
             }
-        }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params, false);
+        }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params, true);
     }
 
     void GetCategory() {
-        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put(Constant.CATEGORY_ID, id);
 
@@ -413,12 +395,9 @@ public class ProductListFragment extends Fragment {
                                 categoryArrayList.add(category);
                             }
                             subCategoryrecycleview.setAdapter(new SubCategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory, "sub_cate"));
-                            progressBar.setVisibility(View.GONE);
                         } else {
-                            progressBar.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
-                        progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                     }
                 }
@@ -427,7 +406,7 @@ public class ProductListFragment extends Fragment {
     }
 
     void GetProducts() {
-        progressBar.setVisibility(View.VISIBLE);
+        productArrayList = new ArrayList<>();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.CATEGORY_ID, id);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -440,11 +419,11 @@ public class ProductListFragment extends Fragment {
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
-
                 if (result) {
                     try {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
+                            isSort = true;
                             total = Integer.parseInt(objectbject.getString(Constant.TOTAL));
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
@@ -453,7 +432,6 @@ public class ProductListFragment extends Fragment {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, R.layout.lyt_item_list);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
-                                progressBar.setVisibility(View.GONE);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -511,16 +489,14 @@ public class ProductListFragment extends Fragment {
                                 });
                             }
                         } else {
-                            isSort = false;
                             activity.invalidateOptionsMenu();
                         }
                     } catch (JSONException e) {
-                        progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                     }
                 }
             }
-        }, activity, Constant.GET_PRODUCT_BY_CATE, params, false);
+        }, activity, Constant.GET_PRODUCT_BY_CATE, params, true);
     }
 
     @Override
@@ -546,11 +522,4 @@ public class ProductListFragment extends Fragment {
         super.onPause();
         ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
     }
-
-    void ReLoadData() {
-        if (AppController.isConnected(activity)) {
-            GetData();
-        }
-    }
-
 }

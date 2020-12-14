@@ -80,25 +80,28 @@ public class StripeActivity extends AppCompatActivity {
         startCheckout();
     }
 
-
     private void startCheckout() {
-        int pincode = 0;
-        String[] address = new String[7];
+        String address = null;
 
         if (from.equals(Constant.PAYMENT)) {
-            address = AddressListFragment.selectedAddress.split(", ");
+            address = AddressListFragment.selectedAddress;
         } else if (from.equals(Constant.WALLET)) {
-            address = Constant.DefaultAddress.split(", ");
+            address = Constant.DefaultAddress;
         }
-        pincode = Integer.parseInt(address[6].replace(getString(R.string.pincode_), ""));
 
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.NAME, session.getData(Constant.NAME));
-        params.put(Constant.ADDRESS_LINE1, AddressListFragment.selectedAddress);
-        params.put(Constant.POSTAL_CODE, "" + (int) pincode / 10);
-        params.put(Constant.CITY, address[2]);
+        params.put(Constant.ADDRESS_LINE1, address);
+        if(Constant.DefaultPinCode.length()>5){
+            params.put(Constant.POSTAL_CODE, "" + (Integer.parseInt(Constant.DefaultPinCode) / 10));
+        }
+        else{
+            params.put(Constant.POSTAL_CODE, "" + Constant.DefaultPinCode);
+        }
+        params.put(Constant.CITY, Constant.DefaultCity);
         params.put(Constant.AMOUNT, "" + (int) Math.round(Double.parseDouble(getIntent().getStringExtra(Constant.AMOUNT))));
         params.put(Constant.ORDER_ID, orderId);
+
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
@@ -161,7 +164,7 @@ public class StripeActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
-                                Toast.makeText(activity, "You amount will be credited in wallet very soon.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, activity.getString(R.string.wallet_message), Toast.LENGTH_SHORT).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals(Constant.SUCCESS) || status.equals(Constant.AWAITING_PAYMENT)) {
                                     finish();
@@ -205,16 +208,15 @@ public class StripeActivity extends AppCompatActivity {
         final AlertDialog alertDialog1 = alertDialog.create();
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                DeleteTransaction(StripeActivity.this, getIntent().getStringExtra(Constant.ORDER_ID));
-                onBackPressed();
                 alertDialog1.dismiss();
+                DeleteTransaction(StripeActivity.this, getIntent().getStringExtra(Constant.ORDER_ID));
             }
         }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 alertDialog1.dismiss();
             }
         });
-        // Showing Alert Message
+
         alertDialog.show();
     }
 
@@ -226,7 +228,7 @@ public class StripeActivity extends AppCompatActivity {
             @Override
             public void onSuccess(boolean result, String response) {
                 if (result) {
-                    onBackPressed();
+                    StripeActivity.super.onBackPressed();
                 }
             }
         }, activity, Constant.ORDERPROCESS_URL, transparams, false);
@@ -247,7 +249,6 @@ public class StripeActivity extends AppCompatActivity {
             } else if (status == PaymentIntent.Status.Processing) {
                 AddTransaction(StripeActivity.this, orderId, getString(R.string.stripe), orderId, Constant.AWAITING_PAYMENT, "", sendparams);
             }
-            Toast.makeText(StripeActivity.this, getString(R.string.order_placed1), Toast.LENGTH_LONG).show();
         }
 
         @Override

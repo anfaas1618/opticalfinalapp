@@ -34,7 +34,6 @@
     <string name="login_">Login</string>
     <string name="password_">Password</string>
     <string name="verify">Verify</string>
-
     <string name="mobile_send_msg">We will send you an OTP on this mobile number to verify. </string>
     <string name="please_type_verification_code_sent_to">Please Enter OTP sent via SMS on</string>
     <string name="personal_info">Personal Info</string>
@@ -72,19 +71,15 @@
     <string name="quantity">Quantity</string>
     <string name="msg_no_result">Sorry, no results found</string>
     <string name="msg_search_again">Please check the spelling or try a different word</string>
-
     <string name="limit_alert">Apologies, max product quantity limit reached.</string>
-
     <string name="deleteproductmsg">Are you sure, you want to remove this product from cart ?</string>
     <string name="delete_address_msg">Are you sure, you want to remove this address?</string>
     <string name="image_permisison_msg">You have to enable storage permission.\n\nGo to app settings > Permissions > Enable Storage</string>
     <string name="deleteproducttitle">Remove Product</string>
     <string name="delete_address">Remove Address</string>
     <string name="stock_limit">Oops! Limited stock available. </string>
-
     <string name="total_amt">Subtotal</string>
     <string name="items">Items Amount :</string>
-
     <string name="promo_applied">PromoCode Discount :</string>
     <string name="delivery_charge">Delivery Charge</string>
     <string name="delivery_charge1">Delivery Charge :</string>
@@ -113,7 +108,6 @@
     <string name="razor_payment">RazorPay</string>
     <string name="razor_pay">RazorPay</string>
     <string name="pay_u">PayUMoney</string>
-
     <string name="paypal">PayPal</string>
     <string name="resend">Resend OTP</string>
     <string name="verify_message">Verify your registered number and reset your password. </string>
@@ -123,7 +117,6 @@
     <string name="verify_alert_2">. You can sign into account using your credentials.</string>
     <string name="reset_alert_msg">Are you sure, you want to reset password?</string>
     <string name="verify_your_mobile">Verify Your Mobile </string>
-
     <string name="onlinepaytype">payumoney</string>
     <string name="codpaytype">cod</string>
     <string name="order_placed1">Order Placed!!!</string>
@@ -232,16 +225,11 @@
     <string name="refer_now">REFER NOW</string>
     <string name="refer_share_msg_1">I have earned money using&#160;</string>
     <string name="refer_share_msg_2">&#160;app. you can also earn money by downloading app from below link and enter referral code while login-&#160; </string>
-    <string name="refer_code_alert_msg">Your refer code not generated please re-login for your refer code.</string>
-
-    <!--Firebase AUTH -->
+    <string name="refer_code_alert_msg">Your refer code not generated please re-login for your refer code.</string><!--Firebase AUTH -->
     <string name="otp_resend_alert">An OTP (One-Time-Password) has been sent to your registered mobile number.</string>
     <string name="enter_otp">Enter OTP</string>
-
-
     <string name="wallet_history">Wallet History</string>
     <string name="transaction_history">Transaction History</string>
-
     <string name="transaction">ID\u0020</string>
     <string name="amount_title">Amount\u0020:\u0020</string>
     <string name="transaction_date_and_time"><![CDATA[Date & Time]]></string>
@@ -272,14 +260,11 @@
     <string name="no_wallet_history_found">No Wallet History Found !!!</string>
     <string name="you_have_not_any_transactional_history_yet">You have not any transaction history yet !</string>
     <string name="you_have_not_any_wallet_history_yet">You have not any wallet history yet !</string>
-
     <string name="no_notification_found">No Notifications Found!!!</string>
     <string name="you_have_no_notification_items_yet">You have no any notifications yet!</string>
-
     <string name="no_faq_found">No Faq Found Yet !</string>
     <string name="you_have_not_any_frequently_ask_question_history_yet">You have not any frequently ask question history yet !</string>
     <string name="go_to_cart">Go to Cart</string>
-
     <string name="cvv">CVV</string>
     <string name="expiry">Expiry</string>
     <string name="card_number">Card Number</string>
@@ -305,9 +290,9 @@
     <string name="wallettype">wallet</string>
     <string name="midtrans">Midtrans</string>
     <string name="stripe">Stripe</string>
-    <string name="refer_text_1">"Refer a friend and earn upto "</string>
+    <string name="refer_text_1">"Refer a friend and earn up to "</string>
     <string name="refer_text_2">\" when your friend\'s first order is successfully delivered. Minimum Order amount should be \"</string>
-    <string name="refer_text_3">. which allows you to earn upto</string>
+    <string name="refer_text_3">. which allows you to earn up to</string>
     <string name="sold_out">Sold Out</string>
     <string name="reorder">Re-Order</string>
     <string name="logout_msg">Are you sure, You want to logout?</string>
@@ -320,5 +305,10 @@
     <string name="item">&#160;Item(s)</string>
     <string name="pincode_">Pin&#160;Code&#160;:&#160;</string>
     <string name="shopping">&#160;Shopping</string>
+    <string name="shopping_">&#160;Shopping</string>
     <string name="wallet_recharge_">&#160;Wallet&#160;Recharge</string>
+    <string name="wallet_message">You amount will be credited in wallet very soon.</string>
+    <string name="tx_id">\", Transaction ID : \"</string>
+    <string name="address_msg">Please set default address in Manage Address.</string>
+    <string name="transaction_failed_msg">Transaction Failed</string>
 </resources>

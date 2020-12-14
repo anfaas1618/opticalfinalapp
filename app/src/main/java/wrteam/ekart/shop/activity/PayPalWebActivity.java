@@ -133,7 +133,7 @@ public class PayPalWebActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
-                                Toast.makeText(activity, "Amount will be credited in wallet very soon.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "Amount will be credited in wallet very soon.", Toast.LENGTH_LONG).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals(Constant.SUCCESS) || status.equals(Constant.AWAITING_PAYMENT)) {
                                     finish();
@@ -158,10 +158,13 @@ public class PayPalWebActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isTxnInProcess)
-            ProcessAlertDialog();
-        else
-            super.onBackPressed();
+        if (PayPalWebActivity.this != null) {
+            if (isTxnInProcess) {
+                ProcessAlertDialog();
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 
     @Override
@@ -179,26 +182,29 @@ public class PayPalWebActivity extends AppCompatActivity {
         final AlertDialog alertDialog1 = alertDialog.create();
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-
-                paymentModelClass.PlaceOrder(PayPalWebActivity.this,
-                        getString(R.string.paypal),
-                        "none",
-                        false,
-                        (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS),
-                        "canceled");
-
+                DeleteTransaction(PayPalWebActivity.this, getIntent().getStringExtra(Constant.ORDER_ID));
                 alertDialog1.dismiss();
-                finish();
-
             }
         }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 alertDialog1.dismiss();
-
             }
         });
-
         // Showing Alert Message
         alertDialog.show();
+    }
+
+    public void DeleteTransaction(Activity activity, String orderId) {
+        Map<String, String> transparams = new HashMap<>();
+        transparams.put(Constant.DELETE_ORDER, Constant.GetVal);
+        transparams.put(Constant.ORDER_ID, orderId);
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    PayPalWebActivity.super.onBackPressed();
+                }
+            }
+        }, activity, Constant.ORDERPROCESS_URL, transparams, false);
     }
 }

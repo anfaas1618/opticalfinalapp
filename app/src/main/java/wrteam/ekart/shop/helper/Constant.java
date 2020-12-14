@@ -295,12 +295,15 @@ public class Constant {
     public static String UNIT = "unit";
     public static String SLUG = "slug";
     public static String PROMO_CODE = "promo_code";
+    public static String USER_WALLET_REFILL_LIMIT = "user-wallet-refill-limit";
     public static String TOKEN = "token";
     public static CharSequence[] filtervalues = {" Newest to Oldest ", " Oldest to Newest ", " Price Highest to Lowest ", " Price Lowest to Highest "};
 
     //**************Constants Values***************
     public static String selectedAddressId = "";
     public static String DefaultAddress = "";
+    public static String DefaultCity= "";
+    public static String DefaultPinCode = "";
     public static Double SETTING_DELIVERY_CHARGE = 0.0;
     public static Double SETTING_TAX = 0.0;
     public static Double SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = 0.0;
@@ -324,6 +327,7 @@ public class Constant {
     public static String FRND_CODE = "";
     public static String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghjiklmnopqrstuvwxyz";
     public static String NUMERIC_STRING = "123456789";
+    public static boolean isSort = false;
     public static String PAYPAL = "";
     public static String PAYUMONEY = "";
     public static String RAZORPAY = "";

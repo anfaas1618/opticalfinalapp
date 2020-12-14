@@ -219,13 +219,9 @@ public class PaymentModelClass {
 
                 String hasCal = appEnvironment.salt() + "|" + status + "||||||" + udf5 + "|" + udf4 + "|" + udf3 + "|" + udf2 + "|" + udf1 + "|" + email + "|" + firstName + "|" + productInfo + "|" + amount + "|" + txnId + "|" + key;
                 String hash = hashCal1(hasCal);
-                //System.out.println("=== hash cal"+hash);
-                //System.out.println("=== hase res "+hash_from_response);
                 Log.d("calHas ", hash);
                 Log.d("resHash", hash_from_response);
 
-
-                //when app is live with real merchant id and salt we will compare both side hash
                 if (hash_from_response.equals(hash)) {
                     if (status.equals(Constant.SUCCESS)) {
                         if (from.equals(Constant.PAYMENT)) {
@@ -234,16 +230,14 @@ public class PaymentModelClass {
                             new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, txnId);
                         }
                     } else if (status.equals("failure")) {
-                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
-                        Toast.makeText(activity, "Transaction Failed", Toast.LENGTH_SHORT).show();
+//                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
+                        Toast.makeText(activity, activity.getString(R.string.transaction_failed_msg), Toast.LENGTH_SHORT).show();
                     } else {
-                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
-                        Toast.makeText(activity, "Transaction Failed", Toast.LENGTH_SHORT).show();
+//                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
+                        Toast.makeText(activity, activity.getString(R.string.transaction_failed_msg), Toast.LENGTH_SHORT).show();
 
                     }
                 }
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

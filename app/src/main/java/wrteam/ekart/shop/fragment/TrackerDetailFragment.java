@@ -343,6 +343,37 @@ public class TrackerDetailFragment extends Fragment {
             }
             lyttracker.setVisibility(View.VISIBLE);
 
+
+            for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
+                int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());
+                int view = getResources().getIdentifier("l" + i, "id", activity.getPackageName());
+                int txt = getResources().getIdentifier("txt" + i, "id", activity.getPackageName());
+                int textview = getResources().getIdentifier("txt" + i + "" + i, "id", activity.getPackageName());
+
+
+                if (img != 0 && root.findViewById(img) != null) {
+                    ImageView imageView = root.findViewById(img);
+                    imageView.setColorFilter(getResources().getColor(R.color.colorPrimary));
+                }
+
+                if (view != 0 && root.findViewById(view) != null) {
+                    View view1 = root.findViewById(view);
+                    view1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+
+                if (txt != 0 && root.findViewById(txt) != null) {
+                    TextView view1 = root.findViewById(txt);
+                    view1.setTextColor(getResources().getColor(R.color.black));
+                }
+
+                if (textview != 0 && root.findViewById(textview) != null) {
+                    TextView view1 = root.findViewById(textview);
+                    String str = order.getDate_added();
+                    String[] splited = str.split("\\s+");
+                    view1.setText(splited[0] + "\n" + splited[1]);
+                }
+            }
+
             for (int i = 0; i < order.getItemsList().size(); i++) {
                 hashMap.put(order.getItemsList().get(i).getProduct_variant_id(), order.getItemsList().get(i).getQuantity());
             }

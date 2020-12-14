@@ -229,8 +229,11 @@ public class PaymentFragment extends Fragment {
                     try {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-                            if (objectbject.has("payment_methods")) {
+                            if (objectbject.has(Constant.PAYMENT_METHODS)) {
                                 JSONObject object = objectbject.getJSONObject(Constant.PAYMENT_METHODS);
+                                if (object.has(Constant.cod_payment_method)) {
+                                    Constant.COD = object.getString(Constant.cod_payment_method);
+                                }
                                 if (object.has(Constant.payu_method)) {
                                     Constant.PAYUMONEY = object.getString(Constant.payu_method);
                                     Constant.MERCHANT_KEY = object.getString(Constant.PAY_M_KEY);
@@ -592,9 +595,13 @@ public class PaymentFragment extends Fragment {
                 sendparams.put(Constant.USER_NAME, session.getData(Constant.NAME));
                 if (paymentMethod.equals(getString(R.string.pay_u))) {
                     dialog.dismiss();
-                    paymentModelClass.OnPayClick(getActivity(), sendparams, "Cart Order", String.valueOf(sendparams.get(Constant.FINAL_TOTAL)));
+                    sendparams.put(Constant.MOBILE, session.getData(Constant.MOBILE));
+                    sendparams.put(Constant.USER_NAME, session.getData(Constant.NAME));
+                    sendparams.put(Constant.EMAIL, session.getData(Constant.EMAIL));
+                    paymentModelClass.OnPayClick(getActivity(), sendparams, Constant.PAYMENT, String.valueOf(sendparams.get(Constant.FINAL_TOTAL)));
                 } else if (paymentMethod.equals(getString(R.string.paypal))) {
                     dialog.dismiss();
+                    sendparams.put(Constant.FROM, Constant.PAYMENT);
                     sendparams.put(Constant.STATUS, Constant.AWAITING_PAYMENT);
                     PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "paypal");
                 } else if (paymentMethod.equals(getString(R.string.razor_pay))) {
@@ -609,11 +616,13 @@ public class PaymentFragment extends Fragment {
                     startActivity(intent);
                 } else if (paymentMethod.equals(getString(R.string.midtrans))) {
                     dialog.dismiss();
+                    sendparams.put(Constant.FROM, Constant.PAYMENT);
                     sendparams.put(Constant.STATUS, Constant.AWAITING_PAYMENT);
                     PlaceOrder(activity, getString(R.string.midtrans), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "midtrans");
                 } else if (paymentMethod.equals(getString(R.string.stripe))) {
                     dialog.dismiss();
                     sendparams.put(Constant.FROM, Constant.PAYMENT);
+                    sendparams.put(Constant.STATUS, Constant.AWAITING_PAYMENT);
                     PlaceOrder(activity, getString(R.string.stripe), System.currentTimeMillis() + Constant.randomNumeric(3), true, sendparams, "stripe");
                 } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
                     dialog.dismiss();

@@ -32,7 +32,6 @@ import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.PaymentModelClass;
-import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 
 public class MidtransActivity extends AppCompatActivity {
@@ -87,7 +86,6 @@ public class MidtransActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 },
                 (VolleyError error) -> error.printStackTrace());
         AppController.getInstance().getRequestQueue().getCache().clear();
@@ -118,7 +116,7 @@ public class MidtransActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
-                                Toast.makeText(activity, "You amount will be credited in wallet very soon.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, getString(R.string.wallet_message), Toast.LENGTH_SHORT).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals("capture") || status.equals("challenge") || status.equals("pending")) {
                                     finish();
@@ -142,10 +140,13 @@ public class MidtransActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isTxnInProcess)
-            ProcessAlertDialog();
-        else
-            super.onBackPressed();
+        if (MidtransActivity.this != null) {
+            if (isTxnInProcess) {
+                ProcessAlertDialog();
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 
     @Override
@@ -162,7 +163,7 @@ public class MidtransActivity extends AppCompatActivity {
         final AlertDialog alertDialog1 = alertDialog.create();
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                DeleteTransaction(MidtransActivity.this, orderId);
+                DeleteTransaction(MidtransActivity.this, getIntent().getStringExtra(Constant.ORDER_ID));
                 alertDialog1.dismiss();
             }
         }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -174,7 +175,6 @@ public class MidtransActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-
     public void DeleteTransaction(Activity activity, String orderId) {
         Map<String, String> transparams = new HashMap<>();
         transparams.put(Constant.DELETE_ORDER, Constant.GetVal);
@@ -183,10 +183,9 @@ public class MidtransActivity extends AppCompatActivity {
             @Override
             public void onSuccess(boolean result, String response) {
                 if (result) {
-                    onBackPressed();
+                    MidtransActivity.super.onBackPressed();
                 }
             }
         }, activity, Constant.ORDERPROCESS_URL, transparams, false);
     }
-
 }
