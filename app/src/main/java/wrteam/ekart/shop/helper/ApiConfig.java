@@ -636,6 +636,7 @@ public class ApiConfig {
                             Constant.SETTING_MAIL_ID = object.getString(Constant.REPLY_TO);
                             Constant.SETTING_MINIMUM_ORDER_AMOUNT = object.getDouble(Constant.MINIMUM_ORDER_AMOUNT);
                             Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(object.getString(Constant.MINIMUM_AMOUNT));
+                            Constant.SETTING_USER_WALLET_REFILL_LIMIT = Double.parseDouble(object.getString(Constant.USER_WALLET_REFILL_LIMIT));
                             Constant.ORDER_DAY_LIMIT = Integer.parseInt(object.getString(Constant.KEY_ORDER_RETURN_DAY_LIMIT));
                             Constant.MAX_PRODUCT_LIMIT = Integer.parseInt(object.getString(Constant.MAX_CART_ITEMS_COUNT));
 

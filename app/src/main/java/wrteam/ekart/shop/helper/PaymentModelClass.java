@@ -161,27 +161,30 @@ public class PaymentModelClass {
     }
 
     public PayUmoneySdkInitializer.PaymentParam calculateServerSideHashAndInitiatePayment1(final PayUmoneySdkInitializer.PaymentParam paymentParam) {
-
         StringBuilder stringBuilder = new StringBuilder();
         HashMap<String, String> params = paymentParam.getParams();
-        stringBuilder.append(params.get(PayUmoneyConstants.KEY) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.TXNID) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.AMOUNT) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.PRODUCT_INFO) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.FIRSTNAME) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.EMAIL) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.UDF1) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.UDF2) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.UDF3) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.UDF4) + "|");
-        stringBuilder.append(params.get(PayUmoneyConstants.UDF5) + "||||||");
+        try {
+            stringBuilder.append(params.get(PayUmoneyConstants.KEY) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.TXNID) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.AMOUNT) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.PRODUCT_INFO) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.FIRSTNAME) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.EMAIL) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.UDF1) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.UDF2) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.UDF3) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.UDF4) + "|");
+            stringBuilder.append(params.get(PayUmoneyConstants.UDF5) + "||||||");
 
-        AppEnvironment appEnvironment = ((AppController) activity.getApplication()).getAppEnvironment();
-        stringBuilder.append(appEnvironment.salt());
+            AppEnvironment appEnvironment = ((AppController) activity.getApplication()).getAppEnvironment();
+            stringBuilder.append(appEnvironment.salt());
 
-        String hash = hashCal("SHA-512", stringBuilder.toString());
-        paymentParam.setMerchantHash(hash);
+            String hash = hashCal("SHA-512", stringBuilder.toString());
+            paymentParam.setMerchantHash(hash);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return paymentParam;
     }
 
@@ -219,8 +222,6 @@ public class PaymentModelClass {
 
                 String hasCal = appEnvironment.salt() + "|" + status + "||||||" + udf5 + "|" + udf4 + "|" + udf3 + "|" + udf2 + "|" + udf1 + "|" + email + "|" + firstName + "|" + productInfo + "|" + amount + "|" + txnId + "|" + key;
                 String hash = hashCal1(hasCal);
-                Log.d("calHas ", hash);
-                Log.d("resHash", hash_from_response);
 
                 if (hash_from_response.equals(hash)) {
                     if (status.equals(Constant.SUCCESS)) {
@@ -230,10 +231,10 @@ public class PaymentModelClass {
                             new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, txnId);
                         }
                     } else if (status.equals("failure")) {
-//                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
+                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
                         Toast.makeText(activity, activity.getString(R.string.transaction_failed_msg), Toast.LENGTH_SHORT).show();
                     } else {
-//                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
+                        PlaceOrder(activity, activity.getResources().getString(R.string.onlinepaytype), txnId, false, sendparams, status);
                         Toast.makeText(activity, activity.getString(R.string.transaction_failed_msg), Toast.LENGTH_SHORT).show();
 
                     }

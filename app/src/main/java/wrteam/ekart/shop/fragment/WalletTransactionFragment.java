@@ -39,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataOutput;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -338,7 +339,7 @@ public class WalletTransactionFragment extends Fragment {
                         if (edtAmount.getText().toString().equals("")) {
                             edtAmount.requestFocus();
                             edtAmount.setError(getString(R.string.alert_enter_amount));
-                        } else if (Double.parseDouble(edtAmount.getText().toString()) > 10000) {
+                        } else if (Double.parseDouble(edtAmount.getText().toString()) > Constant.SETTING_USER_WALLET_REFILL_LIMIT) {
                             Toast.makeText(activity, getString(R.string.max_wallet_amt_error), Toast.LENGTH_SHORT).show();
                         } else {
                             if (Double.parseDouble(edtAmount.getText().toString().trim()) <= 0) {
@@ -418,7 +419,7 @@ public class WalletTransactionFragment extends Fragment {
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.AMOUNT, amount);
         params.put(Constant.TYPE, Constant.CREDIT);
-        params.put(Constant.MESSAGE, msg + getString(R.string.tx_id) + txID);
+        params.put(Constant.MESSAGE, msg);
 
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @SuppressLint("SetTextI18n")
@@ -428,8 +429,8 @@ public class WalletTransactionFragment extends Fragment {
                     try {
                         JSONObject object = new JSONObject(response);
                         if (!object.getBoolean(Constant.ERROR)) {
-                            DrawerActivity.tvWallet.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(object.getString(Constant.NEW_BALANCE)));
-                            tvBalance.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(object.getString(Constant.NEW_BALANCE)));
+                            DrawerActivity.tvWallet.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
+                            tvBalance.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -442,9 +443,9 @@ public class WalletTransactionFragment extends Fragment {
 
     public void StartPayPalPayment(final Map<String, String> sendParams) {
         final Map<String, String> params = new HashMap<>();
-        params.put(Constant.FIRST_NAME, sendParams.get(Constant.USER_NAME));
-        params.put(Constant.LAST_NAME, sendParams.get(Constant.USER_NAME));
-        params.put(Constant.PAYER_EMAIL, sendParams.get(Constant.EMAIL));
+        params.put(Constant.FIRST_NAME, session.getData(Constant.NAME));
+        params.put(Constant.LAST_NAME, session.getData(Constant.NAME));
+        params.put(Constant.PAYER_EMAIL, session.getData(Constant.EMAIL));
         params.put(Constant.ITEM_NAME, getString(R.string.wallet_recharge));
         params.put(Constant.ITEM_NUMBER, "wallet-refill-user-" + new Session(activity).getData(Constant.ID) + "-" + System.currentTimeMillis());
         params.put(Constant.AMOUNT, sendParams.get(Constant.FINAL_TOTAL));
@@ -467,6 +468,7 @@ public class WalletTransactionFragment extends Fragment {
         startActivity(intent);
     }
 
+
     void StartFlutterWavePayment() {
         new RavePayManager(this)
                 .setAmount(Double.parseDouble(amount))
@@ -474,7 +476,7 @@ public class WalletTransactionFragment extends Fragment {
                 .setCurrency(Constant.FLUTTERWAVE_CURRENCY_CODE_VAL)
                 .setfName(session.getData(Constant.FIRST_NAME))
                 .setlName(session.getData(Constant.LAST_NAME))
-                .setNarration(getString(R.string.app_name) + getString(R.string.wallet_recharge_))
+                .setNarration(getString(R.string.app_name) + getString(R.string.shopping))
                 .setPublicKey(Constant.FLUTTERWAVE_PUBLIC_KEY_VAL)
                 .setEncryptionKey(Constant.FLUTTERWAVE_ENCRYPTION_KEY_VAL)
                 .setTxRef(System.currentTimeMillis() + "Ref")
@@ -531,7 +533,7 @@ public class WalletTransactionFragment extends Fragment {
             sendparams.put(Constant.EMAIL, session.getData(Constant.EMAIL));
             new PaymentModelClass(getActivity()).OnPayClick(getActivity(), sendparams, Constant.WALLET, amount);
         } else if (paymentMethod.equals(getString(R.string.paypal))) {
-            sendparams.put(Constant.AMOUNT, amount);
+            sendparams.put(Constant.FINAL_TOTAL, amount);
             sendparams.put(Constant.FIRST_NAME, session.getData(Constant.NAME));
             sendparams.put(Constant.LAST_NAME, session.getData(Constant.NAME));
             sendparams.put(Constant.PAYER_EMAIL, session.getData(Constant.EMAIL));
@@ -543,6 +545,7 @@ public class WalletTransactionFragment extends Fragment {
             CreateOrderId(Double.parseDouble(amount));
         } else if (paymentMethod.equals(getString(R.string.paystack))) {
             sendparams.put(Constant.FINAL_TOTAL, amount);
+            sendparams.put(Constant.FROM, Constant.WALLET);
             callPayStack(sendparams);
         } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
             StartFlutterWavePayment();
@@ -557,7 +560,6 @@ public class WalletTransactionFragment extends Fragment {
                 Intent intent = new Intent(activity, StripeActivity.class);
                 intent.putExtra(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID) + "-" + System.currentTimeMillis());
                 intent.putExtra(Constant.FROM, Constant.WALLET);
-                intent.putExtra(Constant.AMOUNT, amount);
                 intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
                 startActivity(intent);
             } else {

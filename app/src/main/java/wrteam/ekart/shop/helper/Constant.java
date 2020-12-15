@@ -15,13 +15,12 @@ public class Constant {
     public static int GRIDCOLUMN = 3; //Category View Number Of Grid Per Line
     public static int LOAD_ITEM_LIMIT = 10; //Load items limit in listing ,Maximum load item once
 
-
     //MODIFICATION PART END
 
-    //Do not change anything in this link
+    //Do not change anything in this link**************************************************
     public static String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=";
-
     public static String BaseUrl = MAINBASEUrl + "api-firebase/";
+    //*************************************************************************************
 
     //**********APIS**********
     public static String FAQ_URL = BaseUrl + "get-faqs.php";
@@ -307,6 +306,7 @@ public class Constant {
     public static Double SETTING_DELIVERY_CHARGE = 0.0;
     public static Double SETTING_TAX = 0.0;
     public static Double SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = 0.0;
+    public static Double SETTING_USER_WALLET_REFILL_LIMIT = 0.0;
     public static Double SETTING_MINIMUM_ORDER_AMOUNT = 0.0;
     public static Double SETTING_AREA_WISE_DELIVERY_CHARGE = 0.0;
     public static String SETTING_CURRENCY_SYMBOL = "";
@@ -318,7 +318,7 @@ public class Constant {
     public static String U_ID = "";
     public static HashMap<String, String> CartValues = new HashMap<>();
     public static int selectedDatePosition = 0;
-    public static DecimalFormat formater = new DecimalFormat("#.00");
+    public static DecimalFormat formater = new DecimalFormat("0.00");
     public static int MAX_PRODUCT_LIMIT = 0;
     public static boolean CLICK = false;
     public static double FLOAT_TOTAL_AMOUNT = 0;

@@ -74,17 +74,6 @@ public class TrackOrderFragment extends Fragment {
             startActivity(new Intent(activity, LoginActivity.class).putExtra(Constant.FROM, "tracker"));
         }
 
-//        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                if (AppController.isConnected(activity)) {
-//                    swipeLayout.setRefreshing(false);
-//                    ApiConfig.getWalletBalance(activity, new Session(activity));
-//                    GetOrderDetails();
-//                }
-//            }
-//        });
-
         root.findViewById(R.id.btnorder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,12 +88,12 @@ public class TrackOrderFragment extends Fragment {
 
     void setupViewPager(ViewPager viewPager) {
         adapter = new TrackOrderFragment.ViewPagerAdapter(getFragmentManager());
-        adapter.addFrag(new AllOrderListFragment(), tabs[0]);
-        adapter.addFrag(new ReceivedOrderListFragment(), tabs[1]);
-        adapter.addFrag(new ShippedOrderListFragment(), tabs[2]);
-        adapter.addFrag(new DeliveredOrderListFragment(), tabs[3]);
-        adapter.addFrag(new CancelledOrderListFragment(), tabs[4]);
-        adapter.addFrag(new ReturnedOrderListFragment(), tabs[5]);
+        adapter.addFrag(new OrderListAllFragment(), tabs[0]);
+        adapter.addFrag(new OrderListReceivedFragment(), tabs[1]);
+        adapter.addFrag(new OrderListShippedFragment(), tabs[2]);
+        adapter.addFrag(new OrderListDeliveredFragment(), tabs[3]);
+        adapter.addFrag(new OrderListCancelledFragment(), tabs[4]);
+        adapter.addFrag(new OrderListReturnedFragment(), tabs[5]);
         viewPager.setAdapter(adapter);
     }
 
@@ -148,17 +137,17 @@ public class TrackOrderFragment extends Fragment {
             data.putInt("pos", position);
             Fragment fragment = null;
             if (position == 0) {
-                fragment = new AllOrderListFragment();
+                fragment = new OrderListAllFragment();
             } else if (position == 1) {
-                fragment = new ReceivedOrderListFragment();
+                fragment = new OrderListReceivedFragment();
             } else if (position == 2) {
-                fragment = new ShippedOrderListFragment();
+                fragment = new OrderListShippedFragment();
             } else if (position == 3) {
-                fragment = new DeliveredOrderListFragment();
+                fragment = new OrderListDeliveredFragment();
             } else if (position == 4) {
-                fragment = new CancelledOrderListFragment();
+                fragment = new OrderListCancelledFragment();
             } else if (position == 5) {
-                fragment = new ReturnedOrderListFragment();
+                fragment = new OrderListReturnedFragment();
             }
             fragment.setArguments(data);
             return fragment;

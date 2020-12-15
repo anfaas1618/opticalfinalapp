@@ -36,7 +36,7 @@ import wrteam.ekart.shop.model.OrderTracker;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
-public class DeliveredOrderListFragment extends Fragment {
+public class OrderListReturnedFragment extends Fragment {
     RecyclerView recyclerView;
     TextView nodata;
     ProgressBar progressbar;
@@ -60,7 +60,6 @@ public class DeliveredOrderListFragment extends Fragment {
         scrollView = root.findViewById(R.id.scrollView);
         nodata = root.findViewById(R.id.nodata);
         setHasOptionsMenu(true);
-
         SwipeRefreshLayout swipeLayout;
         swipeLayout = root.findViewById(R.id.swipeLayout);
         swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -86,7 +85,7 @@ public class DeliveredOrderListFragment extends Fragment {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_ORDERS, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
-        params.put(Constant.STATUS, Constant.DELIVERED);
+        params.put(Constant.STATUS, Constant.RETURNED);
         params.put(Constant.OFFSET, "" + offset);
         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -217,7 +216,7 @@ public class DeliveredOrderListFragment extends Fragment {
                                                         Map<String, String> params = new HashMap<>();
                                                         params.put(Constant.GET_ORDERS, Constant.GetVal);
                                                         params.put(Constant.USER_ID, session.getData(Constant.ID));
-                                                        params.put(Constant.STATUS, Constant.DELIVERED);
+                                                        params.put(Constant.STATUS, Constant.RETURNED);
                                                         params.put(Constant.OFFSET, "" + offset);
                                                         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
 

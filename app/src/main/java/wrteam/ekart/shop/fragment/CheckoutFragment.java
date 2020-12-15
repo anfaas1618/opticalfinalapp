@@ -107,13 +107,15 @@ public class CheckoutFragment extends Fragment {
             public void onClick(View view) {
                 Fragment fragment = new PaymentFragment();
                 Bundle bundle = new Bundle();
+                if (subtotal > Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
+                    Constant.SETTING_DELIVERY_CHARGE = 0.0;
+                }
                 bundle.putDouble("subtotal", Double.parseDouble(Constant.formater.format(subtotal)));
                 bundle.putDouble("total", Double.parseDouble(Constant.formater.format(total)));
                 bundle.putDouble("taxAmt", Double.parseDouble(Constant.formater.format(taxAmt)));
                 bundle.putDouble("tax", Double.parseDouble(Constant.formater.format(((taxAmt * 100) / total))));
                 bundle.putDouble("pCodeDiscount", Double.parseDouble(Constant.formater.format(pCodeDiscount)));
                 bundle.putString("pCode", pCode);
-                bundle.putDouble("dCharge", Constant.SETTING_DELIVERY_CHARGE);
                 bundle.putStringArrayList("variantIdList", variantIdList);
                 bundle.putStringArrayList("qtyList", qtyList);
                 bundle.putString(Constant.FROM, "process");

@@ -32,6 +32,7 @@ import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.PaymentModelClass;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 
 public class MidtransActivity extends AppCompatActivity {
@@ -116,6 +117,7 @@ public class MidtransActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
+                                ApiConfig.getWalletBalance(activity,new Session(activity));
                                 Toast.makeText(activity, getString(R.string.wallet_message), Toast.LENGTH_SHORT).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals("capture") || status.equals("challenge") || status.equals("pending")) {

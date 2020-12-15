@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -50,7 +51,9 @@ public class StripeActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView tvTitle, tvPayableAmount;
     private String paymentIntentClientSecret, stripePublishableKey, orderId, from;
+    String amount;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,7 @@ public class StripeActivity extends AppCompatActivity {
         sendparams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);
         orderId = getIntent().getStringExtra(Constant.ORDER_ID);
         from = getIntent().getStringExtra(Constant.FROM);
+        amount = sendparams.get(Constant.FINAL_TOTAL);
 
         toolbar = findViewById(R.id.toolbar);
         payButton = findViewById(R.id.payButton);
@@ -71,7 +75,7 @@ public class StripeActivity extends AppCompatActivity {
         } else {
             tvTitle.setText(getString(R.string.app_name) + getString(R.string.wallet_recharge_));
         }
-        tvPayableAmount.setText(Constant.SETTING_CURRENCY_SYMBOL + (int) Math.round(Double.parseDouble(getIntent().getStringExtra(Constant.AMOUNT))));
+        tvPayableAmount.setText(Constant.SETTING_CURRENCY_SYMBOL + sendparams.get(Constant.FINAL_TOTAL));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.stripe));
@@ -99,7 +103,7 @@ public class StripeActivity extends AppCompatActivity {
             params.put(Constant.POSTAL_CODE, "" + Constant.DefaultPinCode);
         }
         params.put(Constant.CITY, Constant.DefaultCity);
-        params.put(Constant.AMOUNT, "" + (int) Math.round(Double.parseDouble(getIntent().getStringExtra(Constant.AMOUNT))));
+        params.put(Constant.AMOUNT, amount);
         params.put(Constant.ORDER_ID, orderId);
 
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -164,6 +168,7 @@ public class StripeActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
+                                ApiConfig.getWalletBalance(activity,session);
                                 Toast.makeText(activity, activity.getString(R.string.wallet_message), Toast.LENGTH_SHORT).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals(Constant.SUCCESS) || status.equals(Constant.AWAITING_PAYMENT)) {
@@ -209,7 +214,7 @@ public class StripeActivity extends AppCompatActivity {
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 alertDialog1.dismiss();
-                DeleteTransaction(StripeActivity.this, getIntent().getStringExtra(Constant.ORDER_ID));
+                DeleteTransaction(StripeActivity.this, orderId);
             }
         }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

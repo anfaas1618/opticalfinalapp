@@ -103,7 +103,6 @@ public class AddressListFragment extends Fragment {
                     if (!selectedAddress.isEmpty()) {
                         Fragment fragment = new CheckoutFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putDouble("dCharge", Constant.SETTING_DELIVERY_CHARGE);
                         bundle.putString("address", selectedAddress);
                         fragment.setArguments(bundle);
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
@@ -172,7 +171,6 @@ public class AddressListFragment extends Fragment {
                             session.setData(Constant.TOTAL, String.valueOf(total));
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            //System.out.println("=====res addresss   " + response);
                             Gson g = new Gson();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -187,6 +185,8 @@ public class AddressListFragment extends Fragment {
                                         if (Constant.SETTING_AREA_WISE_DELIVERY_CHARGE == 1) {
                                             Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(address.getMinimum_free_delivery_order_amount());
                                             Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(address.getDelivery_charges());
+                                        } else {
+                                            GetDChargeSettings(activity);
                                         }
                                     }
                                     addresses.add(address);
@@ -208,6 +208,29 @@ public class AddressListFragment extends Fragment {
                 }
             }
         }, activity, Constant.GET_ADDRESS_URL, params, true);
+    }
+
+
+    public static void GetDChargeSettings(final Activity activity) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.GET_SETTINGS, Constant.GetVal);
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject objectbject = new JSONObject(response);
+                        if (!objectbject.getBoolean(Constant.ERROR)) {
+                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
+                            Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(object.getString(Constant.MINIMUM_AMOUNT));
+                            Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.ORDERPROCESS_URL, params, false);
     }
 
     @Override

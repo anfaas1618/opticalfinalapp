@@ -84,6 +84,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         holder.txtprice.setText(Constant.SETTING_CURRENCY_SYMBOL + order.getPrice());
         holder.txtpaytype.setText(activity.getResources().getString(R.string.via) + payType);
         holder.txtstatus.setText(activeStatus);
+        if (activeStatus.equalsIgnoreCase(Constant.AWAITING_PAYMENT)) {
+            holder.txtstatus.setText(activity.getString(R.string.awaiting_payment));
+        }
         holder.txtstatusdate.setText(order.getActiveStatusDate());
         holder.txtname.setText(order.getName() + "(" + order.getMeasurement() + order.getUnit() + ")");
 

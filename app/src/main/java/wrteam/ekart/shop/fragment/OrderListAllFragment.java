@@ -36,7 +36,7 @@ import wrteam.ekart.shop.model.OrderTracker;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
-public class CancelledOrderListFragment extends Fragment {
+public class OrderListAllFragment extends Fragment {
     RecyclerView recyclerView;
     TextView nodata;
     ProgressBar progressbar;
@@ -48,6 +48,7 @@ public class CancelledOrderListFragment extends Fragment {
     private int offset = 0;
     private int total = 0;
     private NestedScrollView scrollView;
+    SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +87,6 @@ public class CancelledOrderListFragment extends Fragment {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_ORDERS, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
-        params.put(Constant.STATUS, Constant.CANCELLED);
         params.put(Constant.OFFSET, "" + offset);
         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -215,7 +215,6 @@ public class CancelledOrderListFragment extends Fragment {
                                                         Map<String, String> params = new HashMap<>();
                                                         params.put(Constant.GET_ORDERS, Constant.GetVal);
                                                         params.put(Constant.USER_ID, session.getData(Constant.ID));
-                                                        params.put(Constant.STATUS, Constant.CANCELLED);
                                                         params.put(Constant.OFFSET, "" + offset);
                                                         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
 

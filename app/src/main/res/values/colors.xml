@@ -32,4 +32,5 @@
     <color name="shipped_status_bg">#f39c12</color>
     <color name="returned_and_cancel_status_bg">#dd4b39</color>
     <color name="delivered_status_bg">#00a65a</color>
+    <color name="awaiting_status_bg">#565650</color>
 </resources>

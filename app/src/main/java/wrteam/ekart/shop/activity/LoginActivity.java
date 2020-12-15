@@ -769,14 +769,7 @@ public class LoginActivity extends AppCompatActivity {
             OTP_Varification();
 
         } else if (id == R.id.btnsubmit) {
-            double saveLatitude = Double.parseDouble(new Session(getApplicationContext()).getCoordinates(Constant.LATITUDE));
-            double saveLongitude = Double.parseDouble(new Session(getApplicationContext()).getCoordinates(Constant.LONGITUDE));
-
-            if (saveLatitude == 0 || saveLongitude == 0) {
                 UserSignUpSubmit();
-            } else {
-                UserSignUpSubmit();
-            }
         }
 
     }
@@ -791,8 +784,6 @@ public class LoginActivity extends AppCompatActivity {
                     objectbject.getString(Constant.MOBILE),
                     password,
                     objectbject.getString(Constant.REFERRAL_CODE));
-
-            Toast.makeText(activity, session.getData(Constant.SETTING_MAIL_ID), Toast.LENGTH_SHORT).show();
 
             ApiConfig.AddMultipleProductInCart(session, activity, databaseHelper.getDataCartList());
             ApiConfig.getCartItemCount(activity, session);

@@ -59,7 +59,6 @@ public class Session {
         editor.putString(Constant.FCM_ID, fcmId);
         editor.putString(Constant.ID, id);
         editor.putString(Constant.NAME, name);
-        Toast.makeText(_context, email, Toast.LENGTH_SHORT).show();
         editor.putString(Constant.EMAIL, email);
         editor.putString(Constant.MOBILE, mobile);
         editor.putString(Constant.PASSWORD, password);

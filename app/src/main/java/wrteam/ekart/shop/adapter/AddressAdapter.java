@@ -62,7 +62,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (Constant.selectedAddressId.equals(id)) {
             AddressListFragment.selectedAddress = address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", Pin Code : " + address.getPincode();
-
+            Constant.DefaultPinCode = address.getPincode();
+            Constant.DefaultCity = address.getCity_name();
             holder.tvName.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
 
             holder.tvAddressType.setBackground(activity.getResources().getDrawable(R.drawable.right_btn_bg));
@@ -85,7 +86,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         holder.tvAddress.setText(address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", " + activity.getString(R.string.pincode_) + address.getPincode());
-
+        Constant.DefaultPinCode = address.getPincode();
+        Constant.DefaultCity = address.getCity_name();
         if (address.getIs_default().equals("1")) {
             holder.tvDefaultAddress.setVisibility(View.VISIBLE);
         }

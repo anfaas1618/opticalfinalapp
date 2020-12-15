@@ -311,4 +311,6 @@
     <string name="tx_id">\", Transaction ID : \"</string>
     <string name="address_msg">Please set default address in Manage Address.</string>
     <string name="transaction_failed_msg">Transaction Failed</string>
+    <string name="added_to_wallet_msg">Added to wallet from :</string>
+    <string name="awaiting_payment">Awaiting Payment</string>
 </resources>

@@ -140,11 +140,8 @@ public class TrackerDetailFragment extends Fragment {
 
                 final Map<String, String> params = new HashMap<>();
                 params.put(Constant.UPDATE_ORDER_STATUS, Constant.GetVal);
-                params.put(Constant.ORDER_ITEM_ID, order.getId());
-                params.put(Constant.ORDER_ID, order.getOrder_id());
+                params.put(Constant.ID, order.getOrder_id());
                 params.put(Constant.STATUS, Constant.CANCELLED);
-
-
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
                 // Setting Dialog Message
                 alertDialog.setTitle(activity.getResources().getString(R.string.cancel_order));
@@ -324,12 +321,13 @@ public class TrackerDetailFragment extends Fragment {
         tvPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + order.getPromoDiscount());
         tvWallet.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + order.getWalletBalance());
         tvFinalTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + order.getFinal_total());
+
         if (!order.getStatus().equalsIgnoreCase("delivered") && !order.getStatus().equalsIgnoreCase("cancelled") && !order.getStatus().equalsIgnoreCase("returned")) {
             btnCancel.setVisibility(View.VISIBLE);
         } else {
             btnCancel.setVisibility(View.GONE);
         }
-        if (order.getStatus().equalsIgnoreCase("cancelled")) {
+        if (order.getStatus().equalsIgnoreCase("cancelled") || order.getStatus().equalsIgnoreCase("awaiting_payment")) {
             lyttracker.setVisibility(View.GONE);
             btnCancel.setVisibility(View.GONE);
             txtcanceldetail.setVisibility(View.VISIBLE);
@@ -342,7 +340,6 @@ public class TrackerDetailFragment extends Fragment {
                 returnLyt.setVisibility(View.VISIBLE);
             }
             lyttracker.setVisibility(View.VISIBLE);
-
 
             for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
                 int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());

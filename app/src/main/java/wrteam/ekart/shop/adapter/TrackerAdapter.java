@@ -90,6 +90,8 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
+            holder.status.setText(ApiConfig.toTitleCase(order.getStatus()));
+
             if (order.getActiveStatus().equals(Constant.RECEIVED)) {
                 holder.cardView.setCardBackgroundColor(ContextCompat.getColor(activity, R.color.received_status_bg));
             } else if (order.getActiveStatus().equals(Constant.SHIPPED)) {
@@ -100,9 +102,11 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder.cardView.setCardBackgroundColor(ContextCompat.getColor(activity, R.color.returned_and_cancel_status_bg));
             } else if (order.getActiveStatus().equals(Constant.RETURNED)) {
                 holder.cardView.setCardBackgroundColor(ContextCompat.getColor(activity, R.color.returned_and_cancel_status_bg));
+            } else if (order.getActiveStatus().equalsIgnoreCase(Constant.AWAITING_PAYMENT)) {
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(activity, R.color.awaiting_status_bg));
+                holder.status.setText(R.string.awaiting_payment);
             }
 
-            holder.status.setText(ApiConfig.toTitleCase(order.getStatus()));
 
             ArrayList<String> items = new ArrayList<>();
             for (int i = 0; i < order.getItemsList().size(); i++) {

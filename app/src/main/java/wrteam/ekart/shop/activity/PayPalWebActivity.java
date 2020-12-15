@@ -69,7 +69,7 @@ public class PayPalWebActivity extends AppCompatActivity {
         paymentModelClass = new PaymentModelClass(PayPalWebActivity.this);
 
         url = getIntent().getStringExtra("url");
-
+        System.out.println(url);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -133,6 +133,7 @@ public class PayPalWebActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
+                                ApiConfig.getWalletBalance(activity, session);
                                 Toast.makeText(activity, "Amount will be credited in wallet very soon.", Toast.LENGTH_LONG).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals(Constant.SUCCESS) || status.equals(Constant.AWAITING_PAYMENT)) {

@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class WebViewFragment extends Fragment {
     View root;
     Activity activity;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -43,7 +45,6 @@ public class WebViewFragment extends Fragment {
         setHasOptionsMenu(true);
         activity = getActivity();
         type = getArguments().getString("type");
-
 
         prgLoading = root.findViewById(R.id.prgLoading);
         mWebView = root.findViewById(R.id.webView1);

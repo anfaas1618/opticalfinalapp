@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:usesCleartextTraffic,android:allowBackup">
+        tools:replace="android:usesCleartextTraffic,android:allowBackup"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity android:name=".activity.PayStackActivity"></activity>
 
         <uses-library
@@ -107,7 +108,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service android:name=".helper.MyFirebaseMessagingService">
+        <service android:name=".helper.MyFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

@@ -36,7 +36,7 @@ import wrteam.ekart.shop.model.OrderTracker;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
-public class ReturnedOrderListFragment extends Fragment {
+public class OrderListReceivedFragment extends Fragment {
     RecyclerView recyclerView;
     TextView nodata;
     ProgressBar progressbar;
@@ -85,7 +85,7 @@ public class ReturnedOrderListFragment extends Fragment {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_ORDERS, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
-        params.put(Constant.STATUS, Constant.RETURNED);
+        params.put(Constant.STATUS, Constant.RECEIVED);
         params.put(Constant.OFFSET, "" + offset);
         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -216,7 +216,7 @@ public class ReturnedOrderListFragment extends Fragment {
                                                         Map<String, String> params = new HashMap<>();
                                                         params.put(Constant.GET_ORDERS, Constant.GetVal);
                                                         params.put(Constant.USER_ID, session.getData(Constant.ID));
-                                                        params.put(Constant.STATUS, Constant.RETURNED);
+                                                        params.put(Constant.STATUS, Constant.RECEIVED);
                                                         params.put(Constant.OFFSET, "" + offset);
                                                         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
 

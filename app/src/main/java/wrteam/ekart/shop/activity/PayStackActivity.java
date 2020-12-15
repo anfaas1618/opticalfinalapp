@@ -44,13 +44,13 @@ public class PayStackActivity extends AppCompatActivity {
     double payableAmount = 0;
     String from;
     //variables
-    Card card;
-    Charge charge;
-    EditText emailField;
-    CreditCardEditText cardNumberField;
-    EditText expiryMonthField;
-    EditText expiryYearField;
-    EditText cvvField;
+    private Card card;
+    private Charge charge;
+    private EditText emailField;
+    private CreditCardEditText cardNumberField;
+    private EditText expiryMonthField;
+    private EditText expiryYearField;
+    private EditText cvvField;
 
     public static void setPaystackKey(String publicKey) {
         PaystackSdk.setPublicKey(publicKey);
@@ -67,7 +67,7 @@ public class PayStackActivity extends AppCompatActivity {
         activity = PayStackActivity.this;
         session = new Session(activity);
         paymentModelClass = new PaymentModelClass(activity);
-        sendParams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);
+        sendParams = (Map<String, String>) getIntent().getSerializableExtra("params");
         payableAmount = Double.parseDouble(sendParams.get(Constant.FINAL_TOTAL));
         from = sendParams.get(Constant.FROM);
 
@@ -91,7 +91,7 @@ public class PayStackActivity extends AppCompatActivity {
     /**
      * Method to perform the charging of the card
      */
-    void performCharge() {
+    private void performCharge() {
         //create a Charge object
         String[] amount = String.valueOf(payableAmount * 100).split("\\.");
         charge = new Charge();
@@ -101,17 +101,8 @@ public class PayStackActivity extends AppCompatActivity {
         PaystackSdk.chargeCard(PayStackActivity.this, charge, new Paystack.TransactionCallback() {
             @Override
             public void onSuccess(Transaction transaction) {
-                // This is called only after transaction is deemed successful.
-                // Retrieve the transaction, and send its reference to your server
-                // for verification.
                 String paymentReference = transaction.getReference();
-                if (from.equals(Constant.WALLET)) {
-                    onBackPressed();
-                    new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, paymentReference);
-                } else if (from.equals(Constant.PAYMENT)) {
                     verifyReference(String.valueOf(charge.getAmount()), paymentReference, charge.getEmail());
-                }
-
             }
 
             @Override
@@ -128,22 +119,19 @@ public class PayStackActivity extends AppCompatActivity {
         });
     }
 
-    boolean validateForm() {
+    private boolean validateForm() {
         boolean valid = true;
 
         String email = emailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            emailField.requestFocus();
             emailField.setError("Required.");
             valid = false;
         } else {
-            emailField.requestFocus();
             emailField.setError(null);
         }
 
         String cardNumber = cardNumberField.getText().toString();
         if (TextUtils.isEmpty(cardNumber)) {
-            cardNumberField.requestFocus();
             cardNumberField.setError("Required.");
             valid = false;
         } else {
@@ -153,7 +141,6 @@ public class PayStackActivity extends AppCompatActivity {
 
         String expiryMonth = expiryMonthField.getText().toString();
         if (TextUtils.isEmpty(expiryMonth)) {
-            expiryMonthField.requestFocus();
             expiryMonthField.setError("Required.");
             valid = false;
         } else {
@@ -162,7 +149,6 @@ public class PayStackActivity extends AppCompatActivity {
 
         String expiryYear = expiryYearField.getText().toString();
         if (TextUtils.isEmpty(expiryYear)) {
-            expiryYearField.requestFocus();
             expiryYearField.setError("Required.");
             valid = false;
         } else {
@@ -171,7 +157,6 @@ public class PayStackActivity extends AppCompatActivity {
 
         String cvv = cvvField.getText().toString();
         if (TextUtils.isEmpty(cvv)) {
-            cvvField.requestFocus();
             cvvField.setError("Required.");
             valid = false;
         } else {
@@ -222,9 +207,15 @@ public class PayStackActivity extends AppCompatActivity {
             public void onSuccess(boolean result, String response) {
                 if (result) {
                     try {
+
                         JSONObject jsonObject = new JSONObject(response);
                         String status = jsonObject.getString(Constant.STATUS);
-                        paymentModelClass.PlaceOrder(activity, getString(R.string.paystack), reference, status.equalsIgnoreCase(Constant.SUCCESS), (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS), status);
+                        if (from.equals(Constant.WALLET)) {
+                            onBackPressed();
+                            new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, reference);
+                        } else if (from.equals(Constant.PAYMENT)) {
+                            paymentModelClass.PlaceOrder(activity, getString(R.string.paypal), reference, status.equalsIgnoreCase("success"), sendParams, status);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
