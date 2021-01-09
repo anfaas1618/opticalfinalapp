@@ -774,7 +774,7 @@ public class ApiConfig {
                     }
                 }
             }
-        }, activity, Constant.USER_DATA_URL, params, true);
+        }, activity, Constant.USER_DATA_URL, params, false);
         return Constant.WALLET_BALANCE;
     }
 

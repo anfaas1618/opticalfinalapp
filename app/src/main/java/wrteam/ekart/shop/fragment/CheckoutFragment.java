@@ -110,11 +110,11 @@ public class CheckoutFragment extends Fragment {
                 if (subtotal > Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
                     Constant.SETTING_DELIVERY_CHARGE = 0.0;
                 }
-                bundle.putDouble("subtotal", Double.parseDouble(Constant.formater.format(subtotal)));
-                bundle.putDouble("total", Double.parseDouble(Constant.formater.format(total)));
-                bundle.putDouble("taxAmt", Double.parseDouble(Constant.formater.format(taxAmt)));
-                bundle.putDouble("tax", Double.parseDouble(Constant.formater.format(((taxAmt * 100) / total))));
-                bundle.putDouble("pCodeDiscount", Double.parseDouble(Constant.formater.format(pCodeDiscount)));
+                bundle.putDouble("subtotal", Double.parseDouble("" + subtotal));
+                bundle.putDouble("total", Double.parseDouble("" + total));
+                bundle.putDouble("taxAmt", Double.parseDouble("" + taxAmt));
+                bundle.putDouble("tax", Double.parseDouble(("" + (taxAmt * 100) / total)));
+                bundle.putDouble("pCodeDiscount", Double.parseDouble("" + pCodeDiscount));
                 bundle.putString("pCode", pCode);
                 bundle.putStringArrayList("variantIdList", variantIdList);
                 bundle.putStringArrayList("qtyList", qtyList);
@@ -219,12 +219,12 @@ public class CheckoutFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public void SetDataTotal() {
-        tvTotalBeforeTax.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble("" + total)));
+        tvTotalBeforeTax.setText(Constant.SETTING_CURRENCY_SYMBOL + Double.parseDouble("" + total));
         subtotal = total;
         if (total <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
-            tvDeliveryCharge.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.SETTING_DELIVERY_CHARGE));
-            subtotal = Double.parseDouble(Constant.formater.format(subtotal + Constant.SETTING_DELIVERY_CHARGE));
-            deliveryCharge = Constant.formater.format(Constant.SETTING_DELIVERY_CHARGE);
+            tvDeliveryCharge.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.SETTING_DELIVERY_CHARGE);
+            subtotal = Double.parseDouble("" + (subtotal + Constant.SETTING_DELIVERY_CHARGE));
+            deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
         } else {
             tvDeliveryCharge.setText(getResources().getString(R.string.free));
             deliveryCharge = "0";
@@ -235,9 +235,9 @@ public class CheckoutFragment extends Fragment {
         } else {
             subtotal = (subtotal + taxAmt - pCodeDiscount);
         }
-        tvTaxPercent.setText("Tax (" + Constant.formater.format((taxAmt * 100) / total) + "%)");
-        tvTaxAmt.setText("+ " + Constant.SETTING_CURRENCY_SYMBOL + "" + Constant.formater.format(Double.parseDouble("" + taxAmt)));
-        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + "" + Constant.formater.format(Double.parseDouble("" + subtotal)));
+        tvTaxPercent.setText("Tax (" + ((taxAmt * 100) / total) + "%)");
+        tvTaxAmt.setText("+ " + Constant.SETTING_CURRENCY_SYMBOL + "" + Double.parseDouble("" + taxAmt));
+        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + "" + Double.parseDouble("" + subtotal));
     }
 
     public void PromoCodeCheck() {
@@ -285,7 +285,7 @@ public class CheckoutFragment extends Fragment {
                                         subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT));
                                         pCodeDiscount = Double.parseDouble(object.getString(Constant.DISCOUNT));
                                         tvPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + pCodeDiscount);
-                                        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble("" + subtotal)));
+                                        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Double.parseDouble("" + subtotal));
                                     } else {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                                         btnApply.setText("Apply");

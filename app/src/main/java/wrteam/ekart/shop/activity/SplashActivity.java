@@ -27,15 +27,11 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         Uri data = this.getIntent().getData();
         if (data != null && data.isHierarchical()) {
 
             switch (data.getPath().split("/")[1]) {
-                case "itemdetail": // Handle the item detail deep link
+                case "product": // Handle the item detail deep link
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -61,6 +57,9 @@ public class SplashActivity extends AppCompatActivity {
                     break;
             }
         } else {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             setContentView(R.layout.activity_splash);
             activity = SplashActivity.this;

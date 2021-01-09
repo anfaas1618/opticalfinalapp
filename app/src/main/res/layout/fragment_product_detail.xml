@@ -431,6 +431,7 @@
                     android:background="@color/bggray" />
 
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/dimen_10dp"
                     android:id="@+id/titleLyt1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

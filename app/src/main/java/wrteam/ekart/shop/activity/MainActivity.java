@@ -30,9 +30,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.razorpay.PaymentResultListener;
 
 import wrteam.ekart.shop.R;
+import wrteam.ekart.shop.fragment.AddressListFragment;
 import wrteam.ekart.shop.fragment.CartFragment;
 import wrteam.ekart.shop.fragment.CategoryFragment;
-import wrteam.ekart.shop.fragment.CheckoutFragment;
 import wrteam.ekart.shop.fragment.FavoriteFragment;
 import wrteam.ekart.shop.fragment.HomeFragment;
 import wrteam.ekart.shop.fragment.OrderPlacedFragment;
@@ -198,7 +198,12 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             case "checkout":
                 bottomNavigationView.setVisibility(View.GONE);
                 ApiConfig.getCartItemCount(activity, session);
-                fm.beginTransaction().add(R.id.container, new CheckoutFragment()).addToBackStack(null).commit();
+                Fragment fragment1 = new AddressListFragment();
+                Bundle bundle1 = new Bundle();
+                bundle1.putString(Constant.FROM, "process");
+                bundle1.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);
+                fragment1.setArguments(bundle1);
+                fm.beginTransaction().add(R.id.container, fragment1).addToBackStack(null).commit();
 
                 break;
             case "share":

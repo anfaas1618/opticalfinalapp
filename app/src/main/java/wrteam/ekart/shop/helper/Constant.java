@@ -6,8 +6,10 @@ import java.util.HashMap;
 public class Constant {
     //MODIFICATION PART
 
-
     public static String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
+
+    public static String WebsiteUrl = "https://webekart.wrteam.in/";
+    //If you have eCart Website then place here website URL otherwise domain url not admin panel url
 
     //set your jwt secret key here...key must same in PHP and Android
     public static String JWT_KEY = "replace_with_your_strong_jwt_secret_key";
@@ -24,7 +26,6 @@ public class Constant {
 
     //**********APIS**********
     public static String FAQ_URL = BaseUrl + "get-faqs.php";
-    public static String SliderUrl = BaseUrl + "slider-images.php";
     public static String CategoryUrl = BaseUrl + "get-categories.php";
     public static String Get_RazorPay_OrderId = BaseUrl + "create-razorpay-order.php";
     public static String SubcategoryUrl = BaseUrl + "get-subcategories-by-category-id.php";
@@ -101,6 +102,7 @@ public class Constant {
     public static String URL = "url";
     public static String KEY_ORDER_RETURN_DAY_LIMIT = "max-product-return-days";
     public static String ADD_MULTIPLE_ITEMS = "add_multiple_items";
+    public static String GET_REORDER_DATA = "get_reorder_data";
     public static String MAX_CART_ITEMS_COUNT = "max_cart_items_count";
     public static String FIRST_NAME = "first_name";
     public static String LAST_NAME = "last_name";
@@ -117,7 +119,6 @@ public class Constant {
     public static String PAYU_M_ID = "payumoney_merchant_id";
     public static String PAYU_SALT = "payumoney_salt";
     public static String RAZOR_PAY_KEY = "razorpay_key";
-    public static String share_url = MAINBASEUrl;
     public static String REFER_EARN_BONUS = "";
     public static String MAX_EARN_AMOUNT = "";
     public static String paystack_public_key = "paystack_public_key";
@@ -180,7 +181,6 @@ public class Constant {
     public static String STATE = "state";
     public static String ERROR = "error";
     public static String VERIFY_USER = "verify-user";
-    public static String GET_SLIDER_IMAGE = "get-slider-images";
     public static String USER_ID = "user_id";
     public static String OTP = "otp";
     public static String ADD_WALLET_BALANCE = "add_wallet_balance";
@@ -211,6 +211,7 @@ public class Constant {
     public static String GET_ORDERS = "get_orders";
     public static String CONTACT = "contact";
     public static String DATA = "data";
+    public static String ITEMS = "items";
     public static String VARIANT = "variants";
     public static String PRODUCT_ID = "product_id";
     public static String GET_SIMILAR_PRODUCT = "get_similar_products";

@@ -40,8 +40,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                     .load(offerlist.get(position))
                     .fit()
                     .centerInside()
-                    .placeholder(R.drawable.placeholder)
-                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.offer_placeholder)
+                    .error(R.drawable.offer_placeholder)
                     .into(holder.offerImage);
             holder.lytOfferImage.setVisibility(View.VISIBLE);
         }

@@ -94,6 +94,8 @@ public class AddressListFragment extends Fragment {
         }
 
         if (getArguments().getString(Constant.FROM).equalsIgnoreCase("process")) {
+            processLyt.setVisibility(View.VISIBLE);
+            confirmLyt.setVisibility(View.VISIBLE);
             tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(getArguments().getDouble("total")));
             txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
             tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +199,6 @@ public class AddressListFragment extends Fragment {
                             }
                             addressAdapter = new AddressAdapter(activity, addresses);
                             recyclerView.setAdapter(addressAdapter);
-                            confirmLyt.setVisibility(View.VISIBLE);
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             tvAlert.setVisibility(View.VISIBLE);

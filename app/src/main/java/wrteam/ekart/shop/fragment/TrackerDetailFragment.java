@@ -102,6 +102,7 @@ public class TrackerDetailFragment extends Fragment {
         id = getArguments().getString("id");
         if (id.equals("")) {
             order = (OrderTracker) getArguments().getSerializable("model");
+            id = order.getOrder_id();
             SetData(order);
         } else {
             getOrderDetails(id);
@@ -120,7 +121,7 @@ public class TrackerDetailFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (getContext() != null) {
-                                    ApiConfig.AddMultipleProductInCart(session, activity, hashMap);
+                                    GetReOrderData();
                                 }
                                 dialog.dismiss();
                             }
@@ -188,6 +189,31 @@ public class TrackerDetailFragment extends Fragment {
         });
 
         return root;
+    }
+
+    public void GetReOrderData() {
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.GET_REORDER_DATA, Constant.GetVal);
+        params.put(Constant.ID, id);
+
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray jsonArray = jsonObject.getJSONObject(Constant.DATA).getJSONArray(Constant.ITEMS);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            hashMap.put(jsonArray.getJSONObject(i).getString(Constant.PRODUCT_VARIANT_ID), jsonArray.getJSONObject(i).getString(Constant.QUANTITY));
+                        }
+                        ApiConfig.AddMultipleProductInCart(session, activity, hashMap);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.ORDERPROCESS_URL, params, false);
     }
 
     public void getOrderDetails(String id) {
@@ -341,6 +367,10 @@ public class TrackerDetailFragment extends Fragment {
             }
             lyttracker.setVisibility(View.VISIBLE);
 
+            for (int i = 0; i < order.getItemsList().size(); i++) {
+                hashMap.put(order.getItemsList().get(i).getProduct_variant_id(), order.getItemsList().get(i).getQuantity());
+            }
+
             for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
                 int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());
                 int view = getResources().getIdentifier("l" + i, "id", activity.getPackageName());
@@ -371,10 +401,6 @@ public class TrackerDetailFragment extends Fragment {
                 }
             }
 
-            for (int i = 0; i < order.getItemsList().size(); i++) {
-                hashMap.put(order.getItemsList().get(i).getProduct_variant_id(), order.getItemsList().get(i).getQuantity());
-            }
-
             for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
 
                 int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());
@@ -400,7 +426,7 @@ public class TrackerDetailFragment extends Fragment {
 
                 if (textview != 0 && root.findViewById(textview) != null) {
                     TextView view1 = root.findViewById(textview);
-                    String str = order.getDate_added();
+                    String str = order.getOrderStatusArrayList().get(i).getStatusdate();
                     String[] splited = str.split("\\s+");
                     view1.setText(splited[0] + "\n" + splited[1]);
                 }

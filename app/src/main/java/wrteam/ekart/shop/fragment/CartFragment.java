@@ -122,6 +122,8 @@ public class CartFragment extends Fragment {
                                 if (values.size() > 0) {
                                     ApiConfig.AddMultipleProductInCart(session, getActivity(), values);
                                 }
+
+                                AddressListFragment.selectedAddress = "";
                                 Fragment fragment = new AddressListFragment();
                                 final Bundle bundle = new Bundle();
                                 bundle.putString(Constant.FROM, "process");
@@ -129,7 +131,7 @@ public class CartFragment extends Fragment {
                                 fragment.setArguments(bundle);
                                 MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                             } else {
-                                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra(Constant.FROM, "checkout"));
+                                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra("total", Constant.FLOAT_TOTAL_AMOUNT).putExtra(Constant.FROM, "checkout"));
                             }
                         } else {
                             Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();

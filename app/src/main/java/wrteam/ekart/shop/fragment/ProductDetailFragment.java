@@ -3,10 +3,6 @@ package wrteam.ekart.shop.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -31,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,15 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import wrteam.ekart.shop.R;
@@ -118,8 +106,8 @@ public class ProductDetailFragment extends Fragment {
         isLogin = session.isUserLoggedIn();
         databaseHelper = new DatabaseHelper(activity);
 
-
         from = getArguments().getString(Constant.FROM);
+
         vpos = getArguments().getInt("vpos", 0);
         id = getArguments().getString("id");
 
@@ -197,7 +185,14 @@ public class ProductDetailFragment extends Fragment {
         lytshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ShareProduct().execute();
+                String message = Constant.WebsiteUrl + "product/" + product.getSlug();
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, getString(R.string.share_via));
+                startActivity(shareIntent);
             }
         });
 
@@ -438,7 +433,11 @@ public class ProductDetailFragment extends Fragment {
     void GetProductDetail(final String productid) {
         root.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.PRODUCT_ID, productid);
+        if (from.equals("share")) {
+            params.put(Constant.SLUG, productid);
+        } else {
+            params.put(Constant.PRODUCT_ID, productid);
+        }
         if (session.isUserLoggedIn()) {
             params.put(Constant.USER_ID, session.getData(Constant.ID));
         }
@@ -680,51 +679,6 @@ public class ProductDetailFragment extends Fragment {
     public void onPause() {
         super.onPause();
         ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
-    }
-
-    public class ShareProduct extends AsyncTask<String, String, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Bitmap bitmap = null;
-                URL url = null;
-                url = new URL(product.getImage());
-                bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
-                Date now = new Date();
-                File file = new File(activity.getExternalCacheDir(), formatter.format(now) + ".png");
-                FileOutputStream fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                fos.flush();
-                fos.close();
-
-                Uri uri = FileProvider.getUriForFile(getContext(), activity.getPackageName() + ".provider", file);
-
-                String message = product.getName() + "\n";
-                message = message + Constant.share_url + "itemdetail/" + product.getId() + "/" + product.getSlug();
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                intent.setDataAndType(uri, activity.getContentResolver().getType(uri));
-                intent.putExtra(Intent.EXTRA_STREAM, uri);
-                intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(intent, getString(R.string.share_via)));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
     }
 
     public class CustomAdapter extends BaseAdapter {

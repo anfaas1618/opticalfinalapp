@@ -61,7 +61,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.setIsRecyclable(false);
 
         if (Constant.selectedAddressId.equals(id)) {
-            AddressListFragment.selectedAddress = address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", Pin Code : " + address.getPincode();
+            AddressListFragment.selectedAddress = address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", " + activity.getString(R.string.pincode_) + address.getPincode();
             Constant.DefaultPinCode = address.getPincode();
             Constant.DefaultCity = address.getCity_name();
             holder.tvName.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
@@ -97,7 +97,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (!address.getType().equalsIgnoreCase("")) {
             holder.tvAddressType.setText(address.getType());
         }
-        AddressListFragment.selectedAddress = address.getAddress() + ", " + address.getLandmark() + ", " + address.getCity_name() + ", " + address.getArea_name() + ", " + address.getState() + ", " + address.getCountry() + ", " + activity.getString(R.string.pincode_) + address.getPincode();
+
         holder.tvMobile.setText(address.getMobile());
 
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {

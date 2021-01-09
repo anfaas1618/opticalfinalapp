@@ -69,7 +69,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="newekart.wrteam.in"
+                    android:host="webekart.wrteam.in"
                     android:pathPrefix="/refer"
                     android:scheme="https" />
             </intent-filter>
@@ -80,8 +80,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="newekart.wrteam.in"
-                    android:pathPrefix="/itemdetail"
+                    android:host="webekart.wrteam.in"
+                    android:pathPrefix="/product"
                     android:scheme="https" />
             </intent-filter>
         </activity>

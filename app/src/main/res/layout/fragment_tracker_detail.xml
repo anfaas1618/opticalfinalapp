@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <ScrollView
         android:layout_width="match_parent"

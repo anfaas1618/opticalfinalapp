@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -77,6 +78,7 @@ public class HomeFragment extends Fragment {
     Menu menu;
     TextView tvMore;
     boolean searchVisible = false;
+    RelativeLayout progressBar;
 
     public static void UpdateToken(final String token, Activity activity) {
         Map<String, String> params = new HashMap<>();
@@ -133,6 +135,7 @@ public class HomeFragment extends Fragment {
         lytCategory = root.findViewById(R.id.lytCategory);
         lytSearchview = root.findViewById(R.id.lytSearchview);
         tvMore = root.findViewById(R.id.tvMore);
+        progressBar = root.findViewById(R.id.progressBar);
 
         searchview = root.findViewById(R.id.searchview);
 
@@ -244,6 +247,7 @@ public class HomeFragment extends Fragment {
 
 
     public void GetHomeData() {
+        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<String, String>();
         if (session.isUserLoggedIn()) {
             params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -264,18 +268,24 @@ public class HomeFragment extends Fragment {
                             sliderArrayList.clear();
                             categoryArrayList.clear();
                             sectionList.clear();
-
+                            jsonObject.getJSONArray(Constant.OFFER_IMAGES);
                             GetOfferImage(jsonObject.getJSONArray(Constant.OFFER_IMAGES));
+                            jsonObject.getJSONArray(Constant.CATEGORIES);
                             GetCategory(jsonObject.getJSONArray(Constant.CATEGORIES));
+                            jsonObject.getJSONArray(Constant.SECTIONS);
                             SectionProductRequest(jsonObject.getJSONArray(Constant.SECTIONS));
+                            jsonObject.getJSONArray(Constant.SLIDER_IMAGES);
                             GetSlider(jsonObject.getJSONArray(Constant.SLIDER_IMAGES));
+                        } else {
+                            progressBar.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
+                        progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                     }
                 }
             }
-        }, getActivity(), Constant.GET_ALL_DATA_URL, params, true);
+        }, getActivity(), Constant.GET_ALL_DATA_URL, params, false);
     }
 
     public void GetOfferImage(JSONArray jsonArray) {
@@ -333,54 +343,37 @@ public class HomeFragment extends Fragment {
     }
 
     void GetSlider(JSONArray jsonArray) {
-        Map<String, String> params = new HashMap<>();
-        params.put(Constant.GET_SLIDER_IMAGE, Constant.GetVal);
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-
-                    sliderArrayList = new ArrayList<>();
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        if (!object.getBoolean(Constant.ERROR)) {
-                            JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            size = jsonArray.length();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                sliderArrayList.add(new Slider(jsonObject.getString(Constant.TYPE), jsonObject.getString(Constant.TYPE_ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.IMAGE)));
-                            }
-                            mPager.setAdapter(new SliderAdapter(sliderArrayList, getActivity(), R.layout.lyt_slider, "home"));
-                            ApiConfig.addMarkers(0, sliderArrayList, mMarkersLayout, getContext());
-                            handler = new Handler();
-                            Update = new Runnable() {
-                                public void run() {
-                                    if (currentPage == size) {
-                                        currentPage = 0;
-                                    }
-                                    try {
-                                        mPager.setCurrentItem(currentPage++, true);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            };
-                            swipeTimer = new Timer();
-                            swipeTimer.schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    handler.post(Update);
-                                }
-                            }, timerDelay, timerWaiting);
-                        }
-//                        System.out.println("TIMING : : : " + timerDelay + " , " + timerWaiting);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+        try {
+            size = jsonArray.length();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                sliderArrayList.add(new Slider(jsonObject.getString(Constant.TYPE), jsonObject.getString(Constant.TYPE_ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.IMAGE)));
             }
-        }, getActivity(), Constant.SliderUrl, params, false);
+            mPager.setAdapter(new SliderAdapter(sliderArrayList, getActivity(), R.layout.lyt_slider, "home"));
+            ApiConfig.addMarkers(0, sliderArrayList, mMarkersLayout, getContext());
+            handler = new Handler();
+            Update = () -> {
+                if (currentPage == size) {
+                    currentPage = 0;
+                }
+                try {
+                    mPager.setCurrentItem(currentPage++, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            };
+            swipeTimer = new Timer();
+            swipeTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(Update);
+                }
+            }, timerDelay, timerWaiting);
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

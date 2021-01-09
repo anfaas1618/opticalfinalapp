@@ -76,7 +76,7 @@ public class WalletTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
 
             holder.tvTxDateAndTime.setText(walletTransaction.getDate_created());
             holder.tvTxMessage.setText(activity.getString(R.string.hash) + walletTransaction.getOrder_id() + " " + walletTransaction.getMessage());
-            holder.tvTxAmount.setText(activity.getString(R.string.amount_) + Float.parseFloat(walletTransaction.getAmount()));
+            holder.tvTxAmount.setText(activity.getString(R.string.amount_) + Constant.SETTING_CURRENCY_SYMBOL + " " + Float.parseFloat(walletTransaction.getAmount()));
             holder.tvTxNo.setText(activity.getString(R.string.hash) + walletTransaction.getId());
             holder.tvTxStatus.setText(toTitleCase(walletTransaction.getStatus()));
 

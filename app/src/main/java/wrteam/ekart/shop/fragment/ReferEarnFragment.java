@@ -75,7 +75,7 @@ public class ReferEarnFragment extends Fragment {
                         shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
                         shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.refer_share_msg_1)
                                 + getResources().getString(R.string.app_name) + getString(R.string.refer_share_msg_2)
-                                + "\n " + Constant.share_url + "refer/" + txtcode.getText().toString());
+                                + "\n " + Constant.WebsiteUrl + "refer/" + txtcode.getText().toString());
                         startActivity(Intent.createChooser(shareIntent, getString(R.string.invite_frnd_title)));
                     } catch (Exception e) {
                         e.printStackTrace();

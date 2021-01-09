@@ -39,6 +39,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
 
@@ -361,17 +362,19 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void sentRequest(String phoneNumber) {
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(phoneNumber)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this)
+                .setCallbacks(mCallback)
+                .build();
 
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber,                     // Phone number to verify
-                60,                           // Timeout duration
-                TimeUnit.SECONDS,                // Unit of timeout
-                activity,        // Activity (for callback binding)
-                mCallback);
+        PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
     void StartFirebaseLogin() {
         auth = FirebaseAuth.getInstance();
+        
         mCallback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NotNull PhoneAuthCredential phoneAuthCredential) {
@@ -632,6 +635,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void OTP_Varification() {
+
         String otptext = edtotp.getText().toString().trim();
 
         if (ApiConfig.CheckValidattion(otptext, false, false)) {
@@ -769,7 +773,7 @@ public class LoginActivity extends AppCompatActivity {
             OTP_Varification();
 
         } else if (id == R.id.btnsubmit) {
-                UserSignUpSubmit();
+            UserSignUpSubmit();
         }
 
     }
@@ -808,6 +812,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Constant.FROM, "");
             if (fromto != null && fromto.equals("checkout")) {
+                intent.putExtra("total", Constant.FLOAT_TOTAL_AMOUNT);
                 intent.putExtra(Constant.FROM, "checkout");
             } else if (from != null && from.equals("tracker")) {
                 intent.putExtra(Constant.FROM, "tracker");
