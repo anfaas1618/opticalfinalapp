@@ -119,11 +119,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_10dp"
             android:background="@drawable/confirm_bg"
             android:gravity="center"
             android:padding="@dimen/dimen_12dp"
             android:text="@string/btn_continue"
-            android:layout_marginStart="@dimen/margin_10dp"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textStyle="bold" />

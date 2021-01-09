@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.CartFragment;
-import wrteam.ekart.shop.helper.AppController;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Cart;
 
@@ -116,7 +116,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View view) {
 
-                    if (AppController.isConnected(activity)) {
+                    if (ApiConfig.isConnected(activity)) {
                         if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) >= Float.parseFloat(cart.getItems().get(0).getStock()))) {
                             if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) + 1 > Constant.MAX_PRODUCT_LIMIT)) {
                                 int count = Integer.parseInt(holder.txtQuantity.getText().toString());
@@ -149,7 +149,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.btnminusqty.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (AppController.isConnected(activity)) {
+                    if (ApiConfig.isConnected(activity)) {
                         if (Integer.parseInt(holder.txtQuantity.getText().toString()) > 1) {
                             int count = Integer.parseInt(holder.txtQuantity.getText().toString());
                             count--;
@@ -176,7 +176,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    if (AppController.isConnected(activity)) {
+                    if (ApiConfig.isConnected(activity)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                         builder.setTitle(activity.getResources().getString(R.string.deleteproducttitle));
                         builder.setIcon(android.R.drawable.ic_delete);

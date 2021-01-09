@@ -84,8 +84,8 @@
                     android:enabled="false"
                     android:hint="@string/mobile"
                     android:inputType="phone"
-                    android:textColor="@color/gray"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/gray" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button

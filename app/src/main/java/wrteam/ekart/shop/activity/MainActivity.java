@@ -74,9 +74,10 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         activity = MainActivity.this;
         session = new Session(activity);
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         from = getIntent().getStringExtra(Constant.FROM);
         databaseHelper = new DatabaseHelper(activity);
 

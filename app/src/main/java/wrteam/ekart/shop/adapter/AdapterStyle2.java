@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
-import wrteam.ekart.shop.helper.AppController;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Product;
 
@@ -35,7 +35,7 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
 
     public ArrayList<Product> productList;
     public Activity activity;
-    public ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+    public ImageLoader imageLoader = ApiConfig.getInstance().getImageLoader();
     Context context;
 
     public AdapterStyle2(Context context, Activity activity, ArrayList<Product> productList) {

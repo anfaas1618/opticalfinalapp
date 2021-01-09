@@ -57,7 +57,6 @@ import java.util.concurrent.TimeUnit;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.WebViewFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.GPSTracker;
@@ -331,7 +330,7 @@ public class LoginActivity extends AppCompatActivity {
         } else if (ApiConfig.CheckValidattion(mobile, false, true)) {
             edtMobVerify.requestFocus();
             edtMobVerify.setError(getString(R.string.enter_valid_mobile_no));
-        } else if (AppController.isConnected(activity)) {
+        } else if (ApiConfig.isConnected(activity)) {
             session.setData(Constant.COUNTRY_CODE, code);
             Constant.country_code = code;
             Map<String, String> params = new HashMap<String, String>();
@@ -374,7 +373,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void StartFirebaseLogin() {
         auth = FirebaseAuth.getInstance();
-        
+
         mCallback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NotNull PhoneAuthCredential phoneAuthCredential) {
@@ -427,7 +426,7 @@ public class LoginActivity extends AppCompatActivity {
         } else if (!oldpsw.equals(sessionpsw.getData(Constant.PASSWORD))) {
             edtoldpsw.requestFocus();
             edtoldpsw.setError(getString(R.string.no_match_old_pass));
-        } else if (AppController.isConnected(activity)) {
+        } else if (ApiConfig.isConnected(activity)) {
             final Map<String, String> params = new HashMap<String, String>();
             params.put(Constant.TYPE, Constant.CHANGE_PASSWORD);
             params.put(Constant.PASSWORD, password);
@@ -487,7 +486,7 @@ public class LoginActivity extends AppCompatActivity {
         } else if (!reset_psw.equals(reset_c_psw)) {
             edtResetCPass.requestFocus();
             edtResetCPass.setError(getString(R.string.pass_not_match));
-        } else if (AppController.isConnected(activity)) {
+        } else if (ApiConfig.isConnected(activity)) {
             final Map<String, String> params = new HashMap<String, String>();
             params.put(Constant.TYPE, Constant.CHANGE_PASSWORD);
             params.put(Constant.PASSWORD, reset_c_psw);
@@ -586,11 +585,11 @@ public class LoginActivity extends AppCompatActivity {
         } else if (ApiConfig.CheckValidattion(password, false, false)) {
             edtloginpassword.requestFocus();
             edtloginpassword.setError(getString(R.string.enter_pass));
-        } else if (AppController.isConnected(activity)) {
+        } else if (ApiConfig.isConnected(activity)) {
             Map<String, String> params = new HashMap<String, String>();
             params.put(Constant.MOBILE, email);
             params.put(Constant.PASSWORD, password);
-            params.put(Constant.FCM_ID, "" + AppController.getInstance().getDeviceToken());
+            params.put(Constant.FCM_ID, "" + ApiConfig.getInstance().getDeviceToken());
             ApiConfig.RequestToVolley(new VolleyCallback() {
                 @Override
                 public void onSuccess(boolean result, String response) {
@@ -705,7 +704,7 @@ public class LoginActivity extends AppCompatActivity {
             edtcpsw.setError(getString(R.string.pass_not_match));
         } else if (!chPrivacy.isChecked()) {
             Toast.makeText(activity, getString(R.string.alert_privacy_msg), Toast.LENGTH_LONG).show();
-        } else if (AppController.isConnected(activity)) {
+        } else if (ApiConfig.isConnected(activity)) {
             Map<String, String> params = new HashMap<String, String>();
             params.put(Constant.TYPE, Constant.REGISTER);
             params.put(Constant.NAME, name);
@@ -713,7 +712,7 @@ public class LoginActivity extends AppCompatActivity {
             params.put(Constant.PASSWORD, password);
             params.put(Constant.COUNTRY_CODE, Constant.country_code);
             params.put(Constant.MOBILE, mobile);
-            params.put(Constant.FCM_ID, "" + AppController.getInstance().getDeviceToken());
+            params.put(Constant.FCM_ID, "" + ApiConfig.getInstance().getDeviceToken());
             params.put(Constant.REFERRAL_CODE, Constant.randomAlphaNumeric(8));
             params.put(Constant.FRIEND_CODE, edtRefer.getText().toString().trim());
             ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -781,7 +780,7 @@ public class LoginActivity extends AppCompatActivity {
     public void StartMainActivity(JSONObject objectbject, String password) {
         try {
             new Session(activity).createUserLoginSession(objectbject.getString(Constant.PROFILE)
-                    , AppController.getInstance().getDeviceToken(),
+                    , ApiConfig.getInstance().getDeviceToken(),
                     objectbject.getString(Constant.USER_ID),
                     objectbject.getString(Constant.NAME),
                     objectbject.getString(Constant.EMAIL),

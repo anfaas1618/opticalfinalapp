@@ -2,6 +2,7 @@ package wrteam.ekart.shop.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -44,7 +45,6 @@ import wrteam.ekart.shop.adapter.OfferAdapter;
 import wrteam.ekart.shop.adapter.SectionAdapter;
 import wrteam.ekart.shop.adapter.SliderAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment {
     public static Session session;
     public static ArrayList<Category> categoryArrayList, sectionList;
     ArrayList<Slider> sliderArrayList;
-    private ArrayList<String> offerList;
     Activity activity;
     NestedScrollView nestedScrollView;
     SwipeRefreshLayout swipeLayout;
@@ -79,6 +78,7 @@ public class HomeFragment extends Fragment {
     TextView tvMore;
     boolean searchVisible = false;
     RelativeLayout progressBar;
+    private ArrayList<String> offerList;
 
     public static void UpdateToken(final String token, Activity activity) {
         Map<String, String> params = new HashMap<>();
@@ -120,8 +120,10 @@ public class HomeFragment extends Fragment {
         swipeLayout = root.findViewById(R.id.swipeLayout);
 
         categoryRecyclerView = root.findViewById(R.id.categoryrecycleview);
-//        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+//        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
         sectionView = root.findViewById(R.id.sectionView);
         sectionView.setLayoutManager(new LinearLayoutManager(getContext()));
         sectionView.setNestedScrollingEnabled(false);
@@ -143,16 +145,16 @@ public class HomeFragment extends Fragment {
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if (scrollY > oldScrollY) {
+                    Rect scrollBounds = new Rect();
+                    nestedScrollView.getHitRect(scrollBounds);
+                    if (!lytSearchview.getLocalVisibleRect(scrollBounds) || scrollBounds.height() < lytSearchview.getHeight()) {
                         searchVisible = true;
                         menu.findItem(R.id.toolbar_search).setVisible(true);
-                        activity.invalidateOptionsMenu();
-                    }
-                    if (scrollY < oldScrollY) {
+                    } else {
                         searchVisible = false;
                         menu.findItem(R.id.toolbar_search).setVisible(false);
-                        activity.invalidateOptionsMenu();
                     }
+                    activity.invalidateOptionsMenu();
                 }
             });
         }
@@ -213,7 +215,7 @@ public class HomeFragment extends Fragment {
                 if (swipeTimer != null) {
                     swipeTimer.cancel();
                 }
-                if (AppController.isConnected(getActivity())) {
+                if (ApiConfig.isConnected(getActivity())) {
                     ApiConfig.getWalletBalance(activity, session);
                     if (new Session(activity).isUserLoggedIn()) {
                         ApiConfig.getWalletBalance(activity, new Session(activity));
@@ -235,7 +237,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        if (AppController.isConnected(getActivity())) {
+        if (ApiConfig.isConnected(getActivity())) {
             GetHomeData();
             if (new Session(activity).isUserLoggedIn()) {
                 ApiConfig.getWalletBalance(activity, new Session(activity));
@@ -268,13 +270,10 @@ public class HomeFragment extends Fragment {
                             sliderArrayList.clear();
                             categoryArrayList.clear();
                             sectionList.clear();
-                            jsonObject.getJSONArray(Constant.OFFER_IMAGES);
+
                             GetOfferImage(jsonObject.getJSONArray(Constant.OFFER_IMAGES));
-                            jsonObject.getJSONArray(Constant.CATEGORIES);
                             GetCategory(jsonObject.getJSONArray(Constant.CATEGORIES));
-                            jsonObject.getJSONArray(Constant.SECTIONS);
                             SectionProductRequest(jsonObject.getJSONArray(Constant.SECTIONS));
-                            jsonObject.getJSONArray(Constant.SLIDER_IMAGES);
                             GetSlider(jsonObject.getJSONArray(Constant.SLIDER_IMAGES));
                         } else {
                             progressBar.setVisibility(View.GONE);
@@ -311,7 +310,7 @@ public class HomeFragment extends Fragment {
                     Category category = new Gson().fromJson(jsonObject.toString(), Category.class);
                     categoryArrayList.add(category);
                 }
-                categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category, "home"));
+                categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category_list, "home"));
             } else {
                 lytCategory.setVisibility(View.GONE);
             }

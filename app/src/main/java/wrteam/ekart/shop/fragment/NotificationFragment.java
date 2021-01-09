@@ -30,7 +30,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.DrawerActivity;
 import wrteam.ekart.shop.adapter.NotificationAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -72,7 +71,7 @@ public class NotificationFragment extends Fragment {
         setHasOptionsMenu(true);
 
 
-        if (AppController.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
             getNotificationData();
         }
 
@@ -239,6 +238,7 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
         super.onPrepareOptionsMenu(menu);

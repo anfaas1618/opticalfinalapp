@@ -423,11 +423,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dimen_5dp"
                     android:layout_weight="1"
+                    android:background="@color/light_gray"
                     android:gravity="center"
                     android:padding="7dp"
                     android:text="@string/cancel"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:background="@color/light_gray"
                     android:textColor="@color/txt_color" />
 
                 <View

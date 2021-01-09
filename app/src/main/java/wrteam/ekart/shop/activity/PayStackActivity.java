@@ -102,7 +102,7 @@ public class PayStackActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Transaction transaction) {
                 String paymentReference = transaction.getReference();
-                    verifyReference(String.valueOf(charge.getAmount()), paymentReference, charge.getEmail());
+                verifyReference(String.valueOf(charge.getAmount()), paymentReference, charge.getEmail());
             }
 
             @Override

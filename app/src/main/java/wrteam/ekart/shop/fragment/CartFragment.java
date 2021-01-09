@@ -38,7 +38,6 @@ import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.adapter.CartAdapter;
 import wrteam.ekart.shop.adapter.OfflineCartAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
@@ -55,6 +54,7 @@ public class CartFragment extends Fragment {
     public static ArrayList<Cart> carts;
     public static ArrayList<OfflineCart> offlineCarts;
     public static HashMap<String, String> values;
+    public static boolean isSoldOut = false;
     static TextView txttotalamount, txttotalitems, tvConfirmOrder;
     static CartAdapter cartAdapter;
     static OfflineCartAdapter offlineCartAdapter;
@@ -68,7 +68,6 @@ public class CartFragment extends Fragment {
     ProgressBar progressBar;
     Button btnShowNow;
     private DatabaseHelper databaseHelper;
-    public static boolean isSoldOut = false;
 
     @SuppressLint("SetTextI18n")
     public static void SetData() {
@@ -103,7 +102,7 @@ public class CartFragment extends Fragment {
 
         carts = new ArrayList<>();
         cartrecycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if (AppController.isConnected(getActivity())) {
+        if (ApiConfig.isConnected(getActivity())) {
             if (session.isUserLoggedIn()) {
                 getCartData();
                 GetSettings(getActivity());
@@ -115,7 +114,7 @@ public class CartFragment extends Fragment {
         tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppController.isConnected(getActivity())) {
+                if (ApiConfig.isConnected(getActivity())) {
                     if (!isSoldOut) {
                         if (Constant.SETTING_MINIMUM_ORDER_AMOUNT <= Constant.FLOAT_TOTAL_AMOUNT) {
                             if (session.isUserLoggedIn()) {
@@ -291,6 +290,7 @@ public class CartFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         super.onPrepareOptionsMenu(menu);

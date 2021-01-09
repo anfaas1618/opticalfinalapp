@@ -24,7 +24,6 @@ import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.VolleyCallback;
 
@@ -51,7 +50,7 @@ public class WebViewFragment extends Fragment {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new WebViewClient());
         try {
-            if (AppController.isConnected(activity)) {
+            if (ApiConfig.isConnected(activity)) {
                 switch (type) {
                     case "Privacy Policy":
                         GetContent(Constant.GET_PRIVACY, "privacy");
@@ -132,6 +131,7 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
         super.onPrepareOptionsMenu(menu);

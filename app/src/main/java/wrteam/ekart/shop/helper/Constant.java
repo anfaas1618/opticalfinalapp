@@ -180,6 +180,7 @@ public class Constant {
     public static String PINCODE = "pincode";
     public static String STATE = "state";
     public static String ERROR = "error";
+    public static String ORDER_NOTE = "order_note";
     public static String VERIFY_USER = "verify-user";
     public static String USER_ID = "user_id";
     public static String OTP = "otp";
@@ -302,7 +303,7 @@ public class Constant {
     //**************Constants Values***************
     public static String selectedAddressId = "";
     public static String DefaultAddress = "";
-    public static String DefaultCity= "";
+    public static String DefaultCity = "";
     public static String DefaultPinCode = "";
     public static Double SETTING_DELIVERY_CHARGE = 0.0;
     public static Double SETTING_TAX = 0.0;

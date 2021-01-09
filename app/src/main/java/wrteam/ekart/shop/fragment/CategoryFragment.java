@@ -29,7 +29,6 @@ import java.util.Map;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.adapter.CategoryAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -68,7 +67,7 @@ public class CategoryFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (AppController.isConnected(activity)) {
+                if (ApiConfig.isConnected(activity)) {
                     if (new Session(activity).isUserLoggedIn()) {
                         ApiConfig.getWalletBalance(activity, new Session(activity));
                     }
@@ -78,7 +77,7 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-        if (AppController.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
             if (new Session(activity).isUserLoggedIn()) {
                 ApiConfig.getWalletBalance(activity, new Session(activity));
             }

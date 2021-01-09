@@ -35,7 +35,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.adapter.AddressAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -61,6 +60,28 @@ public class AddressListFragment extends Fragment {
     RelativeLayout confirmLyt;
     int offset = 0;
     private Session session;
+
+    public static void GetDChargeSettings(final Activity activity) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.GET_SETTINGS, Constant.GetVal);
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject objectbject = new JSONObject(response);
+                        if (!objectbject.getBoolean(Constant.ERROR)) {
+                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
+                            Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(object.getString(Constant.MINIMUM_AMOUNT));
+                            Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.ORDERPROCESS_URL, params, false);
+    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -88,7 +109,7 @@ public class AddressListFragment extends Fragment {
 
         recyclerView.getItemAnimator().setChangeDuration(0);
 
-        if (AppController.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
             offset = 0;
             getAddresses();
         }
@@ -211,29 +232,6 @@ public class AddressListFragment extends Fragment {
         }, activity, Constant.GET_ADDRESS_URL, params, true);
     }
 
-
-    public static void GetDChargeSettings(final Activity activity) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.GET_SETTINGS, Constant.GetVal);
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject objectbject = new JSONObject(response);
-                        if (!objectbject.getBoolean(Constant.ERROR)) {
-                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
-                            Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(object.getString(Constant.MINIMUM_AMOUNT));
-                            Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, activity, Constant.ORDERPROCESS_URL, params, false);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -256,6 +254,7 @@ public class AddressListFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
     }

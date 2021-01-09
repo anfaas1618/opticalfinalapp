@@ -45,7 +45,6 @@ import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.adapter.AdapterStyle1;
 import wrteam.ekart.shop.adapter.SliderAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
@@ -201,7 +200,7 @@ public class ProductDetailFragment extends Fragment {
             public void onClick(View view) {
                 if (isLogin) {
                     favorite = product.isIs_favorite();
-                    if (AppController.isConnected(activity)) {
+                    if (ApiConfig.isConnected(activity)) {
                         if (favorite) {
                             favorite = false;
                             product.setIs_favorite(false);
@@ -273,7 +272,7 @@ public class ProductDetailFragment extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
-                if (AppController.isConnected(activity)) {
+                if (ApiConfig.isConnected(activity)) {
                     Constant.CLICK = true;
                     count = Integer.parseInt(txtqty.getText().toString());
                     if (!(count <= 0)) {
@@ -309,7 +308,7 @@ public class ProductDetailFragment extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
-                if (AppController.isConnected(activity)) {
+                if (ApiConfig.isConnected(activity)) {
                     count = Integer.parseInt(txtqty.getText().toString());
                     if (!(count >= Float.parseFloat(priceVariationslist.get(vpos).getStock()))) {
                         if (count < Constant.MAX_PRODUCT_LIMIT) {
@@ -703,18 +702,18 @@ public class ProductDetailFragment extends Fragment {
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = getLayoutInflater().inflate(R.layout.lyt_spinner_item, null);
             TextView measurement = view.findViewById(R.id.txtmeasurement);
-            TextView price = view.findViewById(R.id.txtprice);
+//            TextView price = view.findViewById(R.id.txtprice);
 
             PriceVariation extra = product.getPriceVariations().get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+//            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(getResources().getColor(R.color.red));
-                price.setTextColor(getResources().getColor(R.color.red));
+//                price.setTextColor(getResources().getColor(R.color.red));
             } else {
                 measurement.setTextColor(getResources().getColor(R.color.black));
-                price.setTextColor(getResources().getColor(R.color.black));
+//                price.setTextColor(getResources().getColor(R.color.black));
             }
 
             return view;

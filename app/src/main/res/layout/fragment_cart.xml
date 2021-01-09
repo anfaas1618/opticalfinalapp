@@ -52,14 +52,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_10dp"
             android:background="@drawable/confirm_bg"
             android:gravity="center"
             android:padding="@dimen/dimen_12dp"
             android:text="@string/btn_continue"
             android:textAllCaps="true"
-            android:textStyle="bold"
-            android:layout_marginStart="@dimen/margin_10dp"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <LinearLayout

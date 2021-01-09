@@ -3,9 +3,11 @@ package wrteam.ekart.shop.helper;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,6 +16,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
 import android.util.Log;
@@ -30,18 +34,20 @@ import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -54,6 +60,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,13 +80,13 @@ import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import co.paystack.android.PaystackSdk;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.DrawerActivity;
 import wrteam.ekart.shop.model.Favorite;
-import wrteam.ekart.shop.model.OrderTracker;
 import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 import wrteam.ekart.shop.model.Slider;
@@ -87,11 +94,19 @@ import wrteam.ekart.shop.model.Slider;
 import static com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
 import static com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
 
-public class ApiConfig {
+public class ApiConfig extends Application {
+
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     public static String user_location = "";
     public static double latitude1 = 0, longitude1 = 0;
     public static GPSTracker gps;
+
+    public static final String TAG = ApiConfig.class.getSimpleName();
+    static ApiConfig mInstance;
+    AppEnvironment appEnvironment;
+    RequestQueue mRequestQueue;
+    SharedPreferences sharedPref;
+    com.android.volley.toolbox.ImageLoader mImageLoader;
 
     public static String VolleyErrorMessage(VolleyError error) {
         String message = "";
@@ -202,7 +217,7 @@ public class ApiConfig {
     }
 
     public static ArrayList<String> getDates(String startDate, String endDate) {
-        ArrayList<String> dates = new ArrayList<String>();
+        ArrayList<String> dates = new ArrayList<>();
         @SuppressLint("SimpleDateFormat")
         DateFormat df1 = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -217,10 +232,12 @@ public class ApiConfig {
         }
 
         Calendar cal1 = Calendar.getInstance();
+        assert date1 != null;
         cal1.setTime(date1);
 
 
         Calendar cal2 = Calendar.getInstance();
+        assert date2 != null;
         cal2.setTime(date2);
 
         while (!cal1.after(cal2)) {
@@ -232,7 +249,7 @@ public class ApiConfig {
 
     public static void removeAddress(final Activity activity, String addressId) {
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.DELETE_ADDRESS, Constant.GetVal);
         params.put(Constant.ID, addressId);
 
@@ -306,7 +323,7 @@ public class ApiConfig {
         }
         final ProgressDisplay progressDisplay = new ProgressDisplay(activity);
         progressDisplay.hideProgress();
-        if (AppController.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
             if (isprogress)
                 progressDisplay.showProgress();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -345,8 +362,8 @@ public class ApiConfig {
             };
 
             stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, DEFAULT_MAX_RETRIES, DEFAULT_BACKOFF_MULT));
-            AppController.getInstance().getRequestQueue().getCache().clear();
-            AppController.getInstance().addToRequestQueue(stringRequest);
+            ApiConfig.getInstance().getRequestQueue().getCache().clear();
+            ApiConfig.getInstance().addToRequestQueue(stringRequest);
         }
 
     }
@@ -553,35 +570,6 @@ public class ApiConfig {
         }
     }
 
-    public static void setOrderTrackerLayout(Activity activity, OrderTracker order, RecyclerView.ViewHolder holder) {
-        for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
-            int img = activity.getResources().getIdentifier("img" + i, "id", activity.getPackageName());
-            int view = activity.getResources().getIdentifier("l" + i, "id", activity.getPackageName());
-            int txt = activity.getResources().getIdentifier("txt" + i, "id", activity.getPackageName());
-            int textview = activity.getResources().getIdentifier("txt" + i + "" + i, "id", activity.getPackageName());
-//            System.out.println("=============== " + order.getOrderStatusArrayList().get(i).toString());
-            View v = holder.itemView;
-            if (img != 0 && v.findViewById(img) != null) {
-                ImageView imageView = v.findViewById(img);
-                imageView.setColorFilter(activity.getResources().getColor(R.color.colorAccent));
-            }
-            if (view != 0 && v.findViewById(view) != null) {
-                View view1 = v.findViewById(view);
-                view1.setBackgroundColor(activity.getResources().getColor(R.color.colorAccent));
-            }
-            if (txt != 0 && v.findViewById(txt) != null) {
-                TextView view1 = v.findViewById(txt);
-                view1.setTextColor(activity.getResources().getColor(R.color.black));
-            }
-            if (textview != 0 && v.findViewById(textview) != null) {
-                TextView view1 = v.findViewById(textview);
-                String str = order.getOrderStatusArrayList().get(i).getStatusdate();
-                String[] splited = str.split("\\s+");
-                view1.setText(splited[0] + "\n" + splited[1]);
-            }
-        }
-    }
-
     public static Drawable buildCounterDrawable(int count, int backgroundImageId, Activity
             activity) {
         LayoutInflater inflater = LayoutInflater.from(activity);
@@ -631,7 +619,6 @@ public class ApiConfig {
                             Constant.MINIMUM_WITHDRAW_AMOUNT = Double.parseDouble(object.getString(Constant.KEY_MIN_WIDRAWAL));
                             Constant.SETTING_CURRENCY_SYMBOL = object.getString(Constant.CURRENCY);
                             Constant.SETTING_AREA_WISE_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.AREA_WISE_DELIVERY_CHARGE));
-                            Constant.SETTING_TAX = Double.parseDouble(object.getString(Constant.TAX));
                             Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
                             Constant.SETTING_MAIL_ID = object.getString(Constant.REPLY_TO);
                             Constant.SETTING_MINIMUM_ORDER_AMOUNT = object.getDouble(Constant.MINIMUM_ORDER_AMOUNT);
@@ -731,7 +718,7 @@ public class ApiConfig {
         PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
         result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
             @Override
-            public void onResult(LocationSettingsResult result) {
+            public void onResult(@NotNull LocationSettingsResult result) {
                 final Status status = result.getStatus();
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
@@ -754,24 +741,20 @@ public class ApiConfig {
 
     public static double getWalletBalance(final Activity activity, Session session) {
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_DATA, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onSuccess(boolean result, String response) {
+        ApiConfig.RequestToVolley((result, response) -> {
 //                System.out.println("=================*wallet " + response);
-                if (result) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        if (!object.getBoolean(Constant.ERROR)) {
-                            Constant.WALLET_BALANCE = Double.parseDouble(object.getString(Constant.KEY_BALANCE));
-                            DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+            if (result) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    if (!object.getBoolean(Constant.ERROR)) {
+                        Constant.WALLET_BALANCE = Double.parseDouble(object.getString(Constant.KEY_BALANCE));
+                        DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }, activity, Constant.USER_DATA_URL, params, false);
@@ -779,17 +762,10 @@ public class ApiConfig {
     }
 
     public static void clearFCM(Activity activity, Session session) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.REMOVE_FCM_ID, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-
-                }
-            }
+        ApiConfig.RequestToVolley((result, response) -> {
         }, activity, Constant.REMOVE_FCM_URL, params, false);
     }
 
@@ -823,8 +799,7 @@ public class ApiConfig {
     public static boolean isGPSEnable(Activity activity) {
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         assert locationManager != null;
-        boolean GpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        return GpsStatus;
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     public static String getAddress(double lat, double lng, Activity activity) {
@@ -834,8 +809,7 @@ public class ApiConfig {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             if (addresses.size() != 0) {
                 Address obj = addresses.get(0);
-                String add = obj.getAddressLine(0);
-                address = add;
+                address = obj.getAddressLine(0);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -870,6 +844,69 @@ public class ApiConfig {
         }
 
         return 0;
+    }
+
+    public static synchronized ApiConfig getInstance() {
+        return mInstance;
+    }
+
+    public static Boolean isConnected(final Activity activity) {
+        boolean check = false;
+        ConnectivityManager ConnectionManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = ConnectionManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            check = true;
+        } else {
+            Toast.makeText(activity, activity.getString(R.string.no_internet_connection_try_later), Toast.LENGTH_SHORT).show();
+        }
+        return check;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mInstance = this;
+        appEnvironment = AppEnvironment.SANDBOX;
+        sharedPref = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        PaystackSdk.initialize(getApplicationContext());
+    }
+
+    public AppEnvironment getAppEnvironment() {
+        return appEnvironment;
+    }
+
+    public String getData(String id) {
+        return sharedPref.getString(id, "");
+    }
+
+    public String getDeviceToken() {
+        return sharedPref.getString("DEVICETOKEN", "");
+    }
+
+    public void setDeviceToken(String token) {
+        sharedPref.edit().putString("DEVICETOKEN", token).apply();
+    }
+
+    public com.android.volley.toolbox.ImageLoader getImageLoader() {
+        getRequestQueue();
+        if (mImageLoader == null) {
+            mImageLoader = new ImageLoader(this.mRequestQueue, new BitmapCache());
+        }
+        return this.mImageLoader;
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+
+        return mRequestQueue;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req) {
+        req.setTag(TAG);
+        getRequestQueue().add(req);
     }
 
 

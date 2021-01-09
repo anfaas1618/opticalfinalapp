@@ -45,10 +45,10 @@ public class OrderListAllFragment extends Fragment {
     View root;
     ArrayList<OrderTracker> orderTrackerArrayList;
     TrackerAdapter trackerAdapter;
+    SwipeRefreshLayout swipeLayout;
     private int offset = 0;
     private int total = 0;
     private NestedScrollView scrollView;
-    SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

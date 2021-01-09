@@ -64,7 +64,7 @@ public class SearchFragment extends Fragment {
         Constant.CartValues = new HashMap<>();
 
         recycleview.setLayoutManager(new LinearLayoutManager(getContext()));
-        
+
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

@@ -37,7 +37,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.adapter.CheckoutItemListAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -148,7 +147,7 @@ public class CheckoutFragment extends Fragment {
         });
 
 
-        if (AppController.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
             ApiConfig.getWalletBalance(activity, session);
             getCartData();
             PromoCodeCheck();
@@ -330,6 +329,7 @@ public class CheckoutFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
         activity.invalidateOptionsMenu();

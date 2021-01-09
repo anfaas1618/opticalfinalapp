@@ -9,7 +9,7 @@ public class Address implements Serializable {
 
     public Address(boolean isSelected, String id, String user_id, String type, String name, String country_code, String mobile, String alternate_mobile, String address, String landmark,
                    String area_id, String city_id, String pincode, String state, String country, String date_created, String city_name, String area_name, String is_default,
-                   String latitude, String longitude,String minimum_free_delivery_order_amount,String  delivery_charges) {
+                   String latitude, String longitude, String minimum_free_delivery_order_amount, String delivery_charges) {
         this.isSelected = isSelected;
         this.id = id;
         this.user_id = user_id;

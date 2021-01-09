@@ -475,7 +475,7 @@ public class PinView extends AppCompatEditText {
     }
 
     void updateRoundRectPath(RectF rectF, float rx, float ry,
-                                     boolean tl, boolean tr, boolean br, boolean bl) {
+                             boolean tl, boolean tr, boolean br, boolean bl) {
         mPath.reset();
 
         float l = rectF.left;

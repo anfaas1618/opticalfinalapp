@@ -32,7 +32,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.DrawerActivity;
 import wrteam.ekart.shop.adapter.TransactionAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -79,7 +78,7 @@ public class TransactionFragment extends Fragment {
         tvAlertTitle.setText(getString(R.string.no_transaction_history_found));
         tvAlertSubTitle.setText(getString(R.string.you_have_not_any_transactional_history_yet));
 
-        if (AppController.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
             getTransactionData();
         }
 
@@ -257,6 +256,7 @@ public class TransactionFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
     }

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -54,6 +53,15 @@ public class Session {
         editor.commit();
     }
 
+    public void setIsFirstTime(String id, boolean val) {
+        editor.putBoolean(id, val);
+        editor.commit();
+    }
+
+    public boolean getIsFirstTime(String id) {
+        return pref.getBoolean(id, false);
+    }
+
     public void createUserLoginSession(String profile, String fcmId, String id, String name, String email, String mobile, String password, String referCode) {
         editor.putBoolean(Constant.IS_USER_LOGIN, true);
         editor.putString(Constant.FCM_ID, fcmId);
@@ -88,7 +96,6 @@ public class Session {
     public void logoutUserConfirmation(final Activity activity) {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(_context);
-        // Setting Dialog Message
         alertDialog.setTitle(R.string.logout);
         alertDialog.setMessage(R.string.logout_msg);
         alertDialog.setCancelable(false);

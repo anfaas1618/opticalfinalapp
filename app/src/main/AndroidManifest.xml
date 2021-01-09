@@ -12,17 +12,26 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".helper.AppController"
+        android:name=".helper.ApiConfig"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:usesCleartextTraffic,android:allowBackup"
-        android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".activity.PayStackActivity"></activity>
+        tools:replace="android:usesCleartextTraffic,android:allowBackup">
+
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.PayStackActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -85,6 +94,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.PayPalWebActivity"
             android:configChanges="orientation|screenSize"
@@ -108,29 +118,36 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service android:name=".helper.MyFirebaseMessagingService"
+        <service
+            android:name=".helper.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <service android:name=".helper.GPSTracker" />
 
         <meta-data
             android:name="android.app.searchable"
             android:resource="@xml/searchable" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
     </application>
 
 </manifest>

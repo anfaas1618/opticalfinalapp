@@ -37,7 +37,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.FavoriteFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
@@ -137,7 +136,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 public void onClick(View v) {
 
                     if (Constant.CartValues.size() > 0) {
-                        ApiConfig.AddMultipleProductInCart( session, activity, Constant.CartValues);
+                        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                     }
 
                     AppCompatActivity activity1 = (AppCompatActivity) context;
@@ -169,7 +168,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 holder.imgFav.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (AppController.isConnected(activity)) {
+                        if (ApiConfig.isConnected(activity)) {
                             mDataset.remove(product);
                             FavoriteFragment.favoriteLoadMoreAdapter.notifyDataSetChanged();
                             recyclerView.setAdapter(FavoriteFragment.favoriteLoadMoreAdapter);
@@ -291,7 +290,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                             } else {
                                 Constant.CartValues.put(extra.getId(), "" + count);
                             }
-                            ApiConfig.AddMultipleProductInCart( session, activity, Constant.CartValues);
+                            ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                         } else {
                             Toast.makeText(activity, activity.getString(R.string.limit_alert), Toast.LENGTH_SHORT).show();
                         }
@@ -317,7 +316,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 Constant.CartValues.put(extra.getId(), "" + count);
                             }
                         }
-                        ApiConfig.AddMultipleProductInCart( session, activity, Constant.CartValues);
+                        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
                     }
                 }
             });
@@ -438,19 +437,19 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = inflter.inflate(R.layout.lyt_spinner_item, null);
             TextView measurement = view.findViewById(R.id.txtmeasurement);
-            TextView price = view.findViewById(R.id.txtprice);
+//            TextView price = view.findViewById(R.id.txtprice);
 
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+//            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));
-                price.setTextColor(context.getResources().getColor(R.color.red));
+//                price.setTextColor(context.getResources().getColor(R.color.red));
             } else {
                 measurement.setTextColor(context.getResources().getColor(R.color.black));
-                price.setTextColor(context.getResources().getColor(R.color.black));
+//                price.setTextColor(context.getResources().getColor(R.color.black));
             }
 
             holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -23,7 +23,7 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.AddressAddUpdateFragment;
 import wrteam.ekart.shop.fragment.AddressListFragment;
-import wrteam.ekart.shop.helper.AppController;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Address;
@@ -113,7 +113,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 builder.setPositiveButton(activity.getResources().getString(R.string.remove), new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        if (AppController.isConnected(activity)) {
+                        if (ApiConfig.isConnected(activity)) {
                             addresses.remove(address);
                             notifyDataSetChanged();
                             removeAddress(activity, address.getId());
@@ -157,7 +157,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.imgEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (AppController.isConnected(activity)) {
+                if (ApiConfig.isConnected(activity)) {
                     Fragment fragment = new AddressAddUpdateFragment();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("model", address);

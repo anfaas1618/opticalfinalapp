@@ -30,7 +30,6 @@ import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.PaymentModelClass;
 import wrteam.ekart.shop.helper.Session;
@@ -105,8 +104,8 @@ public class PayPalWebActivity extends AppCompatActivity {
                         error.printStackTrace();
                     }
                 });
-        AppController.getInstance().getRequestQueue().getCache().clear();
-        AppController.getInstance().addToRequestQueue(stringRequest);
+        ApiConfig.getInstance().getRequestQueue().getCache().clear();
+        ApiConfig.getInstance().addToRequestQueue(stringRequest);
 
     }
 

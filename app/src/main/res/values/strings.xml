@@ -100,6 +100,7 @@
     <string name="noitem_incart_msg">You have no items in your shopping cart.\nLets\'s go buy something!</string>
     <string name="shop_now">Shop Now</string>
     <string name="filterby">Filter By</string>
+    <string name="change_layout">Change Layout</string>
     <string name="payment_mathod">Payment Method</string>
     <string name="cod_pay">Cash On Delivery</string>
     <string name="pay_u_pay">PayUMoney</string>
@@ -313,4 +314,22 @@
     <string name="transaction_failed_msg">Transaction Failed</string>
     <string name="added_to_wallet_msg">Added to wallet from :</string>
     <string name="awaiting_payment">Awaiting Payment</string>
+    <string name="title_activity_intro_slider">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="discover">Discover</string>
+    <string name="shop">Shop</string>
+    <string name="offers">Offers</string>
+    <string name="rewards">Rewards</string>
+    <string name="discover_text">Look for things around you</string>
+    <string name="shop_text"><![CDATA[Get the best deals & Coupons]]></string>
+    <string name="offers_text">Find great offers while you discover</string>
+    <string name="rewards_text"><![CDATA[Free recharge coupons & more]]></string>
+    <string name="get_started">Get Started</string>
+    <string name="skip">Skip</string>
+    <string name="special_note">Special Note</string>
+
 </resources>

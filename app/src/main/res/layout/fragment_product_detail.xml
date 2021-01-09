@@ -188,9 +188,9 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_border">
 
@@ -431,11 +431,11 @@
                     android:background="@color/bggray" />
 
                 <RelativeLayout
-                    android:layout_marginTop="@dimen/dimen_10dp"
                     android:id="@+id/titleLyt1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/viewSimilar">
+                    android:layout_below="@id/viewSimilar"
+                    android:layout_marginTop="@dimen/dimen_10dp">
 
                     <TextView
                         android:id="@+id/title"

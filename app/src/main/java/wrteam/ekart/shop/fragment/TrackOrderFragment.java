@@ -24,7 +24,6 @@ import java.util.List;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.LoginActivity;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.OrderTracker;
@@ -66,7 +65,7 @@ public class TrackOrderFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         if (session.isUserLoggedIn()) {
-            if (AppController.isConnected(activity)) {
+            if (ApiConfig.isConnected(activity)) {
                 ApiConfig.getWalletBalance(activity, new Session(activity));
                 setupViewPager(viewPager);
             }

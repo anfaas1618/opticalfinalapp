@@ -29,7 +29,6 @@ import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.PaymentModelClass;
 import wrteam.ekart.shop.helper.Session;
@@ -89,8 +88,8 @@ public class MidtransActivity extends AppCompatActivity {
                     }
                 },
                 (VolleyError error) -> error.printStackTrace());
-        AppController.getInstance().getRequestQueue().getCache().clear();
-        AppController.getInstance().addToRequestQueue(stringRequest);
+        ApiConfig.getInstance().getRequestQueue().getCache().clear();
+        ApiConfig.getInstance().addToRequestQueue(stringRequest);
 
     }
 
@@ -117,7 +116,7 @@ public class MidtransActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
-                                ApiConfig.getWalletBalance(activity,new Session(activity));
+                                ApiConfig.getWalletBalance(activity, new Session(activity));
                                 Toast.makeText(activity, getString(R.string.wallet_message), Toast.LENGTH_SHORT).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals("capture") || status.equals("challenge") || status.equals("pending")) {

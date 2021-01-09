@@ -28,7 +28,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.adapter.FavoriteLoadMoreAdapter;
 import wrteam.ekart.shop.adapter.OfflineFavoriteAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
@@ -82,7 +81,7 @@ public class FavoriteFragment extends Fragment {
 
         GetSettings(activity);
 
-        if (AppController.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
             if (isLogin) {
                 ApiConfig.getWalletBalance(activity, new Session(activity));
                 GetData();
@@ -95,7 +94,7 @@ public class FavoriteFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (AppController.isConnected(activity)) {
+                if (ApiConfig.isConnected(activity)) {
 
                     if (new Session(activity).isUserLoggedIn()) {
                         ApiConfig.getWalletBalance(activity, new Session(activity));

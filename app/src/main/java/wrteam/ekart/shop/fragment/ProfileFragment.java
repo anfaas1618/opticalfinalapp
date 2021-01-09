@@ -58,7 +58,6 @@ import wrteam.ekart.shop.activity.DrawerActivity;
 import wrteam.ekart.shop.activity.LoginActivity;
 import wrteam.ekart.shop.helper.AndroidMultiPartEntity;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -150,7 +149,7 @@ public class ProfileFragment extends Fragment {
                 } else if (ApiConfig.CheckValidattion(email, true, false)) {
                     edtemail.requestFocus();
                     edtemail.setError(getString(R.string.enter_valid_email));
-                } else if (AppController.isConnected(activity)) {
+                } else if (ApiConfig.isConnected(activity)) {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(Constant.TYPE, Constant.EDIT_PROFILE);
                     params.put(Constant.ID, session.getData(Constant.ID));
@@ -159,7 +158,7 @@ public class ProfileFragment extends Fragment {
                     params.put(Constant.MOBILE, mobile);
                     params.put(Constant.LONGITUDE, session.getCoordinates(Constant.LONGITUDE));
                     params.put(Constant.LATITUDE, session.getCoordinates(Constant.LATITUDE));
-                    params.put(Constant.FCM_ID, AppController.getInstance().getDeviceToken());
+                    params.put(Constant.FCM_ID, ApiConfig.getInstance().getDeviceToken());
                     //System.out.println("====update res " + params.toString());
                     ApiConfig.RequestToVolley(new VolleyCallback() {
                         @Override
@@ -281,6 +280,7 @@ public class ProfileFragment extends Fragment {
         menu.findItem(R.id.toolbar_search).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
     }
 
 

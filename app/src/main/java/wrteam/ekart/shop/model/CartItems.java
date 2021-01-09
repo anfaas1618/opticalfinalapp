@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class CartItems {
 
-    String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock, stock_unit_id, name, image, unit, tax_percentage,isAvailable;
+    String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock, stock_unit_id, name, image, unit, tax_percentage, isAvailable;
     ArrayList<String> other_images;
 
     public String getIsAvailable() {

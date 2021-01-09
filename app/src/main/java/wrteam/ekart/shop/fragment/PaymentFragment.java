@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -57,7 +58,6 @@ import wrteam.ekart.shop.activity.StripeActivity;
 import wrteam.ekart.shop.adapter.DateAdapter;
 import wrteam.ekart.shop.adapter.SlotAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
-import wrteam.ekart.shop.helper.AppController;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.PaymentModelClass;
 import wrteam.ekart.shop.helper.Session;
@@ -69,18 +69,18 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
 
 public class PaymentFragment extends Fragment {
-    public LinearLayout paymentLyt, deliveryTimeLyt, lytPayOption, lytTax, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
     public static String razorPayId, paymentMethod = "", deliveryTime = "", deliveryDay = "", pCode = "", TAG = CheckoutFragment.class.getSimpleName();
+    public static Map<String, String> sendparams;
+    public static RecyclerView recyclerView;
+    public static SlotAdapter adapter;
+    public LinearLayout paymentLyt, deliveryTimeLyt, lytPayOption, lytTax, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
+    public ArrayList<String> variantIdList, qtyList, dateList;
     TextView tvSubTotal, txttotalitems, tvSelectDeliveryDate, tvWltBalance, tvProceedOrder, tvConfirmOrder, tvPayment, tvDelivery;
     double subtotal = 0.0, usedBalance = 0.0, totalAfterTax = 0.0, taxAmt = 0.0, pCodeDiscount = 0.0;
     RadioButton rbCod, rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe;
-    public ArrayList<String> variantIdList, qtyList, dateList;
-    public static Map<String, String> sendparams;
-    public static RecyclerView recyclerView;
     PaymentModelClass paymentModelClass;
     ArrayList<BookingDate> bookingDates;
     RelativeLayout confirmLyt, lytWallet;
-    public static SlotAdapter adapter;
     RecyclerView recyclerViewDates;
     Calendar StartDate, EndDate;
     ScrollView scrollPaymentLyt;
@@ -121,7 +121,7 @@ public class PaymentFragment extends Fragment {
         tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
         txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
 
-        if (AppController.isConnected(getActivity())) {
+        if (ApiConfig.isConnected(getActivity())) {
             ApiConfig.getWalletBalance(getActivity(), session);
 
             GetPaymentConfig();
@@ -540,6 +540,7 @@ public class PaymentFragment extends Fragment {
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         TextView tvDialogCancel, tvDialogConfirm, tvDialogItemTotal, tvDialogTaxPercent, tvDialogTaxAmt, tvDialogDeliveryCharge, tvDialogTotal, tvDialogPCAmount, tvDialogWallet, tvDialogFinalTotal;
         LinearLayout lytDialogPromo, lytDialogWallet;
+        EditText tvSpecialNote;
 
         lytDialogPromo = dialogView.findViewById(R.id.lytDialogPromo);
         lytDialogWallet = dialogView.findViewById(R.id.lytDialogWallet);
@@ -553,6 +554,8 @@ public class PaymentFragment extends Fragment {
         tvDialogFinalTotal = dialogView.findViewById(R.id.tvDialogFinalTotal);
         tvDialogCancel = dialogView.findViewById(R.id.tvDialogCancel);
         tvDialogConfirm = dialogView.findViewById(R.id.tvDialogConfirm);
+        tvSpecialNote = dialogView.findViewById(R.id.tvSpecialNote);
+
         if (pCodeDiscount > 0) {
             lytDialogPromo.setVisibility(View.VISIBLE);
             tvDialogPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + pCodeDiscount);
@@ -574,6 +577,7 @@ public class PaymentFragment extends Fragment {
         tvDialogTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(totalAfterTax));
         tvDialogFinalTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
         tvDialogConfirm.setOnClickListener(v -> {
+            sendparams.put(Constant.ORDER_NOTE, tvSpecialNote.getText().toString().trim());
             if (paymentMethod.equals(getResources().getString(R.string.codpaytype)) || paymentMethod.equals(getString(R.string.wallettype))) {
                 ApiConfig.RequestToVolley((result, response) -> {
                     if (result) {
@@ -926,6 +930,7 @@ public class PaymentFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
     }

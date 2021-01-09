@@ -51,11 +51,9 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public final int VIEW_TYPE_LOADING = 1;
     final Context context;
     final Activity activity;
-    // The minimum amount of items to have below your current scroll position
-    // before loading more.
     public boolean isLoading;
     public int resource;
-    public ArrayList<Product> mDataset = new ArrayList<>();
+    public ArrayList<Product> mDataset;
     SpannableString spannableString;
     Session session;
     boolean isLogin;
@@ -203,8 +201,11 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                 });
             }
-
-            SetSelectedData(holder, priceVariations.get(0));
+            if (priceVariations.size() > 1) {
+                SetSelectedData(holder, priceVariations.get(0), false);
+            } else {
+                SetSelectedData(holder, priceVariations.get(0), true);
+            }
 
 
         } else if (holderparent instanceof ViewHolderLoading) {
@@ -239,9 +240,14 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @SuppressLint("SetTextI18n")
-    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra) {
+    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra, boolean multiVerients) {
 
-        holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
+        if (!multiVerients) {
+            holder.txtmeasurement.setVisibility(View.GONE);
+        } else {
+            holder.txtmeasurement.setVisibility(View.VISIBLE);
+            holder.txtmeasurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
+        }
         holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
 
         if (session.isUserLoggedIn()) {
@@ -261,12 +267,10 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         holder.txtstatus.setText(extra.getServe_for());
 
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
-            holder.originalPrice.setVisibility(View.GONE);
-            holder.showDiscount.setVisibility(View.GONE);
-            holder.lytDiscount.setVisibility(View.GONE);
-
+            holder.lytDiscount.setVisibility(View.INVISIBLE);
             holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
         } else {
+            holder.lytDiscount.setVisibility(View.VISIBLE);
             spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getPrice());
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
@@ -393,10 +397,10 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public ImageButton imgAdd, imgMinus;
-        TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
+        TextView productName, productPrice, txtqty, txtmeasurement, showDiscount, originalPrice, txtstatus;
         ImageView imgThumb;
         ImageView imgFav, imgIndicator;
-        RelativeLayout lytmain,lytDiscount;
+        RelativeLayout lytmain, lytDiscount;
         AppCompatSpinner spinner;
         LinearLayout qtyLyt;
 
@@ -406,7 +410,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             productPrice = itemView.findViewById(R.id.txtprice);
             showDiscount = itemView.findViewById(R.id.showDiscount);
             originalPrice = itemView.findViewById(R.id.txtoriginalprice);
-            Measurement = itemView.findViewById(R.id.txtmeasurement);
+            txtmeasurement = itemView.findViewById(R.id.txtmeasurement);
             txtstatus = itemView.findViewById(R.id.txtstatus);
             imgThumb = itemView.findViewById(R.id.imgThumb);
             imgIndicator = itemView.findViewById(R.id.imgIndicator);
@@ -458,26 +462,26 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = inflter.inflate(R.layout.lyt_spinner_item, null);
             TextView measurement = view.findViewById(R.id.txtmeasurement);
-            TextView price = view.findViewById(R.id.txtprice);
+//            TextView price = view.findViewById(R.id.txtprice);
 
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+//            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));
-                price.setTextColor(context.getResources().getColor(R.color.red));
+//                price.setTextColor(context.getResources().getColor(R.color.red));
             } else {
                 measurement.setTextColor(context.getResources().getColor(R.color.black));
-                price.setTextColor(context.getResources().getColor(R.color.black));
+//                price.setTextColor(context.getResources().getColor(R.color.black));
             }
 
             holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     PriceVariation priceVariation = extraList.get(i);
-                    SetSelectedData(holder, priceVariation);
+                    SetSelectedData(holder, priceVariation, false);
                 }
 
                 @Override

@@ -122,7 +122,6 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         mapReadyCallback = new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                final GoogleMap mMap = googleMap;
                 double saveLatitude, saveLongitude;
                 if (latitude <= 0 || longitude <= 0) {
                     saveLatitude = Double.parseDouble(session.getCoordinates(Constant.LATITUDE));
@@ -132,27 +131,29 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                     saveLongitude = longitude;
                 }
 
-                mMap.clear();
+                googleMap.clear();
 
                 LatLng latLng = new LatLng(saveLatitude, saveLongitude);
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                mMap.addMarker(new MarkerOptions()
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                googleMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .draggable(true)
                         .title(getString(R.string.current_location)));
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
             }
         };
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
         cityArrayList = new ArrayList<>();
         areaList = new ArrayList<>();
         Bundle bundle = getArguments();
+        assert bundle != null;
         For = bundle.getString("for");
         position = bundle.getInt("position");
         if (For.equals("update")) {
@@ -549,6 +550,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
     }

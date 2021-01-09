@@ -123,7 +123,7 @@ public class PaymentModelClass {
         String udf8 = "";
         String udf9 = "";
         String udf10 = "";
-        AppEnvironment appEnvironment = ((AppController) activity.getApplication()).getAppEnvironment();
+        AppEnvironment appEnvironment = ((ApiConfig) activity.getApplication()).getAppEnvironment();
         //builder.setAmount(amount)
         builder.setAmount(amount)
                 .setTxnId(txnId)
@@ -176,7 +176,7 @@ public class PaymentModelClass {
             stringBuilder.append(params.get(PayUmoneyConstants.UDF4) + "|");
             stringBuilder.append(params.get(PayUmoneyConstants.UDF5) + "||||||");
 
-            AppEnvironment appEnvironment = ((AppController) activity.getApplication()).getAppEnvironment();
+            AppEnvironment appEnvironment = ((ApiConfig) activity.getApplication()).getAppEnvironment();
             stringBuilder.append(appEnvironment.salt());
 
             String hash = hashCal("SHA-512", stringBuilder.toString());
@@ -196,7 +196,7 @@ public class PaymentModelClass {
         // Check which object is non-null
         if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
             //System.out.println("========transaction response "+transactionResponse.getPayuResponse());
-            AppEnvironment appEnvironment = ((AppController) activity.getApplication()).getAppEnvironment();
+            AppEnvironment appEnvironment = ((ApiConfig) activity.getApplication()).getAppEnvironment();
 
             // Response from Payumoney
             String payuResponse = transactionResponse.getPayuResponse();
@@ -267,8 +267,7 @@ public class PaymentModelClass {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(Constant.FROM, "payment_success");
                                 activity.startActivity(intent);
-                            }
-                            else{
+                            } else {
                                 hideProgressDialog();
                             }
                         } catch (JSONException e) {

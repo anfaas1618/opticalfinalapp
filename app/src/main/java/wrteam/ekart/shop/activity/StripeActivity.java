@@ -44,14 +44,14 @@ import wrteam.ekart.shop.helper.VolleyCallback;
 public class StripeActivity extends AppCompatActivity {
 
     boolean isTxnInProcess = true;
-    private Stripe stripe;
     Button payButton;
     Map<String, String> sendparams;
     Session session;
     Toolbar toolbar;
     TextView tvTitle, tvPayableAmount;
-    private String paymentIntentClientSecret, stripePublishableKey, orderId, from;
     String amount;
+    private Stripe stripe;
+    private String paymentIntentClientSecret, stripePublishableKey, orderId, from;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -96,10 +96,9 @@ public class StripeActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.NAME, session.getData(Constant.NAME));
         params.put(Constant.ADDRESS_LINE1, address);
-        if(Constant.DefaultPinCode.length()>5){
+        if (Constant.DefaultPinCode.length() > 5) {
             params.put(Constant.POSTAL_CODE, "" + (Integer.parseInt(Constant.DefaultPinCode) / 10));
-        }
-        else{
+        } else {
             params.put(Constant.POSTAL_CODE, "" + Constant.DefaultPinCode);
         }
         params.put(Constant.CITY, Constant.DefaultCity);
@@ -168,7 +167,7 @@ public class StripeActivity extends AppCompatActivity {
 
                             if (from.equals(Constant.WALLET)) {
                                 onBackPressed();
-                                ApiConfig.getWalletBalance(activity,session);
+                                ApiConfig.getWalletBalance(activity, session);
                                 Toast.makeText(activity, activity.getString(R.string.wallet_message), Toast.LENGTH_SHORT).show();
                             } else if (from.equals(Constant.PAYMENT)) {
                                 if (status.equals(Constant.SUCCESS) || status.equals(Constant.AWAITING_PAYMENT)) {

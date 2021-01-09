@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
-import wrteam.ekart.shop.fragment.ProductListFragment;
+import wrteam.ekart.shop.fragment.SubCategoryFragment;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Category;
 
@@ -64,7 +65,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.lytMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new ProductListFragment();
+                Fragment fragment = new SubCategoryFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.ID, model.getId());
                 bundle.putString(Constant.NAME, model.getName());
@@ -90,7 +91,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public TextView txttitle;
         ImageView imgcategory;
-        LinearLayout lytMain;
+        RelativeLayout lytMain;
 
         public ViewHolder(View itemView) {
             super(itemView);

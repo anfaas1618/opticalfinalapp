@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,8 +57,6 @@ public class SplashActivity extends AppCompatActivity {
             }
         } else {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             setContentView(R.layout.activity_splash);
             activity = SplashActivity.this;
@@ -67,10 +64,11 @@ public class SplashActivity extends AppCompatActivity {
             ApiConfig.GetSettings(activity);
 
             int SPLASH_TIME_OUT = 1500;
-            new Handler().postDelayed(new Runnable() {
 
-                @Override
-                public void run() {
+            new Handler().postDelayed(() -> {
+                if (!session.getIsFirstTime("is_first_time")) {
+                    startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

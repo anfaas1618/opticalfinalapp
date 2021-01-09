@@ -91,7 +91,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        AppController.getInstance().setDeviceToken(s);
+        ApiConfig.getInstance().setDeviceToken(s);
     }
 
 }

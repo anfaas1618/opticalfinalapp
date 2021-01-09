@@ -9,9 +9,9 @@
 
     <ImageView
         android:id="@+id/imgcategory"
-        android:background="@drawable/card_shadow"
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:background="@drawable/card_shadow"
         android:scaleType="centerInside" />
 
     <TextView

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
-import wrteam.ekart.shop.helper.AppController;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
@@ -36,7 +36,7 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
     public Activity activity;
     public int itemResource;
     Context context;
-    ImageLoader netImageLoader = AppController.getInstance().getImageLoader();
+    ImageLoader netImageLoader = ApiConfig.getInstance().getImageLoader();
 
     public AdapterStyle1(Context context, Activity activity, ArrayList<Product> productList, int itemResource) {
         this.context = context;

@@ -355,18 +355,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = inflter.inflate(R.layout.lyt_spinner_item, null);
             TextView measurement = view.findViewById(R.id.txtmeasurement);
-            TextView price = view.findViewById(R.id.txtprice);
+//            TextView price = view.findViewById(R.id.txtprice);
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+//            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));
-                price.setTextColor(context.getResources().getColor(R.color.red));
+//                price.setTextColor(context.getResources().getColor(R.color.red));
             } else {
                 measurement.setTextColor(context.getResources().getColor(R.color.black));
-                price.setTextColor(context.getResources().getColor(R.color.black));
+//                price.setTextColor(context.getResources().getColor(R.color.black));
             }
 
             holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
