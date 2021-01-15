@@ -35,6 +35,7 @@ import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
+import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -47,7 +48,6 @@ public class ProductListFragment extends Fragment {
     View root;
     Session session;
     int total;
-    int position;
     NestedScrollView nestedScrollView;
     Activity activity;
     int offset = 0;
@@ -71,7 +71,9 @@ public class ProductListFragment extends Fragment {
         session = new Session(activity);
 
         from = getArguments().getString(Constant.FROM);
-        id = getArguments().getString("id");
+        id = getArguments().getString(Constant.ID);
+
+        resource = R.layout.lyt_item_list;
 
         swipeLayout = root.findViewById(R.id.swipeLayout);
         tvAlert = root.findViewById(R.id.tvAlert);
@@ -84,42 +86,65 @@ public class ProductListFragment extends Fragment {
 
         filterIndex = -1;
 
-        resource = R.layout.lyt_item_list;
-
-        if (from.equals("regular")) {
-            if (ApiConfig.isConnected(activity)) {
+        if (ApiConfig.isConnected(activity)) {
+            if (from.equals("regular") || from.equals("sub_cate")) {
                 GetData();
                 isSort = true;
-            }
-        } else if (from.equals("similar")) {
-            if (ApiConfig.isConnected(activity)) {
+            } else if (from.equals("similar")) {
                 GetSimilarData();
-            }
-        } else if (from.equals("section")) {
-            if (ApiConfig.isConnected(activity)) {
-                position = getArguments().getInt("position", 0);
-                productArrayList = HomeFragment.sectionList.get(position).getProductList();
-                mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource);
-                recyclerView.setAdapter(mAdapter);
+            } else if (from.equals("section")) {
+                GetSectionData();
             }
         }
 
         swipeLayout.setColorSchemeResources(R.color.colorPrimary);
+
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                offset = 0;
-                swipeLayout.setRefreshing(false);
-                productArrayList.clear();
-                if (from.equals("regular")) {
-                    GetData();
-                } else if (from.equals("similar")) {
-                    GetSimilarData();
+                if (productArrayList.size() > 0) {
+                    offset = 0;
+                    swipeLayout.setRefreshing(false);
+                    productArrayList.clear();
+                    if (from.equals("regular")) {
+                        GetData();
+                    } else if (from.equals("similar")) {
+                        GetSimilarData();
+                    } else if (from.equals("section")) {
+                        GetSectionData();
+                    }
                 }
             }
         });
 
         return root;
+    }
+
+    private void GetSectionData() {
+        Map<String, String> params = new HashMap<>();
+        params.put(Constant.USER_ID, session.getData(Constant.ID));
+        params.put(Constant.GET_ALL_SECTIONS, Constant.GetVal);
+        params.put(Constant.SECTION_ID, id);
+
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject objectbject = new JSONObject(response);
+                        if (!objectbject.getBoolean(Constant.ERROR)) {
+
+                            JSONObject object = new JSONObject(response);
+                            productArrayList = ApiConfig.GetProductList(object.getJSONArray(Constant.SECTIONS).getJSONObject(0).getJSONArray(Constant.PRODUCTS));
+                            mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
+                            recyclerView.setAdapter(mAdapter);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.GET_SECTION_URL, params, true);
     }
 
     void GetData() {
@@ -147,9 +172,34 @@ public class ProductListFragment extends Fragment {
                             }
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            productArrayList.addAll(ApiConfig.GetProductList(jsonArray));
+                            try {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                        for (int j = 0; j < pricearray.length(); j++) {
+                                            JSONObject obj = pricearray.getJSONObject(j);
+                                            String discountpercent = "0", productPrice = " ";
+                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                productPrice = obj.getString(Constant.PRICE);
+                                            else {
+                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                            }
+                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                        }
+                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             if (offset == 0) {
-                                mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource);
+                                mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
 
@@ -190,8 +240,32 @@ public class ProductListFragment extends Fragment {
                                                                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
                                                                             productArrayList.remove(productArrayList.size() - 1);
                                                                             mAdapter.notifyItemRemoved(productArrayList.size());
+                                                                            try {
+                                                                                for (int i = 0; i < jsonArray.length(); i++) {
+                                                                                    try {
+                                                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                                                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
 
-                                                                            productArrayList.addAll(ApiConfig.GetProductList(jsonArray));
+                                                                                        for (int j = 0; j < pricearray.length(); j++) {
+                                                                                            JSONObject obj = pricearray.getJSONObject(j);
+                                                                                            String discountpercent = "0", productPrice = " ";
+                                                                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                                                                productPrice = obj.getString(Constant.PRICE);
+                                                                                            else {
+                                                                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                                                                            }
+                                                                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                                                                        }
+                                                                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                                                                    } catch (JSONException e) {
+                                                                                        e.printStackTrace();
+                                                                                    }
+                                                                                }
+                                                                            } catch (Exception e) {
+                                                                                e.printStackTrace();
+                                                                            }
                                                                             mAdapter.notifyDataSetChanged();
                                                                             mAdapter.setLoaded();
                                                                             isLoadMore = false;
@@ -247,9 +321,35 @@ public class ProductListFragment extends Fragment {
                             }
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            productArrayList.addAll(ApiConfig.GetProductList(jsonArray));
+                            try {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                        for (int j = 0; j < pricearray.length(); j++) {
+                                            JSONObject obj = pricearray.getJSONObject(j);
+                                            String discountpercent = "0", productPrice = " ";
+                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                productPrice = obj.getString(Constant.PRICE);
+                                            else {
+                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                            }
+                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                        }
+                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                             if (offset == 0) {
-                                mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource);
+                                mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -289,7 +389,33 @@ public class ProductListFragment extends Fragment {
                                                                             productArrayList.remove(productArrayList.size() - 1);
                                                                             mAdapter.notifyItemRemoved(productArrayList.size());
 
-                                                                            productArrayList.addAll(ApiConfig.GetProductList(jsonArray));
+                                                                            try {
+                                                                                for (int i = 0; i < jsonArray.length(); i++) {
+                                                                                    try {
+                                                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                                                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                                                                        for (int j = 0; j < pricearray.length(); j++) {
+                                                                                            JSONObject obj = pricearray.getJSONObject(j);
+                                                                                            String discountpercent = "0", productPrice = " ";
+                                                                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                                                                productPrice = obj.getString(Constant.PRICE);
+                                                                                            else {
+                                                                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                                                                            }
+                                                                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                                                                        }
+                                                                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                                                                    } catch (JSONException e) {
+                                                                                        e.printStackTrace();
+                                                                                    }
+                                                                                }
+                                                                            } catch (Exception e) {
+                                                                                e.printStackTrace();
+                                                                            }
+
                                                                             mAdapter.notifyDataSetChanged();
                                                                             mAdapter.setLoaded();
                                                                             isLoadMore = false;
@@ -320,7 +446,6 @@ public class ProductListFragment extends Fragment {
             }
         }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params, true);
     }
-
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -354,23 +479,19 @@ public class ProductListFragment extends Fragment {
             }
         }
         if (item.getItemId() == R.id.toolbar_layout) {
-            Drawable myDrawable = null;
             if (isGrid) {
                 isGrid = false;
                 recyclerView.setAdapter(null);
                 resource = R.layout.lyt_item_list;
-                myDrawable = getResources().getDrawable(R.drawable.ic_list); // The ID of your drawable.
                 recyclerView.setLayoutManager(new LinearLayoutManager(activity));
             } else {
                 isGrid = true;
                 recyclerView.setAdapter(null);
                 resource = R.layout.lyt_item_grid;
-                myDrawable = getResources().getDrawable(R.drawable.ic_grid); // The ID of your drawable.
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
             }
-            mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource);
+            mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
             recyclerView.setAdapter(mAdapter);
-            item.setIcon(myDrawable);
             mAdapter.notifyDataSetChanged();
             activity.invalidateOptionsMenu();
             return true;
@@ -378,12 +499,21 @@ public class ProductListFragment extends Fragment {
         return false;
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_layout).setVisible(true);
         menu.findItem(R.id.toolbar_sort).setVisible(isSort);
         menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, R.drawable.ic_cart, activity));
+
+        Drawable myDrawable = null;
+        if (isGrid) {
+            myDrawable = getResources().getDrawable(R.drawable.ic_list); // The ID of your drawable
+        } else {
+            myDrawable = getResources().getDrawable(R.drawable.ic_grid); // The ID of your drawable.
+        }
+        menu.findItem(R.id.toolbar_layout).setIcon(myDrawable);
     }
 
     @Override

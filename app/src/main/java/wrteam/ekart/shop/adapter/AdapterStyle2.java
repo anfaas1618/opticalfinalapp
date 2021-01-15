@@ -35,7 +35,6 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
 
     public ArrayList<Product> productList;
     public Activity activity;
-    public ImageLoader imageLoader = ApiConfig.getInstance().getImageLoader();
     Context context;
 
     public AdapterStyle2(Context context, Activity activity, ArrayList<Product> productList) {

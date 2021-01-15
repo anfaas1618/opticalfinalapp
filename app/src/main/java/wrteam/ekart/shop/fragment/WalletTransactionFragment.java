@@ -123,7 +123,7 @@ public class WalletTransactionFragment extends Fragment {
 
         ApiConfig.getWalletBalance(activity, session);
 
-        tvBalance.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
+        tvBalance.setText(Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
 
         btnRechargeWallet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -338,22 +338,20 @@ public class WalletTransactionFragment extends Fragment {
                         if (edtAmount.getText().toString().equals("")) {
                             edtAmount.requestFocus();
                             edtAmount.setError(getString(R.string.alert_enter_amount));
-                        } else if (Double.parseDouble(edtAmount.getText().toString()) > Constant.SETTING_USER_WALLET_REFILL_LIMIT) {
+                        } else if (Double.parseDouble(edtAmount.getText().toString()) > Double.parseDouble((Constant.systemSettings.getUser_wallet_refill_limit()))) {
                             Toast.makeText(activity, getString(R.string.max_wallet_amt_error), Toast.LENGTH_SHORT).show();
+                        } else if (Double.parseDouble(edtAmount.getText().toString().trim()) <= 0) {
+                            edtAmount.requestFocus();
+                            edtAmount.setError(getString(R.string.alert_recharge));
                         } else {
-                            if (Double.parseDouble(edtAmount.getText().toString().trim()) <= 0) {
-                                edtAmount.requestFocus();
-                                edtAmount.setError(getString(R.string.alert_recharge));
+                            if (paymentMethod != null) {
+                                amount = edtAmount.getText().toString().trim();
+                                msg = edtMsg.getText().toString().trim();
+                                dialog.dismiss();
+                                RechargeWallet();
+                                dialog.dismiss();
                             } else {
-                                if (paymentMethod != null) {
-                                    amount = edtAmount.getText().toString().trim();
-                                    msg = edtMsg.getText().toString().trim();
-                                    dialog.dismiss();
-                                    RechargeWallet();
-                                    dialog.dismiss();
-                                } else {
-                                    Toast.makeText(activity, getString(R.string.select_payment_method), Toast.LENGTH_SHORT).show();
-                                }
+                                Toast.makeText(activity, getString(R.string.select_payment_method), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -428,8 +426,8 @@ public class WalletTransactionFragment extends Fragment {
                     try {
                         JSONObject object = new JSONObject(response);
                         if (!object.getBoolean(Constant.ERROR)) {
-                            DrawerActivity.tvWallet.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
-                            tvBalance.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
+                            DrawerActivity.tvWallet.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
+                            tvBalance.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -525,7 +523,7 @@ public class WalletTransactionFragment extends Fragment {
     }
 
     public void RechargeWallet() {
-        HashMap<String, String> sendparams = new HashMap();
+        HashMap<String, String> sendparams = new HashMap<>();
         if (paymentMethod.equals(getString(R.string.pay_u))) {
             sendparams.put(Constant.MOBILE, session.getData(Constant.MOBILE));
             sendparams.put(Constant.USER_NAME, session.getData(Constant.NAME));

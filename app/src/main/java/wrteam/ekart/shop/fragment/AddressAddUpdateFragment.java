@@ -116,9 +116,6 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         cityId = session.getData(Constant.CITY_ID);
         areaId = session.getData(Constant.AREA_ID);
 
-
-        ApiConfig.getLocation(activity);
-
         mapReadyCallback = new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -190,8 +187,6 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ApiConfig.isGPSEnable(getActivity())) {
-
                     Fragment fragment = new MapFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(Constant.FROM, "address");
@@ -199,10 +194,6 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                     bundle.putDouble("longitude", longitude);
                     fragment.setArguments(bundle);
                     MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-
-                } else {
-                    ApiConfig.displayLocationSettingsRequest(getActivity());
-                }
             }
         });
 

@@ -2,7 +2,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/play_layout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
+    android:maxWidth="110dp"
     android:layout_height="wrap_content"
     android:background="@drawable/card_shadow"
     android:clickable="true"
@@ -10,37 +11,35 @@
 
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="110dp"
+        android:layout_width="match_parent"
+        android:maxWidth="110dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
         android:src="@drawable/placeholder" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/thumbnail"
-        android:gravity="center"
-        android:maxLines="2"
-        android:minLines="2"
+        android:gravity="start"
+        android:lines="1"
+        android:maxWidth="110dp"
         android:padding="2dp"
         android:textColor="@color/txt_color"
         android:textSize="@dimen/p_text_size" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/tvPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:minLines="2"
+        android:layout_below="@id/tvTitle"
+        android:gravity="start"
+        android:lines="1"
+        android:maxWidth="110dp"
         android:padding="2dp"
-        android:text="date"
-        android:textColor="@color/red"
-        android:textSize="12dp"
-        android:visibility="gone" />
-
+        android:textColor="@color/txt_color"
+        android:textSize="@dimen/p_text_size" />
 </RelativeLayout>
 

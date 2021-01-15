@@ -6,11 +6,6 @@ public class City {
     final String city_id;
     String pincode;
 
-    /*  public City(String city_id, String city_name, String pincode) {
-          this.city_name = city_name;
-          this.city_id = city_id;
-          this.pincode = pincode;
-      }*/
     public City(String city_id, String city_name) {
         this.city_name = city_name;
         this.city_id = city_id;

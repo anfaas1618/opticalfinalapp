@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,14 +30,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     Activity activity;
     Context context;
     String from;
+    int visibleNumber;
 
 
-    public CategoryAdapter(Context context, Activity activity, ArrayList<Category> categorylist, int layout, String from) {
+    public CategoryAdapter(Context context, Activity activity, ArrayList<Category> categorylist, int layout, String from, int visibleNumber) {
         this.context = context;
         this.categorylist = categorylist;
         this.layout = layout;
         this.activity = activity;
         this.from = from;
+        this.visibleNumber = visibleNumber;
     }
 
     @NonNull
@@ -79,8 +80,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public int getItemCount() {
         int categories;
-        if (categorylist.size() > 6 && from.equals("home")) {
-            categories = 6;
+        if (categorylist.size() > visibleNumber && from.equals("home")) {
+            categories = visibleNumber;
         } else {
             categories = categorylist.size();
         }

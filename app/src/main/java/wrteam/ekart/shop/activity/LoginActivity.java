@@ -59,7 +59,6 @@ import wrteam.ekart.shop.fragment.WebViewFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
-import wrteam.ekart.shop.helper.GPSTracker;
 import wrteam.ekart.shop.helper.ProgressDisplay;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.Utils;
@@ -77,10 +76,10 @@ public class LoginActivity extends AppCompatActivity {
     PinView edtotp;
     TextView txtmobileno, tvTimer, tvResend, tvSignUp, tvForgotPass, tvPrivacyPolicy;
     ScrollView scrollView;
-    GPSTracker gps;
     Session session;
     Toolbar toolbar;
     CheckBox chPrivacy;
+
     ////Firebase
     String phoneNumber, firebase_otp, otpFor = "";
     FirebaseAuth auth;
@@ -106,7 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         mobile = getIntent().getStringExtra("txtmobile");
         firebase_otp = getIntent().getStringExtra("OTP");
 
-        gps = new GPSTracker(activity);
         session = new Session(getApplicationContext());
         chPrivacy = findViewById(R.id.chPrivacy);
         txtmobileno = findViewById(R.id.txtmobileno);
@@ -176,8 +174,6 @@ public class LoginActivity extends AppCompatActivity {
 
 //        edtCode.setCountryForNameCode("CODE");
 //        edtFCode.setCountryForNameCode("CODE");
-//        Constant.country_code = edtCode.getSelectedCountryCode();
-//        session.setData(Constant.COUNTRY_CODE, Constant.country_code);
 
         if (from != null) {
             switch (from) {

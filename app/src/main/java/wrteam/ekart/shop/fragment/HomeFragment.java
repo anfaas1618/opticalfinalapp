@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -42,6 +43,7 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.adapter.CategoryAdapter;
 import wrteam.ekart.shop.adapter.OfferAdapter;
+import wrteam.ekart.shop.adapter.ProductLoadMoreAdapter;
 import wrteam.ekart.shop.adapter.SectionAdapter;
 import wrteam.ekart.shop.adapter.SliderAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
@@ -49,6 +51,9 @@ import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Category;
+import wrteam.ekart.shop.model.Favorite;
+import wrteam.ekart.shop.model.PriceVariation;
+import wrteam.ekart.shop.model.Product;
 import wrteam.ekart.shop.model.Slider;
 
 import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
@@ -80,29 +85,6 @@ public class HomeFragment extends Fragment {
     RelativeLayout progressBar;
     private ArrayList<String> offerList;
 
-    public static void UpdateToken(final String token, Activity activity) {
-        Map<String, String> params = new HashMap<>();
-        params.put(Constant.TYPE, Constant.REGISTER_DEVICE);
-        params.put(Constant.TOKEN, token);
-        params.put(Constant.USER_ID, session.getData(Constant.ID));
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        if (!object.getBoolean(Constant.ERROR)) {
-                            session.setData(Constant.FCM_ID, token);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, activity, Constant.RegisterUrl, params, false);
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -120,9 +102,6 @@ public class HomeFragment extends Fragment {
         swipeLayout = root.findViewById(R.id.swipeLayout);
 
         categoryRecyclerView = root.findViewById(R.id.categoryrecycleview);
-
-        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-//        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
         sectionView = root.findViewById(R.id.sectionView);
         sectionView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -247,6 +226,28 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    public static void UpdateToken(final String token, Activity activity) {
+        Map<String, String> params = new HashMap<>();
+        params.put(Constant.TYPE, Constant.REGISTER_DEVICE);
+        params.put(Constant.TOKEN, token);
+        params.put(Constant.USER_ID, session.getData(Constant.ID));
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject object = new JSONObject(response);
+                        if (!object.getBoolean(Constant.ERROR)) {
+                            session.setData(Constant.FCM_ID, token);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.RegisterUrl, params, false);
+
+    }
 
     public void GetHomeData() {
         progressBar.setVisibility(View.VISIBLE);
@@ -272,7 +273,7 @@ public class HomeFragment extends Fragment {
                             sectionList.clear();
 
                             GetOfferImage(jsonObject.getJSONArray(Constant.OFFER_IMAGES));
-                            GetCategory(jsonObject.getJSONArray(Constant.CATEGORIES));
+                            GetCategory(jsonObject);
                             SectionProductRequest(jsonObject.getJSONArray(Constant.SECTIONS));
                             GetSlider(jsonObject.getJSONArray(Constant.SLIDER_IMAGES));
                         } else {
@@ -302,15 +303,41 @@ public class HomeFragment extends Fragment {
 
     }
 
-    void GetCategory(JSONArray jsonArray) {
+    void GetCategory(JSONObject object) {
         try {
+            int visible_count = 0;
+            int column_count = 0;
+
+            JSONArray jsonArray = object.getJSONArray(Constant.CATEGORIES);
+            Gson gson = new Gson();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Category category = gson.fromJson(jsonObject.toString(), Category.class);
+                categoryArrayList.add(category);
+            }
             if (jsonArray != null && jsonArray.length() > 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     Category category = new Gson().fromJson(jsonObject.toString(), Category.class);
                     categoryArrayList.add(category);
                 }
-                categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category_list, "home"));
+
+                if (!object.getString("style").equals("")) {
+                    if (object.getString("style").equals("style_1")) {
+                        visible_count = Integer.parseInt(object.getString("visible_count"));
+                        column_count = Integer.parseInt(object.getString("column_count"));
+                        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), column_count));
+                        categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category_grid, "home", visible_count));
+                    } else if (object.getString("style").equals("style_2")) {
+                        visible_count = Integer.parseInt(object.getString("visible_count"));
+                        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+                        categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category_list, "home", visible_count));
+                    }
+                } else {
+                    categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+                    categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), getActivity(), categoryArrayList, R.layout.lyt_category_list, "home", 6));
+                }
             } else {
                 lytCategory.setVisibility(View.GONE);
             }
@@ -320,12 +347,12 @@ public class HomeFragment extends Fragment {
     }
 
     public void SectionProductRequest(JSONArray jsonArray) {  //json request for product search
-
         try {
             for (int j = 0; j < jsonArray.length(); j++) {
                 Category section = new Category();
                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                 section.setName(jsonObject.getString(Constant.TITLE));
+                section.setId(jsonObject.getString(Constant.ID));
                 section.setStyle(jsonObject.getString(Constant.SECTION_STYLE));
                 section.setSubtitle(jsonObject.getString(Constant.SHORT_DESC));
                 JSONArray productArray = jsonObject.getJSONArray(Constant.PRODUCTS);
@@ -339,6 +366,7 @@ public class HomeFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     void GetSlider(JSONArray jsonArray) {

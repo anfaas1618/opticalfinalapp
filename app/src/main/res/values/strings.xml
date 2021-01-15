@@ -287,7 +287,6 @@
     <string name="tax_formula">tax_percentage = ( tax_amount x 100 ) / order_total_without_tax</string>
     <string name="off">OFF</string>
     <string name="alert_payment_methods_blank">Payment methods not found!</string>
-    <string name="stripe_card_details">Testing Card Number: 4242 4242 4242 4242\nExpiry Date: Any Future Date\nCVC : Any 3 Digit Number\nPostal Code : Any Postal</string>
     <string name="wallettype">wallet</string>
     <string name="midtrans">Midtrans</string>
     <string name="stripe">Stripe</string>
@@ -306,30 +305,23 @@
     <string name="item">&#160;Item(s)</string>
     <string name="pincode_">Pin&#160;Code&#160;:&#160;</string>
     <string name="shopping">&#160;Shopping</string>
-    <string name="shopping_">&#160;Shopping</string>
     <string name="wallet_recharge_">&#160;Wallet&#160;Recharge</string>
     <string name="wallet_message">You amount will be credited in wallet very soon.</string>
-    <string name="tx_id">\", Transaction ID : \"</string>
     <string name="address_msg">Please set default address in Manage Address.</string>
     <string name="transaction_failed_msg">Transaction Failed</string>
-    <string name="added_to_wallet_msg">Added to wallet from :</string>
     <string name="awaiting_payment">Awaiting Payment</string>
-    <string name="title_activity_intro_slider">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="discover">Discover</string>
     <string name="shop">Shop</string>
     <string name="offers">Offers</string>
-    <string name="rewards">Rewards</string>
     <string name="discover_text">Look for things around you</string>
     <string name="shop_text"><![CDATA[Get the best deals & Coupons]]></string>
     <string name="offers_text">Find great offers while you discover</string>
-    <string name="rewards_text"><![CDATA[Free recharge coupons & more]]></string>
     <string name="get_started">Get Started</string>
     <string name="skip">Skip</string>
     <string name="special_note">Special Note</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -118,7 +118,7 @@ public class PaymentFragment extends Fragment {
         variantIdList = getArguments().getStringArrayList("variantIdList");
         qtyList = getArguments().getStringArrayList("qtyList");
 
-        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
+        tvSubTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(subtotal));
         txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
 
         if (ApiConfig.isConnected(getActivity())) {
@@ -126,7 +126,7 @@ public class PaymentFragment extends Fragment {
 
             GetPaymentConfig();
             chWallet.setTag("false");
-            tvWltBalance.setText("Total Balance: " + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.WALLET_BALANCE));
+            tvWltBalance.setText("Total Balance: " + Constant.systemSettings.getCurrency() + Constant.formater.format(Constant.WALLET_BALANCE));
             if (Constant.WALLET_BALANCE == 0) {
                 lytWallet.setVisibility(View.GONE);
             } else {
@@ -142,16 +142,16 @@ public class PaymentFragment extends Fragment {
 
                     if (Constant.WALLET_BALANCE >= subtotal) {
                         usedBalance = subtotal;
-                        tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format((Constant.WALLET_BALANCE - usedBalance)));
+                        tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + Constant.systemSettings.getCurrency() + Constant.formater.format((Constant.WALLET_BALANCE - usedBalance)));
                         paymentMethod = Constant.WALLET;
                         lytPayOption.setVisibility(View.GONE);
                     } else {
                         usedBalance = Constant.WALLET_BALANCE;
-                        tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + Constant.SETTING_CURRENCY_SYMBOL + "0.00");
+                        tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + Constant.systemSettings.getCurrency() + "0.00");
                         lytPayOption.setVisibility(View.VISIBLE);
                     }
                     subtotal = (subtotal - usedBalance);
-                    tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
+                    tvSubTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(subtotal));
                     chWallet.setTag("true");
 
                 } else {
@@ -434,9 +434,9 @@ public class PaymentFragment extends Fragment {
         rbFlutterWave.setChecked(false);
 
         lytPayOption.setVisibility(View.VISIBLE);
-        tvWltBalance.setText(getString(R.string.total) + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
+        tvWltBalance.setText(getString(R.string.total) + Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
         subtotal = (subtotal + usedBalance);
-        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
+        tvSubTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(subtotal));
         chWallet.setChecked(false);
         chWallet.setTag("false");
     }
@@ -558,24 +558,24 @@ public class PaymentFragment extends Fragment {
 
         if (pCodeDiscount > 0) {
             lytDialogPromo.setVisibility(View.VISIBLE);
-            tvDialogPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + pCodeDiscount);
+            tvDialogPCAmount.setText("- " + Constant.systemSettings.getCurrency() + pCodeDiscount);
         } else {
             lytDialogPromo.setVisibility(View.GONE);
         }
 
         if (chWallet.getTag().toString().equals("true")) {
             lytDialogWallet.setVisibility(View.VISIBLE);
-            tvDialogWallet.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + usedBalance);
+            tvDialogWallet.setText("- " + Constant.systemSettings.getCurrency() + usedBalance);
         } else {
             lytDialogWallet.setVisibility(View.GONE);
         }
 
-        tvDialogItemTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(total));
-        tvDialogDeliveryCharge.setText(Constant.SETTING_DELIVERY_CHARGE > 0 ? Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Constant.SETTING_DELIVERY_CHARGE) : getString(R.string.free));
+        tvDialogItemTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(total));
+        tvDialogDeliveryCharge.setText(Constant.SETTING_DELIVERY_CHARGE > 0 ? Constant.systemSettings.getCurrency() + Constant.formater.format(Constant.SETTING_DELIVERY_CHARGE) : getString(R.string.free));
         tvDialogTaxPercent.setText(getString(R.string.tax) + "(" + Constant.SETTING_TAX + "%) :");
-        tvDialogTaxAmt.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(taxAmt));
-        tvDialogTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(totalAfterTax));
-        tvDialogFinalTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(subtotal));
+        tvDialogTaxAmt.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(taxAmt));
+        tvDialogTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(totalAfterTax));
+        tvDialogFinalTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(subtotal));
         tvDialogConfirm.setOnClickListener(v -> {
             sendparams.put(Constant.ORDER_NOTE, tvSpecialNote.getText().toString().trim());
             if (paymentMethod.equals(getResources().getString(R.string.codpaytype)) || paymentMethod.equals(getString(R.string.wallettype))) {

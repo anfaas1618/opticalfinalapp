@@ -14,16 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
-import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
-import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 
 /**
@@ -36,7 +33,6 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
     public Activity activity;
     public int itemResource;
     Context context;
-    ImageLoader netImageLoader = ApiConfig.getInstance().getImageLoader();
 
     public AdapterStyle1(Context context, Activity activity, ArrayList<Product> productList, int itemResource) {
         this.context = context;
@@ -60,7 +56,6 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
     @Override
     public void onBindViewHolder(VideoHolder holder, final int position) {
         final Product product = productList.get(position);
-        final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
 
         Picasso.get()
                 .load(product.getImage())
@@ -70,7 +65,8 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
                 .error(R.drawable.placeholder)
                 .into(holder.thumbnail);
 
-        holder.v_title.setText(product.getName());
+        holder.tvTitle.setText(product.getName());
+        holder.tvPrice.setText(product.getPriceVariations().get(0).getDiscounted_price().equals("0") ? product.getPriceVariations().get(0).getProductPrice() : product.getPriceVariations().get(0).getDiscounted_price());
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,14 +106,14 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
     public class VideoHolder extends RecyclerView.ViewHolder {
 
         public ImageView thumbnail;
-        public TextView v_title, v_date, description;
+        public TextView tvTitle, tvPrice;
         public RelativeLayout relativeLayout;
 
         public VideoHolder(View itemView) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.thumbnail);
-            v_title = itemView.findViewById(R.id.title);
-            v_date = itemView.findViewById(R.id.date);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvPrice = itemView.findViewById(R.id.tvPrice);
             relativeLayout = itemView.findViewById(R.id.play_layout);
 
         }

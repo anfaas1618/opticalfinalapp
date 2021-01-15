@@ -91,7 +91,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             holder.txtmeasurement.setText(cart.getItems().get(0).getMeasurement() + "\u0020" + cart.getItems().get(0).getUnit());
 
-            holder.txtprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getDiscounted_price())));
+            holder.txtprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getDiscounted_price())));
 
             if (cart.getItems().get(0).getIsAvailable().equals("false")) {
                 holder.txtstatus.setVisibility(View.VISIBLE);
@@ -101,15 +101,15 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             if (cart.getItems().get(0).getDiscounted_price().equals("0")) {
-                holder.txtprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getPrice())));
+                holder.txtprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getPrice())));
                 price = Double.parseDouble(cart.getItems().get(0).getPrice());
             } else if (!cart.getItems().get(0).getDiscounted_price().equalsIgnoreCase(cart.getItems().get(0).getPrice())) {
                 holder.txtoriginalprice.setPaintFlags(holder.txtoriginalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                holder.txtoriginalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getPrice())));
+                holder.txtoriginalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getPrice())));
             }
 
             holder.txtQuantity.setText(cart.getQty());
-            holder.txttotalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(price * Integer.parseInt(cart.getQty())));
+            holder.txttotalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(price * Integer.parseInt(cart.getQty())));
 
             final double finalPrice = price;
             holder.btnaddqty.setOnClickListener(new View.OnClickListener() {
@@ -118,11 +118,11 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     if (ApiConfig.isConnected(activity)) {
                         if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) >= Float.parseFloat(cart.getItems().get(0).getStock()))) {
-                            if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) + 1 > Constant.MAX_PRODUCT_LIMIT)) {
+                            if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) + 1 > Integer.parseInt(Constant.systemSettings.getMax_cart_items_count()))) {
                                 int count = Integer.parseInt(holder.txtQuantity.getText().toString());
                                 count++;
                                 holder.txtQuantity.setText("" + count);
-                                holder.txttotalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(finalPrice * count));
+                                holder.txttotalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(finalPrice * count));
                                 Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + finalPrice;
                                 if (CartFragment.values.containsKey(items.get(position).getProduct_variant_id())) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -154,7 +154,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             int count = Integer.parseInt(holder.txtQuantity.getText().toString());
                             count--;
                             holder.txtQuantity.setText("" + count);
-                            holder.txttotalprice.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(finalPrice * count));
+                            holder.txttotalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(finalPrice * count));
                             Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT - finalPrice;
                             if (CartFragment.values.containsKey(items.get(position).getProduct_variant_id())) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

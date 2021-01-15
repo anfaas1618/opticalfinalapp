@@ -29,6 +29,7 @@ import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
+import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 
 
@@ -110,8 +111,33 @@ public class SearchFragment extends Fragment {
 
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
+                            try {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
 
-                            productArrayList = ApiConfig.GetProductList(jsonArray);
+                                        for (int j = 0; j < pricearray.length(); j++) {
+                                            JSONObject obj = pricearray.getJSONObject(j);
+                                            String discountpercent = "0", productPrice = " ";
+                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                productPrice = obj.getString(Constant.PRICE);
+                                            else {
+                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                            }
+                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                        }
+                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                             productAdapter = new ProductAdapter(productArrayList, R.layout.lyt_item_list, activity);
                             recycleview.setAdapter(productAdapter);
                             noResult.setVisibility(View.GONE);

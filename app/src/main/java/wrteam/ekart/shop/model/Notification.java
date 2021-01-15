@@ -4,19 +4,6 @@ public class Notification {
 
     String id, name, subtitle, type, type_id, image;
 
-    public Notification() {
-
-    }
-
-    public Notification(String id, String name, String subtitle, String type, String type_id, String image) {
-        this.id = id;
-        this.name = name;
-        this.subtitle = subtitle;
-        this.type = type;
-        this.type_id = type_id;
-        this.image = image;
-    }
-
     public String getId() {
         return id;
     }

@@ -218,10 +218,10 @@ public class CheckoutFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public void SetDataTotal() {
-        tvTotalBeforeTax.setText(Constant.SETTING_CURRENCY_SYMBOL + Double.parseDouble("" + total));
+        tvTotalBeforeTax.setText(Constant.systemSettings.getCurrency() + Double.parseDouble("" + total));
         subtotal = total;
         if (total <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
-            tvDeliveryCharge.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.SETTING_DELIVERY_CHARGE);
+            tvDeliveryCharge.setText(Constant.systemSettings.getCurrency() + Constant.SETTING_DELIVERY_CHARGE);
             subtotal = Double.parseDouble("" + (subtotal + Constant.SETTING_DELIVERY_CHARGE));
             deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
         } else {
@@ -235,8 +235,8 @@ public class CheckoutFragment extends Fragment {
             subtotal = (subtotal + taxAmt - pCodeDiscount);
         }
         tvTaxPercent.setText("Tax (" + ((taxAmt * 100) / total) + "%)");
-        tvTaxAmt.setText("+ " + Constant.SETTING_CURRENCY_SYMBOL + "" + Double.parseDouble("" + taxAmt));
-        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + "" + Double.parseDouble("" + subtotal));
+        tvTaxAmt.setText("+ " + Constant.systemSettings.getCurrency() + "" + Double.parseDouble("" + taxAmt));
+        tvSubTotal.setText(Constant.systemSettings.getCurrency() + "" + Double.parseDouble("" + subtotal));
     }
 
     public void PromoCodeCheck() {
@@ -283,8 +283,8 @@ public class CheckoutFragment extends Fragment {
                                         dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
                                         subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT));
                                         pCodeDiscount = Double.parseDouble(object.getString(Constant.DISCOUNT));
-                                        tvPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + pCodeDiscount);
-                                        tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Double.parseDouble("" + subtotal));
+                                        tvPCAmount.setText("- " + Constant.systemSettings.getCurrency() + pCodeDiscount);
+                                        tvSubTotal.setText(Constant.systemSettings.getCurrency() + Double.parseDouble("" + subtotal));
                                     } else {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                                         btnApply.setText("Apply");

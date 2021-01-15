@@ -1,9 +1,12 @@
 package wrteam.ekart.shop.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +15,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -33,6 +37,7 @@ import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Favorite;
+import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -56,6 +61,8 @@ public class FavoriteFragment extends Fragment {
     int offset = 0;
     SwipeRefreshLayout swipeLayout;
     boolean isLoadMore = false;
+    boolean isGrid = false;
+    int resource;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,8 +71,9 @@ public class FavoriteFragment extends Fragment {
         setHasOptionsMenu(true);
 
         activity = getActivity();
-
         session = new Session(activity);
+
+        resource = R.layout.lyt_item_list;
 
         isLogin = session.isUserLoggedIn();
         databaseHelper = new DatabaseHelper(activity);
@@ -139,9 +147,34 @@ public class FavoriteFragment extends Fragment {
                             }
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            favoriteArrayList.addAll(ApiConfig.GetFavoriteProductList(jsonArray));
+                            try {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                        for (int j = 0; j < pricearray.length(); j++) {
+                                            JSONObject obj = pricearray.getJSONObject(j);
+                                            String discountpercent = "0", productPrice = " ";
+                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                productPrice = obj.getString(Constant.PRICE);
+                                            else {
+                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                            }
+                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                        }
+                                        productArrayList.add(new Favorite(jsonObject.getString(Constant.PRODUCT_ID), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             if (offset == 0) {
-                                favoriteLoadMoreAdapter = new FavoriteLoadMoreAdapter(getContext(), favoriteArrayList, R.layout.lyt_item_list);
+                                favoriteLoadMoreAdapter = new FavoriteLoadMoreAdapter(getContext(), favoriteArrayList, resource);
                                 favoriteLoadMoreAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(favoriteLoadMoreAdapter);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -179,7 +212,33 @@ public class FavoriteFragment extends Fragment {
                                                                             favoriteArrayList.remove(favoriteArrayList.size() - 1);
                                                                             favoriteLoadMoreAdapter.notifyItemRemoved(favoriteArrayList.size());
 
-                                                                            favoriteArrayList.addAll(ApiConfig.GetFavoriteProductList(jsonArray));
+                                                                            try {
+                                                                                for (int i = 0; i < jsonArray.length(); i++) {
+                                                                                    try {
+                                                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                                                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                                                                        for (int j = 0; j < pricearray.length(); j++) {
+                                                                                            JSONObject obj = pricearray.getJSONObject(j);
+                                                                                            String discountpercent = "0", productPrice = " ";
+                                                                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                                                                productPrice = obj.getString(Constant.PRICE);
+                                                                                            else {
+                                                                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                                                                            }
+                                                                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                                                                        }
+                                                                                        productArrayList.add(new Favorite(jsonObject.getString(Constant.PRODUCT_ID), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                                                                    } catch (JSONException e) {
+                                                                                        e.printStackTrace();
+                                                                                    }
+                                                                                }
+                                                                            } catch (Exception e) {
+                                                                                e.printStackTrace();
+                                                                            }
+
                                                                             favoriteLoadMoreAdapter.notifyDataSetChanged();
                                                                             favoriteLoadMoreAdapter.setLoaded();
                                                                             isLoadMore = false;
@@ -223,19 +282,41 @@ public class FavoriteFragment extends Fragment {
             ApiConfig.RequestToVolley(new VolleyCallback() {
                 @Override
                 public void onSuccess(boolean result, String response) {
-
                     if (result) {
                         try {
                             JSONObject objectbject = new JSONObject(response);
                             if (!objectbject.getBoolean(Constant.ERROR)) {
                                 JSONArray jsonArray = objectbject.getJSONArray(Constant.DATA);
-                                productArrayList = new ArrayList<>();
-                                recyclerView.setVisibility(View.VISIBLE);
-                                tvAlert.setVisibility(View.GONE);
-                                offlineFavoriteAdapter = new OfflineFavoriteAdapter(getContext(), productArrayList, R.layout.lyt_item_list);
-                                offlineFavoriteAdapter.setHasStableIds(true);
-                                productArrayList.addAll(ApiConfig.GetProductList(jsonArray));
-                                recyclerView.setAdapter(offlineFavoriteAdapter);
+                                try {
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        try {
+                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                            if (jsonObject != null) {
+                                                ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                                JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                                for (int j = 0; j < pricearray.length(); j++) {
+                                                    JSONObject obj = pricearray.getJSONObject(j);
+                                                    String discountpercent = "0", productPrice = " ";
+                                                    if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                        productPrice = obj.getString(Constant.PRICE);
+                                                    else {
+                                                        discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                        productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                                    }
+                                                    priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                                }
+                                                productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                            } else {
+                                                break;
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             } else {
                                 recyclerView.setVisibility(View.GONE);
                                 tvAlert.setVisibility(View.VISIBLE);
@@ -250,14 +331,45 @@ public class FavoriteFragment extends Fragment {
             recyclerView.setVisibility(View.GONE);
             tvAlert.setVisibility(View.VISIBLE);
         }
-
     }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.toolbar_layout) {
+            if (isGrid) {
+                isGrid = false;
+                recyclerView.setAdapter(null);
+                resource = R.layout.lyt_item_list;
+                recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+            } else {
+                isGrid = true;
+                recyclerView.setAdapter(null);
+                resource = R.layout.lyt_item_grid;
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            }
+            if (session.isUserLoggedIn()) {
+                favoriteLoadMoreAdapter = new FavoriteLoadMoreAdapter(getContext(), favoriteArrayList, resource);
+                recyclerView.setAdapter(favoriteLoadMoreAdapter);
+                favoriteLoadMoreAdapter.notifyDataSetChanged();
+            } else {
+                offlineFavoriteAdapter = new OfflineFavoriteAdapter(getContext(), productArrayList, resource);
+                recyclerView.setAdapter(offlineFavoriteAdapter);
+                offlineFavoriteAdapter.notifyDataSetChanged();
+            }
+            activity.invalidateOptionsMenu();
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
         Constant.TOOLBAR_TITLE = getString(R.string.title_fav);
-        getActivity().invalidateOptionsMenu();
+        activity.invalidateOptionsMenu();
         hideKeyboard();
     }
 
@@ -271,11 +383,20 @@ public class FavoriteFragment extends Fragment {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(true);
-        menu.findItem(R.id.toolbar_sort).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(true);
         menu.findItem(R.id.toolbar_search).setVisible(true);
+
+        Drawable myDrawable = null;
+        if (isGrid) {
+            myDrawable = getResources().getDrawable(R.drawable.ic_list); // The ID of your drawable.
+        } else {
+            myDrawable = getResources().getDrawable(R.drawable.ic_grid); // The ID of your drawable.
+        }
+        menu.findItem(R.id.toolbar_layout).setIcon(myDrawable);
+        super.onPrepareOptionsMenu(menu);
     }
 }

@@ -337,16 +337,16 @@ public class TrackerDetailFragment extends Fragment {
         txtorderdate.setText(date[0]);
         txtotherdetails.setText(getString(R.string.name_1) + order.getUsername() + getString(R.string.mobile_no_1) + order.getMobile() + getString(R.string.address_1) + order.getAddress());
         totalAfterTax = (Double.parseDouble(order.getTotal()) + Double.parseDouble(order.getDelivery_charge()) + Double.parseDouble(order.getTax_amt()));
-        tvItemTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + order.getTotal());
-        tvDeliveryCharge.setText("+ " + Constant.SETTING_CURRENCY_SYMBOL + order.getDelivery_charge());
+        tvItemTotal.setText(Constant.systemSettings.getCurrency() + order.getTotal());
+        tvDeliveryCharge.setText("+ " + Constant.systemSettings.getCurrency() + order.getDelivery_charge());
         tvTaxPercent.setText(getString(R.string.tax) + "(" + order.getTax_percent() + "%) :");
-        tvTaxAmt.setText("+ " + Constant.SETTING_CURRENCY_SYMBOL + order.getTax_amt());
+        tvTaxAmt.setText("+ " + Constant.systemSettings.getCurrency() + order.getTax_amt());
         tvDPercent.setText(getString(R.string.discount) + "(" + order.getdPercent() + "%) :");
-        tvDAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + order.getdAmount());
-        tvTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + totalAfterTax);
-        tvPCAmount.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + order.getPromoDiscount());
-        tvWallet.setText("- " + Constant.SETTING_CURRENCY_SYMBOL + order.getWalletBalance());
-        tvFinalTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + order.getFinal_total());
+        tvDAmount.setText("- " + Constant.systemSettings.getCurrency() + order.getdAmount());
+        tvTotal.setText(Constant.systemSettings.getCurrency() + totalAfterTax);
+        tvPCAmount.setText("- " + Constant.systemSettings.getCurrency() + order.getPromoDiscount());
+        tvWallet.setText("- " + Constant.systemSettings.getCurrency() + order.getWalletBalance());
+        tvFinalTotal.setText(Constant.systemSettings.getCurrency() + order.getFinal_total());
 
         if (!order.getStatus().equalsIgnoreCase("delivered") && !order.getStatus().equalsIgnoreCase("cancelled") && !order.getStatus().equalsIgnoreCase("returned")) {
             btnCancel.setVisibility(View.VISIBLE);

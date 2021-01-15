@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,7 +69,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.ID, model.getId());
                 bundle.putString(Constant.NAME, model.getName());
-                bundle.putString(Constant.FROM, "regular");
+                bundle.putString(Constant.FROM, from);
                 fragment.setArguments(bundle);
                 activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
@@ -84,7 +85,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
         public TextView txttitle;
         ImageView imgcategory;
-        LinearLayout lytMain;
+        RelativeLayout lytMain;
 
         public ViewHolder(View itemView) {
             super(itemView);

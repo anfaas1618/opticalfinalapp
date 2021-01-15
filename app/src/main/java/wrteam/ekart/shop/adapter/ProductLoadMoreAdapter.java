@@ -59,13 +59,15 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     boolean isLogin;
     DatabaseHelper databaseHelper;
     boolean isFavorite;
+    String from;
 
 
-    public ProductLoadMoreAdapter(Context context, ArrayList<Product> myDataset, int resource) {
+    public ProductLoadMoreAdapter(Context context, ArrayList<Product> myDataset, int resource, String from) {
         this.context = context;
         this.activity = (Activity) context;
         this.mDataset = myDataset;
         this.resource = resource;
+        this.from = from;
         this.session = new Session(activity);
         isLogin = session.isUserLoggedIn();
         Constant.CartValues = new HashMap<>();
@@ -138,7 +140,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     Bundle bundle = new Bundle();
                     bundle.putInt("vpos", priceVariations.size() == 1 ? 0 : holder.spinner.getSelectedItemPosition());
                     bundle.putString("id", product.getId());
-                    bundle.putString(Constant.FROM, "fragment");
+                    bundle.putString(Constant.FROM, from);
                     bundle.putInt("position", position);
 
                     fragment.setArguments(bundle);
@@ -248,7 +250,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holder.txtmeasurement.setVisibility(View.VISIBLE);
             holder.txtmeasurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
         }
-        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
 
         if (session.isUserLoggedIn()) {
             if (Constant.CartValues.containsKey(extra.getId())) {
@@ -268,10 +270,10 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
         } else {
             holder.lytDiscount.setVisibility(View.VISIBLE);
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getPrice());
+            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getPrice());
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
 
@@ -301,7 +303,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View view) {
                     int count = Integer.parseInt(holder.txtqty.getText().toString());
                     if (count < Float.parseFloat(extra.getStock())) {
-                        if (count < Constant.MAX_PRODUCT_LIMIT) {
+                        if (count < Integer.parseInt(Constant.systemSettings.getMax_cart_items_count())) {
                             count++;
                             holder.txtqty.setText("" + count);
                             if (Constant.CartValues.containsKey(extra.getId())) {
@@ -350,7 +352,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View view) {
                     int count = Integer.parseInt(holder.txtqty.getText().toString());
                     if (count < Float.parseFloat(extra.getStock())) {
-                        if (count < Constant.MAX_PRODUCT_LIMIT) {
+                        if (count < Integer.parseInt(Constant.systemSettings.getMax_cart_items_count())) {
                             count++;
                             holder.txtqty.setText("" + count);
                             databaseHelper.AddOrderData(extra.getId(), extra.getProduct_id(), "" + count);
@@ -467,7 +469,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-//            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+//            price.setText(Constant.systemSettings.getCurrency() + extra.getProductPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));

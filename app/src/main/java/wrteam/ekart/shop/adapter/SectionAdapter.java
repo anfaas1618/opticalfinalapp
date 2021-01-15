@@ -74,7 +74,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionH
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.FROM, "section");
                 bundle.putString(Constant.NAME, section.getName());
-                bundle.putInt("position", position);
+                bundle.putString(Constant.ID, section.getId());
                 fragment.setArguments(bundle);
 
                 MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();

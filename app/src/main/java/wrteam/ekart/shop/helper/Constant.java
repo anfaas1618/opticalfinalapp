@@ -3,6 +3,8 @@ package wrteam.ekart.shop.helper;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
+import wrteam.ekart.shop.model.SystemSettings;
+
 public class Constant {
     //MODIFICATION PART
 
@@ -88,22 +90,14 @@ public class Constant {
     public static String REMOVE_FCM_ID = "remove_fcm_id";
     public static String KEY_BALANCE = "balance";
     public static String AWAITING_PAYMENT = "awaiting_payment";
-    public static String KEY_REFER_EARN_BONUS = "refer-earn-bonus";
-    public static String KEY_REFER_EARN_STATUS = "is-refer-earn-on";
-    public static String KEY_MAX_EARN_AMOUNT = "max-refer-earn-amount";
-    public static String KEY_MIN_WIDRAWAL = "minimum-withdrawal-amount";
     public static String KEY_WALLET_USED = "wallet_used";
     public static String KEY_WALLET_BALANCE = "wallet_balance";
     public static String WALLET = "wallet";
     public static String PAYMENT = "payment";
-    public static String KEY_VERSION_CODE = "current_version";
-    public static String KEY_UPDATE_STATUS = "is-version-system-on";
     public static String REDIRECT_URL = "redirect_url";
     public static String URL = "url";
-    public static String KEY_ORDER_RETURN_DAY_LIMIT = "max-product-return-days";
     public static String ADD_MULTIPLE_ITEMS = "add_multiple_items";
     public static String GET_REORDER_DATA = "get_reorder_data";
-    public static String MAX_CART_ITEMS_COUNT = "max_cart_items_count";
     public static String FIRST_NAME = "first_name";
     public static String LAST_NAME = "last_name";
     public static String PAYER_EMAIL = "payer_email";
@@ -119,8 +113,6 @@ public class Constant {
     public static String PAYU_M_ID = "payumoney_merchant_id";
     public static String PAYU_SALT = "payumoney_salt";
     public static String RAZOR_PAY_KEY = "razorpay_key";
-    public static String REFER_EARN_BONUS = "";
-    public static String MAX_EARN_AMOUNT = "";
     public static String paystack_public_key = "paystack_public_key";
     public static String UNREAD_NOTIFICATION_COUNT = "unread_notification_count";
     public static String UNREAD_WALLET_COUNT = "unread_wallet_count";
@@ -134,10 +126,7 @@ public class Constant {
     public static String AREA_ID = "area_id";
     public static String REFERRAL_CODE = "referral_code";
     public static String FRIEND_CODE = "friends_code";
-    public static String VERSION_CODE;
     public static String TOOLBAR_TITLE;
-    public static String REQUIRED_VERSION;
-    public static String VERSION_STATUS;
     public static String SOLDOUT_TEXT = "Sold Out";
     public static String QTY = "qty";
     public static String GET_USER_CART = "get_user_cart";
@@ -180,6 +169,7 @@ public class Constant {
     public static String PINCODE = "pincode";
     public static String STATE = "state";
     public static String ERROR = "error";
+    public static String GET_TIMEZONE = "get_timezone";
     public static String ORDER_NOTE = "order_note";
     public static String VERIFY_USER = "verify-user";
     public static String USER_ID = "user_id";
@@ -202,6 +192,8 @@ public class Constant {
     public static String ROW_ORDER = "row_order";
     public static String TILL_STATUS = "till_status";
     public static String SUB_CATEGORY_ID = "subcategory_id";
+    public static String GET_ALL_SECTIONS = "get-all-sections";
+    public static String SECTION_ID = "section_id";
     public static String GET_FAVORITES = "get_favorites";
     public static String GET_FAVORITES_OFFLINE = "get_products_offline";
     public static String GET_CART_OFFLINE = "get_variants_offline";
@@ -230,7 +222,6 @@ public class Constant {
     public static String STOCK_UNIT_NAME = "stock_unit_name";
     public static String SETTINGS = "settings";
     public static String GET_SETTINGS = "get_settings";
-    public static String MINIMUM_ORDER_AMOUNT = "min_order_amount";
     public static String GET_TIME_SLOT_CONFIG = "get_time_slot_config";
     public static String TIME_SLOT_CONFIG = "time_slot_config";
     public static String IS_TIME_SLOTS_ENABLE = "is_time_slots_enabled";
@@ -244,17 +235,9 @@ public class Constant {
     public static String flutterwave_payment_method = "flutterwave_payment_method";
     public static String midtrans_payment_method = "midtrans_payment_method";
     public static String stripe_payment_method = "stripe_payment_method";
-    public static String KEY_REFER_EARN_METHOD = "refer-earn-method";
-    public static String KEY_MIN_REFER_ORDER_AMOUNT = "min-refer-earn-order-amount";
-    public static String REFER_EARN_ORDER_AMOUNT = "";
-    public static String REFER_EARN_METHOD = "";
-    public static String REFER_EARN_ACTIVE = "";
-    public static String REPLY_TO = "reply_to";
     public static String MINIMUM_AMOUNT = "min_amount";
     public static String DELIEVERY_CHARGE = "delivery_charge";
-    public static String AREA_WISE_DELIVERY_CHARGE = "area-wise-delivery-charge";
     public static String CURRENCY = "currency";
-    public static String TAX = "tax";
     public static String GET_FAQS = "get_faqs";
     public static String LIMIT = "limit";
     public static String OFFSET = "offset";
@@ -296,7 +279,6 @@ public class Constant {
     public static String UNIT = "unit";
     public static String SLUG = "slug";
     public static String PROMO_CODE = "promo_code";
-    public static String USER_WALLET_REFILL_LIMIT = "user-wallet-refill-limit";
     public static String TOKEN = "token";
     public static CharSequence[] filtervalues = {" Newest to Oldest ", " Oldest to Newest ", " Price Highest to Lowest ", " Price Lowest to Highest "};
 
@@ -308,20 +290,14 @@ public class Constant {
     public static Double SETTING_DELIVERY_CHARGE = 0.0;
     public static Double SETTING_TAX = 0.0;
     public static Double SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = 0.0;
-    public static Double SETTING_USER_WALLET_REFILL_LIMIT = 0.0;
     public static Double SETTING_MINIMUM_ORDER_AMOUNT = 0.0;
-    public static Double SETTING_AREA_WISE_DELIVERY_CHARGE = 0.0;
-    public static String SETTING_CURRENCY_SYMBOL = "";
-    public static String SETTING_MAIL_ID = "";
     public static Double WALLET_BALANCE = 0.0;
-    public static Double MINIMUM_WITHDRAW_AMOUNT = 0.0;
-    public static int ORDER_DAY_LIMIT = 0;
     public static String country_code = "";
     public static String U_ID = "";
     public static HashMap<String, String> CartValues = new HashMap<>();
     public static int selectedDatePosition = 0;
     public static DecimalFormat formater = new DecimalFormat("0.00");
-    public static int MAX_PRODUCT_LIMIT = 0;
+    public static SystemSettings systemSettings;
     public static boolean CLICK = false;
     public static double FLOAT_TOTAL_AMOUNT = 0;
     public static int TOTAL_CART_ITEM = 0;
@@ -329,7 +305,6 @@ public class Constant {
     public static String FRND_CODE = "";
     public static String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghjiklmnopqrstuvwxyz";
     public static String NUMERIC_STRING = "123456789";
-    public static boolean isSort = false;
     public static String PAYPAL = "";
     public static String PAYUMONEY = "";
     public static String RAZORPAY = "";

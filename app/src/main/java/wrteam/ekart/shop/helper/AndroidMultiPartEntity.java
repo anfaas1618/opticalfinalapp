@@ -18,18 +18,6 @@ public class AndroidMultiPartEntity extends MultipartEntity {
         this.listener = listener;
     }
 
-    public AndroidMultiPartEntity(final HttpMultipartMode mode,
-                                  final ProgressListener listener) {
-        super(mode);
-        this.listener = listener;
-    }
-
-    public AndroidMultiPartEntity(HttpMultipartMode mode, final String boundary,
-                                  final Charset charset, final ProgressListener listener) {
-        super(mode, boundary, charset);
-        this.listener = listener;
-    }
-
     @Override
     public void writeTo(final OutputStream outstream) throws IOException {
         super.writeTo(new CountingOutputStream(outstream, this.listener));

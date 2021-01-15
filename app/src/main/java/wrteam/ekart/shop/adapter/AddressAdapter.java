@@ -145,7 +145,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Constant.selectedAddressId = address.getId();
                 new Session(activity).setData(Constant.LONGITUDE, address.getLongitude());
                 new Session(activity).setData(Constant.LATITUDE, address.getLatitude());
-                if (Constant.SETTING_AREA_WISE_DELIVERY_CHARGE == 1) {
+                if (Constant.systemSettings.getArea_wise_delivery_charge().equals("1")) {
                     Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(address.getMinimum_free_delivery_order_amount());
                     Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(address.getDelivery_charges());
                 }

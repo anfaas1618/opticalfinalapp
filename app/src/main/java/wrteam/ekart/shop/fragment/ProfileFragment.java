@@ -106,8 +106,6 @@ public class ProfileFragment extends Fragment {
 
         session = new Session(getContext());
 
-        ApiConfig.getLocation(activity);
-
         imgProfile = root.findViewById(R.id.imgProfile);
 
         Picasso.get()
@@ -280,7 +278,6 @@ public class ProfileFragment extends Fragment {
         menu.findItem(R.id.toolbar_search).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
-        menu.findItem(R.id.toolbar_layout).setVisible(false);
     }
 
 

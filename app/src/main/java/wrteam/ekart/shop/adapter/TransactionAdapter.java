@@ -75,7 +75,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             holder.tvTxDateAndTime.setText(transaction.getDate_created());
             holder.tvTxMessage.setText(activity.getString(R.string.hash) + transaction.getOrder_id() + " " + transaction.getMessage());
-            holder.tvTxAmount.setText(activity.getString(R.string.amount_) + Constant.SETTING_CURRENCY_SYMBOL + " " + Float.parseFloat(transaction.getAmount()));
+            holder.tvTxAmount.setText(activity.getString(R.string.amount_) + Constant.systemSettings.getCurrency() + " " + Float.parseFloat(transaction.getAmount()));
             holder.tvTxNo.setText(activity.getString(R.string.hash) + transaction.getTxn_id());
             holder.tvPaymentMethod.setText(activity.getString(R.string.via) + transaction.getType());
 

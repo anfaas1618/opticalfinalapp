@@ -3,7 +3,6 @@ package wrteam.ekart.shop.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -21,9 +20,15 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.tasks.OnFailureListener;
 import com.google.android.play.core.tasks.Task;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.AddressListFragment;
@@ -38,6 +43,8 @@ import wrteam.ekart.shop.fragment.WebViewFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
+import wrteam.ekart.shop.helper.VolleyCallback;
+import wrteam.ekart.shop.model.SystemSettings;
 import wrteam.ekart.shop.ui.CircleTransform;
 
 @SuppressLint("StaticFieldLeak")
@@ -61,7 +68,6 @@ public class DrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
 
-
         frameLayout = findViewById(R.id.content_frame);
         navigationView = findViewById(R.id.nav_view);
         drawer_layout = findViewById(R.id.drawer_layout);
@@ -71,16 +77,16 @@ public class DrawerActivity extends AppCompatActivity {
         tvMobile = header.findViewById(R.id.tvMobile);
         lytProfile = header.findViewById(R.id.lytProfile);
         imgProfile = header.findViewById(R.id.imgProfile);
+
         activity = DrawerActivity.this;
         session = new Session(activity);
 
-        manager = ReviewManagerFactory.create(activity);
-
+        manager = ReviewManagerFactory.create(this);
         request = manager.requestReviewFlow();
         request.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 // We can get the ReviewInfo object
-                reviewInfo = task.getResult();
+                ReviewInfo reviewInfo = task.getResult();
             } else {
                 // There was some problem, continue regardless of the result.
             }
@@ -123,13 +129,39 @@ public class DrawerActivity extends AppCompatActivity {
             else
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class).putExtra(Constant.FROM, "drawer"));
         });
-        setupNavigationDrawer();
+        GetSettings(activity);
+    }
 
+    public void GetSettings(final Activity activity) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.SETTINGS, Constant.GetVal);
+        params.put(Constant.GET_TIMEZONE, Constant.GetVal);
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject objectbject = new JSONObject(response);
+                        if (!objectbject.getBoolean(Constant.ERROR)) {
+                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
+                            Constant.systemSettings = new Gson().fromJson(object.toString(), SystemSettings.class);
+
+                            setupNavigationDrawer();
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, activity, Constant.SETTING_URL, params, false);
     }
 
     @SuppressLint("NonConstantResourceId")
     void setupNavigationDrawer() {
         Menu nav_Menu = navigationView.getMenu();
+
         if (session.isUserLoggedIn()) {
             nav_Menu.findItem(R.id.menu_logout).setVisible(true);
             nav_Menu.setGroupVisible(R.id.group1, true);
@@ -138,6 +170,10 @@ public class DrawerActivity extends AppCompatActivity {
             nav_Menu.findItem(R.id.menu_logout).setVisible(false);
             nav_Menu.setGroupVisible(R.id.group1, false);
             nav_Menu.setGroupVisible(R.id.group2, false);
+        }
+
+        if (Constant.systemSettings.getIs_refer_earn_on().equals("0")) {
+            nav_Menu.findItem(R.id.menu_refer).setVisible(false);
         }
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
@@ -239,12 +275,9 @@ public class DrawerActivity extends AppCompatActivity {
                 case R.id.menu_rate:
                     Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
                     flow.addOnCompleteListener(task -> {
-                        task.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(Exception e) {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constant.PLAY_STORE_LINK + getPackageName())));
-                            }
-                        });
+                        // The flow has finished. The API does not indicate whether the user
+                        // reviewed or not, or even whether the review dialog was shown. Thus, no
+                        // matter the result, we continue our app flow.
                     });
                     break;
                 case R.id.menu_logout:

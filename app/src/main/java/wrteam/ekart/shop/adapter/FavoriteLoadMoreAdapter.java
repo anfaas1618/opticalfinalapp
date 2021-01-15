@@ -54,11 +54,9 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     public final int VIEW_TYPE_LOADING = 1;
     final Context context;
     final Activity activity;
-    // The minimum amount of items to have below your current scroll position
-    // before loading more.
     public boolean isLoading;
     public int resource;
-    public ArrayList<Favorite> mDataset = new ArrayList<>();
+    public ArrayList<Favorite> mDataset;
     SpannableString spannableString;
     Session session;
     boolean isLogin;
@@ -102,106 +100,107 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holderparent, final int position) {
 
         if (holderparent instanceof FavoriteLoadMoreAdapter.ViewHolderRow) {
-            final FavoriteLoadMoreAdapter.ViewHolderRow holder = (FavoriteLoadMoreAdapter.ViewHolderRow) holderparent;
-            holder.setIsRecyclable(false);
-            final Favorite product = mDataset.get(position);
+            try {
+                final FavoriteLoadMoreAdapter.ViewHolderRow holder = (FavoriteLoadMoreAdapter.ViewHolderRow) holderparent;
+                holder.setIsRecyclable(false);
+                final Favorite product = mDataset.get(position);
 
-            final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
-            if (priceVariations.size() == 1) {
-                holder.spinner.setVisibility(View.GONE);
-            }
-            if (!product.getIndicator().equals("0")) {
-                holder.imgIndicator.setVisibility(View.VISIBLE);
-                if (product.getIndicator().equals("1"))
-                    holder.imgIndicator.setImageResource(R.drawable.ic_veg_icon);
-                else if (product.getIndicator().equals("2"))
-                    holder.imgIndicator.setImageResource(R.drawable.ic_non_veg_icon);
-            }
-
-            holder.productName.setText(Html.fromHtml(product.getName()));
-
-            Picasso.get()
-                    .load(product.getImage())
-                    .fit()
-                    .centerInside()
-                    .placeholder(R.drawable.placeholder)
-                    .error(R.drawable.placeholder)
-                    .into(holder.imgThumb);
-
-            FavoriteLoadMoreAdapter.CustomAdapter customAdapter = new FavoriteLoadMoreAdapter.CustomAdapter(context, priceVariations, holder, product);
-            holder.spinner.setAdapter(customAdapter);
-
-            holder.lytmain.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (Constant.CartValues.size() > 0) {
-                        ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
-                    }
-
-                    AppCompatActivity activity1 = (AppCompatActivity) context;
-                    Fragment fragment = new ProductDetailFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("vpos", priceVariations.size() == 1 ? 0 : holder.spinner.getSelectedItemPosition());
-                    bundle.putString("id", product.getProduct_id());
-                    bundle.putInt("position", position);
-                    bundle.putString(Constant.FROM, "favorite");
-                    fragment.setArguments(bundle);
-                    activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
+                if (priceVariations.size() == 1) {
+                    holder.spinner.setVisibility(View.GONE);
                 }
-            });
-
-
-            if (isLogin) {
-
-                holder.txtqty.setText(priceVariations.get(0).getCart_count());
-
-                if (product.isIs_favorite()) {
-                    holder.imgFav.setImageResource(R.drawable.ic_is_favorite);
-                } else {
-                    holder.imgFav.setImageResource(R.drawable.ic_is_not_favorite);
+                if (!product.getIndicator().equals("0")) {
+                    holder.imgIndicator.setVisibility(View.VISIBLE);
+                    if (product.getIndicator().equals("1"))
+                        holder.imgIndicator.setImageResource(R.drawable.ic_veg_icon);
+                    else if (product.getIndicator().equals("2"))
+                        holder.imgIndicator.setImageResource(R.drawable.ic_non_veg_icon);
                 }
-                final Session session = new Session(activity);
 
-                holder.imgFav.setImageResource(R.drawable.ic_is_favorite);
+                holder.productName.setText(Html.fromHtml(product.getName()));
 
-                holder.imgFav.setOnClickListener(new View.OnClickListener() {
+                Picasso.get()
+                        .load(product.getImage())
+                        .fit()
+                        .centerInside()
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)
+                        .into(holder.imgThumb);
+
+                FavoriteLoadMoreAdapter.CustomAdapter customAdapter = new FavoriteLoadMoreAdapter.CustomAdapter(context, priceVariations, holder, product);
+                holder.spinner.setAdapter(customAdapter);
+
+                holder.lytmain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (ApiConfig.isConnected(activity)) {
-                            mDataset.remove(product);
-                            FavoriteFragment.favoriteLoadMoreAdapter.notifyDataSetChanged();
-                            recyclerView.setAdapter(FavoriteFragment.favoriteLoadMoreAdapter);
-                            if (session.isUserLoggedIn()) {
-                                AddOrRemoveFavorite(activity, session, product.getProduct_id(), false);
-                            } else {
-                                databaseHelper.AddOrRemoveFavorite(product.getId(), false);
-                            }
-                            if (mDataset.size() == 0) {
-                                tvAlert.setVisibility(View.VISIBLE);
-                                recyclerView.setVisibility(View.GONE);
+
+                        if (Constant.CartValues.size() > 0) {
+                            ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
+                        }
+
+                        AppCompatActivity activity1 = (AppCompatActivity) context;
+                        Fragment fragment = new ProductDetailFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("vpos", priceVariations.size() == 1 ? 0 : holder.spinner.getSelectedItemPosition());
+                        bundle.putString("id", product.getProduct_id());
+                        bundle.putInt("position", position);
+                        bundle.putString(Constant.FROM, "favorite");
+                        fragment.setArguments(bundle);
+                        activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                    }
+                });
+
+
+                if (isLogin) {
+
+                    holder.txtqty.setText(priceVariations.get(0).getCart_count());
+
+                    if (product.isIs_favorite()) {
+                        holder.imgFav.setImageResource(R.drawable.ic_is_favorite);
+                    } else {
+                        holder.imgFav.setImageResource(R.drawable.ic_is_not_favorite);
+                    }
+                    final Session session = new Session(activity);
+
+                    holder.imgFav.setImageResource(R.drawable.ic_is_favorite);
+
+                    holder.imgFav.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (ApiConfig.isConnected(activity)) {
+                                mDataset.remove(product);
+                                FavoriteFragment.favoriteLoadMoreAdapter.notifyDataSetChanged();
+                                recyclerView.setAdapter(FavoriteFragment.favoriteLoadMoreAdapter);
+                                if (session.isUserLoggedIn()) {
+                                    AddOrRemoveFavorite(activity, session, product.getProduct_id(), false);
+                                } else {
+                                    databaseHelper.AddOrRemoveFavorite(product.getId(), false);
+                                }
+                                if (mDataset.size() == 0) {
+                                    tvAlert.setVisibility(View.VISIBLE);
+                                    recyclerView.setVisibility(View.GONE);
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-            } else {
+                } else {
 
-                holder.txtqty.setText(databaseHelper.CheckOrderExists(product.getPriceVariations().get(0).getId(), product.getId()));
+                    holder.txtqty.setText(databaseHelper.CheckOrderExists(product.getPriceVariations().get(0).getId(), product.getId()));
 
-                holder.imgFav.setImageResource(R.drawable.ic_is_not_favorite);
+                    holder.imgFav.setImageResource(R.drawable.ic_is_not_favorite);
 
-                holder.imgFav.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        databaseHelper.AddOrRemoveFavorite(product.getId(), false);
-                    }
-                });
+                    holder.imgFav.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            databaseHelper.AddOrRemoveFavorite(product.getId(), false);
+                        }
+                    });
+                }
+                SetSelectedData(holder, priceVariations.get(0));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            SetSelectedData(holder, priceVariations.get(0));
-
-
         } else if (holderparent instanceof FavoriteLoadMoreAdapter.ViewHolderLoading) {
             FavoriteLoadMoreAdapter.ViewHolderLoading loadingViewHolder = (FavoriteLoadMoreAdapter.ViewHolderLoading) holderparent;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -237,7 +236,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void SetSelectedData(final FavoriteLoadMoreAdapter.ViewHolderRow holder, final PriceVariation extra) {
 
         holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
-        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
 
         if (session.isUserLoggedIn()) {
             if (Constant.CartValues.containsKey(extra.getId())) {
@@ -255,9 +254,9 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
             holder.originalPrice.setVisibility(View.INVISIBLE);
             holder.showDiscount.setVisibility(View.INVISIBLE);
 
-            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
         } else {
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + extra.getPrice());
+            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getPrice());
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
@@ -280,7 +279,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 public void onClick(View view) {
                     int count = Integer.parseInt(holder.txtqty.getText().toString());
                     if (count < Float.parseFloat(extra.getStock())) {
-                        if (count < Constant.MAX_PRODUCT_LIMIT) {
+                        if (count < Integer.parseInt(Constant.systemSettings.getMax_cart_items_count())) {
                             count++;
                             holder.txtqty.setText("" + count);
                             if (Constant.CartValues.containsKey(extra.getId())) {
@@ -329,7 +328,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 public void onClick(View view) {
                     int count = Integer.parseInt(holder.txtqty.getText().toString());
                     if (count < Float.parseFloat(extra.getStock())) {
-                        if (count < Constant.MAX_PRODUCT_LIMIT) {
+                        if (count < Integer.parseInt(Constant.systemSettings.getMax_cart_items_count())) {
                             count++;
                             holder.txtqty.setText("" + count);
                             databaseHelper.AddOrderData(extra.getId(), extra.getProduct_id(), "" + count);
@@ -442,7 +441,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-//            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+//            price.setText(Constant.systemSettings.getCurrency() + extra.getProductPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));

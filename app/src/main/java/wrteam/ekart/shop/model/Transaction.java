@@ -4,23 +4,6 @@ public class Transaction {
 
     String id, user_id, order_id, type, txn_id, payu_txn_id, amount, status, message, transaction_date, date_created;
 
-    public Transaction() {
-    }
-
-    public Transaction(String id, String user_id, String order_id, String type, String txn_id, String payu_txn_id, String amount, String status, String message, String transaction_date, String date_created) {
-        this.id = id;
-        this.user_id = user_id;
-        this.order_id = order_id;
-        this.type = type;
-        this.txn_id = txn_id;
-        this.payu_txn_id = payu_txn_id;
-        this.amount = amount;
-        this.status = status;
-        this.message = message;
-        this.transaction_date = transaction_date;
-        this.date_created = date_created;
-    }
-
     public String getId() {
         return id;
     }

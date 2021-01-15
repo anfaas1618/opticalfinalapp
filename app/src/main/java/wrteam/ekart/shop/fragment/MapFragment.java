@@ -112,11 +112,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                         .title(getString(R.string.current_location)));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
             }
         };
-
 
         googleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
@@ -209,8 +207,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     private void getCurrentLocation() {
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 new AlertDialog.Builder(getContext())

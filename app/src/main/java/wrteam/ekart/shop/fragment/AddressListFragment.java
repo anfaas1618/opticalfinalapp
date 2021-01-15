@@ -117,7 +117,7 @@ public class AddressListFragment extends Fragment {
         if (getArguments().getString(Constant.FROM).equalsIgnoreCase("process")) {
             processLyt.setVisibility(View.VISIBLE);
             confirmLyt.setVisibility(View.VISIBLE);
-            tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(getArguments().getDouble("total")));
+            tvSubTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(getArguments().getDouble("total")));
             txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
             tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
@@ -205,7 +205,7 @@ public class AddressListFragment extends Fragment {
                                         session.setData(Constant.LONGITUDE, address.getLongitude());
                                         session.setData(Constant.LATITUDE, address.getLatitude());
                                         Constant.selectedAddressId = address.getId();
-                                        if (Constant.SETTING_AREA_WISE_DELIVERY_CHARGE == 1) {
+                                        if (Constant.systemSettings.getArea_wise_delivery_charge().equals("1")) {
                                             Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(address.getMinimum_free_delivery_order_amount());
                                             Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(address.getDelivery_charges());
                                         } else {

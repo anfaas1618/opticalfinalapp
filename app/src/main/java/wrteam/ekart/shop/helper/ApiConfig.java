@@ -1,12 +1,10 @@
 package wrteam.ekart.shop.helper;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -15,12 +13,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.IdRes;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -45,22 +39,12 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,6 +74,7 @@ import wrteam.ekart.shop.model.Favorite;
 import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 import wrteam.ekart.shop.model.Slider;
+import wrteam.ekart.shop.model.SystemSettings;
 
 import static com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
 import static com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
@@ -97,9 +82,6 @@ import static com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
 public class ApiConfig extends Application {
 
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-    public static String user_location = "";
-    public static double latitude1 = 0, longitude1 = 0;
-    public static GPSTracker gps;
 
     public static final String TAG = ApiConfig.class.getSimpleName();
     static ApiConfig mInstance;
@@ -253,20 +235,17 @@ public class ApiConfig extends Application {
         params.put(Constant.DELETE_ADDRESS, Constant.GetVal);
         params.put(Constant.ID, addressId);
 
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        if (!jsonObject.getBoolean(Constant.ERROR)) {
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (!jsonObject.getBoolean(Constant.ERROR)) {
 
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
             }
         }, activity, Constant.GET_ADDRESS_URL, params, false);
     }
@@ -276,23 +255,20 @@ public class ApiConfig extends Application {
         params.put(Constant.GET_USER_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
 
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        if (!jsonObject.getBoolean(Constant.ERROR)) {
-                            Constant.TOTAL_CART_ITEM = Integer.parseInt(jsonObject.getString(Constant.TOTAL));
-                        } else {
-                            Constant.TOTAL_CART_ITEM = 0;
-                        }
-                        activity.invalidateOptionsMenu();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (!jsonObject.getBoolean(Constant.ERROR)) {
+                        Constant.TOTAL_CART_ITEM = Integer.parseInt(jsonObject.getString(Constant.TOTAL));
+                    } else {
+                        Constant.TOTAL_CART_ITEM = 0;
                     }
-
+                    activity.invalidateOptionsMenu();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
             }
         }, activity, Constant.CART_URL, params, false);
     }
@@ -307,12 +283,9 @@ public class ApiConfig extends Application {
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.PRODUCT_ID, productID);
 
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
 
-                }
             }
         }, activity, Constant.GET_FAVORITES_URL, params, false);
     }
@@ -335,16 +308,13 @@ public class ApiConfig extends Application {
 
                 }
             },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            if (isprogress)
-                                progressDisplay.hideProgress();
-                            callback.onSuccess(false, "");
-                            String message = VolleyErrorMessage(error);
-                            if (!message.equals(""))
-                                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-                        }
+                    error -> {
+                        if (isprogress)
+                            progressDisplay.hideProgress();
+                        callback.onSuccess(false, "");
+                        String message = VolleyErrorMessage(error);
+                        if (!message.equals(""))
+                            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
                     }) {
 
                 @Override
@@ -431,75 +401,12 @@ public class ApiConfig extends Application {
         return result;
     }
 
+    @SuppressLint("DefaultLocale")
     public static String GetDiscount(String oldprice, String newprice) {
         double dold = Double.parseDouble(oldprice);
         double dnew = Double.parseDouble(newprice);
 
-        //return String.valueOf(((dnew / dold) - 1) * 100);
         return " (" + String.format("%.2f", (((dnew / dold) - 1) * 100)) + "%)";
-    }
-
-    public static ArrayList<Product> GetProductList(JSONArray jsonArray) {
-        ArrayList<Product> productArrayList = new ArrayList<>();
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                try {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    ArrayList<PriceVariation> priceVariations = new ArrayList<>();
-                    JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
-
-                    for (int j = 0; j < pricearray.length(); j++) {
-                        JSONObject obj = pricearray.getJSONObject(j);
-                        String discountpercent = "0", productPrice = " ";
-                        if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
-                            productPrice = obj.getString(Constant.PRICE);
-                        else {
-                            discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
-                            productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
-                        }
-                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
-                    }
-                    productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return productArrayList;
-    }
-
-
-    public static ArrayList<Favorite> GetFavoriteProductList(JSONArray jsonArray) {
-        ArrayList<Favorite> productArrayList = new ArrayList<>();
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                try {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    ArrayList<PriceVariation> priceVariations = new ArrayList<>();
-                    JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
-
-                    for (int j = 0; j < pricearray.length(); j++) {
-                        JSONObject obj = pricearray.getJSONObject(j);
-                        String discountpercent = "0", productPrice = " ";
-                        if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
-                            productPrice = obj.getString(Constant.PRICE);
-                        else {
-                            discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
-                            productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
-                        }
-                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
-                    }
-                    productArrayList.add(new Favorite(jsonObject.getString(Constant.PRODUCT_ID), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return productArrayList;
     }
 
     public static void GetTimeSlotConfig(final Session session, Activity activity) {
@@ -507,22 +414,19 @@ public class ApiConfig extends Application {
         params.put(Constant.SETTINGS, Constant.GetVal);
         params.put(Constant.GET_TIME_SLOT_CONFIG, Constant.GetVal);
 
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject jsonObject1 = new JSONObject(response);
-                        if (!jsonObject1.getBoolean(Constant.ERROR)) {
-                            JSONObject jsonObject = new JSONObject(jsonObject1.getJSONObject(Constant.TIME_SLOT_CONFIG).toString());
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject1 = new JSONObject(response);
+                    if (!jsonObject1.getBoolean(Constant.ERROR)) {
+                        JSONObject jsonObject = new JSONObject(jsonObject1.getJSONObject(Constant.TIME_SLOT_CONFIG).toString());
 
-                            session.setData(Constant.IS_TIME_SLOTS_ENABLE, jsonObject.getString(Constant.IS_TIME_SLOTS_ENABLE));
-                            session.setData(Constant.DELIVERY_STARTS_FROM, jsonObject.getString(Constant.DELIVERY_STARTS_FROM));
-                            session.setData(Constant.ALLOWED_DAYS, jsonObject.getString(Constant.ALLOWED_DAYS));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        session.setData(Constant.IS_TIME_SLOTS_ENABLE, jsonObject.getString(Constant.IS_TIME_SLOTS_ENABLE));
+                        session.setData(Constant.DELIVERY_STARTS_FROM, jsonObject.getString(Constant.DELIVERY_STARTS_FROM));
+                        session.setData(Constant.ALLOWED_DAYS, jsonObject.getString(Constant.ALLOWED_DAYS));
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }, activity, Constant.SETTING_URL, params, false);
@@ -598,38 +502,20 @@ public class ApiConfig extends Application {
 
     public static void GetSettings(final Activity activity) {
         Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.GET_SETTINGS, Constant.GetVal);
+        params.put(Constant.SETTINGS, Constant.GetVal);
+        params.put(Constant.GET_TIMEZONE, Constant.GetVal);
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
-//                System.out.println("============pay method " + response);
                 if (result) {
                     try {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
-                            Constant.VERSION_CODE = object.getString(Constant.KEY_VERSION_CODE);
-                            Constant.REQUIRED_VERSION = object.getString(Constant.KEY_VERSION_CODE);
-                            Constant.VERSION_STATUS = object.getString(Constant.KEY_UPDATE_STATUS);
-                            Constant.REFER_EARN_BONUS = object.getString(Constant.KEY_REFER_EARN_BONUS);
-                            Constant.REFER_EARN_ACTIVE = object.getString(Constant.KEY_REFER_EARN_STATUS);
-                            Constant.REFER_EARN_METHOD = object.getString(Constant.KEY_REFER_EARN_METHOD);
-                            Constant.REFER_EARN_ORDER_AMOUNT = object.getString(Constant.KEY_MIN_REFER_ORDER_AMOUNT);
-                            Constant.MAX_EARN_AMOUNT = object.getString(Constant.KEY_MAX_EARN_AMOUNT);
-                            Constant.MINIMUM_WITHDRAW_AMOUNT = Double.parseDouble(object.getString(Constant.KEY_MIN_WIDRAWAL));
-                            Constant.SETTING_CURRENCY_SYMBOL = object.getString(Constant.CURRENCY);
-                            Constant.SETTING_AREA_WISE_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.AREA_WISE_DELIVERY_CHARGE));
-                            Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
-                            Constant.SETTING_MAIL_ID = object.getString(Constant.REPLY_TO);
-                            Constant.SETTING_MINIMUM_ORDER_AMOUNT = object.getDouble(Constant.MINIMUM_ORDER_AMOUNT);
-                            Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(object.getString(Constant.MINIMUM_AMOUNT));
-                            Constant.SETTING_USER_WALLET_REFILL_LIMIT = Double.parseDouble(object.getString(Constant.USER_WALLET_REFILL_LIMIT));
-                            Constant.ORDER_DAY_LIMIT = Integer.parseInt(object.getString(Constant.KEY_ORDER_RETURN_DAY_LIMIT));
-                            Constant.MAX_PRODUCT_LIMIT = Integer.parseInt(object.getString(Constant.MAX_CART_ITEMS_COUNT));
-
+                            Constant.systemSettings = new Gson().fromJson(object.toString(), SystemSettings.class);
 
                             if (DrawerActivity.tvWallet != null) {
-                                DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
+                                DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
                             }
                             String versionName = "";
                             try {
@@ -638,9 +524,7 @@ public class ApiConfig extends Application {
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
                             }
-                            if (ApiConfig.compareVersion(versionName, Constant.VERSION_CODE) < 0) {
-                                OpenBottomDialog(activity);
-                            } else if (ApiConfig.compareVersion(versionName, Constant.REQUIRED_VERSION) < 0) {
+                            if ((ApiConfig.compareVersion(versionName, Constant.systemSettings.getCurrent_version()) < 0) || (ApiConfig.compareVersion(versionName, Constant.systemSettings.getMinimum_version_required()) < 0)) {
                                 OpenBottomDialog(activity);
                             }
                         }
@@ -650,7 +534,7 @@ public class ApiConfig extends Application {
                     }
                 }
             }
-        }, activity, Constant.ORDERPROCESS_URL, params, false);
+        }, activity, Constant.SETTING_URL, params, false);
     }
 
     public static void OpenBottomDialog(final Activity activity) {
@@ -671,7 +555,7 @@ public class ApiConfig extends Application {
         TextView txttitle = sheetView.findViewById(R.id.tvTitle);
         Button btnNotNow = sheetView.findViewById(R.id.btnNotNow);
         Button btnUpadateNow = sheetView.findViewById(R.id.btnUpdateNow);
-        if (Constant.VERSION_STATUS.equals("0")) {
+        if (Constant.systemSettings.getIs_version_system_on().equals("0")) {
             btnNotNow.setVisibility(View.VISIBLE);
             imgclose.setVisibility(View.VISIBLE);
             mBottomSheetDialog.setCancelable(true);
@@ -702,43 +586,6 @@ public class ApiConfig extends Application {
         });
     }
 
-    public static void displayLocationSettingsRequest(final Activity activity) {
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(activity)
-                .addApi(LocationServices.API).build();
-        googleApiClient.connect();
-
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(10000 / 2);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(@NotNull LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-
-                        try {
-
-                            status.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
-                            Log.i("TAG", "PendingIntent unable to execute request.");
-                        }
-                        break;
-
-                }
-            }
-        });
-    }
-
     public static double getWalletBalance(final Activity activity, Session session) {
 
         Map<String, String> params = new HashMap<>();
@@ -751,7 +598,7 @@ public class ApiConfig extends Application {
                     JSONObject object = new JSONObject(response);
                     if (!object.getBoolean(Constant.ERROR)) {
                         Constant.WALLET_BALANCE = Double.parseDouble(object.getString(Constant.KEY_BALANCE));
-                        DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
+                        DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -767,39 +614,6 @@ public class ApiConfig extends Application {
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         ApiConfig.RequestToVolley((result, response) -> {
         }, activity, Constant.REMOVE_FCM_URL, params, false);
-    }
-
-    public static void getLocation(final Activity activity) {
-        try {
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-
-                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-                }
-            } else {
-                gps = new GPSTracker(activity);
-                if (gps.canGetLocation()) {
-                    user_location = gps.getAddressLine(activity);
-
-                }
-                if (gps.getIsGPSTrackingEnabled()) {
-                    latitude1 = gps.latitude;
-                    longitude1 = gps.longitude;
-                    new Session(activity).setData(Constant.LATITUDE, "" + gps.latitude);
-                    new Session(activity).setData(Constant.LONGITUDE, "" + gps.longitude);
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean isGPSEnable(Activity activity) {
-        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        assert locationManager != null;
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     public static String getAddress(double lat, double lng, Activity activity) {
@@ -863,6 +677,71 @@ public class ApiConfig extends Application {
         return check;
     }
 
+    public static ArrayList<Product> GetProductList(JSONArray jsonArray) {
+        ArrayList<Product> productArrayList = new ArrayList<>();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                    JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                    for (int j = 0; j < pricearray.length(); j++) {
+                        JSONObject obj = pricearray.getJSONObject(j);
+                        String discountpercent = "0", productPrice = " ";
+                        if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                            productPrice = obj.getString(Constant.PRICE);
+                        else {
+                            discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                            productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                        }
+                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                    }
+                    productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return productArrayList;
+
+    }
+
+    public static ArrayList<Favorite> GetFavoriteProductList(JSONArray jsonArray) {
+        ArrayList<Favorite> productArrayList = new ArrayList<>();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                    JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                    for (int j = 0; j < pricearray.length(); j++) {
+                        JSONObject obj = pricearray.getJSONObject(j);
+                        String discountpercent = "0", productPrice = " ";
+                        if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                            productPrice = obj.getString(Constant.PRICE);
+                        else {
+                            discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                            productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                        }
+                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                    }
+                    productArrayList.add(new Favorite(jsonObject.getString(Constant.PRODUCT_ID), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return productArrayList;
+    }
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -888,13 +767,6 @@ public class ApiConfig extends Application {
         sharedPref.edit().putString("DEVICETOKEN", token).apply();
     }
 
-    public com.android.volley.toolbox.ImageLoader getImageLoader() {
-        getRequestQueue();
-        if (mImageLoader == null) {
-            mImageLoader = new ImageLoader(this.mRequestQueue, new BitmapCache());
-        }
-        return this.mImageLoader;
-    }
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
@@ -908,6 +780,4 @@ public class ApiConfig extends Application {
         req.setTag(TAG);
         getRequestQueue().add(req);
     }
-
-
 }

@@ -105,15 +105,10 @@ public class CategoryFragment extends Fragment {
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Category category = new Category();
-                                category.setId(jsonObject.getString(Constant.ID));
-                                category.setName(jsonObject.getString(Constant.NAME));
-                                category.setSubtitle(jsonObject.getString(Constant.SUBTITLE));
-                                category.setImage(jsonObject.getString(Constant.IMAGE));
-                                category.setStatus(jsonObject.getString(Constant.STATUS));
+                                Category category = gson.fromJson(jsonObject.toString(), Category.class);
                                 categoryArrayList.add(category);
                             }
-                            categoryrecycleview.setAdapter(new CategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory, "category"));
+                            categoryrecycleview.setAdapter(new CategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory, "category", 0));
                             progressBar.setVisibility(View.GONE);
                         } else {
                             txtnodata.setVisibility(View.VISIBLE);

@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -32,6 +33,7 @@ public class ReferEarnFragment extends Fragment {
     String preText = "";
     Activity activity;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -42,12 +44,12 @@ public class ReferEarnFragment extends Fragment {
 
         session = new Session(getContext());
         txtrefercoin = root.findViewById(R.id.txtrefercoin);
-        if (Constant.REFER_EARN_METHOD.equals("rupees")) {
-            preText = Constant.SETTING_CURRENCY_SYMBOL + Constant.REFER_EARN_BONUS;
+        if (Constant.systemSettings.getRefer_earn_method().equals("rupees")) {
+            preText = Constant.systemSettings.getCurrency() + Constant.systemSettings.getRefer_earn_bonus();
         } else {
-            preText = Constant.REFER_EARN_BONUS + "% ";
+            preText = Constant.systemSettings.getRefer_earn_bonus() + "% ";
         }
-        txtrefercoin.setText(getString(R.string.refer_text_1) + preText + getString(R.string.refer_text_2) + Constant.SETTING_CURRENCY_SYMBOL + Constant.REFER_EARN_ORDER_AMOUNT + getString(R.string.refer_text_3) + Constant.SETTING_CURRENCY_SYMBOL + Constant.MAX_EARN_AMOUNT + ".");
+        txtrefercoin.setText(getString(R.string.refer_text_1) + preText + getString(R.string.refer_text_2) + Constant.systemSettings.getCurrency() + Constant.systemSettings.getMin_order_amount() + getString(R.string.refer_text_3) + Constant.systemSettings.getCurrency() + Constant.systemSettings.getMax_refer_earn_amount() + ".");
         txtcode = root.findViewById(R.id.txtcode);
         txtcopy = root.findViewById(R.id.txtcopy);
         txtinvite = root.findViewById(R.id.txtinvite);

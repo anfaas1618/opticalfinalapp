@@ -61,7 +61,7 @@ import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 public class ProductDetailFragment extends Fragment {
     static ArrayList<Slider> sliderArrayList;
-    TextView tvMfg, tvMadeIn, txtProductName, txtqty, txtPrice, txtOriginalPrice, txtDiscountedPrice, txtMeasurement, txtstatus, tvReturnable, tvCancellable, tvTitleMadeIn, tvTitleMfg, tvTaxPercent;
+    TextView tvMfg, tvMadeIn, txtProductName, txtqty, txtPrice, txtOriginalPrice, txtDiscountedPrice, txtMeasurement, txtstatus, tvTitleMadeIn, tvTitleMfg;
     WebView webDescription;
     ViewPager viewPager;
     Spinner spinner;
@@ -90,6 +90,8 @@ public class ProductDetailFragment extends Fragment {
     RecyclerView recyclerView;
     RelativeLayout relativeLayout;
     TextView tvMore;
+    ImageView imgReturnable, imgCancellable;
+    TextView tvReturnable, tvCancellable;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -110,7 +112,7 @@ public class ProductDetailFragment extends Fragment {
         vpos = getArguments().getInt("vpos", 0);
         id = getArguments().getString("id");
 
-        if (from.equals("fragment") || from.equals("favorite") || from.equals("search")) {
+        if (from.equals("fragment") || from.equals("sub_cate") || from.equals("favorite") || from.equals("search")) {
             position = getArguments().getInt("position");
         }
 
@@ -136,8 +138,6 @@ public class ProductDetailFragment extends Fragment {
         lytshare = root.findViewById(R.id.lytshare);
         lytsave = root.findViewById(R.id.lytsave);
         lytSimilar = root.findViewById(R.id.lytSimilar);
-        tvReturnable = root.findViewById(R.id.tvReturnable);
-        tvCancellable = root.findViewById(R.id.tvCancellable);
         tvMadeIn = root.findViewById(R.id.tvMadeIn);
         tvTitleMadeIn = root.findViewById(R.id.tvTitleMadeIn);
         tvMfg = root.findViewById(R.id.tvMfg);
@@ -148,7 +148,12 @@ public class ProductDetailFragment extends Fragment {
         recyclerView = root.findViewById(R.id.recyclerView);
         relativeLayout = root.findViewById(R.id.relativeLayout);
         tvMore = root.findViewById(R.id.tvMore);
-        tvTaxPercent = root.findViewById(R.id.tvTaxPercent);
+
+
+        tvReturnable = root.findViewById(R.id.tvReturnable);
+        tvCancellable = root.findViewById(R.id.tvCancellable);
+        imgReturnable = root.findViewById(R.id.imgReturnable);
+        imgCancellable = root.findViewById(R.id.imgCancellable);
 
         GetProductDetail(id);
         GetSettings(activity);
@@ -224,6 +229,9 @@ public class ProductDetailFragment extends Fragment {
                     databaseHelper.AddOrRemoveFavorite(product.getId(), favorite);
                 }
                 if (from.equals("fragment")) {
+                    ProductListFragment.productArrayList.get(position).setIs_favorite(favorite);
+                    ProductListFragment.mAdapter.notifyDataSetChanged();
+                } else if (from.equals("sub_cate")) {
                     ProductListFragment.productArrayList.get(position).setIs_favorite(favorite);
                     ProductListFragment.mAdapter.notifyDataSetChanged();
                 } else if (from.equals("favorite")) {
@@ -311,7 +319,7 @@ public class ProductDetailFragment extends Fragment {
                 if (ApiConfig.isConnected(activity)) {
                     count = Integer.parseInt(txtqty.getText().toString());
                     if (!(count >= Float.parseFloat(priceVariationslist.get(vpos).getStock()))) {
-                        if (count < Constant.MAX_PRODUCT_LIMIT) {
+                        if (count < Integer.parseInt(Constant.systemSettings.getMax_cart_items_count())) {
                             Constant.CLICK = true;
                             count++;
                             txtqty.setText("" + count);
@@ -357,6 +365,7 @@ public class ProductDetailFragment extends Fragment {
 
 
     void GetSimilarData(Product product) {
+        ArrayList<Product> productArrayList = new ArrayList<>();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_SIMILAR_PRODUCT, Constant.GetVal);
         params.put(Constant.PRODUCT_ID, product.getId());
@@ -372,7 +381,35 @@ public class ProductDetailFragment extends Fragment {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-                            AdapterStyle1 adapter = new AdapterStyle1(getContext(), activity, ApiConfig.GetProductList(objectbject.getJSONArray(Constant.DATA)), R.layout.offer_layout);
+                            JSONArray jsonArray = objectbject.getJSONArray(Constant.DATA);
+                            try {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                        for (int j = 0; j < pricearray.length(); j++) {
+                                            JSONObject obj = pricearray.getJSONObject(j);
+                                            String discountpercent = "0", productPrice = " ";
+                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                productPrice = obj.getString(Constant.PRICE);
+                                            else {
+                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                            }
+                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                        }
+                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            AdapterStyle1 adapter = new AdapterStyle1(getContext(), activity, productArrayList, R.layout.offer_layout);
                             recyclerView.setAdapter(adapter);
                             relativeLayout.setVisibility(View.VISIBLE);
                         } else {
@@ -451,7 +488,33 @@ public class ProductDetailFragment extends Fragment {
 
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            product = ApiConfig.GetProductList(jsonArray).get(0);
+                            product = new Product();
+                            try {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
+                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
+
+                                        for (int j = 0; j < pricearray.length(); j++) {
+                                            JSONObject obj = pricearray.getJSONObject(j);
+                                            String discountpercent = "0", productPrice = " ";
+                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
+                                                productPrice = obj.getString(Constant.PRICE);
+                                            else {
+                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
+                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
+                                            }
+                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                        }
+                                        product = new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             priceVariationslist = product.getPriceVariations();
 
                             SetProductDetails(product);
@@ -472,7 +535,7 @@ public class ProductDetailFragment extends Fragment {
     }
 
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     void SetProductDetails(final Product product) {
         try {
             sliderArrayList = new ArrayList<>();
@@ -519,14 +582,18 @@ public class ProductDetailFragment extends Fragment {
             }
 
             if (product.getReturn_status().equalsIgnoreCase("1")) {
-                tvReturnable.setText(Constant.ORDER_DAY_LIMIT + " Days Returnable.");
+                imgReturnable.setImageDrawable(getResources().getDrawable(R.drawable.ic_returnable));
+                tvReturnable.setText(Integer.parseInt(Constant.systemSettings.getMax_product_return_days()) + " Days Returnable.");
             } else {
+                imgReturnable.setImageDrawable(getResources().getDrawable(R.drawable.ic_not_returnable));
                 tvReturnable.setText("Not Returnable.");
             }
 
             if (product.getCancelable_status().equalsIgnoreCase("1")) {
+                imgCancellable.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancellable));
                 tvCancellable.setText("Order Can Cancel Till Order " + ApiConfig.toTitleCase(product.getTill_status()) + ".");
             } else {
+                imgCancellable.setImageDrawable(getResources().getDrawable(R.drawable.ic_not_cancellable));
                 tvCancellable.setText("Non Cancellable.");
             }
 
@@ -562,13 +629,6 @@ public class ProductDetailFragment extends Fragment {
             webDescription.setBackgroundColor(getResources().getColor(R.color.white));
             txtProductName.setText(product.getName());
 
-            if (product.getTax_percentage().length() > 0 && !product.getTax_percentage().isEmpty()) {
-                tvTaxPercent.setText(product.getTax_percentage() + "% Tax Applicable on Product Price");
-            } else {
-                tvTaxPercent.setVisibility(View.GONE);
-            }
-
-
             spinner.setSelection(vpos);
 
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -599,7 +659,6 @@ public class ProductDetailFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> adapterView) {
                 }
             });
-
             scrollView.setVisibility(View.VISIBLE);
         } catch (Exception e) {
             e.printStackTrace();
@@ -630,17 +689,17 @@ public class ProductDetailFragment extends Fragment {
 
 
         txtMeasurement.setText(" ( " + priceVariation.getMeasurement() + priceVariation.getMeasurement_unit_name() + " ) ");
-        txtPrice.setText(getString(R.string.offer_price) + Constant.SETTING_CURRENCY_SYMBOL + priceVariation.getProductPrice());
+        txtPrice.setText(getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + priceVariation.getProductPrice());
         txtstatus.setText(priceVariation.getServe_for());
 
         if (priceVariation.getDiscounted_price().equals("0") || priceVariation.getDiscounted_price().equals("")) {
             txtDiscountedPrice.setVisibility(View.GONE);
         } else {
-            spannableString = new SpannableString(getString(R.string.mrp) + Constant.SETTING_CURRENCY_SYMBOL + priceVariation.getPrice());
+            spannableString = new SpannableString(getString(R.string.mrp) + Constant.systemSettings.getCurrency() + priceVariation.getPrice());
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtOriginalPrice.setText(spannableString);
             double diff = Double.parseDouble(priceVariation.getPrice()) - Double.parseDouble(priceVariation.getProductPrice());
-            txtDiscountedPrice.setText(getString(R.string.you_save) + Constant.SETTING_CURRENCY_SYMBOL + diff + priceVariation.getDiscountpercent());
+            txtDiscountedPrice.setText(getString(R.string.you_save) + Constant.systemSettings.getCurrency() + diff + priceVariation.getDiscountpercent());
         }
 
 
@@ -706,7 +765,7 @@ public class ProductDetailFragment extends Fragment {
 
             PriceVariation extra = product.getPriceVariations().get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-//            price.setText(Constant.SETTING_CURRENCY_SYMBOL + extra.getProductPrice());
+//            price.setText(Constant.systemSettings.getCurrency() + extra.getProductPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(getResources().getColor(R.color.red));

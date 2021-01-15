@@ -52,9 +52,9 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
 
         holder.tvItemName.setText(cart.getItems().get(0).getName() + " (" + cart.getItems().get(0).getMeasurement() + " " + ApiConfig.toTitleCase(cart.getItems().get(0).getUnit()) + ")");
         holder.tvQty.setText("Qty : " + cart.getQty());
-        holder.tvPrice.setText("Price : " + Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(price));
+        holder.tvPrice.setText("Price : " + Constant.systemSettings.getCurrency() + Constant.formater.format(price));
         holder.tvTaxPercent.setText("Tax (" + cart.getItems().get(0).getTax_percentage() + "%)");
-        holder.tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.formater.format(itemTotal));
+        holder.tvSubTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(itemTotal));
     }
 
     @Override

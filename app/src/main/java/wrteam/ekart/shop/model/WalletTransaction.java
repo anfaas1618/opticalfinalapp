@@ -4,22 +4,6 @@ public class WalletTransaction {
 
     String id, user_id, order_id, type, txn_id, amount, status, message, date_created, last_updated;
 
-    public WalletTransaction() {
-    }
-
-    public WalletTransaction(String id, String user_id, String order_id, String type, String txn_id, String amount, String status, String message, String date_created, String last_updated) {
-        this.id = id;
-        this.user_id = user_id;
-        this.order_id = order_id;
-        this.type = type;
-        this.txn_id = txn_id;
-        this.amount = amount;
-        this.status = status;
-        this.message = message;
-        this.date_created = date_created;
-        this.last_updated = last_updated;
-    }
-
     public String getId() {
         return id;
     }
