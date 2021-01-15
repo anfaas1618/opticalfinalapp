@@ -9,7 +9,6 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0.1"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'

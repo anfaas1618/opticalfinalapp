@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@drawable/card_shadow"
-        android:scaleType="centerInside" />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/txttitle"
