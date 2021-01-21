@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
@@ -62,6 +62,15 @@ public class Session {
         return pref.getBoolean(id, false);
     }
 
+    public void setGrid(String id, boolean val) {
+        editor.putBoolean(id, val);
+        editor.commit();
+    }
+
+    public boolean getGrid(String id) {
+        return pref.getBoolean(id, false);
+    }
+
     public void createUserLoginSession(String profile, String fcmId, String id, String name, String email, String mobile, String password, String referCode) {
         editor.putBoolean(Constant.IS_USER_LOGIN, true);
         editor.putString(Constant.FCM_ID, fcmId);
@@ -106,6 +115,8 @@ public class Session {
             public void onClick(DialogInterface dialog, int which) {
                 editor.clear();
                 editor.commit();
+
+                new Session(_context).setIsFirstTime("is_first_time", true);
 
                 Intent i = new Intent(activity, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

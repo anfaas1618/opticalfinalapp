@@ -68,7 +68,6 @@ public class PayPalWebActivity extends AppCompatActivity {
         paymentModelClass = new PaymentModelClass(PayPalWebActivity.this);
 
         url = getIntent().getStringExtra("url");
-        System.out.println(url);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override

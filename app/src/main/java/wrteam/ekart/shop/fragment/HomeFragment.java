@@ -43,7 +43,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.adapter.CategoryAdapter;
 import wrteam.ekart.shop.adapter.OfferAdapter;
-import wrteam.ekart.shop.adapter.ProductLoadMoreAdapter;
 import wrteam.ekart.shop.adapter.SectionAdapter;
 import wrteam.ekart.shop.adapter.SliderAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
@@ -51,9 +50,6 @@ import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Category;
-import wrteam.ekart.shop.model.Favorite;
-import wrteam.ekart.shop.model.PriceVariation;
-import wrteam.ekart.shop.model.Product;
 import wrteam.ekart.shop.model.Slider;
 
 import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
@@ -205,17 +201,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String token = instanceIdResult.getToken();
-                if (!token.equals(session.getData(Constant.FCM_ID))) {
-                    UpdateToken(token, getActivity());
-                }
-            }
-        });
-
         if (ApiConfig.isConnected(getActivity())) {
             GetHomeData();
             if (new Session(activity).isUserLoggedIn()) {
@@ -224,29 +209,6 @@ public class HomeFragment extends Fragment {
         }
 
         return root;
-    }
-
-    public static void UpdateToken(final String token, Activity activity) {
-        Map<String, String> params = new HashMap<>();
-        params.put(Constant.TYPE, Constant.REGISTER_DEVICE);
-        params.put(Constant.TOKEN, token);
-        params.put(Constant.USER_ID, session.getData(Constant.ID));
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        if (!object.getBoolean(Constant.ERROR)) {
-                            session.setData(Constant.FCM_ID, token);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, activity, Constant.RegisterUrl, params, false);
-
     }
 
     public void GetHomeData() {

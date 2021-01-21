@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,11 +47,12 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class CheckoutFragment extends Fragment {
     public static String pCode = "", appliedCode = "", deliveryCharge = "0";
-    public double pCodeDiscount = 0.0, subtotal = 0.0, dCharge = 0.0, taxAmt = 0.0, total = 0.0;
+    public static double pCodeDiscount = 0.0, subtotal = 0.0, dCharge = 0.0; //, total = 0.0; //taxAmt = 0.0,
     public TextView tvConfirmOrder, tvPayment, tvDelivery;
     public ArrayList<String> variantIdList, qtyList;
-    public TextView tvTaxPercent, tvTaxAmt, tvAlert, tvTotalBeforeTax, tvDeliveryCharge, tvSubTotal, tvPromoCode, tvPCAmount, txttotalitems;
-    public LinearLayout lytTax, processLyt, lytPromo;
+    public TextView tvSaveAmount, tvAlert, tvTotalBeforeTax, tvDeliveryCharge, tvSubTotal, txttotalitems;
+    public LinearLayout processLyt;
+    CardView lytSaveAmount;
     RecyclerView recyclerView;
     View root;
     RelativeLayout confirmLyt;
@@ -63,7 +65,7 @@ public class CheckoutFragment extends Fragment {
     Activity activity;
     CheckoutItemListAdapter checkoutItemListAdapter;
     ArrayList<Cart> carts;
-    double totalPercentage = 0.0;
+    float OriginalAmount = 0, DiscountedAmount = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -74,13 +76,8 @@ public class CheckoutFragment extends Fragment {
         activity = getActivity();
         session = new Session(activity);
         progressBar = root.findViewById(R.id.progressBar);
-        lytTax = root.findViewById(R.id.lytTax);
-        tvTaxAmt = root.findViewById(R.id.tvTaxAmt);
-        tvTaxPercent = root.findViewById(R.id.tvTaxPercent);
         tvDelivery = root.findViewById(R.id.tvSummary);
         tvPayment = root.findViewById(R.id.tvPayment);
-        tvPCAmount = root.findViewById(R.id.tvPCAmount);
-        tvPromoCode = root.findViewById(R.id.tvPromoCode);
         tvAlert = root.findViewById(R.id.tvAlert);
         edtPromoCode = root.findViewById(R.id.edtPromoCode);
         tvSubTotal = root.findViewById(R.id.tvSubTotal);
@@ -89,9 +86,10 @@ public class CheckoutFragment extends Fragment {
         confirmLyt = root.findViewById(R.id.confirmLyt);
         tvConfirmOrder = root.findViewById(R.id.tvConfirmOrder);
         processLyt = root.findViewById(R.id.processLyt);
-        lytPromo = root.findViewById(R.id.lytPromo);
         imgRefresh = root.findViewById(R.id.imgRefresh);
         tvTotalBeforeTax = root.findViewById(R.id.tvTotalBeforeTax);
+        tvSaveAmount = root.findViewById(R.id.tvSaveAmount);
+        lytSaveAmount = root.findViewById(R.id.lytSaveAmount);
         btnApply = root.findViewById(R.id.btnApply);
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -100,6 +98,8 @@ public class CheckoutFragment extends Fragment {
 
         setHasOptionsMenu(true);
         txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
+
+        Constant.FLOAT_TOTAL_AMOUNT = 0;
 
         tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,9 +110,7 @@ public class CheckoutFragment extends Fragment {
                     Constant.SETTING_DELIVERY_CHARGE = 0.0;
                 }
                 bundle.putDouble("subtotal", Double.parseDouble("" + subtotal));
-                bundle.putDouble("total", Double.parseDouble("" + total));
-                bundle.putDouble("taxAmt", Double.parseDouble("" + taxAmt));
-                bundle.putDouble("tax", Double.parseDouble(("" + (taxAmt * 100) / total)));
+                bundle.putDouble("total", Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
                 bundle.putDouble("pCodeDiscount", Double.parseDouble("" + pCodeDiscount));
                 bundle.putString("pCode", pCode);
                 bundle.putStringArrayList("variantIdList", variantIdList);
@@ -135,13 +133,11 @@ public class CheckoutFragment extends Fragment {
                     btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                     btnApply.setText("Apply");
                     edtPromoCode.setText("");
-                    lytPromo.setVisibility(View.GONE);
                     isApplied = false;
                     appliedCode = "";
                     pCode = "";
+                    pCodeDiscount = 0;
                     SetDataTotal();
-                } else {
-                    lytPromo.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -158,7 +154,7 @@ public class CheckoutFragment extends Fragment {
 
 
     void getCartData() {
-
+        subtotal = 0;
         ApiConfig.getCartItemCount(activity, session);
 
         progressBar.setVisibility(View.VISIBLE);
@@ -183,24 +179,24 @@ public class CheckoutFragment extends Fragment {
                             Cart cart = gson.fromJson(String.valueOf(jsonArray.getJSONObject(i)), Cart.class);
                             variantIdList.add(cart.getProduct_variant_id());
                             qtyList.add(cart.getQty());
-
-                            totalPercentage += (Double.parseDouble(cart.getItems().get(0).getTax_percentage()));
-
                             float price;
-                            if (cart.getItems().get(0).getDiscounted_price().equals("0")) {
-                                price = Float.parseFloat(cart.getItems().get(0).getPrice());
+                            int qty = Integer.parseInt(cart.getQty());
+                            String taxPercentage = cart.getItems().get(0).getTax_percentage();
+
+                            if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+                                price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
                             } else {
-                                price = Float.parseFloat(cart.getItems().get(0).getDiscounted_price());
+                                OriginalAmount += (Float.parseFloat(cart.getItems().get(0).getPrice()) * qty);
+                                DiscountedAmount += (Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * qty);
+
+                                price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
                             }
 
-                            double itemTotal = price * (Integer.parseInt(cart.getQty()));
-                            double itemTaxAmt = (itemTotal * (Double.parseDouble(cart.getItems().get(0).getTax_percentage()) / 100));
-
-                            taxAmt += itemTaxAmt;
-                            total += itemTotal;
+                            Constant.FLOAT_TOTAL_AMOUNT += (price * qty);
 
                             carts.add(cart);
                         }
+
                         checkoutItemListAdapter = new CheckoutItemListAdapter(getActivity(), carts);
                         recyclerView.setAdapter(checkoutItemListAdapter);
                         SetDataTotal();
@@ -209,6 +205,9 @@ public class CheckoutFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
 
                     } catch (JSONException e) {
+
+                        confirmLyt.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                     }
                 }
@@ -218,9 +217,23 @@ public class CheckoutFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public void SetDataTotal() {
-        tvTotalBeforeTax.setText(Constant.systemSettings.getCurrency() + Double.parseDouble("" + total));
-        subtotal = total;
-        if (total <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
+
+        if ((OriginalAmount - DiscountedAmount) != 0) {
+            lytSaveAmount.setVisibility(View.VISIBLE);
+            if (pCodeDiscount != 0) {
+                tvSaveAmount.setText(Constant.systemSettings.getCurrency() + ((OriginalAmount - DiscountedAmount) + pCodeDiscount));
+            } else {
+                tvSaveAmount.setText(Constant.systemSettings.getCurrency() + (OriginalAmount - DiscountedAmount));
+            }
+        } else {
+            if (pCodeDiscount == 0) {
+                lytSaveAmount.setVisibility(View.GONE);
+            }
+        }
+
+        subtotal = Constant.FLOAT_TOTAL_AMOUNT;
+        tvTotalBeforeTax.setText(Constant.systemSettings.getCurrency() + Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
+        if (Constant.FLOAT_TOTAL_AMOUNT <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
             tvDeliveryCharge.setText(Constant.systemSettings.getCurrency() + Constant.SETTING_DELIVERY_CHARGE);
             subtotal = Double.parseDouble("" + (subtotal + Constant.SETTING_DELIVERY_CHARGE));
             deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
@@ -229,13 +242,9 @@ public class CheckoutFragment extends Fragment {
             deliveryCharge = "0";
         }
         dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
-        if (pCode.isEmpty()) {
-            subtotal = (subtotal + taxAmt);
-        } else {
-            subtotal = (subtotal + taxAmt - pCodeDiscount);
+        if (!pCode.isEmpty()) {
+            subtotal = subtotal - pCodeDiscount;
         }
-        tvTaxPercent.setText("Tax (" + ((taxAmt * 100) / total) + "%)");
-        tvTaxAmt.setText("+ " + Constant.systemSettings.getCurrency() + "" + Double.parseDouble("" + taxAmt));
         tvSubTotal.setText(Constant.systemSettings.getCurrency() + "" + Double.parseDouble("" + subtotal));
     }
 
@@ -261,7 +270,7 @@ public class CheckoutFragment extends Fragment {
                     params.put(Constant.VALIDATE_PROMO_CODE, Constant.GetVal);
                     params.put(Constant.USER_ID, session.getData(Constant.ID));
                     params.put(Constant.PROMO_CODE, promoCode);
-                    params.put(Constant.TOTAL, String.valueOf((total + taxAmt + dCharge)));
+                    params.put(Constant.TOTAL, String.valueOf((Constant.FLOAT_TOTAL_AMOUNT + dCharge))); // taxAmt +
 
                     ApiConfig.RequestToVolley(new VolleyCallback() {
                         @SuppressLint("SetTextI18n")
@@ -273,17 +282,14 @@ public class CheckoutFragment extends Fragment {
                                     //   System.out.println("===res " + response);
                                     if (!object.getBoolean(Constant.ERROR)) {
                                         pCode = object.getString(Constant.PROMO_CODE);
-                                        tvPromoCode.setText(getString(R.string.promo_code) + "(" + pCode + ")");
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_green));
                                         btnApply.setText("Applied");
                                         btnApply.setEnabled(false);
                                         isApplied = true;
-                                        lytPromo.setVisibility(View.VISIBLE);
                                         appliedCode = edtPromoCode.getText().toString();
                                         dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
                                         subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT));
                                         pCodeDiscount = Double.parseDouble(object.getString(Constant.DISCOUNT));
-                                        tvPCAmount.setText("- " + Constant.systemSettings.getCurrency() + pCodeDiscount);
                                         tvSubTotal.setText(Constant.systemSettings.getCurrency() + Double.parseDouble("" + subtotal));
                                     } else {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
@@ -291,8 +297,8 @@ public class CheckoutFragment extends Fragment {
                                         btnApply.setEnabled(true);
                                         tvAlert.setVisibility(View.VISIBLE);
                                         tvAlert.setText(object.getString("message"));
-                                        SetDataTotal();
                                     }
+                                    SetDataTotal();
                                     progressBar.setVisibility(View.GONE);
                                     btnApply.setVisibility(View.VISIBLE);
                                 } catch (JSONException e) {

@@ -61,7 +61,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionH
                 break;
             case "style_3":
                 holder.recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
-                AdapterStyle1 adapter3 = new AdapterStyle1(context, activity, section.getProductList(), R.layout.layout_style_3);
+                AdapterStyle1 adapter3 = new AdapterStyle1(context, activity, section.getProductList(), R.layout.lyt_style_3);
                 holder.recyclerView.setAdapter(adapter3);
                 break;
         }

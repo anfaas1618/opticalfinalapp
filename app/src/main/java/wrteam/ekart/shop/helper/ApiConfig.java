@@ -81,14 +81,11 @@ import static com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
 
 public class ApiConfig extends Application {
 
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-
     public static final String TAG = ApiConfig.class.getSimpleName();
     static ApiConfig mInstance;
     AppEnvironment appEnvironment;
     RequestQueue mRequestQueue;
     SharedPreferences sharedPref;
-    com.android.volley.toolbox.ImageLoader mImageLoader;
 
     public static String VolleyErrorMessage(VolleyError error) {
         String message = "";
@@ -665,16 +662,23 @@ public class ApiConfig extends Application {
     }
 
     public static Boolean isConnected(final Activity activity) {
-        boolean check = false;
-        ConnectivityManager ConnectionManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = ConnectionManager.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            check = true;
-        } else {
-            Toast.makeText(activity, activity.getString(R.string.no_internet_connection_try_later), Toast.LENGTH_SHORT).show();
+        try {
+            ConnectivityManager connectivity = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivity == null) {
+                Toast.makeText(activity, activity.getString(R.string.no_internet_connection_try_later), Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                NetworkInfo[] info = connectivity.getAllNetworkInfo();
+                for (NetworkInfo networkInfo : info) {
+                    if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return check;
+        return false;
     }
 
     public static ArrayList<Product> GetProductList(JSONArray jsonArray) {
@@ -688,14 +692,11 @@ public class ApiConfig extends Application {
 
                     for (int j = 0; j < pricearray.length(); j++) {
                         JSONObject obj = pricearray.getJSONObject(j);
-                        String discountpercent = "0", productPrice = " ";
-                        if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
-                            productPrice = obj.getString(Constant.PRICE);
-                        else {
+                        String discountpercent = "0";
+                        if (!obj.getString(Constant.DISCOUNTED_PRICE).equals("0")) {
                             discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
-                            productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
                         }
-                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
                     }
                     productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                 } catch (JSONException e) {
@@ -720,14 +721,11 @@ public class ApiConfig extends Application {
 
                     for (int j = 0; j < pricearray.length(); j++) {
                         JSONObject obj = pricearray.getJSONObject(j);
-                        String discountpercent = "0", productPrice = " ";
-                        if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
-                            productPrice = obj.getString(Constant.PRICE);
-                        else {
+                        String discountpercent = "0";
+                        if (!obj.getString(Constant.DISCOUNTED_PRICE).equals("0")) {
                             discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
-                            productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
                         }
-                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                        priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
                     }
                     productArrayList.add(new Favorite(jsonObject.getString(Constant.PRODUCT_ID), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                 } catch (JSONException e) {

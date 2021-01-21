@@ -171,9 +171,10 @@ public class DrawerActivity extends AppCompatActivity {
             nav_Menu.setGroupVisible(R.id.group1, false);
             nav_Menu.setGroupVisible(R.id.group2, false);
         }
-
-        if (Constant.systemSettings.getIs_refer_earn_on().equals("0")) {
-            nav_Menu.findItem(R.id.menu_refer).setVisible(false);
+        if (session.isUserLoggedIn()) {
+            if (Constant.systemSettings.getIs_refer_earn_on().equals("0")) {
+                nav_Menu.findItem(R.id.menu_refer).setVisible(false);
+            }
         }
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {

@@ -60,6 +60,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     DatabaseHelper databaseHelper;
     boolean isFavorite;
     String from;
+    String taxPercentage;
 
 
     public ProductLoadMoreAdapter(Context context, ArrayList<Product> myDataset, int resource, String from) {
@@ -72,6 +73,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         isLogin = session.isUserLoggedIn();
         Constant.CartValues = new HashMap<>();
         databaseHelper = new DatabaseHelper(activity);
+        taxPercentage = "0";
     }
 
     public void add(int position, Product item) {
@@ -102,6 +104,12 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final ViewHolderRow holder = (ViewHolderRow) holderparent;
             holder.setIsRecyclable(false);
             final Product product = mDataset.get(position);
+
+            try {
+                taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
             if (priceVariations.size() == 1) {
@@ -244,13 +252,15 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @SuppressLint("SetTextI18n")
     public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra, boolean multiVerients) {
 
+//        GST_Amount (Original Cost x GST %)/100
+//        Net_Price Original Cost + GST Amount
+
         if (!multiVerients) {
             holder.txtmeasurement.setVisibility(View.GONE);
         } else {
             holder.txtmeasurement.setVisibility(View.VISIBLE);
             holder.txtmeasurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
         }
-        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
 
         if (session.isUserLoggedIn()) {
             if (Constant.CartValues.containsKey(extra.getId())) {
@@ -268,15 +278,17 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         holder.txtstatus.setText(extra.getServe_for());
 
+
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
+            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
-            holder.lytDiscount.setVisibility(View.VISIBLE);
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getPrice());
+            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
 
+            holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.lytDiscount.setVisibility(View.VISIBLE);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
         }
 
@@ -469,7 +481,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-//            price.setText(Constant.systemSettings.getCurrency() + extra.getProductPrice());
+//            price.setText(Constant.systemSettings.getCurrency() + extra.getPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));

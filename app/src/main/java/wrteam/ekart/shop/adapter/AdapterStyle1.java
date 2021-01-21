@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
         return product;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(VideoHolder holder, final int position) {
         final Product product = productList.get(position);
@@ -66,7 +68,7 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
                 .into(holder.thumbnail);
 
         holder.tvTitle.setText(product.getName());
-        holder.tvPrice.setText(product.getPriceVariations().get(0).getDiscounted_price().equals("0") ? product.getPriceVariations().get(0).getProductPrice() : product.getPriceVariations().get(0).getDiscounted_price());
+        holder.tvPrice.setText(Constant.systemSettings.getCurrency() + (product.getPriceVariations().get(0).getDiscounted_price().equals("0") ? product.getPriceVariations().get(0).getPrice() : product.getPriceVariations().get(0).getDiscounted_price()));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

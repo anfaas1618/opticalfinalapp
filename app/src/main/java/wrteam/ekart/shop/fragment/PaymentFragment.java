@@ -73,7 +73,7 @@ public class PaymentFragment extends Fragment {
     public static Map<String, String> sendparams;
     public static RecyclerView recyclerView;
     public static SlotAdapter adapter;
-    public LinearLayout paymentLyt, deliveryTimeLyt, lytPayOption, lytTax, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
+    public LinearLayout paymentLyt, deliveryTimeLyt, lytPayOption, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
     public ArrayList<String> variantIdList, qtyList, dateList;
     TextView tvSubTotal, txttotalitems, tvSelectDeliveryDate, tvWltBalance, tvProceedOrder, tvConfirmOrder, tvPayment, tvDelivery;
     double subtotal = 0.0, usedBalance = 0.0, totalAfterTax = 0.0, taxAmt = 0.0, pCodeDiscount = 0.0;
@@ -110,6 +110,7 @@ public class PaymentFragment extends Fragment {
         setHasOptionsMenu(true);
         total = getArguments().getDouble("total");
         subtotal = getArguments().getDouble("subtotal");
+
         taxAmt = getArguments().getDouble("taxAmt");
         Constant.SETTING_TAX = getArguments().getDouble("tax");
         pCodeDiscount = getArguments().getDouble("pCodeDiscount");
@@ -171,8 +172,6 @@ public class PaymentFragment extends Fragment {
     public void getAllWidgets(View root) {
         recyclerView = root.findViewById(R.id.recyclerView);
         pBar = root.findViewById(R.id.pBar);
-        lytTax = root.findViewById(R.id.lytTax);
-
 
         lytPayStack = root.findViewById(R.id.lytPayStack);
         rbPayStack = root.findViewById(R.id.rbPayStack);
@@ -538,15 +537,13 @@ public class PaymentFragment extends Fragment {
         alertDialog.setCancelable(true);
         final AlertDialog dialog = alertDialog.create();
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        TextView tvDialogCancel, tvDialogConfirm, tvDialogItemTotal, tvDialogTaxPercent, tvDialogTaxAmt, tvDialogDeliveryCharge, tvDialogTotal, tvDialogPCAmount, tvDialogWallet, tvDialogFinalTotal;
+        TextView tvDialogCancel, tvDialogConfirm, tvDialogItemTotal, tvDialogDeliveryCharge, tvDialogTotal, tvDialogPCAmount, tvDialogWallet, tvDialogFinalTotal;
         LinearLayout lytDialogPromo, lytDialogWallet;
         EditText tvSpecialNote;
 
         lytDialogPromo = dialogView.findViewById(R.id.lytDialogPromo);
         lytDialogWallet = dialogView.findViewById(R.id.lytDialogWallet);
         tvDialogItemTotal = dialogView.findViewById(R.id.tvDialogItemTotal);
-        tvDialogTaxPercent = dialogView.findViewById(R.id.tvDialogTaxPercent);
-        tvDialogTaxAmt = dialogView.findViewById(R.id.tvDialogTaxAmt);
         tvDialogDeliveryCharge = dialogView.findViewById(R.id.tvDialogDeliveryCharge);
         tvDialogTotal = dialogView.findViewById(R.id.tvDialogTotal);
         tvDialogPCAmount = dialogView.findViewById(R.id.tvDialogPCAmount);
@@ -572,8 +569,6 @@ public class PaymentFragment extends Fragment {
 
         tvDialogItemTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(total));
         tvDialogDeliveryCharge.setText(Constant.SETTING_DELIVERY_CHARGE > 0 ? Constant.systemSettings.getCurrency() + Constant.formater.format(Constant.SETTING_DELIVERY_CHARGE) : getString(R.string.free));
-        tvDialogTaxPercent.setText(getString(R.string.tax) + "(" + Constant.SETTING_TAX + "%) :");
-        tvDialogTaxAmt.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(taxAmt));
         tvDialogTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(totalAfterTax));
         tvDialogFinalTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(subtotal));
         tvDialogConfirm.setOnClickListener(v -> {

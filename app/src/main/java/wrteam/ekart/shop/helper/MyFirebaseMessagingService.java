@@ -3,6 +3,7 @@ package wrteam.ekart.shop.helper;
 
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -62,6 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else {
                 intent.putExtra(Constant.FROM, "");
             }
+
             if (type.equals("payment_transaction")) {
                 Session.setCount(Constant.UNREAD_TRANSACTION_COUNT, (Session.getCount(Constant.UNREAD_TRANSACTION_COUNT, getApplicationContext()) + 1), getApplicationContext());
             } else if (type.equals("wallet_transaction")) {

@@ -142,7 +142,6 @@
     <string name="update_now">Update</string>
     <string name="offer_price">Offer Price:&#160;</string>
     <string name="mrp">Price :&#160;</string>
-    <string name="you_save">You Save:&#160;</string>
     <string name="canceled_on">Order Cancelled On : &#160;</string>
     <string name="name_1">Name :&#160;</string>
     <string name="mobile_no_1">\nMobile No :&#160;</string>
@@ -284,7 +283,6 @@
     <string name="alert_enter_amount">Please enter amount!!!</string>
     <string name="title_order_otp">Order OTP :</string>
     <string name="order_otp">Order OTP</string>
-    <string name="tax_formula">tax_percentage = ( tax_amount x 100 ) / order_total_without_tax</string>
     <string name="off">OFF</string>
     <string name="alert_payment_methods_blank">Payment methods not found!</string>
     <string name="wallettype">wallet</string>
@@ -310,8 +308,6 @@
     <string name="address_msg">Please set default address in Manage Address.</string>
     <string name="transaction_failed_msg">Transaction Failed</string>
     <string name="awaiting_payment">Awaiting Payment</string>
-    <!-- TODO: Remove or change this placeholder text -->
-
     <string name="discover">Discover</string>
     <string name="shop">Shop</string>
     <string name="offers">Offers</string>
@@ -321,7 +317,5 @@
     <string name="get_started">Get Started</string>
     <string name="skip">Skip</string>
     <string name="special_note">Special Note</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="saved_price_txt_msg">You Saved</string>
 </resources>

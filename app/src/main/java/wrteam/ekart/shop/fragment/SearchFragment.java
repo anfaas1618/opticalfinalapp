@@ -1,9 +1,12 @@
 package wrteam.ekart.shop.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,11 +42,13 @@ public class SearchFragment extends Fragment {
     public static ProductAdapter productAdapter;
     public ProgressBar progressBar;
     View root;
-    RecyclerView recycleview;
+    RecyclerView recyclerView;
     TextView noResult, msg;
     Session session;
     Activity activity;
     SearchView searchview;
+    boolean isGrid = false;
+    int resource;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +59,7 @@ public class SearchFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        recycleview = root.findViewById(R.id.recycleview);
+        recyclerView = root.findViewById(R.id.recyclerView);
         productArrayList = new ArrayList<>();
         noResult = root.findViewById(R.id.noResult);
         msg = root.findViewById(R.id.msg);
@@ -64,7 +70,20 @@ public class SearchFragment extends Fragment {
 
         Constant.CartValues = new HashMap<>();
 
-        recycleview.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (session.getGrid("grid")) {
+            resource = R.layout.lyt_item_grid;
+            isGrid = true;
+
+            recyclerView = root.findViewById(R.id.recyclerView);
+            recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
+
+        } else {
+            resource = R.layout.lyt_item_list;
+            isGrid = false;
+
+            recyclerView = root.findViewById(R.id.recyclerView);
+            recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        }
 
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -120,14 +139,11 @@ public class SearchFragment extends Fragment {
 
                                         for (int j = 0; j < pricearray.length(); j++) {
                                             JSONObject obj = pricearray.getJSONObject(j);
-                                            String discountpercent = "0", productPrice = " ";
-                                            if (obj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
-                                                productPrice = obj.getString(Constant.PRICE);
-                                            else {
+                                            String discountpercent = "0";
+                                            if (!obj.getString(Constant.DISCOUNTED_PRICE).equals("0")) {
                                                 discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
-                                                productPrice = obj.getString(Constant.DISCOUNTED_PRICE);
                                             }
-                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), productPrice, obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
+                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
@@ -138,8 +154,8 @@ public class SearchFragment extends Fragment {
                                 e.printStackTrace();
                             }
 
-                            productAdapter = new ProductAdapter(productArrayList, R.layout.lyt_item_list, activity);
-                            recycleview.setAdapter(productAdapter);
+                            productAdapter = new ProductAdapter(productArrayList, resource, activity);
+                            recyclerView.setAdapter(productAdapter);
                             noResult.setVisibility(View.GONE);
                             msg.setVisibility(View.GONE);
                         } else {
@@ -147,7 +163,7 @@ public class SearchFragment extends Fragment {
                             msg.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                             productArrayList.clear();
-                            recycleview.setAdapter(new ProductAdapter(productArrayList, R.layout.lyt_item_list, activity));
+                            recyclerView.setAdapter(new ProductAdapter(productArrayList, resource, activity));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -158,12 +174,46 @@ public class SearchFragment extends Fragment {
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.toolbar_layout) {
+            if (isGrid) {
+                isGrid = false;
+                recyclerView.setAdapter(null);
+                resource = R.layout.lyt_item_list;
+                recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+            } else {
+                isGrid = true;
+                recyclerView.setAdapter(null);
+                resource = R.layout.lyt_item_grid;
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            }
+            productAdapter = new ProductAdapter(productArrayList, resource, activity);
+            recyclerView.setAdapter(productAdapter);
+            productAdapter.notifyDataSetChanged();
+            session.setGrid("grid", isGrid);
+            activity.invalidateOptionsMenu();
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.findItem(R.id.toolbar_cart).setVisible(true);
-        menu.findItem(R.id.toolbar_search).setVisible(false);
-        menu.findItem(R.id.toolbar_sort).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.toolbar_cart).setVisible(true);
+        menu.findItem(R.id.toolbar_sort).setVisible(false);
+        menu.findItem(R.id.toolbar_search).setVisible(false);
+        menu.findItem(R.id.toolbar_layout).setVisible(true);
+
+        Drawable myDrawable = null;
+        if (isGrid) {
+            myDrawable = getResources().getDrawable(R.drawable.ic_list); // The ID of your drawable
+        } else {
+            myDrawable = getResources().getDrawable(R.drawable.ic_grid); // The ID of your drawable.
+        }
+        menu.findItem(R.id.toolbar_layout).setIcon(myDrawable);
     }
 
     @Override
@@ -171,7 +221,6 @@ public class SearchFragment extends Fragment {
         super.onResume();
         Constant.TOOLBAR_TITLE = getString(R.string.search);
         activity.invalidateOptionsMenu();
-
         searchview.setIconifiedByDefault(true);
         searchview.setFocusable(true);
         searchview.setIconified(false);

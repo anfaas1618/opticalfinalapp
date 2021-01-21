@@ -12,20 +12,20 @@
         android:icon="@drawable/ic_menu_cart"
         android:title="@string/cart" />
 
+    <item
+        android:id="@+id/menu_notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/notifications"
+        app:actionLayout="@layout/menu_counter_layout" />
+
     <group
         android:id="@+id/group1"
         android:checkableBehavior="none">
-
 
         <item
             android:id="@+id/menu_tracker"
             android:icon="@drawable/ic_menu_tracker"
             android:title="@string/your_orders" />
-        <item
-            android:id="@+id/menu_notifications"
-            android:icon="@drawable/ic_notifications"
-            android:title="@string/notifications"
-            app:actionLayout="@layout/menu_counter_layout" />
         <item
             android:id="@+id/menu_wallet_history"
             android:icon="@drawable/ic_wallet"

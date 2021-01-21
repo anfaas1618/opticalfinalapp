@@ -1,6 +1,7 @@
 package wrteam.ekart.shop.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +28,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.razorpay.PaymentResultListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.AddressListFragment;
@@ -47,8 +55,7 @@ import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
-
-import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
+import wrteam.ekart.shop.helper.VolleyCallback;
 
 
 public class MainActivity extends DrawerActivity implements OnMapReadyCallback, PaymentResultListener {
@@ -248,6 +255,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         }
 
         bottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -284,6 +292,13 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             }
         });
 
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+            String token = instanceIdResult.getToken();
+            if (!token.equals(session.getData(Constant.FCM_ID))) {
+                Register_FCM(token);
+            }
+        });
+
         GetSettings(activity);
 
     }
@@ -295,6 +310,26 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
 //        configuration.setLocale(new Locale(languageCode.toLowerCase()));
 //        resources.updateConfiguration(configuration, dm);
 //    }
+
+    public void Register_FCM(String token) {
+        Map<String, String> params = new HashMap<>();
+        params.put(Constant.USER_ID, session.getData(Constant.USER_ID));
+        params.put(Constant.FCM_ID, token);
+
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (!jsonObject.getBoolean(Constant.ERROR)) {
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, activity, Constant.REGISTER_DEVICE_URL, params, false);
+    }
 
     @Override
     public void onBackPressed() {
@@ -343,7 +378,6 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 break;
             case R.id.toolbar_logout:
                 session.logoutUserConfirmation(activity);
-                ApiConfig.clearFCM(activity, session);
                 break;
         }
         return super.onOptionsItemSelected(item);

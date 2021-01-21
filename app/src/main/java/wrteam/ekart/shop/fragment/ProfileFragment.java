@@ -328,12 +328,12 @@ public class ProfileFragment extends Fragment {
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
                         new AndroidMultiPartEntity.ProgressListener() {
-
                             @Override
                             public void transferred(long num) {
                                 //publishProgress((int) ((num / (float) totalSize) * 100));
                             }
                         });
+
                 filePath = fileUri.getPath();
                 sourceFile = new File(filePath);
 

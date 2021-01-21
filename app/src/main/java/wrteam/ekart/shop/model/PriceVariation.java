@@ -17,11 +17,10 @@ public class PriceVariation implements Serializable {
     final String stock_unit_name;
     final String discountpercent;
     String cart_count;
-    String productPrice;
     int qty;
     double totalprice;
 
-    public PriceVariation(String cart_count, String id, String product_id, String type, String measurement, String measurement_unit_id, String productPrice, String price, String discounted_price, String serve_for, String stock, String stock_unit_id, String measurement_unit_name, String stock_unit_name, String discountpercent) {
+    public PriceVariation(String cart_count, String id, String product_id, String type, String measurement, String measurement_unit_id, String price, String discounted_price, String serve_for, String stock, String stock_unit_id, String measurement_unit_name, String stock_unit_name, String discountpercent) {
         this.cart_count = cart_count;
         this.id = id;
         this.product_id = product_id;
@@ -29,7 +28,6 @@ public class PriceVariation implements Serializable {
         this.measurement = measurement;
         this.measurement_unit_id = measurement_unit_id;
         this.price = price;
-        this.productPrice = productPrice;
         this.discounted_price = discounted_price;
         this.serve_for = serve_for;
         this.stock = stock;
@@ -45,14 +43,6 @@ public class PriceVariation implements Serializable {
 
     public void setCart_count(String cart_count) {
         this.cart_count = cart_count;
-    }
-
-    public String getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
     }
 
     public double getTotalprice() {

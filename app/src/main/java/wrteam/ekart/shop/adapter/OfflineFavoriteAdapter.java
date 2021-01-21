@@ -57,6 +57,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     SpannableString spannableString;
     Session session;
     DatabaseHelper databaseHelper;
+    String taxPercentage;
 
 
     public OfflineFavoriteAdapter(Context context, ArrayList<Product> myDataset, int resource) {
@@ -66,6 +67,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.resource = resource;
         this.session = new Session(activity);
         databaseHelper = new DatabaseHelper(activity);
+        taxPercentage = "0";
     }
 
     public void add(int position, Product item) {
@@ -96,6 +98,12 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final ViewHolderRow holder = (ViewHolderRow) holderparent;
             holder.setIsRecyclable(false);
             final Product product = mDataset.get(position);
+
+            try {
+                taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
             if (priceVariations.size() == 1) {
@@ -197,7 +205,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra) {
 
         holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
-        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
+        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + extra.getPrice());
 
         if (session.isUserLoggedIn()) {
             if (Constant.CartValues.containsKey(extra.getId())) {
@@ -216,15 +224,15 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         holder.txtstatus.setText(extra.getServe_for());
 
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
-            holder.originalPrice.setVisibility(View.INVISIBLE);
-            holder.showDiscount.setVisibility(View.INVISIBLE);
-
-            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getProductPrice());
+            holder.lytDiscount.setVisibility(View.INVISIBLE);
+            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + extra.getPrice());
+            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
 
+            holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.lytDiscount.setVisibility(View.VISIBLE);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
         }
 
@@ -292,7 +300,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
         ImageView imgThumb;
         ImageView imgFav, imgIndicator;
-        RelativeLayout lytmain;
+        RelativeLayout lytmain, lytDiscount;
         AppCompatSpinner spinner;
         LinearLayout qtyLyt;
 
@@ -313,6 +321,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             imgFav = itemView.findViewById(R.id.imgFav);
             lytmain = itemView.findViewById(R.id.lytmain);
             spinner = itemView.findViewById(R.id.spinner);
+            lytDiscount = itemView.findViewById(R.id.lytDiscount);
 
         }
 
@@ -358,7 +367,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-            price.setText(Constant.systemSettings.getCurrency() + extra.getProductPrice());
+            price.setText(Constant.systemSettings.getCurrency() + extra.getPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));

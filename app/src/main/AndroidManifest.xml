@@ -118,6 +118,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+
         <service
             android:name=".helper.MyFirebaseMessagingService"
             android:exported="false">

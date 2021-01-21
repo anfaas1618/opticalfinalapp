@@ -214,8 +214,6 @@ public class CartFragment extends Fragment {
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_USER_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
-//        params.put(Constant.OFFSET, "" + offset);
-//        params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
 
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @SuppressLint("SetTextI18n")
@@ -232,6 +230,17 @@ public class CartFragment extends Fragment {
                                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                                 if (jsonObject1 != null) {
                                     Cart cart = g.fromJson(jsonObject1.toString(), Cart.class);
+
+                                    float price;
+                                    int qty = Integer.parseInt(cart.getQty());
+                                    String taxPercentage = cart.getItems().get(0).getTax_percentage();
+
+                                    if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+                                        price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+                                    } else {
+                                        price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                                    }
+                                    Constant.FLOAT_TOTAL_AMOUNT += (price * qty);
                                     carts.add(cart);
                                 } else {
                                     break;
@@ -244,7 +253,6 @@ public class CartFragment extends Fragment {
                             progressBar.setVisibility(View.GONE);
                             total = Double.parseDouble(objectbject.getString(Constant.TOTAL));
                             session.setData(Constant.TOTAL, String.valueOf(total));
-                            Constant.FLOAT_TOTAL_AMOUNT = objectbject.getDouble(Constant.TOTAL_AMOUNT);
                             Constant.TOTAL_CART_ITEM = Integer.parseInt(objectbject.getString(Constant.TOTAL));
                             SetData();
                         } else {

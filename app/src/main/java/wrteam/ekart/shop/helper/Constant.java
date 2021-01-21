@@ -56,15 +56,14 @@ public class Constant {
     public static String GET_SIMILAR_PRODUCT_URL = BaseUrl + "get-similar-products.php";
     public static String TRANSACTION_URL = BaseUrl + "get-user-transactions.php";
     public static String PROMO_CODE_CHECK_URL = BaseUrl + "validate-promo-code.php";
-    public static String VALIDATE_PROMO_CODE = "validate_promo_code";
     public static String VERIFY_PAYMENT_REQUEST = BaseUrl + "payment-request.php";
-
+    public static String REGISTER_DEVICE_URL = BaseUrl + "register-device.php";
 
     //**************parameters***************
     public static String VERIFY_PAYSTACK = "verify_paystack_transaction";
     public static String DISCOUNTED_AMOUNT = "discounted_amount";
-    public static String REGISTER_DEVICE = "register-device";
     public static String AccessKey = "accesskey";
+    public static String VALIDATE_PROMO_CODE = "validate_promo_code";
     public static String AccessKeyVal = "90336";
     public static String PROFILE = "profile";
     public static String UPLOAD_PROFILE = "upload_profile";
@@ -250,7 +249,6 @@ public class Constant {
     public static String PROMO_DISCOUNT = "promo_discount";
     public static String DISCOUNT_AMT = "discount_rupees";
     public static String TOTAL = "total";
-    public static String TOTAL_AMOUNT = "total_amount";
     public static String PRODUCT_VARIANT_ID = "product_variant_id";
     public static String QUANTITY = "quantity";
     public static String USER_NAME = "user_name";

@@ -47,7 +47,7 @@ public class TrackerDetailFragment extends Fragment {
     public static LinearLayout lyttracker;
     View root;
     OrderTracker order;
-    TextView txtorderotp, tvItemTotal, tvTaxPercent, tvTaxAmt, tvDeliveryCharge, tvTotal, tvPromoCode, tvPCAmount, tvWallet, tvFinalTotal, tvDPercent, tvDAmount;
+    TextView txtorderotp, tvItemTotal, tvDeliveryCharge, tvTotal, tvPromoCode, tvPCAmount, tvWallet, tvFinalTotal, tvDPercent, tvDAmount;
     TextView txtcanceldetail, txtotherdetails, txtorderid, txtorderdate;
     RecyclerView recyclerView;
     View l4;
@@ -72,8 +72,6 @@ public class TrackerDetailFragment extends Fragment {
         lytPromo = root.findViewById(R.id.lytPromo);
         lytWallet = root.findViewById(R.id.lytWallet);
         tvItemTotal = root.findViewById(R.id.tvItemTotal);
-        tvTaxPercent = root.findViewById(R.id.tvTaxPercent);
-        tvTaxAmt = root.findViewById(R.id.tvTaxAmt);
         tvDeliveryCharge = root.findViewById(R.id.tvDeliveryCharge);
         tvDAmount = root.findViewById(R.id.tvDAmount);
         tvDPercent = root.findViewById(R.id.tvDPercent);
@@ -339,8 +337,6 @@ public class TrackerDetailFragment extends Fragment {
         totalAfterTax = (Double.parseDouble(order.getTotal()) + Double.parseDouble(order.getDelivery_charge()) + Double.parseDouble(order.getTax_amt()));
         tvItemTotal.setText(Constant.systemSettings.getCurrency() + order.getTotal());
         tvDeliveryCharge.setText("+ " + Constant.systemSettings.getCurrency() + order.getDelivery_charge());
-        tvTaxPercent.setText(getString(R.string.tax) + "(" + order.getTax_percent() + "%) :");
-        tvTaxAmt.setText("+ " + Constant.systemSettings.getCurrency() + order.getTax_amt());
         tvDPercent.setText(getString(R.string.discount) + "(" + order.getdPercent() + "%) :");
         tvDAmount.setText("- " + Constant.systemSettings.getCurrency() + order.getdAmount());
         tvTotal.setText(Constant.systemSettings.getCurrency() + totalAfterTax);

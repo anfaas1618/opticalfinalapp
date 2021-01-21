@@ -100,7 +100,6 @@ public class NotificationFragment extends Fragment {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_NOTIFICATIONS, Constant.GetVal);
-        params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.OFFSET, "" + offset);
         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT + 10);
 
@@ -149,7 +148,6 @@ public class NotificationFragment extends Fragment {
                                                         offset += Constant.LOAD_ITEM_LIMIT + 10;
                                                         Map<String, String> params = new HashMap<>();
                                                         params.put(Constant.GET_NOTIFICATIONS, Constant.GetVal);
-                                                        params.put(Constant.USER_ID, session.getData(Constant.ID));
                                                         params.put(Constant.OFFSET, "" + offset);
                                                         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT + 10);
 

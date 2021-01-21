@@ -15,14 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
-import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Product;
 
@@ -55,6 +53,9 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
 
         if (productList.size() > 0) {
             holder.tvStyle2_1.setText(productList.get(0).getName());
+
+            holder.tvSubStyle2_1.setText(Constant.systemSettings.getCurrency() + (productList.get(0).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(0).getPriceVariations().get(0).getPrice() : productList.get(0).getPriceVariations().get(0).getDiscounted_price()));
+
             Picasso.get()
                     .load(productList.get(0).getImage())
                     .fit()
@@ -65,6 +66,9 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
         }
         if (productList.size() > 1) {
             holder.tvStyle2_2.setText(productList.get(1).getName());
+
+            holder.tvSubStyle2_2.setText(Constant.systemSettings.getCurrency() + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(1).getPriceVariations().get(0).getPrice() : productList.get(1).getPriceVariations().get(0).getDiscounted_price()));
+
             Picasso.get()
                     .load(productList.get(1).getImage())
                     .fit()
@@ -74,9 +78,11 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
                     .into(holder.imgStyle2_2);
         }
 
-
         if (productList.size() > 2) {
             holder.tvStyle2_3.setText(productList.get(2).getName());
+
+            holder.tvSubStyle2_3.setText(Constant.systemSettings.getCurrency() + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(2).getPriceVariations().get(0).getPrice() : productList.get(2).getPriceVariations().get(0).getDiscounted_price()));
+
             Picasso.get()
                     .load(productList.get(2).getImage())
                     .fit()
@@ -132,7 +138,7 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
     @Override
     public VideoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_style_2, parent, false);
+                .inflate(R.layout.lyt_style_2, parent, false);
         return new VideoHolder(view);
     }
 

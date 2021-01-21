@@ -47,14 +47,39 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
             price = Float.parseFloat(cart.getItems().get(0).getDiscounted_price());
         }
 
-        double itemTotal = price * (Integer.parseInt(cart.getQty()));
-
+        String taxPercentage = cart.getItems().get(0).getTax_percentage();
 
         holder.tvItemName.setText(cart.getItems().get(0).getName() + " (" + cart.getItems().get(0).getMeasurement() + " " + ApiConfig.toTitleCase(cart.getItems().get(0).getUnit()) + ")");
-        holder.tvQty.setText("Qty : " + cart.getQty());
-        holder.tvPrice.setText("Price : " + Constant.systemSettings.getCurrency() + Constant.formater.format(price));
-        holder.tvTaxPercent.setText("Tax (" + cart.getItems().get(0).getTax_percentage() + "%)");
-        holder.tvSubTotal.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(itemTotal));
+        holder.tvQty.setText(activity.getString(R.string.qty_1) + cart.getQty());
+        holder.tvPrice.setText(activity.getString(R.string.mrp) + Constant.systemSettings.getCurrency() + Constant.formater.format(price));
+
+        if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+            if (cart.getItems().get(0).getTax_title().equals(null) && cart.getItems().get(0).getTax_title().equals("")) {
+                holder.tvTaxTitle.setText(activity.getString(R.string.tax));
+                holder.tvTaxAmount.setText(Constant.systemSettings.getCurrency() + "0.00");
+                holder.tvTaxPercent.setText("(0%)");
+            } else {
+                holder.tvTaxTitle.setText(cart.getItems().get(0).getTax_title());
+                holder.tvTaxAmount.setText(Constant.systemSettings.getCurrency() + (Integer.parseInt(cart.getQty()) * ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+                holder.tvTaxPercent.setText("(" + cart.getItems().get(0).getTax_percentage() + "%)");
+            }
+        } else {
+            if (cart.getItems().get(0).getTax_title().equals(null) && cart.getItems().get(0).getTax_title().equals("")) {
+                holder.tvTaxTitle.setText(activity.getString(R.string.tax));
+                holder.tvTaxAmount.setText(Constant.systemSettings.getCurrency() + "0.00");
+                holder.tvTaxPercent.setText("(0%)");
+            } else {
+                holder.tvTaxTitle.setText(cart.getItems().get(0).getTax_title());
+                holder.tvTaxAmount.setText(Constant.systemSettings.getCurrency() + (Integer.parseInt(cart.getQty()) * ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                holder.tvTaxPercent.setText("(" + cart.getItems().get(0).getTax_percentage() + "%)");
+            }
+        }
+
+        if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+            holder.tvSubTotal.setText(Constant.systemSettings.getCurrency() + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+        } else {
+            holder.tvSubTotal.setText(Constant.systemSettings.getCurrency() + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+        }
     }
 
     @Override
@@ -75,7 +100,7 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
 
     public class ItemHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvItemName, tvQty, tvPrice, tvSubTotal, tvTaxPercent;
+        public TextView tvItemName, tvQty, tvPrice, tvSubTotal, tvTaxPercent, tvTaxTitle, tvTaxAmount;
 
         public ItemHolder(View itemView) {
             super(itemView);
@@ -85,6 +110,8 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvSubTotal = itemView.findViewById(R.id.tvSubTotal);
             tvTaxPercent = itemView.findViewById(R.id.tvTaxPercent);
+            tvTaxTitle = itemView.findViewById(R.id.tvTaxTitle);
+            tvTaxAmount = itemView.findViewById(R.id.tvTaxAmount);
         }
 
 

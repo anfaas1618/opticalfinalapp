@@ -33,7 +33,6 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="10dp" />
 
-
         <RelativeLayout
             android:id="@+id/lytDiscount"
             android:layout_width="wrap_content"

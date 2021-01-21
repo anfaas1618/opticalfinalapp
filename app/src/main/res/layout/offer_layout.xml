@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:id="@+id/play_layout"
+    android:background="@drawable/card_shadow"
     android:layout_width="110dp">
 
     <ImageView
@@ -29,8 +30,8 @@
         android:layout_below="@id/thumbnail"
         android:gravity="start"
         android:lines="1"
+        android:paddingStart="@dimen/dimen_5dp"
         android:maxWidth="110dp"
-        android:padding="2dp"
         android:textColor="@color/txt_color"
         android:textSize="@dimen/p_text_size" />
 
@@ -38,12 +39,16 @@
         android:id="@+id/tvPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvTitle"
         android:gravity="start"
         android:lines="1"
         android:maxWidth="110dp"
-        android:padding="2dp"
-        android:textColor="@color/txt_color"
+        android:layout_below="@id/tvTitle"
+        android:paddingStart="@dimen/dimen_5dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="2dp"
+        android:paddingBottom="2dp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         android:textSize="@dimen/p_text_size" />
 
 </RelativeLayout>

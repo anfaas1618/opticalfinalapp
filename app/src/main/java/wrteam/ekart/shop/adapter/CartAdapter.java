@@ -38,11 +38,13 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public boolean isLoading;
     Activity activity;
     ArrayList<Cart> items;
+    String taxPercentage;
 
 
     public CartAdapter(Activity activity, ArrayList<Cart> items) {
         this.activity = activity;
         this.items = items;
+        taxPercentage = "0";
     }
 
     public void add(int position, Cart item) {
@@ -77,7 +79,13 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final ProductHolderItems holder = (ProductHolderItems) holderparent;
             final Cart cart = items.get(position);
 
-            double price = Double.parseDouble(cart.getItems().get(0).getDiscounted_price());
+            double price = 0;
+
+            try {
+                taxPercentage = (Double.parseDouble(cart.getItems().get(0).getTax_percentage()) > 0 ? cart.getItems().get(0).getTax_percentage() : "0");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             Picasso.get()
                     .load(cart.getItems().get(0).getImage())
@@ -100,15 +108,19 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 CartFragment.isSoldOut = true;
             }
 
-            if (cart.getItems().get(0).getDiscounted_price().equals("0")) {
-                holder.txtprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getPrice())));
-                price = Double.parseDouble(cart.getItems().get(0).getPrice());
-            } else if (!cart.getItems().get(0).getDiscounted_price().equalsIgnoreCase(cart.getItems().get(0).getPrice())) {
+            if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+                price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+                holder.txtprice.setText(Constant.systemSettings.getCurrency() + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            } else {
+                price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
                 holder.txtoriginalprice.setPaintFlags(holder.txtoriginalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                holder.txtoriginalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getPrice())));
+                holder.txtoriginalprice.setText(Constant.systemSettings.getCurrency() + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+
+                holder.txtprice.setText(Constant.systemSettings.getCurrency() + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             }
 
             holder.txtQuantity.setText(cart.getQty());
+
             holder.txttotalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(price * Integer.parseInt(cart.getQty())));
 
             final double finalPrice = price;
@@ -229,7 +241,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holderparent;
             loadingViewHolder.progressBar.setIndeterminate(true);
         }
-
     }
 
     @Override

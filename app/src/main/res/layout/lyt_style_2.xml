@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgStyle2_1"
             android:gravity="center"
+            android:paddingStart="@dimen/dimen_5dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="@color/txt_color" />
 
@@ -43,7 +44,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvStyle2_1"
             android:gravity="center"
-            android:textColor="@color/green" />
+            android:paddingStart="@dimen/dimen_5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="2dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 
@@ -79,6 +85,7 @@
                 android:layout_below="@+id/imgStyle2_2"
                 android:ellipsize="end"
                 android:gravity="center"
+                android:paddingStart="@dimen/dimen_5dp"
                 android:maxLines="1"
                 android:textColor="@color/txt_color"
                 android:textSize="@dimen/p_text_size" />
@@ -89,8 +96,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvStyle2_2"
                 android:gravity="center"
-
-                android:textColor="@color/green" />
+                android:paddingStart="@dimen/dimen_5dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
         </RelativeLayout>
 
 
@@ -117,6 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imgStyle2_3"
                 android:ellipsize="end"
+                android:paddingStart="@dimen/dimen_5dp"
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/txt_color"
@@ -128,7 +140,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvStyle2_3"
                 android:gravity="center"
-                android:textColor="@color/green" />
+                android:paddingStart="@dimen/dimen_5dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

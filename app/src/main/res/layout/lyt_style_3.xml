@@ -27,6 +27,7 @@
         android:lines="1"
         android:maxWidth="110dp"
         android:padding="2dp"
+        android:paddingStart="@dimen/dimen_5dp"
         android:textColor="@color/txt_color"
         android:textSize="@dimen/p_text_size" />
 
@@ -38,8 +39,12 @@
         android:gravity="start"
         android:lines="1"
         android:maxWidth="110dp"
-        android:padding="2dp"
-        android:textColor="@color/txt_color"
+        android:paddingStart="@dimen/dimen_5dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="2dp"
+        android:paddingBottom="2dp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         android:textSize="@dimen/p_text_size" />
 </RelativeLayout>
 
