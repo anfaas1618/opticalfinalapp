@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,7 +117,7 @@ public class ProductListFragment extends Fragment {
                     offset = 0;
                     swipeLayout.setRefreshing(false);
                     productArrayList.clear();
-                    if (from.equals("regular")) {
+                    if (from.equals("regular")|| from.equals("sub_cate")) {
                         GetData();
                     } else if (from.equals("similar")) {
                         GetSimilarData();
@@ -446,6 +447,11 @@ public class ProductListFragment extends Fragment {
         }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params, true);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        super.onCreateOptionsMenu(menu, inflater);
+    }
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -474,7 +480,9 @@ public class ProductListFragment extends Fragment {
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+                return  true;
             } else if (item.getItemId() == R.id.toolbar_layout) {
+                System.out.println("====shorting call");
                 if (isGrid) {
                     isGrid = false;
                     recyclerView.setAdapter(null);
@@ -491,7 +499,7 @@ public class ProductListFragment extends Fragment {
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
                 activity.invalidateOptionsMenu();
-                return true;
+return  true;
             }
         return false;
     }
@@ -501,6 +509,7 @@ public class ProductListFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_layout).setVisible(true);
+        menu.findItem(R.id.toolbar_layout).setEnabled(true);
         menu.findItem(R.id.toolbar_sort).setVisible(isSort);
         menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, R.drawable.ic_cart, activity));
 

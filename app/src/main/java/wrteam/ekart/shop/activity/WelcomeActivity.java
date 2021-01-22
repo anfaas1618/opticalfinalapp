@@ -54,6 +54,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 } else {
                     new Session(WelcomeActivity.this).setIsFirstTime("is_first_time", true);
                     startActivity(new Intent(WelcomeActivity.this, MainActivity.class).putExtra(Constant.FROM, ""));
+               finish();
                 }
             }
         });
@@ -63,6 +64,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 new Session(WelcomeActivity.this).setIsFirstTime("is_first_time", true);
                 startActivity(new Intent(WelcomeActivity.this, MainActivity.class).putExtra(Constant.FROM, ""));
+            finish();
             }
         });
 

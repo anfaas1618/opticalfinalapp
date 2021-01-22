@@ -57,7 +57,10 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:26.2.0')
-
+// paytm dependency
+    implementation('com.paytm:pgplussdk:1.4.4') {
+        transitive = true;
+    }
 
     implementation('org.apache.httpcomponents:httpmime:4.3.6') {
         exclude module: 'httpclient'

@@ -234,6 +234,9 @@ public class Constant {
     public static String flutterwave_payment_method = "flutterwave_payment_method";
     public static String midtrans_payment_method = "midtrans_payment_method";
     public static String stripe_payment_method = "stripe_payment_method";
+    public static String paytm_payment_method = "paytm_payment_method";
+    public static String paytm_merchant_id = "paytm_merchant_id";
+    public static String paytm_merchant_key = "paytm_merchant_key";
     public static String MINIMUM_AMOUNT = "min_amount";
     public static String DELIEVERY_CHARGE = "delivery_charge";
     public static String CURRENCY = "currency";
@@ -313,6 +316,9 @@ public class Constant {
     public static String STRIPE = "";
     public static String MERCHANT_ID = "";
     public static String MERCHANT_KEY = "";
+    public static String PAYTM_MERCHANT_ID = "";
+    public static String PAYTM = "";
+    public static String PAYTM_MERCHANT_KEY = "";
     public static String MERCHANT_SALT = "";
     public static String RAZOR_PAY_KEY_VALUE = "";
     public static String PAYSTACK_KEY = "";
@@ -320,6 +326,15 @@ public class Constant {
     public static String FLUTTERWAVE_SECRET_KEY_VAL = "";
     public static String FLUTTERWAVE_ENCRYPTION_KEY_VAL = "";
     public static String FLUTTERWAVE_CURRENCY_CODE_VAL = "";
+
+
+   //PayTm configs
+   public static final String GENERATE_PAYTM_CHECKSUM = "https://newekart.wrteam.in/paytm/generate_checksum.php";
+   public static final String PAYTM_ORDER_PROCESS_URL = "https://securegw-stage.paytm.in/order/process"; //Paytm Merchand Id we got it in paytm credentials
+    public static final String CHANNEL_ID = "WAP"; //Paytm Channel Id, got it in paytm credentials
+    public static final String INDUSTRY_TYPE_ID = "Retail"; //Paytm industry type got it in paytm credential
+
+    public static final String WEBSITE = "WEBSTAGING";
 
     public static String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();

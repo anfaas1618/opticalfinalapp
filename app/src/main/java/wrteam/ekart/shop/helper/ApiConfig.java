@@ -335,6 +335,39 @@ public class ApiConfig extends Application {
 
     }
 
+    public static void RequestToVolley(final VolleyCallback callback, final String url, final Map<String, String> params) {
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onSuccess(true, response);
+
+            }
+
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        callback.onSuccess(false, "");
+
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                params.put(Constant.AccessKey, Constant.AccessKeyVal);
+                return params;
+            }
+        };
+        getInstance().getRequestQueue().getCache().clear();
+        getInstance().addToRequestQueue(stringRequest);
+
+
+    }
+
     public static String toTitleCase(String str) {
         if (str == null) {
             return null;
@@ -737,7 +770,6 @@ public class ApiConfig extends Application {
         }
         return productArrayList;
     }
-
 
 
     @Override

@@ -34,6 +34,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.flutterwave.raveandroid.RaveConstants;
 import com.flutterwave.raveandroid.RavePayActivity;
 import com.flutterwave.raveandroid.RavePayManager;
+import com.paytm.pgsdk.PaytmOrder;
+import com.paytm.pgsdk.PaytmPGService;
+import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
 import com.razorpay.Checkout;
 
 import org.json.JSONArray;
@@ -68,16 +71,16 @@ import wrteam.ekart.shop.model.Slot;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
 
-public class PaymentFragment extends Fragment {
-    public static String razorPayId, paymentMethod = "", deliveryTime = "", deliveryDay = "", pCode = "", TAG = CheckoutFragment.class.getSimpleName();
+public class PaymentFragment extends Fragment implements PaytmPaymentTransactionCallback {
+    public static String customerId, razorPayId, paymentMethod = "", deliveryTime = "", deliveryDay = "", pCode = "", TAG = CheckoutFragment.class.getSimpleName();
     public static Map<String, String> sendparams;
     public static RecyclerView recyclerView;
     public static SlotAdapter adapter;
-    public LinearLayout paymentLyt, deliveryTimeLyt, lytPayOption, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe;
+    public LinearLayout paymentLyt, deliveryTimeLyt, lytPayOption, lytOrderList, lytCLocation, processLyt, lytFlutterWave, CODLinearLyt, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe, lytPayTm;
     public ArrayList<String> variantIdList, qtyList, dateList;
     TextView tvSubTotal, txttotalitems, tvSelectDeliveryDate, tvWltBalance, tvProceedOrder, tvConfirmOrder, tvPayment, tvDelivery;
     double subtotal = 0.0, usedBalance = 0.0, totalAfterTax = 0.0, taxAmt = 0.0, pCodeDiscount = 0.0;
-    RadioButton rbCod, rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe;
+    RadioButton rbCod, rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe, rbPayTm;
     PaymentModelClass paymentModelClass;
     ArrayList<BookingDate> bookingDates;
     RelativeLayout confirmLyt, lytWallet;
@@ -174,6 +177,8 @@ public class PaymentFragment extends Fragment {
         pBar = root.findViewById(R.id.pBar);
 
         lytPayStack = root.findViewById(R.id.lytPayStack);
+        lytPayTm = root.findViewById(R.id.lytPayTm);
+        rbPayTm = root.findViewById(R.id.rbPayTm);
         rbPayStack = root.findViewById(R.id.rbPayStack);
         rbFlutterWave = root.findViewById(R.id.rbFlutterWave);
         rbCod = root.findViewById(R.id.rbcod);
@@ -225,6 +230,7 @@ public class PaymentFragment extends Fragment {
 
                 if (result) {
                     try {
+                        System.out.println("=======payment res " + response);
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             if (objectbject.has(Constant.PAYMENT_METHODS)) {
@@ -262,6 +268,12 @@ public class PaymentFragment extends Fragment {
                                 }
                                 if (object.has(Constant.stripe_payment_method)) {
                                     Constant.STRIPE = object.getString(Constant.stripe_payment_method);
+                                }
+                                if (object.has(Constant.paytm_payment_method)) {
+                                    Constant.PAYTM = object.getString(Constant.paytm_payment_method);
+                                    Constant.PAYTM_MERCHANT_ID = object.getString(Constant.paytm_merchant_id);
+                                    Constant.PAYTM_MERCHANT_KEY = object.getString(Constant.paytm_merchant_key);
+
                                 }
 
                                 setPaymentMethod();
@@ -309,6 +321,9 @@ public class PaymentFragment extends Fragment {
                 if (Constant.STRIPE.equals("1")) {
                     lytStripe.setVisibility(View.VISIBLE);
                 }
+                if (Constant.PAYTM.equals("1")) {
+                    lytPayTm.setVisibility(View.VISIBLE);
+                }
 
                 rbCod.setOnClickListener(v -> {
                     rbCod.setChecked(true);
@@ -319,6 +334,7 @@ public class PaymentFragment extends Fragment {
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(false);
                     rbMidTrans.setChecked(false);
+                    rbPayTm.setChecked(false);
                     paymentMethod = rbCod.getTag().toString();
 
                 });
@@ -344,6 +360,7 @@ public class PaymentFragment extends Fragment {
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(false);
                     rbMidTrans.setChecked(false);
+                    rbPayTm.setChecked(false);
                     paymentMethod = rbPayPal.getTag().toString();
 
                 });
@@ -357,6 +374,7 @@ public class PaymentFragment extends Fragment {
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(false);
                     rbMidTrans.setChecked(false);
+                    rbPayTm.setChecked(false);
                     paymentMethod = rbRazorPay.getTag().toString();
                     Checkout.preload(getContext());
                 });
@@ -370,6 +388,7 @@ public class PaymentFragment extends Fragment {
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(false);
                     rbMidTrans.setChecked(false);
+                    rbPayTm.setChecked(false);
                     paymentMethod = rbPayStack.getTag().toString();
 
                 });
@@ -383,6 +402,7 @@ public class PaymentFragment extends Fragment {
                     rbFlutterWave.setChecked(true);
                     rbStripe.setChecked(false);
                     rbMidTrans.setChecked(false);
+                    rbPayTm.setChecked(false);
                     paymentMethod = rbFlutterWave.getTag().toString();
 
                 });
@@ -396,6 +416,7 @@ public class PaymentFragment extends Fragment {
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(true);
                     rbMidTrans.setChecked(false);
+                    rbPayTm.setChecked(false);
                     paymentMethod = rbStripe.getTag().toString();
 
                 });
@@ -408,8 +429,24 @@ public class PaymentFragment extends Fragment {
                     rbPayStack.setChecked(false);
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(false);
+                    rbPayTm.setChecked(false);
                     rbMidTrans.setChecked(true);
+
                     paymentMethod = rbMidTrans.getTag().toString();
+
+                });
+
+                rbPayTm.setOnClickListener(v -> {
+                    rbPayTm.setChecked(true);
+                    rbCod.setChecked(false);
+                    rbPayU.setChecked(false);
+                    rbPayPal.setChecked(false);
+                    rbRazorPay.setChecked(false);
+                    rbPayStack.setChecked(false);
+                    rbFlutterWave.setChecked(false);
+                    rbStripe.setChecked(false);
+                    rbMidTrans.setChecked(false);
+                    paymentMethod = rbPayTm.getTag().toString();
 
                 });
             }
@@ -430,6 +467,7 @@ public class PaymentFragment extends Fragment {
         rbPayPal.setChecked(false);
         rbRazorPay.setChecked(false);
         rbPayStack.setChecked(false);
+        rbPayTm.setChecked(false);
         rbFlutterWave.setChecked(false);
 
         lytPayOption.setVisibility(View.VISIBLE);
@@ -630,6 +668,9 @@ public class PaymentFragment extends Fragment {
                 } else if (paymentMethod.equals(getString(R.string.flutterwave))) {
                     dialog.dismiss();
                     StartFlutterWavePayment();
+                } else if (paymentMethod.equals(getString(R.string.paytm))) {
+                    dialog.dismiss();
+                    startPayTmPayment();
                 }
             }
         });
@@ -844,6 +885,101 @@ public class PaymentFragment extends Fragment {
                 }
             }
         }, getActivity(), Constant.SETTING_URL, params, true);
+    }
+
+    public void startPayTmPayment() {
+
+
+//containing all the values required
+//generate checksum
+
+        Map<String, String> params = new HashMap<>();
+
+        params.put("ORDER_ID", Constant.randomAlphaNumeric(20));
+        params.put("CUST_ID", Constant.randomAlphaNumeric(10));
+        params.put("INDUSTRY_TYPE_ID", Constant.INDUSTRY_TYPE_ID);
+        params.put("CHANNEL_ID", Constant.CHANNEL_ID);
+        params.put("TXN_AMOUNT", "" + subtotal);
+        params.put("WEBSITE", Constant.WEBSITE);
+        System.out.println("====" + params.toString());
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject object = jsonObject.getJSONObject("data");
+                    System.out.println("=======res  " + response);
+
+                    PaytmPGService Service = PaytmPGService.getStagingService(Constant.PAYTM_ORDER_PROCESS_URL);
+                    //use this when using for production
+                    // PaytmPGService Service = PaytmPGService.getProductionService();
+                    customerId = object.getString("CUST_ID");
+                    //creating a hashmap and adding all the values required
+                    HashMap<String, String> paramMap = new HashMap<>();
+                    paramMap.put("MID", Constant.PAYTM_MERCHANT_ID);
+                    paramMap.put("ORDER_ID", jsonObject.getString("order id"));
+                    paramMap.put("CUST_ID", object.getString("CUST_ID"));
+                    paramMap.put("INDUSTRY_TYPE_ID", Constant.INDUSTRY_TYPE_ID);
+                    paramMap.put("CHANNEL_ID", Constant.CHANNEL_ID);
+                    paramMap.put("TXN_AMOUNT", "" + subtotal);
+                    paramMap.put("WEBSITE", Constant.WEBSITE);
+                    paramMap.put("CALLBACK_URL", object.getString("CALLBACK_URL"));
+                    paramMap.put("CHECKSUMHASH", jsonObject.getString("signature"));
+
+                    //creating a paytm order object using the hashmap
+                    PaytmOrder order = new PaytmOrder(paramMap);
+
+                    //intializing the paytm service
+                    Service.initialize(order, null);
+
+                    //finally starting the payment transaction
+                    Service.startPaymentTransaction(getActivity(), true, true, this);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Constant.GENERATE_PAYTM_CHECKSUM, params);
+
+
+    }
+    @Override
+    public void onTransactionResponse(Bundle bundle) {
+        System.out.println("============ response transaction " + bundle);
+        String cheksum = bundle.getString("CHECKSUMHASH");
+        String orderId = bundle.getString("ORDERID");
+        String status = bundle.getString("STATUS");
+        if (status.equalsIgnoreCase("TXN_SUCCESS")) {
+        }
+    }
+
+    @Override
+    public void networkNotAvailable() {
+        Toast.makeText(getActivity(), "Network error", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void clientAuthenticationFailed(String s) {
+        Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void someUIErrorOccurred(String s) {
+        Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onErrorLoadingWebPage(int i, String s, String s1) {
+        Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressedCancelTransaction() {
+        Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTransactionCancel(String s, Bundle bundle) {
+        Toast.makeText(getContext(), s + bundle.toString(), Toast.LENGTH_LONG).show();
     }
 
     void StartFlutterWavePayment() {

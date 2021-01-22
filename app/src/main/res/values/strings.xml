@@ -288,6 +288,7 @@
     <string name="wallettype">wallet</string>
     <string name="midtrans">Midtrans</string>
     <string name="stripe">Stripe</string>
+    <string name="paytm">PayTm</string>
     <string name="refer_text_1">"Refer a friend and earn up to "</string>
     <string name="refer_text_2">\" when your friend\'s first order is successfully delivered. Minimum Order amount should be \"</string>
     <string name="refer_text_3">. which allows you to earn up to</string>

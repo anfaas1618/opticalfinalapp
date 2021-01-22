@@ -371,14 +371,16 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_cart:
-                MainActivity.fm.beginTransaction().add(R.id.container, new CartFragment()).addToBackStack(null).commit();
+             fm.beginTransaction().add(R.id.container, new CartFragment()).addToBackStack(null).commit();
                 break;
             case R.id.toolbar_search:
-                MainActivity.fm.beginTransaction().add(R.id.container, new SearchFragment()).addToBackStack(null).commit();
+               fm.beginTransaction().add(R.id.container, new SearchFragment()).addToBackStack(null).commit();
                 break;
             case R.id.toolbar_logout:
                 session.logoutUserConfirmation(activity);
                 break;
+        /*    case R.id.toolbar_layout:
+                return false;*/
         }
         return super.onOptionsItemSelected(item);
     }
