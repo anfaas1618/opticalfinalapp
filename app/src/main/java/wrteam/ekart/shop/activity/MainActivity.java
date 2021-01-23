@@ -27,8 +27,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONException;
@@ -55,7 +57,6 @@ import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
-import wrteam.ekart.shop.helper.VolleyCallback;
 
 
 public class MainActivity extends DrawerActivity implements OnMapReadyCallback, PaymentResultListener {
@@ -291,11 +292,13 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 currentFragment.onResume();
             }
         });
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
-            String token = instanceIdResult.getToken();
-            if (!token.equals(session.getData(Constant.FCM_ID))) {
-                Register_FCM(token);
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String token = instanceIdResult.getToken();
+                if (!token.equals(session.getData(Constant.FCM_ID))) {
+                    Register_FCM(instanceIdResult.getToken());
+                }
             }
         });
 
@@ -313,7 +316,9 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
 
     public void Register_FCM(String token) {
         Map<String, String> params = new HashMap<>();
-        params.put(Constant.USER_ID, session.getData(Constant.USER_ID));
+        if (session.isUserLoggedIn()) {
+            params.put(Constant.USER_ID, session.getData(Constant.USER_ID));
+        }
         params.put(Constant.FCM_ID, token);
 
         ApiConfig.RequestToVolley((result, response) -> {
@@ -321,7 +326,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (!jsonObject.getBoolean(Constant.ERROR)) {
-
+                        session.setData(Constant.FCM_ID, token);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -371,16 +376,14 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_cart:
-             fm.beginTransaction().add(R.id.container, new CartFragment()).addToBackStack(null).commit();
+                MainActivity.fm.beginTransaction().add(R.id.container, new CartFragment()).addToBackStack(null).commit();
                 break;
             case R.id.toolbar_search:
-               fm.beginTransaction().add(R.id.container, new SearchFragment()).addToBackStack(null).commit();
+                MainActivity.fm.beginTransaction().add(R.id.container, new SearchFragment()).addToBackStack(null).commit();
                 break;
             case R.id.toolbar_logout:
                 session.logoutUserConfirmation(activity);
                 break;
-        /*    case R.id.toolbar_layout:
-                return false;*/
         }
         return super.onOptionsItemSelected(item);
     }

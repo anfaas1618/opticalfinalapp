@@ -448,12 +448,6 @@ public class ProductListFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Do something that differs the Activity's menu here
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-    @SuppressLint("UseCompatLoadingForDrawables")
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
             if (item.getItemId() == R.id.toolbar_sort) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -480,7 +474,6 @@ public class ProductListFragment extends Fragment {
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-                return  true;
             } else if (item.getItemId() == R.id.toolbar_layout) {
                 System.out.println("====shorting call");
                 if (isGrid) {
@@ -499,15 +492,13 @@ public class ProductListFragment extends Fragment {
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
                 activity.invalidateOptionsMenu();
-return  true;
             }
-        return false;
+            return super.onOptionsItemSelected(item);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_layout).setVisible(true);
         menu.findItem(R.id.toolbar_layout).setEnabled(true);
         menu.findItem(R.id.toolbar_sort).setVisible(isSort);
@@ -520,6 +511,8 @@ return  true;
             myDrawable = getResources().getDrawable(R.drawable.ic_grid); // The ID of your drawable.
         }
         menu.findItem(R.id.toolbar_layout).setIcon(myDrawable);
+
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

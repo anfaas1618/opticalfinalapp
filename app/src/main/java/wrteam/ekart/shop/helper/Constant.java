@@ -10,14 +10,29 @@ public class Constant {
 
     public static String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
 
-    public static String WebsiteUrl = "https://webekart.wrteam.in/";
     //If you have eCart Website then place here website URL otherwise domain url not admin panel url
+    public static String WebsiteUrl = "https://webekart.wrteam.in/";
 
     //set your jwt secret key here...key must same in PHP and Android
     public static String JWT_KEY = "replace_with_your_strong_jwt_secret_key";
 
     public static int GRIDCOLUMN = 3; //Category View Number Of Grid Per Line
     public static int LOAD_ITEM_LIMIT = 10; //Load items limit in listing ,Maximum load item once
+
+
+    //PayTm configs
+    public static final String GENERATE_PAYTM_CHECKSUM = MAINBASEUrl+"paytm/generate_checksum.php";
+    public static final String VALID_TRANSACTION = MAINBASEUrl+"/paytm/valid_transction.php";
+
+    public static final String WEBSITE_LIVE_VAL = "WEB";
+    public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";
+    public static final String MOBILE_APP_CHANNEL_ID_LIVE_VAL = "WAP";
+    public static final String PAYTM_ORDER_PROCESS_LIVE_URL = "https://securegw.paytm.in/order/process";
+
+    public static final String WEBSITE_DEMO_VAL = "WEBSTAGING";
+    public static final String INDUSTRY_TYPE_ID_DEMO_VAL = "Retail";
+    public static final String MOBILE_APP_CHANNEL_ID_DEMO_VAL = "WAP";
+    public static final String PAYTM_ORDER_PROCESS_DEMO_VAL = "https://securegw-stage.paytm.in/order/process";
 
     //MODIFICATION PART END
 
@@ -57,7 +72,7 @@ public class Constant {
     public static String TRANSACTION_URL = BaseUrl + "get-user-transactions.php";
     public static String PROMO_CODE_CHECK_URL = BaseUrl + "validate-promo-code.php";
     public static String VERIFY_PAYMENT_REQUEST = BaseUrl + "payment-request.php";
-    public static String REGISTER_DEVICE_URL = BaseUrl + "register-device.php";
+    public static String REGISTER_DEVICE_URL = BaseUrl + "store-fcm-id.php";
 
     //**************parameters***************
     public static String VERIFY_PAYSTACK = "verify_paystack_transaction";
@@ -237,6 +252,7 @@ public class Constant {
     public static String paytm_payment_method = "paytm_payment_method";
     public static String paytm_merchant_id = "paytm_merchant_id";
     public static String paytm_merchant_key = "paytm_merchant_key";
+    public static String paytm_mode = "paytm_mode";
     public static String MINIMUM_AMOUNT = "min_amount";
     public static String DELIEVERY_CHARGE = "delivery_charge";
     public static String CURRENCY = "currency";
@@ -280,8 +296,20 @@ public class Constant {
     public static String UNIT = "unit";
     public static String SLUG = "slug";
     public static String PROMO_CODE = "promo_code";
-    public static String TOKEN = "token";
     public static CharSequence[] filtervalues = {" Newest to Oldest ", " Oldest to Newest ", " Price Highest to Lowest ", " Price Lowest to Highest "};
+    public static final String CHANNEL_ID = "CHANNEL_ID";
+    public static final String INDUSTRY_TYPE_ID = "INDUSTRY_TYPE_ID";
+    public static final String WEBSITE = "WEBSITE";
+    public static final String TXN_AMOUNT = "TXN_AMOUNT";
+    public static final String MID = "MID";
+    public static final String CALLBACK_URL = "CALLBACK_URL";
+    public static final String CHECKSUMHASH = "CHECKSUMHASH";
+    public static final String ORDER_ID_ = "ORDER_ID";
+    public static String CUST_ID = "CUST_ID";
+    public static String ORDERID = "ORDERID";
+    public static String STATUS_ = "STATUS";
+    public static String TXN_SUCCESS = "TXN_SUCCESS";
+    public static String BANKTXNID = "BANKTXNID";
 
     //**************Constants Values***************
     public static String selectedAddressId = "";
@@ -319,6 +347,7 @@ public class Constant {
     public static String PAYTM_MERCHANT_ID = "";
     public static String PAYTM = "";
     public static String PAYTM_MERCHANT_KEY = "";
+    public static String PAYTM_MODE = "";
     public static String MERCHANT_SALT = "";
     public static String RAZOR_PAY_KEY_VALUE = "";
     public static String PAYSTACK_KEY = "";
@@ -326,15 +355,6 @@ public class Constant {
     public static String FLUTTERWAVE_SECRET_KEY_VAL = "";
     public static String FLUTTERWAVE_ENCRYPTION_KEY_VAL = "";
     public static String FLUTTERWAVE_CURRENCY_CODE_VAL = "";
-
-
-   //PayTm configs
-   public static final String GENERATE_PAYTM_CHECKSUM = "https://newekart.wrteam.in/paytm/generate_checksum.php";
-   public static final String PAYTM_ORDER_PROCESS_URL = "https://securegw-stage.paytm.in/order/process"; //Paytm Merchand Id we got it in paytm credentials
-    public static final String CHANNEL_ID = "WAP"; //Paytm Channel Id, got it in paytm credentials
-    public static final String INDUSTRY_TYPE_ID = "Retail"; //Paytm industry type got it in paytm credential
-
-    public static final String WEBSITE = "WEBSTAGING";
 
     public static String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();

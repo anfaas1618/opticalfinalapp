@@ -405,6 +405,54 @@
                             android:textSize="@dimen/mid_text" />
                     </LinearLayout>
 
+
+                    <LinearLayout
+                        android:id="@+id/lytPayTm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1.5dp"
+                            android:background="@color/bg_color" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/margin_5dp"
+                            android:weightSum="10">
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                android:src="@drawable/ic_paytm" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="7"
+                                android:text="@string/paytm"
+                                android:textColor="@color/txt_color"
+                                android:textSize="@dimen/mid_text" />
+
+                            <RadioButton
+                                android:id="@+id/rbPayTm"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="@dimen/margin_10dp"
+                                android:tag="@string/paytm"
+                                android:textSize="@dimen/mid_text" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

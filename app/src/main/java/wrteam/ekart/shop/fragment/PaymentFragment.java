@@ -273,7 +273,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                                     Constant.PAYTM = object.getString(Constant.paytm_payment_method);
                                     Constant.PAYTM_MERCHANT_ID = object.getString(Constant.paytm_merchant_id);
                                     Constant.PAYTM_MERCHANT_KEY = object.getString(Constant.paytm_merchant_key);
-
+                                    Constant.PAYTM_MODE = object.getString(Constant.paytm_mode);
                                 }
 
                                 setPaymentMethod();
@@ -431,7 +431,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                     rbStripe.setChecked(false);
                     rbPayTm.setChecked(false);
                     rbMidTrans.setChecked(true);
-
                     paymentMethod = rbMidTrans.getTag().toString();
 
                 });
@@ -888,42 +887,57 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
     }
 
     public void startPayTmPayment() {
-
-
-//containing all the values required
-//generate checksum
-
         Map<String, String> params = new HashMap<>();
 
-        params.put("ORDER_ID", Constant.randomAlphaNumeric(20));
-        params.put("CUST_ID", Constant.randomAlphaNumeric(10));
-        params.put("INDUSTRY_TYPE_ID", Constant.INDUSTRY_TYPE_ID);
-        params.put("CHANNEL_ID", Constant.CHANNEL_ID);
-        params.put("TXN_AMOUNT", "" + subtotal);
-        params.put("WEBSITE", Constant.WEBSITE);
+        params.put(Constant.ORDER_ID_, Constant.randomAlphaNumeric(20));
+        params.put(Constant.CUST_ID, Constant.randomAlphaNumeric(10));
+        params.put(Constant.TXN_AMOUNT, "" + subtotal);
+        if (Constant.PAYTM_MODE.equals("sandbox")) {
+            params.put(Constant.INDUSTRY_TYPE_ID, Constant.INDUSTRY_TYPE_ID_DEMO_VAL);
+            params.put(Constant.CHANNEL_ID, Constant.MOBILE_APP_CHANNEL_ID_DEMO_VAL);
+            params.put(Constant.WEBSITE, Constant.WEBSITE_DEMO_VAL);
+        } else if (Constant.PAYTM_MODE.equals("production")) {
+            params.put(Constant.INDUSTRY_TYPE_ID, Constant.INDUSTRY_TYPE_ID_LIVE_VAL);
+            params.put(Constant.CHANNEL_ID, Constant.MOBILE_APP_CHANNEL_ID_LIVE_VAL);
+            params.put(Constant.WEBSITE, Constant.WEBSITE_LIVE_VAL);
+        }
+
         System.out.println("====" + params.toString());
         ApiConfig.RequestToVolley((result, response) -> {
             if (result) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONObject object = jsonObject.getJSONObject("data");
+                    JSONObject object = jsonObject.getJSONObject(Constant.DATA);
                     System.out.println("=======res  " + response);
 
-                    PaytmPGService Service = PaytmPGService.getStagingService(Constant.PAYTM_ORDER_PROCESS_URL);
-                    //use this when using for production
-                    // PaytmPGService Service = PaytmPGService.getProductionService();
-                    customerId = object.getString("CUST_ID");
+                    PaytmPGService Service = null;
+                    if (Constant.PAYTM_MODE.equals("sandbox")) {
+                        Service = PaytmPGService.getStagingService(Constant.PAYTM_ORDER_PROCESS_DEMO_VAL);
+                    } else if (Constant.PAYTM_MODE.equals("production")) {
+                        Service = PaytmPGService.getProductionService();
+                    }
+
+                    customerId = object.getString(Constant.CUST_ID);
                     //creating a hashmap and adding all the values required
+
                     HashMap<String, String> paramMap = new HashMap<>();
-                    paramMap.put("MID", Constant.PAYTM_MERCHANT_ID);
-                    paramMap.put("ORDER_ID", jsonObject.getString("order id"));
-                    paramMap.put("CUST_ID", object.getString("CUST_ID"));
-                    paramMap.put("INDUSTRY_TYPE_ID", Constant.INDUSTRY_TYPE_ID);
-                    paramMap.put("CHANNEL_ID", Constant.CHANNEL_ID);
-                    paramMap.put("TXN_AMOUNT", "" + subtotal);
-                    paramMap.put("WEBSITE", Constant.WEBSITE);
-                    paramMap.put("CALLBACK_URL", object.getString("CALLBACK_URL"));
-                    paramMap.put("CHECKSUMHASH", jsonObject.getString("signature"));
+                    paramMap.put(Constant.MID, Constant.PAYTM_MERCHANT_ID);
+                    paramMap.put(Constant.ORDER_ID_, jsonObject.getString("order id"));
+                    paramMap.put(Constant.CUST_ID, object.getString(Constant.CUST_ID));
+                    paramMap.put(Constant.TXN_AMOUNT, "" + subtotal);
+
+                    if (Constant.PAYTM_MODE.equals("sandbox")) {
+                        paramMap.put(Constant.INDUSTRY_TYPE_ID, Constant.INDUSTRY_TYPE_ID_DEMO_VAL);
+                        paramMap.put(Constant.CHANNEL_ID, Constant.MOBILE_APP_CHANNEL_ID_DEMO_VAL);
+                        paramMap.put(Constant.WEBSITE, Constant.WEBSITE_DEMO_VAL);
+                    } else if (Constant.PAYTM_MODE.equals("production")) {
+                        paramMap.put(Constant.INDUSTRY_TYPE_ID, Constant.INDUSTRY_TYPE_ID_LIVE_VAL);
+                        paramMap.put(Constant.CHANNEL_ID, Constant.MOBILE_APP_CHANNEL_ID_LIVE_VAL);
+                        paramMap.put(Constant.WEBSITE, Constant.WEBSITE_LIVE_VAL);
+                    }
+
+                    paramMap.put(Constant.CALLBACK_URL, object.getString(Constant.CALLBACK_URL));
+                    paramMap.put(Constant.CHECKSUMHASH, jsonObject.getString("signature"));
 
                     //creating a paytm order object using the hashmap
                     PaytmOrder order = new PaytmOrder(paramMap);
@@ -942,14 +956,38 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
 
     }
+
     @Override
     public void onTransactionResponse(Bundle bundle) {
-        System.out.println("============ response transaction " + bundle);
-        String cheksum = bundle.getString("CHECKSUMHASH");
-        String orderId = bundle.getString("ORDERID");
-        String status = bundle.getString("STATUS");
-        if (status.equalsIgnoreCase("TXN_SUCCESS")) {
+        String orderId = bundle.getString(Constant.ORDERID);
+
+        String status = bundle.getString(Constant.STATUS_);
+        if (status.equalsIgnoreCase(Constant.TXN_SUCCESS)) {
+            verifyTransaction(orderId);
         }
+    }
+
+    /**
+     * Verifying the transaction status once PayTM transaction is over
+     * This makes server(own) -> server(PayTM) call to verify the transaction status
+     */
+    public void verifyTransaction(String orderId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("orderId", orderId);
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getJSONObject("body").getJSONObject("resultInfo").getString("resultStatus");
+                    if (status.equalsIgnoreCase("TXN_SUCCESS")) {
+                        String txnId = jsonObject.getJSONObject("body").getString("txnId");
+                        PlaceOrder(getActivity(), getString(R.string.paytm), txnId, true, sendparams, Constant.SUCCESS);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Constant.VALID_TRANSACTION, params);
     }
 
     @Override

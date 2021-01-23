@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_layout" />
+        layout="@layout/lyt_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
