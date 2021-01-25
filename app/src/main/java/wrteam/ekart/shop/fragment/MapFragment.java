@@ -363,6 +363,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         menu.findItem(R.id.toolbar_search).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
-        menu.findItem(R.id.toolbar_layout).setVisible(false);
     }
 }

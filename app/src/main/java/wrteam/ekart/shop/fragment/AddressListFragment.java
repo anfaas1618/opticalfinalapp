@@ -254,7 +254,6 @@ public class AddressListFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(false);
-        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
     }

@@ -474,24 +474,6 @@ public class ProductListFragment extends Fragment {
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-            } else if (item.getItemId() == R.id.toolbar_layout) {
-                System.out.println("====shorting call");
-                if (isGrid) {
-                    isGrid = false;
-                    recyclerView.setAdapter(null);
-                    resource = R.layout.lyt_item_list;
-                    recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-                } else {
-                    isGrid = true;
-                    recyclerView.setAdapter(null);
-                    resource = R.layout.lyt_item_grid;
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                }
-                session.setGrid("grid", isGrid);
-                mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
-                recyclerView.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
-                activity.invalidateOptionsMenu();
             }
             return super.onOptionsItemSelected(item);
     }
@@ -499,18 +481,8 @@ public class ProductListFragment extends Fragment {
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.findItem(R.id.toolbar_layout).setVisible(true);
-        menu.findItem(R.id.toolbar_layout).setEnabled(true);
         menu.findItem(R.id.toolbar_sort).setVisible(isSort);
         menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, R.drawable.ic_cart, activity));
-
-        Drawable myDrawable = null;
-        if (isGrid) {
-            myDrawable = getResources().getDrawable(R.drawable.ic_list); // The ID of your drawable
-        } else {
-            myDrawable = getResources().getDrawable(R.drawable.ic_grid); // The ID of your drawable.
-        }
-        menu.findItem(R.id.toolbar_layout).setIcon(myDrawable);
 
         super.onPrepareOptionsMenu(menu);
     }

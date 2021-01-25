@@ -131,7 +131,6 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.toolbar_cart).setVisible(false);
-        menu.findItem(R.id.toolbar_layout).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(false);
         super.onPrepareOptionsMenu(menu);

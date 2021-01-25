@@ -289,51 +289,11 @@ public class FavoriteFragment extends Fragment {
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.toolbar_layout) {
-            if (isGrid) {
-                isGrid = false;
-                recyclerView.setAdapter(null);
-                resource = R.layout.lyt_item_list;
-                recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-            } else {
-                isGrid = true;
-                recyclerView.setAdapter(null);
-                resource = R.layout.lyt_item_grid;
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            }
-            if (session.isUserLoggedIn()) {
-                favoriteLoadMoreAdapter = new FavoriteLoadMoreAdapter(activity, favoriteArrayList, resource);
-                recyclerView.setAdapter(favoriteLoadMoreAdapter);
-                favoriteLoadMoreAdapter.notifyDataSetChanged();
-            } else {
-                offlineFavoriteAdapter = new OfflineFavoriteAdapter(activity, productArrayList, resource);
-                recyclerView.setAdapter(offlineFavoriteAdapter);
-                offlineFavoriteAdapter.notifyDataSetChanged();
-            }
-            session.setGrid("grid", isGrid);
-            activity.invalidateOptionsMenu();
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_cart).setVisible(true);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(true);
-        menu.findItem(R.id.toolbar_layout).setVisible(true);
-
-        Drawable myDrawable = null;
-        if (isGrid) {
-            myDrawable = getResources().getDrawable(R.drawable.ic_list); // The ID of your drawable
-        } else {
-            myDrawable = getResources().getDrawable(R.drawable.ic_grid); // The ID of your drawable.
-        }
-        menu.findItem(R.id.toolbar_layout).setIcon(myDrawable);
     }
 }

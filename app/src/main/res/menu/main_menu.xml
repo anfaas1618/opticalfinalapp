@@ -17,13 +17,6 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/toolbar_layout"
-        android:icon="@drawable/ic_grid"
-        android:title="@string/change_layout"
-        android:visible="false"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/toolbar_cart"
         android:icon="@drawable/ic_cart"
         android:title="@string/title_cart"

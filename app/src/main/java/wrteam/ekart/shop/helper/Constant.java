@@ -8,7 +8,7 @@ import wrteam.ekart.shop.model.SystemSettings;
 public class Constant {
     //MODIFICATION PART
 
-    public static String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
+    public static String MAINBASEUrl = "https://ekart.wrteam.in/"; //Admin panel url
 
     //If you have eCart Website then place here website URL otherwise domain url not admin panel url
     public static String WebsiteUrl = "https://webekart.wrteam.in/";
@@ -18,21 +18,6 @@ public class Constant {
 
     public static int GRIDCOLUMN = 3; //Category View Number Of Grid Per Line
     public static int LOAD_ITEM_LIMIT = 10; //Load items limit in listing ,Maximum load item once
-
-
-    //PayTm configs
-    public static final String GENERATE_PAYTM_CHECKSUM = MAINBASEUrl+"paytm/generate_checksum.php";
-    public static final String VALID_TRANSACTION = MAINBASEUrl+"/paytm/valid_transction.php";
-
-    public static final String WEBSITE_LIVE_VAL = "WEB";
-    public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";
-    public static final String MOBILE_APP_CHANNEL_ID_LIVE_VAL = "WAP";
-    public static final String PAYTM_ORDER_PROCESS_LIVE_URL = "https://securegw.paytm.in/order/process";
-
-    public static final String WEBSITE_DEMO_VAL = "WEBSTAGING";
-    public static final String INDUSTRY_TYPE_ID_DEMO_VAL = "Retail";
-    public static final String MOBILE_APP_CHANNEL_ID_DEMO_VAL = "WAP";
-    public static final String PAYTM_ORDER_PROCESS_DEMO_VAL = "https://securegw-stage.paytm.in/order/process";
 
     //MODIFICATION PART END
 
@@ -355,6 +340,20 @@ public class Constant {
     public static String FLUTTERWAVE_SECRET_KEY_VAL = "";
     public static String FLUTTERWAVE_ENCRYPTION_KEY_VAL = "";
     public static String FLUTTERWAVE_CURRENCY_CODE_VAL = "";
+
+    //PayTm configs
+    public static final String GENERATE_PAYTM_CHECKSUM = MAINBASEUrl+"paytm/generate-checksum.php";
+    public static final String VALID_TRANSACTION = MAINBASEUrl+"/paytm/valid-transction.php";
+
+    public static final String WEBSITE_LIVE_VAL = "WEB";
+    public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";
+    public static final String MOBILE_APP_CHANNEL_ID_LIVE_VAL = "WAP";
+    public static final String PAYTM_ORDER_PROCESS_LIVE_URL = "https://securegw.paytm.in/order/process";
+
+    public static final String WEBSITE_DEMO_VAL = "WEBSTAGING";
+    public static final String INDUSTRY_TYPE_ID_DEMO_VAL = "Retail";
+    public static final String MOBILE_APP_CHANNEL_ID_DEMO_VAL = "WAP";
+    public static final String PAYTM_ORDER_PROCESS_DEMO_VAL = "https://securegw-stage.paytm.in/order/process";
 
     public static String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();
