@@ -193,7 +193,7 @@ public class OrderListAllFragment extends Fragment {
 
                             }
                             if (offset == 0) {
-                                trackerAdapter = new TrackerAdapter(activity, orderTrackerArrayList);
+                                trackerAdapter = new TrackerAdapter(getContext(),activity, orderTrackerArrayList);
                                 recyclerView.setAdapter(trackerAdapter);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     private boolean isLoadMore;

@@ -335,14 +335,14 @@ public class TrackerDetailFragment extends Fragment {
         txtorderdate.setText(date[0]);
         txtotherdetails.setText(getString(R.string.name_1) + order.getUsername() + getString(R.string.mobile_no_1) + order.getMobile() + getString(R.string.address_1) + order.getAddress());
         totalAfterTax = (Double.parseDouble(order.getTotal()) + Double.parseDouble(order.getDelivery_charge()) + Double.parseDouble(order.getTax_amt()));
-        tvItemTotal.setText(Constant.systemSettings.getCurrency() + order.getTotal());
-        tvDeliveryCharge.setText("+ " + Constant.systemSettings.getCurrency() + order.getDelivery_charge());
+        tvItemTotal.setText(session.getData(Constant.currency) + order.getTotal());
+        tvDeliveryCharge.setText("+ " + session.getData(Constant.currency) + order.getDelivery_charge());
         tvDPercent.setText(getString(R.string.discount) + "(" + order.getdPercent() + "%) :");
-        tvDAmount.setText("- " + Constant.systemSettings.getCurrency() + order.getdAmount());
-        tvTotal.setText(Constant.systemSettings.getCurrency() + totalAfterTax);
-        tvPCAmount.setText("- " + Constant.systemSettings.getCurrency() + order.getPromoDiscount());
-        tvWallet.setText("- " + Constant.systemSettings.getCurrency() + order.getWalletBalance());
-        tvFinalTotal.setText(Constant.systemSettings.getCurrency() + order.getFinal_total());
+        tvDAmount.setText("- " + session.getData(Constant.currency) + order.getdAmount());
+        tvTotal.setText(session.getData(Constant.currency) + totalAfterTax);
+        tvPCAmount.setText("- " + session.getData(Constant.currency) + order.getPromoDiscount());
+        tvWallet.setText("- " + session.getData(Constant.currency) + order.getWalletBalance());
+        tvFinalTotal.setText(session.getData(Constant.currency) + order.getFinal_total());
 
         if (!order.getStatus().equalsIgnoreCase("delivered") && !order.getStatus().equalsIgnoreCase("cancelled") && !order.getStatus().equalsIgnoreCase("returned")) {
             btnCancel.setVisibility(View.VISIBLE);

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Product;
 
 
@@ -34,12 +35,13 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
     public ArrayList<Product> productList;
     public Activity activity;
     Context context;
+    Session session;
 
     public AdapterStyle2(Context context, Activity activity, ArrayList<Product> productList) {
         this.context = context;
         this.activity = activity;
         this.productList = productList;
-
+        session = new Session(context);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
         if (productList.size() > 0) {
             holder.tvStyle2_1.setText(productList.get(0).getName());
 
-            holder.tvSubStyle2_1.setText(Constant.systemSettings.getCurrency() + (productList.get(0).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(0).getPriceVariations().get(0).getPrice() : productList.get(0).getPriceVariations().get(0).getDiscounted_price()));
+            holder.tvSubStyle2_1.setText(session.getData(Constant.currency) + (productList.get(0).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(0).getPriceVariations().get(0).getPrice() : productList.get(0).getPriceVariations().get(0).getDiscounted_price()));
 
             Picasso.get()
                     .load(productList.get(0).getImage())
@@ -67,7 +69,7 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
         if (productList.size() > 1) {
             holder.tvStyle2_2.setText(productList.get(1).getName());
 
-            holder.tvSubStyle2_2.setText(Constant.systemSettings.getCurrency() + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(1).getPriceVariations().get(0).getPrice() : productList.get(1).getPriceVariations().get(0).getDiscounted_price()));
+            holder.tvSubStyle2_2.setText(session.getData(Constant.currency) + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(1).getPriceVariations().get(0).getPrice() : productList.get(1).getPriceVariations().get(0).getDiscounted_price()));
 
             Picasso.get()
                     .load(productList.get(1).getImage())
@@ -81,7 +83,7 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
         if (productList.size() > 2) {
             holder.tvStyle2_3.setText(productList.get(2).getName());
 
-            holder.tvSubStyle2_3.setText(Constant.systemSettings.getCurrency() + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(2).getPriceVariations().get(0).getPrice() : productList.get(2).getPriceVariations().get(0).getDiscounted_price()));
+            holder.tvSubStyle2_3.setText(session.getData(Constant.currency) + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(2).getPriceVariations().get(0).getPrice() : productList.get(2).getPriceVariations().get(0).getDiscounted_price()));
 
             Picasso.get()
                     .load(productList.get(2).getImage())

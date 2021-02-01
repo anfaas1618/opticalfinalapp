@@ -44,12 +44,12 @@ public class ReferEarnFragment extends Fragment {
 
         session = new Session(getContext());
         txtrefercoin = root.findViewById(R.id.txtrefercoin);
-        if (Constant.systemSettings.getRefer_earn_method().equals("rupees")) {
-            preText = Constant.systemSettings.getCurrency() + Constant.systemSettings.getRefer_earn_bonus();
+        if (Constant.refer_earn_method.equals("rupees")) {
+            preText = session.getData(Constant.currency) + Constant.refer_earn_bonus;
         } else {
-            preText = Constant.systemSettings.getRefer_earn_bonus() + "% ";
+            preText = Constant.refer_earn_bonus + "% ";
         }
-        txtrefercoin.setText(getString(R.string.refer_text_1) + preText + getString(R.string.refer_text_2) + Constant.systemSettings.getCurrency() + Constant.systemSettings.getMin_order_amount() + getString(R.string.refer_text_3) + Constant.systemSettings.getCurrency() + Constant.systemSettings.getMax_refer_earn_amount() + ".");
+        txtrefercoin.setText(getString(R.string.refer_text_1) + preText + getString(R.string.refer_text_2) + session.getData(Constant.currency) + session.getData(Constant.min_refer_earn_order_amount) + getString(R.string.refer_text_3) + session.getData(Constant.currency) + Constant.max_refer_earn_amount + ".");
         txtcode = root.findViewById(R.id.txtcode);
         txtcopy = root.findViewById(R.id.txtcopy);
         txtinvite = root.findViewById(R.id.txtinvite);

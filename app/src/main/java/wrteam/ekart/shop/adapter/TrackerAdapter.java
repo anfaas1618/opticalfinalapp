@@ -2,6 +2,7 @@ package wrteam.ekart.shop.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.TrackerDetailFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.OrderTracker;
 
 
@@ -35,9 +37,11 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public boolean isLoading;
     Activity activity;
     ArrayList<OrderTracker> orderTrackerArrayList;
+    Context context;
 
 
-    public TrackerAdapter(Activity activity, ArrayList<OrderTracker> orderTrackerArrayList) {
+    public TrackerAdapter(Context context,Activity activity, ArrayList<OrderTracker> orderTrackerArrayList) {
+        this.context = context;
         this.activity = activity;
         this.orderTrackerArrayList = orderTrackerArrayList;
     }
@@ -76,7 +80,7 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.txtorderid.setText(activity.getString(R.string.order_number) + order.getOrder_id());
             String[] date = order.getDate_added().split("\\s+");
             holder.txtorderdate.setText(activity.getString(R.string.ordered_on) + date[0]);
-            holder.txtorderamount.setText(activity.getString(R.string.for_amount_on) + Constant.systemSettings.getCurrency() + order.getTotal());
+            holder.txtorderamount.setText(activity.getString(R.string.for_amount_on) + new Session(context).getData(Constant.currency) + order.getTotal());
 
             holder.carddetail.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -138,7 +138,7 @@ public class TransactionFragment extends Fragment {
 
                             }
                             if (offset == 0) {
-                                transactionAdapter = new TransactionAdapter(activity, transactions);
+                                transactionAdapter = new TransactionAdapter(getContext(), activity, transactions);
                                 transactionAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(transactionAdapter);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {

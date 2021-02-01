@@ -197,7 +197,7 @@ public class CheckoutFragment extends Fragment {
                             carts.add(cart);
                         }
 
-                        checkoutItemListAdapter = new CheckoutItemListAdapter(getActivity(), carts);
+                        checkoutItemListAdapter = new CheckoutItemListAdapter(getContext(),getActivity(), carts);
                         recyclerView.setAdapter(checkoutItemListAdapter);
                         SetDataTotal();
 
@@ -221,9 +221,9 @@ public class CheckoutFragment extends Fragment {
         if ((OriginalAmount - DiscountedAmount) != 0) {
             lytSaveAmount.setVisibility(View.VISIBLE);
             if (pCodeDiscount != 0) {
-                tvSaveAmount.setText(Constant.systemSettings.getCurrency() + ((OriginalAmount - DiscountedAmount) + pCodeDiscount));
+                tvSaveAmount.setText(session.getData(Constant.currency) + ((OriginalAmount - DiscountedAmount) + pCodeDiscount));
             } else {
-                tvSaveAmount.setText(Constant.systemSettings.getCurrency() + (OriginalAmount - DiscountedAmount));
+                tvSaveAmount.setText(session.getData(Constant.currency) + (OriginalAmount - DiscountedAmount));
             }
         } else {
             if (pCodeDiscount == 0) {
@@ -232,9 +232,9 @@ public class CheckoutFragment extends Fragment {
         }
 
         subtotal = Constant.FLOAT_TOTAL_AMOUNT;
-        tvTotalBeforeTax.setText(Constant.systemSettings.getCurrency() + Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
+        tvTotalBeforeTax.setText(session.getData(Constant.currency) + Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
         if (Constant.FLOAT_TOTAL_AMOUNT <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
-            tvDeliveryCharge.setText(Constant.systemSettings.getCurrency() + Constant.SETTING_DELIVERY_CHARGE);
+            tvDeliveryCharge.setText(session.getData(Constant.currency) + Constant.SETTING_DELIVERY_CHARGE);
             subtotal = Double.parseDouble("" + (subtotal + Constant.SETTING_DELIVERY_CHARGE));
             deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
         } else {
@@ -245,7 +245,7 @@ public class CheckoutFragment extends Fragment {
         if (!pCode.isEmpty()) {
             subtotal = subtotal - pCodeDiscount;
         }
-        tvSubTotal.setText(Constant.systemSettings.getCurrency() + "" + Double.parseDouble("" + subtotal));
+        tvSubTotal.setText(session.getData(Constant.currency) + "" + Double.parseDouble("" + subtotal));
     }
 
     public void PromoCodeCheck() {
@@ -290,7 +290,7 @@ public class CheckoutFragment extends Fragment {
                                         dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
                                         subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT));
                                         pCodeDiscount = Double.parseDouble(object.getString(Constant.DISCOUNT));
-                                        tvSubTotal.setText(Constant.systemSettings.getCurrency() + Double.parseDouble("" + subtotal));
+                                        tvSubTotal.setText(session.getData(Constant.currency) + Double.parseDouble("" + subtotal));
                                     } else {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                                         btnApply.setText("Apply");

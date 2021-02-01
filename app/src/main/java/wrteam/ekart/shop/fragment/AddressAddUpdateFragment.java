@@ -345,7 +345,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                                     } else {
                                         addresses = new ArrayList<>();
                                         addresses.add(address);
-                                        addressAdapter = new AddressAdapter(getActivity(), addresses);
+                                        addressAdapter = new AddressAdapter(getContext(),getActivity(), addresses);
                                         recyclerView.setAdapter(addressAdapter);
                                         recyclerView.setVisibility(View.VISIBLE);
                                     }

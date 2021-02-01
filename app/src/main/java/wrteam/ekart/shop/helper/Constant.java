@@ -3,12 +3,10 @@ package wrteam.ekart.shop.helper;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-import wrteam.ekart.shop.model.SystemSettings;
-
 public class Constant {
     //MODIFICATION PART
 
-    public static String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
+    public static String MAINBASEUrl = "https://ekart.wrteam.in/"; //Admin panel url
 
     //If you have eCart Website then place here website URL otherwise domain url not admin panel url
     public static String WebsiteUrl = "https://webekart.wrteam.in/";
@@ -294,7 +292,22 @@ public class Constant {
     public static String ORDERID = "ORDERID";
     public static String STATUS_ = "STATUS";
     public static String TXN_SUCCESS = "TXN_SUCCESS";
-    public static String BANKTXNID = "BANKTXNID";
+
+    public static String minimum_version_required = "minimum_version_required";
+    public static String is_version_system_on = "is_version_system_on";
+    public static String currency = "currency";
+    public static String delivery_charge = "delivery_charge";
+    public static String min_order_amount = "min_order_amount";
+    public static String max_cart_items_count = "max_cart_items_count";
+    public static String area_wise_delivery_charge = "area_wise_delivery_charge";
+    public static String is_refer_earn_on = "is_refer_earn_on";
+    public static String refer_earn_bonus = "refer_earn_bonus";
+    public static String refer_earn_method = "refer_earn_method";
+    public static String max_refer_earn_amount = "max_refer_earn_amount";
+    public static String max_product_return_days = "max_product_return_days";
+    public static String user_wallet_refill_limit = "user_wallet_refill_limit";
+    public static String min_refer_earn_order_amount = "min_refer_earn_order_amount";
+
 
     //**************Constants Values***************
     public static String selectedAddressId = "";
@@ -311,7 +324,6 @@ public class Constant {
     public static HashMap<String, String> CartValues = new HashMap<>();
     public static int selectedDatePosition = 0;
     public static DecimalFormat formater = new DecimalFormat("0.00");
-    public static SystemSettings systemSettings;
     public static boolean CLICK = false;
     public static double FLOAT_TOTAL_AMOUNT = 0;
     public static int TOTAL_CART_ITEM = 0;
@@ -341,9 +353,10 @@ public class Constant {
     public static String FLUTTERWAVE_ENCRYPTION_KEY_VAL = "";
     public static String FLUTTERWAVE_CURRENCY_CODE_VAL = "";
 
+
     //PayTm configs
-    public static final String GENERATE_PAYTM_CHECKSUM = MAINBASEUrl+"paytm/generate-checksum.php";
-    public static final String VALID_TRANSACTION = MAINBASEUrl+"/paytm/valid-transction.php";
+    public static final String GENERATE_PAYTM_CHECKSUM = MAINBASEUrl + "paytm/generate-checksum.php";
+    public static final String VALID_TRANSACTION = MAINBASEUrl + "/paytm/valid-transction.php";
 
     public static final String WEBSITE_LIVE_VAL = "WEB";
     public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";

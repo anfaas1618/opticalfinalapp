@@ -324,7 +324,7 @@ public class ProductDetailFragment extends Fragment {
                 if (ApiConfig.isConnected(activity)) {
                     count = Integer.parseInt(txtqty.getText().toString());
                     if (!(count >= Float.parseFloat(priceVariationslist.get(vpos).getStock()))) {
-                        if (count < Integer.parseInt(Constant.systemSettings.getMax_cart_items_count())) {
+                        if (count < Integer.parseInt(session.getData(Constant.max_cart_items_count))) {
                             Constant.CLICK = true;
                             count++;
                             txtqty.setText("" + count);
@@ -589,7 +589,7 @@ public class ProductDetailFragment extends Fragment {
 
             if (product.getReturn_status().equalsIgnoreCase("1")) {
                 imgReturnable.setImageDrawable(getResources().getDrawable(R.drawable.ic_returnable));
-                tvReturnable.setText(Integer.parseInt(Constant.systemSettings.getMax_product_return_days()) + " Days Returnable.");
+                tvReturnable.setText(Integer.parseInt(Constant.max_product_return_days) + " Days Returnable.");
             } else {
                 imgReturnable.setImageDrawable(getResources().getDrawable(R.drawable.ic_not_returnable));
                 tvReturnable.setText("Not Returnable.");
@@ -695,18 +695,18 @@ public class ProductDetailFragment extends Fragment {
 
 
         txtMeasurement.setText(" ( " + priceVariation.getMeasurement() + priceVariation.getMeasurement_unit_name() + " ) ");
-        txtPrice.setText(getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + priceVariation.getPrice());
+        txtPrice.setText(getString(R.string.offer_price) + session.getData(Constant.currency) + priceVariation.getPrice());
         txtstatus.setText(priceVariation.getServe_for());
 
         if (priceVariation.getDiscounted_price().equals("0") || priceVariation.getDiscounted_price().equals("")) {
             lytDiscount.setVisibility(View.INVISIBLE);
-            txtPrice.setText(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            txtPrice.setText(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtOriginalPrice.setText(spannableString);
 
-            txtPrice.setText(activity.getResources().getString(R.string.offer_price) + Constant.systemSettings.getCurrency() + ((Float.parseFloat(priceVariation.getDiscounted_price()) + ((Float.parseFloat(priceVariation.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            txtPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getDiscounted_price()) + ((Float.parseFloat(priceVariation.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             lytDiscount.setVisibility(View.VISIBLE);
             showDiscount.setText(priceVariation.getDiscountpercent().replace("(", "").replace(")", ""));
         }
@@ -774,7 +774,7 @@ public class ProductDetailFragment extends Fragment {
 
             PriceVariation extra = product.getPriceVariations().get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-//            price.setText(Constant.systemSettings.getCurrency() + extra.getPrice());
+//            price.setText(session.getData(Constant.currency) + extra.getPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(getResources().getColor(R.color.red));

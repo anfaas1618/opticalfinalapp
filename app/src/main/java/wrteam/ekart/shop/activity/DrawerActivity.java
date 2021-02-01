@@ -21,14 +21,7 @@ import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
 import com.google.android.play.core.tasks.Task;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.AddressListFragment;
@@ -43,8 +36,6 @@ import wrteam.ekart.shop.fragment.WebViewFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
-import wrteam.ekart.shop.helper.VolleyCallback;
-import wrteam.ekart.shop.model.SystemSettings;
 import wrteam.ekart.shop.ui.CircleTransform;
 
 @SuppressLint("StaticFieldLeak")
@@ -129,34 +120,9 @@ public class DrawerActivity extends AppCompatActivity {
             else
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class).putExtra(Constant.FROM, "drawer"));
         });
-        GetSettings(activity);
+        setupNavigationDrawer();
     }
 
-    public void GetSettings(final Activity activity) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.SETTINGS, Constant.GetVal);
-        params.put(Constant.GET_TIMEZONE, Constant.GetVal);
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject objectbject = new JSONObject(response);
-                        if (!objectbject.getBoolean(Constant.ERROR)) {
-                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
-                            Constant.systemSettings = new Gson().fromJson(object.toString(), SystemSettings.class);
-
-                            setupNavigationDrawer();
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, activity, Constant.SETTING_URL, params, false);
-    }
 
     @SuppressLint("NonConstantResourceId")
     void setupNavigationDrawer() {
@@ -171,8 +137,9 @@ public class DrawerActivity extends AppCompatActivity {
             nav_Menu.setGroupVisible(R.id.group1, false);
             nav_Menu.setGroupVisible(R.id.group2, false);
         }
+
         if (session.isUserLoggedIn()) {
-            if (Constant.systemSettings.getIs_refer_earn_on().equals("0")) {
+            if (session.getData(Constant.is_refer_earn_on).equals("0")) {
                 nav_Menu.findItem(R.id.menu_refer).setVisible(false);
             }
         }

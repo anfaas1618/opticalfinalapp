@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Product;
 
 /**
@@ -68,7 +69,7 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
                 .into(holder.thumbnail);
 
         holder.tvTitle.setText(product.getName());
-        holder.tvPrice.setText(Constant.systemSettings.getCurrency() + (product.getPriceVariations().get(0).getDiscounted_price().equals("0") ? product.getPriceVariations().get(0).getPrice() : product.getPriceVariations().get(0).getDiscounted_price()));
+        holder.tvPrice.setText(new Session(activity).getData(Constant.currency) + (product.getPriceVariations().get(0).getDiscounted_price().equals("0") ? product.getPriceVariations().get(0).getPrice() : product.getPriceVariations().get(0).getDiscounted_price()));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

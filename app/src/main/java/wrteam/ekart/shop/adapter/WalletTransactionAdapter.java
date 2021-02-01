@@ -2,6 +2,7 @@ package wrteam.ekart.shop.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.WalletTransaction;
 
 import static wrteam.ekart.shop.helper.ApiConfig.toTitleCase;
@@ -33,9 +35,10 @@ public class WalletTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
     Activity activity;
     ArrayList<WalletTransaction> walletTransactions;
     String id = "0";
+    Context context;
 
-
-    public WalletTransactionAdapter(Activity activity, ArrayList<WalletTransaction> walletTransactions) {
+    public WalletTransactionAdapter(Context context,Activity activity, ArrayList<WalletTransaction> walletTransactions) {
+        this.context = context;
         this.activity = activity;
         this.walletTransactions = walletTransactions;
     }
@@ -76,7 +79,7 @@ public class WalletTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
 
             holder.tvTxDateAndTime.setText(walletTransaction.getDate_created());
             holder.tvTxMessage.setText(activity.getString(R.string.hash) + walletTransaction.getOrder_id() + " " + walletTransaction.getMessage());
-            holder.tvTxAmount.setText(activity.getString(R.string.amount_) + Constant.systemSettings.getCurrency() + " " + Float.parseFloat(walletTransaction.getAmount()));
+            holder.tvTxAmount.setText(activity.getString(R.string.amount_) + new Session(context).getData(Constant.currency) + " " + Float.parseFloat(walletTransaction.getAmount()));
             holder.tvTxNo.setText(activity.getString(R.string.hash) + walletTransaction.getId());
             holder.tvTxStatus.setText(toTitleCase(walletTransaction.getStatus()));
 

@@ -71,7 +71,7 @@ public class CartFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public static void SetData() {
-        txttotalamount.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Constant.FLOAT_TOTAL_AMOUNT));
+        txttotalamount.setText(session.getData(Constant.currency) + Constant.formater.format(Constant.FLOAT_TOTAL_AMOUNT));
         txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
     }
 
@@ -133,7 +133,7 @@ public class CartFragment extends Fragment {
                                 startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra("total", Constant.FLOAT_TOTAL_AMOUNT).putExtra(Constant.FROM, "checkout"));
                             }
                         } else {
-                            Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + Constant.systemSettings.getCurrency() + Constant.formater.format(Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + session.getData(Constant.currency) + Constant.formater.format(Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(activity, getString(R.string.msg_sold_out), Toast.LENGTH_SHORT).show();
@@ -246,7 +246,7 @@ public class CartFragment extends Fragment {
                                     break;
                                 }
                             }
-                            cartAdapter = new CartAdapter(getActivity(), carts);
+                            cartAdapter = new CartAdapter(getContext(),getActivity(), carts);
                             cartAdapter.setHasStableIds(true);
                             cartrecycleview.setAdapter(cartAdapter);
                             lytTotal.setVisibility(View.VISIBLE);

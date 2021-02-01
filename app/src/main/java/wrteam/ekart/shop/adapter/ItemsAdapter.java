@@ -81,7 +81,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
             payType = order.getPayment_method();
         String activeStatus = order.getActiveStatus().substring(0, 1).toUpperCase() + order.getActiveStatus().substring(1).toLowerCase();
         holder.txtqty.setText(order.getQuantity());
-        holder.txtprice.setText(Constant.systemSettings.getCurrency() + order.getPrice());
+        holder.txtprice.setText(new Session(activity).getData(Constant.currency) + order.getPrice());
         holder.txtpaytype.setText(activity.getResources().getString(R.string.via) + payType);
         holder.txtstatus.setText(activeStatus);
         if (activeStatus.equalsIgnoreCase(Constant.AWAITING_PAYMENT)) {
@@ -131,11 +131,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
                     long diff = date2.getTime() - date1.getTime();
                     //  System.out.println("Days: "+TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
 
-                    if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= Integer.parseInt(Constant.systemSettings.getMax_product_return_days())) {
+                    if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= Integer.parseInt(new Session(activity).getData(Constant.max_product_return_days))) {
                         updateOrderStatus(activity, order, Constant.RETURNED, holder, from);
 
                     } else {
-                        final Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), activity.getResources().getString(R.string.product_return) + Integer.parseInt(Constant.systemSettings.getMax_product_return_days()) + activity.getString(R.string.day_max_limit), Snackbar.LENGTH_INDEFINITE);
+                        final Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), activity.getResources().getString(R.string.product_return) + Integer.parseInt(new Session(activity).getData(Constant.max_product_return_days)) + activity.getString(R.string.day_max_limit), Snackbar.LENGTH_INDEFINITE);
                         snackbar.setAction(activity.getResources().getString(R.string.ok), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

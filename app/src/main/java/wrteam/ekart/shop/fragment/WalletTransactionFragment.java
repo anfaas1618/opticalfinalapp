@@ -126,7 +126,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
         ApiConfig.getWalletBalance(activity, session);
 
-        tvBalance.setText(Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
+        tvBalance.setText(session.getData(Constant.currency) + Constant.WALLET_BALANCE);
 
         btnRechargeWallet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -371,7 +371,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                         if (edtAmount.getText().toString().equals("")) {
                             edtAmount.requestFocus();
                             edtAmount.setError(getString(R.string.alert_enter_amount));
-                        } else if (Double.parseDouble(edtAmount.getText().toString()) > Double.parseDouble((Constant.systemSettings.getUser_wallet_refill_limit()))) {
+                        } else if (Double.parseDouble(edtAmount.getText().toString()) > Double.parseDouble(session.getData(Constant.user_wallet_refill_limit))) {
                             Toast.makeText(activity, getString(R.string.max_wallet_amt_error), Toast.LENGTH_SHORT).show();
                         } else if (Double.parseDouble(edtAmount.getText().toString().trim()) <= 0) {
                             edtAmount.requestFocus();
@@ -459,8 +459,8 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                     try {
                         JSONObject object = new JSONObject(response);
                         if (!object.getBoolean(Constant.ERROR)) {
-                            DrawerActivity.tvWallet.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
-                            tvBalance.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
+                            DrawerActivity.tvWallet.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
+                            tvBalance.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -823,7 +823,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
                             }
                             if (offset == 0) {
-                                walletTransactionAdapter = new WalletTransactionAdapter(activity, walletTransactions);
+                                walletTransactionAdapter = new WalletTransactionAdapter(getContext(),activity, walletTransactions);
                                 walletTransactionAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(walletTransactionAdapter);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {

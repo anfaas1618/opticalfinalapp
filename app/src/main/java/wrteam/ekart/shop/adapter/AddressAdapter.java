@@ -3,6 +3,7 @@ package wrteam.ekart.shop.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,14 +29,14 @@ import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Address;
 
-import static wrteam.ekart.shop.helper.ApiConfig.removeAddress;
-
 public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Activity activity;
+    Context context;
     ArrayList<Address> addresses;
     String id = "0";
 
-    public AddressAdapter(Activity activity, ArrayList<Address> addresses) {
+    public AddressAdapter(Context context,Activity activity, ArrayList<Address> addresses) {
+        this.context = context;
         this.activity = activity;
         this.addresses = addresses;
     }
@@ -116,7 +117,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         if (ApiConfig.isConnected(activity)) {
                             addresses.remove(address);
                             notifyDataSetChanged();
-                            removeAddress(activity, address.getId());
+                            ApiConfig.removeAddress(activity, address.getId());
                         }
                         if (addresses.size() == 0) {
                             AddressListFragment.selectedAddress = "";
@@ -138,19 +139,18 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
 
-
         holder.lytMain.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Constant.selectedAddressId = address.getId();
                 new Session(activity).setData(Constant.LONGITUDE, address.getLongitude());
                 new Session(activity).setData(Constant.LATITUDE, address.getLatitude());
-                if (Constant.systemSettings.getArea_wise_delivery_charge().equals("1")) {
+
+                if (new Session(context).getData(Constant.area_wise_delivery_charge).equals("1")) {
                     Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(address.getMinimum_free_delivery_order_amount());
                     Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(address.getDelivery_charges());
                 }
                 notifyDataSetChanged();
-
             }
         });
 

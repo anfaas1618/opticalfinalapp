@@ -43,7 +43,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,7 +73,6 @@ import wrteam.ekart.shop.model.Favorite;
 import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 import wrteam.ekart.shop.model.Slider;
-import wrteam.ekart.shop.model.SystemSettings;
 
 import static com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
 import static com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
@@ -531,6 +529,7 @@ public class ApiConfig extends Application {
     }
 
     public static void GetSettings(final Activity activity) {
+        Session session = new Session(activity);
         Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.SETTINGS, Constant.GetVal);
         params.put(Constant.GET_TIMEZONE, Constant.GetVal);
@@ -544,10 +543,28 @@ public class ApiConfig extends Application {
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
 
-                            Constant.systemSettings = new Gson().fromJson(object.toString(), SystemSettings.class);
+                            session.setData(Constant.minimum_version_required, object.getString(Constant.minimum_version_required));
+                            session.setData(Constant.is_version_system_on, object.getString(Constant.is_version_system_on));
+
+                            session.setData(Constant.currency, object.getString(Constant.currency));
+
+                            session.setData(Constant.min_order_amount, object.getString(Constant.min_order_amount));
+                            session.setData(Constant.max_cart_items_count, object.getString(Constant.max_cart_items_count));
+                            session.setData(Constant.area_wise_delivery_charge, object.getString(Constant.area_wise_delivery_charge));
+
+                            session.setData(Constant.is_refer_earn_on, object.getString(Constant.is_refer_earn_on));
+                            session.setData(Constant.refer_earn_bonus, object.getString(Constant.refer_earn_bonus));
+                            session.setData(Constant.refer_earn_bonus, object.getString(Constant.refer_earn_bonus));
+                            session.setData(Constant.refer_earn_method, object.getString(Constant.refer_earn_method));
+                            session.setData(Constant.max_refer_earn_amount, object.getString(Constant.max_refer_earn_amount));
+
+                            session.setData(Constant.max_product_return_days, object.getString(Constant.max_product_return_days));
+                            session.setData(Constant.user_wallet_refill_limit, object.getString(Constant.user_wallet_refill_limit));
+                            session.setData(Constant.min_refer_earn_order_amount, object.getString(Constant.min_refer_earn_order_amount));
+
 
                             if (DrawerActivity.tvWallet != null) {
-                                DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
+                                DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + session.getData(Constant.currency) + Constant.WALLET_BALANCE);
                             }
                             String versionName = "";
                             try {
@@ -556,10 +573,8 @@ public class ApiConfig extends Application {
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
                             }
-                            if ((ApiConfig.compareVersion(versionName, Constant.systemSettings.getCurrent_version()) < 0) || (ApiConfig.compareVersion(versionName, Constant.systemSettings.getMinimum_version_required()) < 0)) {
-                                if (!new Session(activity).getIsUpdateSkipped("update_skip")) {
-                                    OpenBottomDialog(activity);
-                                }
+                            if (ApiConfig.compareVersion(versionName, session.getData(Constant.minimum_version_required)) < 0) {
+                                OpenBottomDialog(activity);
                             }
                         }
 
@@ -590,7 +605,7 @@ public class ApiConfig extends Application {
             TextView txttitle = sheetView.findViewById(R.id.tvTitle);
             Button btnNotNow = sheetView.findViewById(R.id.btnNotNow);
             Button btnUpadateNow = sheetView.findViewById(R.id.btnUpdateNow);
-            if (Constant.systemSettings.getIs_version_system_on().equals("0")) {
+            if (new Session(activity).getData(Constant.is_version_system_on).equals("0")) {
                 {
                     btnNotNow.setVisibility(View.VISIBLE);
                     imgclose.setVisibility(View.VISIBLE);
@@ -640,7 +655,7 @@ public class ApiConfig extends Application {
                         JSONObject object = new JSONObject(response);
                         if (!object.getBoolean(Constant.ERROR)) {
                             Constant.WALLET_BALANCE = Double.parseDouble(object.getString(Constant.KEY_BALANCE));
-                            DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
+                            DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + session.getData(Constant.currency) + Constant.WALLET_BALANCE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

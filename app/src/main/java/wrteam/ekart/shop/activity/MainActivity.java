@@ -303,7 +303,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             }
         });
 
-        GetSettings(activity);
+        ApiConfig.GetSettings(activity);
 
     }
 

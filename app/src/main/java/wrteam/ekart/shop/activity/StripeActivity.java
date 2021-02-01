@@ -75,7 +75,7 @@ public class StripeActivity extends AppCompatActivity {
         } else {
             tvTitle.setText(getString(R.string.app_name) + getString(R.string.wallet_recharge_));
         }
-        tvPayableAmount.setText(Constant.systemSettings.getCurrency() + sendparams.get(Constant.FINAL_TOTAL));
+        tvPayableAmount.setText(session.getData(Constant.currency) + sendparams.get(Constant.FINAL_TOTAL));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.stripe));

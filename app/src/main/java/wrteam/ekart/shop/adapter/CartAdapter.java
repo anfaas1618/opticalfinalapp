@@ -3,6 +3,7 @@ package wrteam.ekart.shop.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Build;
@@ -27,6 +28,7 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.CartFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
+import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Cart;
 
 
@@ -39,11 +41,15 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Activity activity;
     ArrayList<Cart> items;
     String taxPercentage;
+    Context context;
+    Session session;
 
 
-    public CartAdapter(Activity activity, ArrayList<Cart> items) {
+    public CartAdapter(Context context,Activity activity, ArrayList<Cart> items) {
+        this.context = context;
         this.activity = activity;
         this.items = items;
+        session = new Session(context);
         taxPercentage = "0";
     }
 
@@ -99,7 +105,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             holder.txtmeasurement.setText(cart.getItems().get(0).getMeasurement() + "\u0020" + cart.getItems().get(0).getUnit());
 
-            holder.txtprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getDiscounted_price())));
+            holder.txtprice.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getDiscounted_price())));
 
             if (cart.getItems().get(0).getIsAvailable().equals("false")) {
                 holder.txtstatus.setVisibility(View.VISIBLE);
@@ -110,18 +116,18 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
                 price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
-                holder.txtprice.setText(Constant.systemSettings.getCurrency() + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+                holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             } else {
                 price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
                 holder.txtoriginalprice.setPaintFlags(holder.txtoriginalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                holder.txtoriginalprice.setText(Constant.systemSettings.getCurrency() + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+                holder.txtoriginalprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
 
-                holder.txtprice.setText(Constant.systemSettings.getCurrency() + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+                holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             }
 
             holder.txtQuantity.setText(cart.getQty());
 
-            holder.txttotalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(price * Integer.parseInt(cart.getQty())));
+            holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(price * Integer.parseInt(cart.getQty())));
 
             final double finalPrice = price;
             holder.btnaddqty.setOnClickListener(new View.OnClickListener() {
@@ -130,11 +136,11 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     if (ApiConfig.isConnected(activity)) {
                         if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) >= Float.parseFloat(cart.getItems().get(0).getStock()))) {
-                            if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) + 1 > Integer.parseInt(Constant.systemSettings.getMax_cart_items_count()))) {
+                            if (!(Integer.parseInt(holder.txtQuantity.getText().toString()) + 1 > Integer.parseInt(session.getData(Constant.max_cart_items_count)))) {
                                 int count = Integer.parseInt(holder.txtQuantity.getText().toString());
                                 count++;
                                 holder.txtQuantity.setText("" + count);
-                                holder.txttotalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(finalPrice * count));
+                                holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(finalPrice * count));
                                 Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + finalPrice;
                                 if (CartFragment.values.containsKey(items.get(position).getProduct_variant_id())) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -166,7 +172,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             int count = Integer.parseInt(holder.txtQuantity.getText().toString());
                             count--;
                             holder.txtQuantity.setText("" + count);
-                            holder.txttotalprice.setText(Constant.systemSettings.getCurrency() + Constant.formater.format(finalPrice * count));
+                            holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(finalPrice * count));
                             Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT - finalPrice;
                             if (CartFragment.values.containsKey(items.get(position).getProduct_variant_id())) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
