@@ -371,6 +371,8 @@ public class HomeFragment extends Fragment {
         Constant.TOOLBAR_TITLE = getString(R.string.app_name);
         getActivity().invalidateOptionsMenu();
         hideKeyboard();
+
+        ApiConfig.GetSettings(activity);
     }
 
     public void hideKeyboard() {

@@ -214,7 +214,7 @@ public class PayStackActivity extends AppCompatActivity {
                             onBackPressed();
                             new WalletTransactionFragment().AddWalletBalance(activity, new Session(activity), WalletTransactionFragment.amount, WalletTransactionFragment.msg, reference);
                         } else if (from.equals(Constant.PAYMENT)) {
-                            paymentModelClass.PlaceOrder(activity, getString(R.string.paypal), reference, status.equalsIgnoreCase("success"), sendParams, status);
+                            paymentModelClass.PlaceOrder(activity, getString(R.string.paystack), reference, status.equalsIgnoreCase("success"), sendParams, status);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

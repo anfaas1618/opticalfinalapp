@@ -292,6 +292,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 currentFragment.onResume();
             }
         });
+
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
@@ -464,7 +465,6 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
 
     }
 
-
     @Override
     public void onPaymentSuccess(String razorpayPaymentID) {
         try {
@@ -483,9 +483,6 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     @Override
     public void onPaymentError(int code, String response) {
         try {
-            if (!WalletTransactionFragment.payFromWallet) {
-                new PaymentFragment().PlaceOrder(MainActivity.this, PaymentFragment.paymentMethod, "", false, PaymentFragment.sendparams, Constant.FAILED);
-            }
             Toast.makeText(activity, getString(R.string.order_cancel), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Log.d(TAG, "onPaymentError  ", e);

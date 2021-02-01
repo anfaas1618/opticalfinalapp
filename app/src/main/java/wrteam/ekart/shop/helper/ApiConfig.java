@@ -535,6 +535,7 @@ public class ApiConfig extends Application {
         params.put(Constant.SETTINGS, Constant.GetVal);
         params.put(Constant.GET_TIMEZONE, Constant.GetVal);
         ApiConfig.RequestToVolley(new VolleyCallback() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onSuccess(boolean result, String response) {
                 if (result) {
@@ -542,6 +543,7 @@ public class ApiConfig extends Application {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
+
                             Constant.systemSettings = new Gson().fromJson(object.toString(), SystemSettings.class);
 
                             if (DrawerActivity.tvWallet != null) {
@@ -555,7 +557,9 @@ public class ApiConfig extends Application {
                                 e.printStackTrace();
                             }
                             if ((ApiConfig.compareVersion(versionName, Constant.systemSettings.getCurrent_version()) < 0) || (ApiConfig.compareVersion(versionName, Constant.systemSettings.getMinimum_version_required()) < 0)) {
-                                OpenBottomDialog(activity);
+                                if (!new Session(activity).getIsUpdateSkipped("update_skip")) {
+                                    OpenBottomDialog(activity);
+                                }
                             }
                         }
 
@@ -568,73 +572,84 @@ public class ApiConfig extends Application {
     }
 
     public static void OpenBottomDialog(final Activity activity) {
-        View sheetView = activity.getLayoutInflater().inflate(R.layout.lyt_update_app_alert, null);
-        ViewGroup parentViewGroup = (ViewGroup) sheetView.getParent();
-        if (parentViewGroup != null) {
-            parentViewGroup.removeAllViews();
+        try {
+            View sheetView = activity.getLayoutInflater().inflate(R.layout.lyt_update_app_alert, null);
+            ViewGroup parentViewGroup = (ViewGroup) sheetView.getParent();
+            if (parentViewGroup != null) {
+                parentViewGroup.removeAllViews();
+            }
+
+            final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity);
+            mBottomSheetDialog.setContentView(sheetView);
+            mBottomSheetDialog.show();
+            FrameLayout bottomSheet = mBottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            //BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
+
+            ImageView imgclose = sheetView.findViewById(R.id.imgclose);
+            TextView txttitle = sheetView.findViewById(R.id.tvTitle);
+            Button btnNotNow = sheetView.findViewById(R.id.btnNotNow);
+            Button btnUpadateNow = sheetView.findViewById(R.id.btnUpdateNow);
+            if (Constant.systemSettings.getIs_version_system_on().equals("0")) {
+                {
+                    btnNotNow.setVisibility(View.VISIBLE);
+                    imgclose.setVisibility(View.VISIBLE);
+                    mBottomSheetDialog.setCancelable(true);
+                }
+            } else {
+                mBottomSheetDialog.setCancelable(false);
+            }
+
+
+            imgclose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mBottomSheetDialog.isShowing())
+                        new Session(activity).setIsUpdateSkipped("update_skip", true);
+                    mBottomSheetDialog.dismiss();
+                }
+            });
+            btnNotNow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new Session(activity).setIsUpdateSkipped("update_skip", true);
+                    if (mBottomSheetDialog.isShowing())
+                        mBottomSheetDialog.dismiss();
+                }
+            });
+
+            btnUpadateNow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constant.PLAY_STORE_LINK + activity.getPackageName())));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity);
-        mBottomSheetDialog.setContentView(sheetView);
-        mBottomSheetDialog.show();
-        FrameLayout bottomSheet = mBottomSheetDialog.findViewById(R.id.design_bottom_sheet);
-        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        //BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
-
-        ImageView imgclose = sheetView.findViewById(R.id.imgclose);
-        TextView txttitle = sheetView.findViewById(R.id.tvTitle);
-        Button btnNotNow = sheetView.findViewById(R.id.btnNotNow);
-        Button btnUpadateNow = sheetView.findViewById(R.id.btnUpdateNow);
-        if (Constant.systemSettings.getIs_version_system_on().equals("0")) {
-            btnNotNow.setVisibility(View.VISIBLE);
-            imgclose.setVisibility(View.VISIBLE);
-            mBottomSheetDialog.setCancelable(true);
-        } else
-            mBottomSheetDialog.setCancelable(false);
-
-
-        imgclose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBottomSheetDialog.isShowing())
-                    mBottomSheetDialog.dismiss();
-            }
-        });
-        btnNotNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBottomSheetDialog.isShowing())
-                    mBottomSheetDialog.dismiss();
-            }
-        });
-
-        btnUpadateNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constant.PLAY_STORE_LINK + activity.getPackageName())));
-            }
-        });
     }
 
     public static double getWalletBalance(final Activity activity, Session session) {
-
-        Map<String, String> params = new HashMap<>();
-        params.put(Constant.GET_USER_DATA, Constant.GetVal);
-        params.put(Constant.USER_ID, session.getData(Constant.ID));
-        ApiConfig.RequestToVolley((result, response) -> {
-//                System.out.println("=================*wallet " + response);
-            if (result) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    if (!object.getBoolean(Constant.ERROR)) {
-                        Constant.WALLET_BALANCE = Double.parseDouble(object.getString(Constant.KEY_BALANCE));
-                        DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put(Constant.GET_USER_DATA, Constant.GetVal);
+            params.put(Constant.USER_ID, session.getData(Constant.ID));
+            ApiConfig.RequestToVolley((result, response) -> {
+                if (result) {
+                    try {
+                        JSONObject object = new JSONObject(response);
+                        if (!object.getBoolean(Constant.ERROR)) {
+                            Constant.WALLET_BALANCE = Double.parseDouble(object.getString(Constant.KEY_BALANCE));
+                            DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + Constant.systemSettings.getCurrency() + Constant.WALLET_BALANCE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, activity, Constant.USER_DATA_URL, params, false);
+            }, activity, Constant.USER_DATA_URL, params, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return Constant.WALLET_BALANCE;
     }
 

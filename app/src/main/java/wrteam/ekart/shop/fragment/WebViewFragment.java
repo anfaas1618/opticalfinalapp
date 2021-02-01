@@ -71,7 +71,6 @@ public class WebViewFragment extends Fragment {
             e.printStackTrace();
         }
 
-
         return root;
     }
 

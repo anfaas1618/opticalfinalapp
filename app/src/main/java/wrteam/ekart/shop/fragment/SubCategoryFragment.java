@@ -2,7 +2,6 @@ package wrteam.ekart.shop.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -110,8 +109,6 @@ public class SubCategoryFragment extends Fragment {
             } else if (from.equals("category")) {
                 GetCategory();
                 GetProducts();
-            } else if (from.equals("similar")) {
-                GetSimilarData();
             } else if (from.equals("section")) {
                 position = getArguments().getInt("position", 0);
                 productArrayList = HomeFragment.sectionList.get(position).getProductList();
@@ -124,16 +121,19 @@ public class SubCategoryFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                offset = 0;
-                swipeLayout.setRefreshing(false);
-                productArrayList.clear();
-                if (from.equals("regular")) {
-                    GetData();
-                } else if (from.equals("category")) {
-                    GetCategory();
-                    GetProducts();
-                } else if (from.equals("similar")) {
-                    GetSimilarData();
+                if (categoryArrayList.size() > 0) {
+                    offset = 0;
+                    swipeLayout.setRefreshing(false);
+                    productArrayList.clear();
+                    if (from.equals("regular")) {
+                        GetData();
+                    } else if (from.equals("category")) {
+                        GetCategory();
+                        if (productArrayList.size() > 0) {
+                            categoryArrayList.clear();
+                            GetProducts();
+                        }
+                    }
                 }
             }
         });
@@ -286,149 +286,6 @@ public class SubCategoryFragment extends Fragment {
                 }
             }
         }, activity, Constant.GET_PRODUCT_BY_SUB_CATE, params, true);
-    }
-
-    void GetSimilarData() {
-        Map<String, String> params = new HashMap<>();
-        params.put(Constant.GET_SIMILAR_PRODUCT, Constant.GetVal);
-        params.put(Constant.PRODUCT_ID, id);
-        params.put(Constant.CATEGORY_ID, getArguments().getString("cat_id"));
-        params.put(Constant.USER_ID, session.getData(Constant.ID));
-        params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
-        params.put(Constant.OFFSET, "" + offset);
-
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-
-                if (result) {
-                    try {
-                        JSONObject objectbject = new JSONObject(response);
-                        if (!objectbject.getBoolean(Constant.ERROR)) {
-                            total = Integer.parseInt(objectbject.getString(Constant.TOTAL));
-                            if (offset == 0) {
-                                productArrayList = new ArrayList<>();
-                                tvAlert.setVisibility(View.GONE);
-                            }
-                            JSONObject object = new JSONObject(response);
-                            JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                            try {
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    try {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
-                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
-
-                                        for (int j = 0; j < pricearray.length(); j++) {
-                                            JSONObject obj = pricearray.getJSONObject(j);
-                                            String discountpercent = "0";
-                                            if (!obj.getString(Constant.DISCOUNTED_PRICE).equals("0")) {
-                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
-                                            }
-                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
-                                        }
-                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            if (offset == 0) {
-                                mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
-                                mAdapter.setHasStableIds(true);
-                                recyclerView.setAdapter(mAdapter);
-                                nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-                                    @Override
-                                    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                                        // if (diff == 0) {
-                                        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                                            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                                            if (productArrayList.size() < total) {
-                                                if (!isLoadMore) {
-                                                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == productArrayList.size() - 1) {
-                                                        //bottom of list!
-                                                        productArrayList.add(null);
-                                                        mAdapter.notifyItemInserted(productArrayList.size() - 1);
-
-                                                        offset += Integer.parseInt("" + Constant.LOAD_ITEM_LIMIT);
-                                                        Map<String, String> params = new HashMap<>();
-                                                        params.put(Constant.GET_SIMILAR_PRODUCT, Constant.GetVal);
-                                                        params.put(Constant.PRODUCT_ID, id);
-                                                        params.put(Constant.CATEGORY_ID, getArguments().getString("cat_id"));
-                                                        params.put(Constant.USER_ID, session.getData(Constant.ID));
-                                                        params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT);
-                                                        params.put(Constant.OFFSET, "" + offset);
-
-                                                        ApiConfig.RequestToVolley(new VolleyCallback() {
-                                                            @Override
-                                                            public void onSuccess(boolean result, String response) {
-
-                                                                if (result) {
-                                                                    try {
-                                                                        JSONObject objectbject = new JSONObject(response);
-                                                                        if (!objectbject.getBoolean(Constant.ERROR)) {
-
-                                                                            JSONObject object = new JSONObject(response);
-                                                                            JSONArray jsonArray = object.getJSONArray(Constant.DATA);
-                                                                            productArrayList.remove(productArrayList.size() - 1);
-                                                                            mAdapter.notifyItemRemoved(productArrayList.size());
-
-                                                                            try {
-                                                                                for (int i = 0; i < jsonArray.length(); i++) {
-                                                                                    try {
-                                                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                                                                        ArrayList<PriceVariation> priceVariations = new ArrayList<>();
-                                                                                        JSONArray pricearray = jsonObject.getJSONArray(Constant.VARIANT);
-
-                                                                                        for (int j = 0; j < pricearray.length(); j++) {
-                                                                                            JSONObject obj = pricearray.getJSONObject(j);
-                                                                                            String discountpercent = "0";
-                                                                                            if (!obj.getString(Constant.DISCOUNTED_PRICE).equals("0")) {
-                                                                                                discountpercent = ApiConfig.GetDiscount(obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE));
-                                                                                            }
-                                                                                            priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
-                                                                                        }
-                                                                                        productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
-                                                                                    } catch (JSONException e) {
-                                                                                        e.printStackTrace();
-                                                                                    }
-                                                                                }
-                                                                            } catch (Exception e) {
-                                                                                e.printStackTrace();
-                                                                            }
-
-                                                                            mAdapter.notifyDataSetChanged();
-                                                                            mAdapter.setLoaded();
-                                                                            isLoadMore = false;
-                                                                        }
-                                                                    } catch (JSONException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                }
-                                                            }
-                                                        }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params, false);
-                                                        isLoadMore = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            if (offset == 0) {
-                                tvAlert.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params, true);
     }
 
     void GetCategory() {

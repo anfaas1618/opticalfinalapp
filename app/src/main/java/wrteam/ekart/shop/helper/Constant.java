@@ -8,7 +8,7 @@ import wrteam.ekart.shop.model.SystemSettings;
 public class Constant {
     //MODIFICATION PART
 
-    public static String MAINBASEUrl = "https://ekart.wrteam.in/"; //Admin panel url
+    public static String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
 
     //If you have eCart Website then place here website URL otherwise domain url not admin panel url
     public static String WebsiteUrl = "https://webekart.wrteam.in/";

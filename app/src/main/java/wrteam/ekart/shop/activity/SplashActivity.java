@@ -67,6 +67,7 @@ public class SplashActivity extends AppCompatActivity {
 
             new Handler().postDelayed(() -> {
                 if (!session.getIsFirstTime("is_first_time")) {
+                    session.setIsUpdateSkipped("update_skip", false);
                     startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 } else {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);

@@ -21,6 +21,7 @@ import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.FullScreenViewFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.fragment.ProductListFragment;
+import wrteam.ekart.shop.fragment.SubCategoryFragment;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Slider;
 
@@ -74,7 +75,7 @@ public class SliderAdapter extends PagerAdapter {
 
                     if (singleItem.getType().equals("category")) {
 
-                        Fragment fragment = new ProductListFragment();
+                        Fragment fragment = new SubCategoryFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString(Constant.ID, singleItem.getType_id());
                         bundle.putString(Constant.NAME, singleItem.getName());
@@ -89,7 +90,7 @@ public class SliderAdapter extends PagerAdapter {
                         Fragment fragment = new ProductDetailFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString(Constant.ID, singleItem.getType_id());
-                        bundle.putString(Constant.FROM, "share");
+                        bundle.putString(Constant.FROM, "slider");
                         bundle.putInt("vpos", 0);
                         fragment.setArguments(bundle);
 

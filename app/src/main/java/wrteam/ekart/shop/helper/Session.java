@@ -62,9 +62,13 @@ public class Session {
         return pref.getBoolean(id, false);
     }
 
-    public void setGrid(String id, boolean val) {
+    public void setIsUpdateSkipped(String id, boolean val) {
         editor.putBoolean(id, val);
         editor.commit();
+    }
+
+    public boolean getIsUpdateSkipped(String id) {
+        return pref.getBoolean(id, false);
     }
 
     public boolean getGrid(String id) {
@@ -126,6 +130,7 @@ public class Session {
                 activity.finish();
             }
         });
+
         alertDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 alertDialog1.dismiss();
