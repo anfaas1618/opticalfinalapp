@@ -566,16 +566,6 @@ public class ApiConfig extends Application {
                             if (DrawerActivity.tvWallet != null) {
                                 DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + session.getData(Constant.currency) + Constant.WALLET_BALANCE);
                             }
-                            String versionName = "";
-                            try {
-                                PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-                                versionName = packageInfo.versionName;
-                            } catch (PackageManager.NameNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                            if (ApiConfig.compareVersion(versionName, session.getData(Constant.minimum_version_required)) < 0) {
-                                OpenBottomDialog(activity);
-                            }
                         }
 
                     } catch (JSONException e) {

@@ -2,6 +2,8 @@ package wrteam.ekart.shop.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -86,12 +88,23 @@ public class HomeFragment extends Fragment {
 
         root = inflater.inflate(R.layout.fragment_home, container, false);
         session = new Session(getContext());
+        activity = getActivity();
 
+        if(!session.getIsUpdateSkipped("update_skip")){
+            String versionName = "";
+            try {
+                PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
+                versionName = packageInfo.versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (ApiConfig.compareVersion(versionName, session.getData(Constant.minimum_version_required)) < 0) {
+                ApiConfig.OpenBottomDialog(activity);
+            }
+        }
 
         timerDelay = 3000;
         timerWaiting = 3000;
-
-        activity = getActivity();
         GetTimeSlotConfig(session, activity);
         setHasOptionsMenu(true);
 
