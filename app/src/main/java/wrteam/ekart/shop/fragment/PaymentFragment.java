@@ -495,7 +495,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
             int DeliveryAllowFrom = Integer.parseInt(session.getData(Constant.ALLOWED_DAYS));
 
             StartDate.add(Calendar.DATE, DeliveryStartFrom);
-
             EndDate.add(Calendar.DATE, (DeliveryStartFrom + DeliveryAllowFrom));
 
             dateList = ApiConfig.getDates(StartDate.get(Calendar.DATE) + "-" + (StartDate.get(Calendar.MONTH) + 1) + "-" + StartDate.get(Calendar.YEAR), EndDate.get(Calendar.DATE) + "-" + (EndDate.get(Calendar.MONTH) + 1) + "-" + EndDate.get(Calendar.YEAR));
