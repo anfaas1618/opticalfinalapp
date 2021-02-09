@@ -404,11 +404,11 @@ public class ProductDetailFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
 
                             AdapterStyle1 adapter = new AdapterStyle1(getContext(), activity, productArrayList, R.layout.offer_layout);
@@ -418,7 +418,7 @@ public class ProductDetailFragment extends Fragment {
                             relativeLayout.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -508,11 +508,11 @@ public class ProductDetailFragment extends Fragment {
                                         }
                                         product = new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
                             priceVariationslist = product.getPriceVariations();
 
@@ -525,7 +525,7 @@ public class ProductDetailFragment extends Fragment {
 
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                         root.findViewById(R.id.progressBar).setVisibility(View.GONE);
                     }
                 }
@@ -541,7 +541,7 @@ public class ProductDetailFragment extends Fragment {
             try {
                 taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
 
             sliderArrayList = new ArrayList<>();
@@ -589,7 +589,7 @@ public class ProductDetailFragment extends Fragment {
 
             if (product.getReturn_status().equalsIgnoreCase("1")) {
                 imgReturnable.setImageDrawable(getResources().getDrawable(R.drawable.ic_returnable));
-                tvReturnable.setText(Integer.parseInt(Constant.max_product_return_days) + " Days Returnable.");
+                tvReturnable.setText(Integer.parseInt(session.getData(Constant.max_product_return_days)) + " Days Returnable.");
             } else {
                 imgReturnable.setImageDrawable(getResources().getDrawable(R.drawable.ic_not_returnable));
                 tvReturnable.setText("Not Returnable.");
@@ -667,7 +667,7 @@ public class ProductDetailFragment extends Fragment {
             });
             scrollView.setVisibility(View.VISIBLE);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -685,7 +685,7 @@ public class ProductDetailFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

@@ -44,12 +44,12 @@ public class ReferEarnFragment extends Fragment {
 
         session = new Session(getContext());
         txtrefercoin = root.findViewById(R.id.txtrefercoin);
-        if (Constant.refer_earn_method.equals("rupees")) {
-            preText = session.getData(Constant.currency) + Constant.refer_earn_bonus;
+        if (session.getData(Constant.refer_earn_method).equals("rupees")) {
+            preText = session.getData(Constant.currency) + session.getData(Constant.refer_earn_bonus);
         } else {
-            preText = Constant.refer_earn_bonus + "% ";
+            preText = session.getData(Constant.refer_earn_bonus) + "% ";
         }
-        txtrefercoin.setText(getString(R.string.refer_text_1) + preText + getString(R.string.refer_text_2) + session.getData(Constant.currency) + session.getData(Constant.min_refer_earn_order_amount) + getString(R.string.refer_text_3) + session.getData(Constant.currency) + Constant.max_refer_earn_amount + ".");
+        txtrefercoin.setText(getString(R.string.refer_text_1) + preText + getString(R.string.refer_text_2) + session.getData(Constant.currency) + session.getData(Constant.min_refer_earn_order_amount) + getString(R.string.refer_text_3) + session.getData(Constant.currency) + session.getData(Constant.max_refer_earn_amount) + ".");
         txtcode = root.findViewById(R.id.txtcode);
         txtcopy = root.findViewById(R.id.txtcopy);
         txtinvite = root.findViewById(R.id.txtinvite);
@@ -80,7 +80,7 @@ public class ReferEarnFragment extends Fragment {
                                 + "\n " + Constant.WebsiteUrl + "refer/" + txtcode.getText().toString());
                         startActivity(Intent.createChooser(shareIntent, getString(R.string.invite_frnd_title)));
                     } catch (Exception e) {
-                        e.printStackTrace();
+
                     }
                 } else {
                     Toast.makeText(getContext(), getString(R.string.refer_code_alert_msg), Toast.LENGTH_SHORT).show();
@@ -105,7 +105,7 @@ public class ReferEarnFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

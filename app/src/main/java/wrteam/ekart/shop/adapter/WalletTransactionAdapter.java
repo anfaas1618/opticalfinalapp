@@ -37,7 +37,7 @@ public class WalletTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
     String id = "0";
     Context context;
 
-    public WalletTransactionAdapter(Context context,Activity activity, ArrayList<WalletTransaction> walletTransactions) {
+    public WalletTransactionAdapter(Context context, Activity activity, ArrayList<WalletTransaction> walletTransactions) {
         this.context = context;
         this.activity = activity;
         this.walletTransactions = walletTransactions;

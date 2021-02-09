@@ -23,9 +23,13 @@ public class Session {
 
 
     public Session(Context context) {
-        this._context = context;
-        pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
-        editor = pref.edit();
+        try {
+            this._context = context;
+            pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
+            editor = pref.edit();
+        } catch (Exception e) {
+
+        }
     }
 
     public static void setCount(String id, int value, Context context) {

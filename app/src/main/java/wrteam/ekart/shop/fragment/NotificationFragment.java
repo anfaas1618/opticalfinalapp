@@ -186,7 +186,7 @@ public class NotificationFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-                                                                        e.printStackTrace();
+
                                                                     }
                                                                 }
                                                             }
@@ -206,7 +206,7 @@ public class NotificationFragment extends Fragment {
                             tvAlert.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -229,7 +229,7 @@ public class NotificationFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

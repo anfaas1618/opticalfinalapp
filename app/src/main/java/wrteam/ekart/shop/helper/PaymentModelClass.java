@@ -54,7 +54,7 @@ public class PaymentModelClass {
                 hash.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
             }
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+
 
         }
         return hash.toString();
@@ -183,7 +183,7 @@ public class PaymentModelClass {
             paymentParam.setMerchantHash(hash);
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return paymentParam;
     }
@@ -240,7 +240,7 @@ public class PaymentModelClass {
                     }
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+
             }
 
         } else if (resultModel != null && resultModel.getError() != null) {
@@ -272,7 +272,7 @@ public class PaymentModelClass {
                             }
                         } catch (JSONException e) {
                             hideProgressDialog();
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -311,7 +311,7 @@ public class PaymentModelClass {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }

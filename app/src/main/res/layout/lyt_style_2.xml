@@ -85,8 +85,8 @@
                 android:layout_below="@+id/imgStyle2_2"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:paddingStart="@dimen/dimen_5dp"
                 android:maxLines="1"
+                android:paddingStart="@dimen/dimen_5dp"
                 android:textColor="@color/txt_color"
                 android:textSize="@dimen/p_text_size" />
 
@@ -128,9 +128,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imgStyle2_3"
                 android:ellipsize="end"
-                android:paddingStart="@dimen/dimen_5dp"
                 android:gravity="center"
                 android:maxLines="1"
+                android:paddingStart="@dimen/dimen_5dp"
                 android:textColor="@color/txt_color"
                 android:textSize="@dimen/p_text_size" />
 

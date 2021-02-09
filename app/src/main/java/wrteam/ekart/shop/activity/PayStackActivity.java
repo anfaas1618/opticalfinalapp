@@ -191,7 +191,7 @@ public class PayStackActivity extends AppCompatActivity {
                 Toast.makeText(PayStackActivity.this, "Card is not Valid", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -217,7 +217,7 @@ public class PayStackActivity extends AppCompatActivity {
                             paymentModelClass.PlaceOrder(activity, getString(R.string.paystack), reference, status.equalsIgnoreCase("success"), sendParams, status);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }

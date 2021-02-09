@@ -1,12 +1,9 @@
 package wrteam.ekart.shop.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -147,11 +144,11 @@ public class SearchFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
 
                             productAdapter = new ProductAdapter(productArrayList, resource, activity);
@@ -166,7 +163,7 @@ public class SearchFragment extends Fragment {
                             recyclerView.setAdapter(new ProductAdapter(productArrayList, resource, activity));
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }

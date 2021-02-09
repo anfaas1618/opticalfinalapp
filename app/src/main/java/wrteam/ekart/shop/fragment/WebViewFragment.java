@@ -68,7 +68,7 @@ public class WebViewFragment extends Fragment {
                 activity.invalidateOptionsMenu();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
 
         return root;
@@ -102,7 +102,7 @@ public class WebViewFragment extends Fragment {
                     } catch (JSONException e) {
 
                         prgLoading.setVisibility(View.GONE);
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -123,7 +123,7 @@ public class WebViewFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

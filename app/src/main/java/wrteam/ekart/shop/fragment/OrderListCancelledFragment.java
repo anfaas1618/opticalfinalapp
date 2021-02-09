@@ -193,7 +193,7 @@ public class OrderListCancelledFragment extends Fragment {
 
                             }
                             if (offset == 0) {
-                                trackerAdapter = new TrackerAdapter(getContext(),activity, orderTrackerArrayList);
+                                trackerAdapter = new TrackerAdapter(getContext(), activity, orderTrackerArrayList);
                                 recyclerView.setAdapter(trackerAdapter);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     private boolean isLoadMore;
@@ -334,7 +334,7 @@ public class OrderListCancelledFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-                                                                        e.printStackTrace();
+
                                                                     }
                                                                 }
                                                             }
@@ -354,7 +354,7 @@ public class OrderListCancelledFragment extends Fragment {
 
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
 
                 }
@@ -375,7 +375,7 @@ public class OrderListCancelledFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 }

@@ -176,28 +176,32 @@ public class CheckoutFragment extends Fragment {
                         qtyList = new ArrayList<>();
 
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            Cart cart = gson.fromJson(String.valueOf(jsonArray.getJSONObject(i)), Cart.class);
-                            variantIdList.add(cart.getProduct_variant_id());
-                            qtyList.add(cart.getQty());
-                            float price;
-                            int qty = Integer.parseInt(cart.getQty());
-                            String taxPercentage = cart.getItems().get(0).getTax_percentage();
+                            try {
+                                Cart cart = gson.fromJson(String.valueOf(jsonArray.getJSONObject(i)), Cart.class);
+                                variantIdList.add(cart.getProduct_variant_id());
+                                qtyList.add(cart.getQty());
+                                float price;
+                                int qty = Integer.parseInt(cart.getQty());
+                                String taxPercentage = cart.getItems().get(0).getTax_percentage();
 
-                            if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
-                                price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
-                            } else {
-                                OriginalAmount += (Float.parseFloat(cart.getItems().get(0).getPrice()) * qty);
-                                DiscountedAmount += (Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * qty);
+                                if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+                                    price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+                                } else {
+                                    OriginalAmount += (Float.parseFloat(cart.getItems().get(0).getPrice()) * qty);
+                                    DiscountedAmount += (Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * qty);
 
-                                price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                                    price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                                }
+
+                                Constant.FLOAT_TOTAL_AMOUNT += (price * qty);
+
+                                carts.add(cart);
+                            } catch (Exception e) {
+
                             }
-
-                            Constant.FLOAT_TOTAL_AMOUNT += (price * qty);
-
-                            carts.add(cart);
                         }
 
-                        checkoutItemListAdapter = new CheckoutItemListAdapter(getContext(),getActivity(), carts);
+                        checkoutItemListAdapter = new CheckoutItemListAdapter(getContext(), getActivity(), carts);
                         recyclerView.setAdapter(checkoutItemListAdapter);
                         SetDataTotal();
 
@@ -208,7 +212,7 @@ public class CheckoutFragment extends Fragment {
 
                         confirmLyt.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -217,35 +221,38 @@ public class CheckoutFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public void SetDataTotal() {
-
-        if ((OriginalAmount - DiscountedAmount) != 0) {
-            lytSaveAmount.setVisibility(View.VISIBLE);
-            if (pCodeDiscount != 0) {
-                tvSaveAmount.setText(session.getData(Constant.currency) + ((OriginalAmount - DiscountedAmount) + pCodeDiscount));
+        try {
+            if ((OriginalAmount - DiscountedAmount) != 0) {
+                lytSaveAmount.setVisibility(View.VISIBLE);
+                if (pCodeDiscount != 0) {
+                    tvSaveAmount.setText(session.getData(Constant.currency) + ((OriginalAmount - DiscountedAmount) + pCodeDiscount));
+                } else {
+                    tvSaveAmount.setText(session.getData(Constant.currency) + (OriginalAmount - DiscountedAmount));
+                }
             } else {
-                tvSaveAmount.setText(session.getData(Constant.currency) + (OriginalAmount - DiscountedAmount));
+                if (pCodeDiscount == 0) {
+                    lytSaveAmount.setVisibility(View.GONE);
+                }
             }
-        } else {
-            if (pCodeDiscount == 0) {
-                lytSaveAmount.setVisibility(View.GONE);
-            }
-        }
 
-        subtotal = Constant.FLOAT_TOTAL_AMOUNT;
-        tvTotalBeforeTax.setText(session.getData(Constant.currency) + Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
-        if (Constant.FLOAT_TOTAL_AMOUNT <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
-            tvDeliveryCharge.setText(session.getData(Constant.currency) + Constant.SETTING_DELIVERY_CHARGE);
-            subtotal = Double.parseDouble("" + (subtotal + Constant.SETTING_DELIVERY_CHARGE));
-            deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
-        } else {
-            tvDeliveryCharge.setText(getResources().getString(R.string.free));
-            deliveryCharge = "0";
+            subtotal = Constant.FLOAT_TOTAL_AMOUNT;
+            tvTotalBeforeTax.setText(session.getData(Constant.currency) + Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
+            if (Constant.FLOAT_TOTAL_AMOUNT <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
+                tvDeliveryCharge.setText(session.getData(Constant.currency) + Constant.SETTING_DELIVERY_CHARGE);
+                subtotal = Double.parseDouble("" + (subtotal + Constant.SETTING_DELIVERY_CHARGE));
+                deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
+            } else {
+                tvDeliveryCharge.setText(getResources().getString(R.string.free));
+                deliveryCharge = "0";
+            }
+            dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
+            if (!pCode.isEmpty()) {
+                subtotal = subtotal - pCodeDiscount;
+            }
+            tvSubTotal.setText(session.getData(Constant.currency) + "" + Double.parseDouble("" + subtotal));
+        } catch (Exception e) {
+
         }
-        dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
-        if (!pCode.isEmpty()) {
-            subtotal = subtotal - pCodeDiscount;
-        }
-        tvSubTotal.setText(session.getData(Constant.currency) + "" + Double.parseDouble("" + subtotal));
     }
 
     public void PromoCodeCheck() {
@@ -302,7 +309,7 @@ public class CheckoutFragment extends Fragment {
                                     progressBar.setVisibility(View.GONE);
                                     btnApply.setVisibility(View.VISIBLE);
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+
                                 }
                             }
                         }
@@ -327,7 +334,7 @@ public class CheckoutFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

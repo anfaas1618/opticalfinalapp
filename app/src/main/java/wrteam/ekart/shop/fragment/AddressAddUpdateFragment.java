@@ -187,13 +187,13 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
         tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Fragment fragment = new MapFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constant.FROM, "address");
-                    bundle.putDouble("latitude", latitude);
-                    bundle.putDouble("longitude", longitude);
-                    fragment.setArguments(bundle);
-                    MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                Fragment fragment = new MapFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.FROM, "address");
+                bundle.putDouble("latitude", latitude);
+                bundle.putDouble("longitude", longitude);
+                fragment.setArguments(bundle);
+                MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
 
@@ -345,7 +345,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                                     } else {
                                         addresses = new ArrayList<>();
                                         addresses.add(address);
-                                        addressAdapter = new AddressAdapter(getContext(),getActivity(), addresses);
+                                        addressAdapter = new AddressAdapter(getContext(), getActivity(), addresses);
                                         recyclerView.setAdapter(addressAdapter);
                                         recyclerView.setVisibility(View.VISIBLE);
                                     }
@@ -371,7 +371,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                                 Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -409,7 +409,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                                 }
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }, activity, Constant.CITY_URL, params, false);
@@ -429,7 +429,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -461,7 +461,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -501,7 +501,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

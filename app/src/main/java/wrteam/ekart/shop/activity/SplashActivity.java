@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import wrteam.ekart.shop.R;
-import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 
@@ -61,7 +60,6 @@ public class SplashActivity extends AppCompatActivity {
             setContentView(R.layout.activity_splash);
             activity = SplashActivity.this;
             session = new Session(activity);
-            ApiConfig.GetSettings(activity);
 
             int SPLASH_TIME_OUT = 1500;
 

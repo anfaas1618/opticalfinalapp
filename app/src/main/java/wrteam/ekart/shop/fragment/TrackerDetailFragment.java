@@ -58,6 +58,7 @@ public class TrackerDetailFragment extends Fragment {
     String id;
     Session session;
     HashMap<String, String> hashMap;
+    LinearLayout lytMainTracker;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -95,6 +96,7 @@ public class TrackerDetailFragment extends Fragment {
         returnLyt = root.findViewById(R.id.returnLyt);
         txtorderotp = root.findViewById(R.id.txtorderotp);
         lytotp = root.findViewById(R.id.lytotp);
+        lytMainTracker = root.findViewById(R.id.lytMainTracker);
         hashMap = new HashMap<>();
 
         id = getArguments().getString("id");
@@ -344,89 +346,70 @@ public class TrackerDetailFragment extends Fragment {
         tvWallet.setText("- " + session.getData(Constant.currency) + order.getWalletBalance());
         tvFinalTotal.setText(session.getData(Constant.currency) + order.getFinal_total());
 
-        if (!order.getStatus().equalsIgnoreCase("delivered") && !order.getStatus().equalsIgnoreCase("cancelled") && !order.getStatus().equalsIgnoreCase("returned")) {
-            btnCancel.setVisibility(View.VISIBLE);
-        } else {
-            btnCancel.setVisibility(View.GONE);
+        try {
+            if (!order.getStatus().equalsIgnoreCase("delivered") && !order.getStatus().equalsIgnoreCase("cancelled") && !order.getStatus().equalsIgnoreCase("returned")) {
+                btnCancel.setVisibility(View.VISIBLE);
+            } else {
+                btnCancel.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
         }
-        if (order.getStatus().equalsIgnoreCase("cancelled") || order.getStatus().equalsIgnoreCase("awaiting_payment")) {
-            lyttracker.setVisibility(View.GONE);
-            btnCancel.setVisibility(View.GONE);
-            txtcanceldetail.setVisibility(View.VISIBLE);
-            txtcanceldetail.setText(getString(R.string.canceled_on) + order.getStatusdate());
-            lytPriceDetail.setVisibility(View.GONE);
-        } else {
-            lytPriceDetail.setVisibility(View.VISIBLE);
-            if (order.getStatus().equals("returned")) {
-                l4.setVisibility(View.VISIBLE);
-                returnLyt.setVisibility(View.VISIBLE);
-            }
-            lyttracker.setVisibility(View.VISIBLE);
+        try {
+            if (order.getStatus().equalsIgnoreCase("cancelled") || order.getStatus().equalsIgnoreCase("awaiting_payment")) {
+                lyttracker.setVisibility(View.GONE);
+                btnCancel.setVisibility(View.GONE);
+                if (order.getStatus().equalsIgnoreCase("awaiting_payment")) {
+                    txtcanceldetail.setVisibility(View.GONE);
+                } else {
+                    txtcanceldetail.setVisibility(View.VISIBLE);
+                    txtcanceldetail.setText(getString(R.string.canceled_on) + order.getStatusdate());
 
-            for (int i = 0; i < order.getItemsList().size(); i++) {
-                hashMap.put(order.getItemsList().get(i).getProduct_variant_id(), order.getItemsList().get(i).getQuantity());
-            }
+                }
+                lytPriceDetail.setVisibility(View.GONE);
+            } else {
+                lytPriceDetail.setVisibility(View.VISIBLE);
+                if (order.getStatus().equals("returned")) {
+                    l4.setVisibility(View.VISIBLE);
+                    returnLyt.setVisibility(View.VISIBLE);
+                }
+                lyttracker.setVisibility(View.VISIBLE);
 
-            for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
-                int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());
-                int view = getResources().getIdentifier("l" + i, "id", activity.getPackageName());
-                int txt = getResources().getIdentifier("txt" + i, "id", activity.getPackageName());
-                int textview = getResources().getIdentifier("txt" + i + "" + i, "id", activity.getPackageName());
-
-
-                if (img != 0 && root.findViewById(img) != null) {
-                    ImageView imageView = root.findViewById(img);
-                    imageView.setColorFilter(getResources().getColor(R.color.colorPrimary));
+                for (int i = 0; i < order.getItemsList().size(); i++) {
+                    hashMap.put(order.getItemsList().get(i).getProduct_variant_id(), order.getItemsList().get(i).getQuantity());
                 }
 
-                if (view != 0 && root.findViewById(view) != null) {
-                    View view1 = root.findViewById(view);
-                    view1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                }
-
-                if (txt != 0 && root.findViewById(txt) != null) {
-                    TextView view1 = root.findViewById(txt);
-                    view1.setTextColor(getResources().getColor(R.color.black));
-                }
-
-                if (textview != 0 && root.findViewById(textview) != null) {
-                    TextView view1 = root.findViewById(textview);
-                    String str = order.getDate_added();
-                    String[] splited = str.split("\\s+");
-                    view1.setText(splited[0] + "\n" + splited[1]);
-                }
-            }
-
-            for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
-
-                int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());
-                int view = getResources().getIdentifier("l" + i, "id", activity.getPackageName());
-                int txt = getResources().getIdentifier("txt" + i, "id", activity.getPackageName());
-                int textview = getResources().getIdentifier("txt" + i + "" + i, "id", activity.getPackageName());
+                for (int i = 0; i < order.getOrderStatusArrayList().size(); i++) {
+                    int img = getResources().getIdentifier("img" + i, "id", activity.getPackageName());
+                    int view = getResources().getIdentifier("l" + i, "id", activity.getPackageName());
+                    int txt = getResources().getIdentifier("txt" + i, "id", activity.getPackageName());
+                    int textview = getResources().getIdentifier("txt" + i + "" + i, "id", activity.getPackageName());
 
 
-                if (img != 0 && root.findViewById(img) != null) {
-                    ImageView imageView = root.findViewById(img);
-                    imageView.setColorFilter(getResources().getColor(R.color.colorPrimary));
-                }
+                    if (img != 0 && root.findViewById(img) != null) {
+                        ImageView imageView = root.findViewById(img);
+                        imageView.setColorFilter(getResources().getColor(R.color.colorPrimary));
+                    }
 
-                if (view != 0 && root.findViewById(view) != null) {
-                    View view1 = root.findViewById(view);
-                    view1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                }
+                    if (view != 0 && root.findViewById(view) != null) {
+                        View view1 = root.findViewById(view);
+                        view1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    }
 
-                if (txt != 0 && root.findViewById(txt) != null) {
-                    TextView view1 = root.findViewById(txt);
-                    view1.setTextColor(getResources().getColor(R.color.black));
-                }
+                    if (txt != 0 && root.findViewById(txt) != null) {
+                        TextView view1 = root.findViewById(txt);
+                        view1.setTextColor(getResources().getColor(R.color.black));
+                    }
 
-                if (textview != 0 && root.findViewById(textview) != null) {
-                    TextView view1 = root.findViewById(textview);
-                    String str = order.getOrderStatusArrayList().get(i).getStatusdate();
-                    String[] splited = str.split("\\s+");
-                    view1.setText(splited[0] + "\n" + splited[1]);
+                    if (textview != 0 && root.findViewById(textview) != null) {
+                        TextView view1 = root.findViewById(textview);
+                        String str = order.getDate_added();
+                        String[] splited = str.split("\\s+");
+                        view1.setText(splited[0] + "\n" + splited[1]);
+                    }
                 }
             }
+        } catch (Exception e) {
+            lytMainTracker.setVisibility(View.GONE);
         }
         recyclerView.setAdapter(new ItemsAdapter(activity, order.itemsList, "detail"));
         relativeLyt.setVisibility(View.VISIBLE);

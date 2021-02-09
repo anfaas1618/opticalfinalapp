@@ -352,7 +352,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

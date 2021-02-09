@@ -86,6 +86,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     boolean isLoadMore = false;
     String paymentMethod = null;
     String customerId;
+
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -359,7 +360,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                                 }
 
                             } catch (JSONException e) {
-                                e.printStackTrace();
+
                             }
                         }
                     }
@@ -435,7 +436,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -463,7 +464,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                             tvBalance.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -550,7 +551,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                     Toast.makeText(getContext(), getString(R.string.order_cancel), Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+
             }
         }
     }
@@ -618,7 +619,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
             params.put(Constant.CHANNEL_ID, Constant.MOBILE_APP_CHANNEL_ID_LIVE_VAL);
             params.put(Constant.WEBSITE, Constant.WEBSITE_LIVE_VAL);
         }
-        System.out.println("====" + params.toString());
+//        System.out.println("====" + params.toString());
 
         ApiConfig.RequestToVolley((result, response) -> {
             if (result) {
@@ -665,7 +666,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                     Service.startPaymentTransaction(getActivity(), true, true, this);
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
             }
         }, Constant.GENERATE_PAYTM_CHECKSUM, params);
@@ -682,7 +683,6 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
             verifyTransaction(orderId);
         }
     }
-
 
 
     /**
@@ -703,7 +703,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                         Toast.makeText(getContext(), getString(R.string.wallet_recharged), Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
             }
         }, Constant.VALID_TRANSACTION, params);
@@ -755,7 +755,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                             startPayment(object.getString("id"), object.getString("amount"));
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -823,7 +823,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
                             }
                             if (offset == 0) {
-                                walletTransactionAdapter = new WalletTransactionAdapter(getContext(),activity, walletTransactions);
+                                walletTransactionAdapter = new WalletTransactionAdapter(getContext(), activity, walletTransactions);
                                 walletTransactionAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(walletTransactionAdapter);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -887,7 +887,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                                                                                     isLoadMore = false;
                                                                                 }
                                                                             } catch (JSONException e) {
-                                                                                e.printStackTrace();
+
                                                                             }
                                                                         }
                                                                     }
@@ -910,7 +910,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
 
                 }
@@ -939,7 +939,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                             startActivity(intent);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -962,7 +962,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

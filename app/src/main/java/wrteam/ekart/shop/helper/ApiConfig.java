@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -101,7 +100,7 @@ public class ApiConfig extends Application {
             } else
                 message = "";
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return message;
     }
@@ -205,7 +204,7 @@ public class ApiConfig extends Application {
             date1 = df1.parse(startDate);
             date2 = df1.parse(endDate);
         } catch (ParseException e) {
-            e.printStackTrace();
+
         }
 
         Calendar cal1 = Calendar.getInstance();
@@ -238,7 +237,7 @@ public class ApiConfig extends Application {
 
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
 
             }
@@ -261,7 +260,7 @@ public class ApiConfig extends Application {
                     }
                     activity.invalidateOptionsMenu();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
 
             }
@@ -407,7 +406,7 @@ public class ApiConfig extends Application {
 
             return builder.compact();
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return null;
     }
@@ -435,29 +434,6 @@ public class ApiConfig extends Application {
         double dnew = Double.parseDouble(newprice);
 
         return " (" + String.format("%.2f", (((dnew / dold) - 1) * 100)) + "%)";
-    }
-
-    public static void GetTimeSlotConfig(final Session session, Activity activity) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(Constant.SETTINGS, Constant.GetVal);
-        params.put(Constant.GET_TIME_SLOT_CONFIG, Constant.GetVal);
-
-        ApiConfig.RequestToVolley((result, response) -> {
-            if (result) {
-                try {
-                    JSONObject jsonObject1 = new JSONObject(response);
-                    if (!jsonObject1.getBoolean(Constant.ERROR)) {
-                        JSONObject jsonObject = new JSONObject(jsonObject1.getJSONObject(Constant.TIME_SLOT_CONFIG).toString());
-
-                        session.setData(Constant.IS_TIME_SLOTS_ENABLE, jsonObject.getString(Constant.IS_TIME_SLOTS_ENABLE));
-                        session.setData(Constant.DELIVERY_STARTS_FROM, jsonObject.getString(Constant.DELIVERY_STARTS_FROM));
-                        session.setData(Constant.ALLOWED_DAYS, jsonObject.getString(Constant.ALLOWED_DAYS));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, activity, Constant.SETTING_URL, params, false);
     }
 
     public static void AddMultipleProductInCart(final Session session, final Activity activity, HashMap<String, String> map) {
@@ -566,10 +542,23 @@ public class ApiConfig extends Application {
                             if (DrawerActivity.tvWallet != null) {
                                 DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + session.getData(Constant.currency) + Constant.WALLET_BALANCE);
                             }
+
+                            if (!session.getIsUpdateSkipped("update_skip")) {
+                                String versionName = "";
+                                try {
+                                    PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
+                                    versionName = packageInfo.versionName;
+                                } catch (PackageManager.NameNotFoundException e) {
+
+                                }
+                                if (ApiConfig.compareVersion(versionName, session.getData(Constant.minimum_version_required)) < 0) {
+                                    ApiConfig.OpenBottomDialog(activity);
+                                }
+                            }
                         }
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -587,12 +576,9 @@ public class ApiConfig extends Application {
             final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity);
             mBottomSheetDialog.setContentView(sheetView);
             mBottomSheetDialog.show();
-            FrameLayout bottomSheet = mBottomSheetDialog.findViewById(R.id.design_bottom_sheet);
             mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            //BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
 
             ImageView imgclose = sheetView.findViewById(R.id.imgclose);
-            TextView txttitle = sheetView.findViewById(R.id.tvTitle);
             Button btnNotNow = sheetView.findViewById(R.id.btnNotNow);
             Button btnUpadateNow = sheetView.findViewById(R.id.btnUpdateNow);
             if (new Session(activity).getData(Constant.is_version_system_on).equals("0")) {
@@ -630,7 +616,7 @@ public class ApiConfig extends Application {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -648,12 +634,12 @@ public class ApiConfig extends Application {
                             DrawerActivity.tvWallet.setText(activity.getResources().getString(R.string.wallet_balance) + "\t:\t" + session.getData(Constant.currency) + Constant.WALLET_BALANCE);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }, activity, Constant.USER_DATA_URL, params, false);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return Constant.WALLET_BALANCE;
     }
@@ -676,7 +662,7 @@ public class ApiConfig extends Application {
                 address = obj.getAddressLine(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+
             Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show();
         }
         return address;
@@ -715,24 +701,21 @@ public class ApiConfig extends Application {
     }
 
     public static Boolean isConnected(final Activity activity) {
+        boolean check = false;
         try {
-            ConnectivityManager connectivity = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (connectivity == null) {
-                Toast.makeText(activity, activity.getString(R.string.no_internet_connection_try_later), Toast.LENGTH_SHORT).show();
-                return false;
+            ConnectivityManager ConnectionManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = ConnectionManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                check = true;
             } else {
-                NetworkInfo[] info = connectivity.getAllNetworkInfo();
-                for (NetworkInfo networkInfo : info) {
-                    if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-                }
+                Toast.makeText(activity, activity.getString(R.string.no_internet_connection_try_later), Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
-        return false;
+        return check;
     }
+
 
     public static ArrayList<Product> GetProductList(JSONArray jsonArray) {
         ArrayList<Product> productArrayList = new ArrayList<>();
@@ -753,11 +736,11 @@ public class ApiConfig extends Application {
                     }
                     productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return productArrayList;
 
@@ -782,11 +765,11 @@ public class ApiConfig extends Application {
                     }
                     productArrayList.add(new Favorite(jsonObject.getString(Constant.PRODUCT_ID), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return productArrayList;
     }

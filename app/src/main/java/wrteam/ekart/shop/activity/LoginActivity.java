@@ -347,7 +347,7 @@ public class LoginActivity extends AppCompatActivity {
                                 setSnackBar(getString(R.string.verify_alert_1) + getString(R.string.app_name) + getString(R.string.verify_alert_2), getString(R.string.btn_ok), from);
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -450,7 +450,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                     Toast.makeText(activity, object.getString("message"), Toast.LENGTH_SHORT).show();
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+
                                 }
                             }
                         }
@@ -510,7 +510,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
 
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+
                                 }
                             }
                         }
@@ -560,7 +560,7 @@ public class LoginActivity extends AppCompatActivity {
                                 setSnackBar(getString(R.string.alert_register_num1) + getString(R.string.app_name) + getString(R.string.alert_register_num2), getString(R.string.btn_ok), from);
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -599,7 +599,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             Toast.makeText(activity, objectbject.getString("message"), Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -724,7 +724,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             Toast.makeText(activity, objectbject.getString("message"), Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -817,7 +817,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         } catch (
                 JSONException e) {
-            e.printStackTrace();
+
         }
 
     }
@@ -886,7 +886,7 @@ public class LoginActivity extends AppCompatActivity {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

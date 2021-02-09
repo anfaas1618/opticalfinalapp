@@ -63,12 +63,13 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
             currentTime = sdf.parse(now);
             SlotTime = sdf.parse(model.getLastOrderTime());
         } catch (ParseException e) {
-            e.printStackTrace();
+
         }
 
         Calendar calendar = Calendar.getInstance();
         isToday = PaymentFragment.deliveryDay.equals(calendar.get(Calendar.DATE) + "-" + getMonth((calendar.get(Calendar.MONTH) + 1)) + "-" + calendar.get(Calendar.YEAR));
 
+        assert currentTime != null;
         if (activity != null) {
             if (isToday) {
                 if (currentTime.compareTo(SlotTime) > 0) {
@@ -88,12 +89,16 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
             }
         }
 
+        Date finalCurrentTime = currentTime;
+        Date finalSlotTime = SlotTime;
         holder.rdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PaymentFragment.deliveryTime = model.getTitle();
-                selectedPosition = (Integer) v.getTag();
-                notifyDataSetChanged();
+                if (finalCurrentTime.compareTo(finalSlotTime) < 0) {
+                    PaymentFragment.deliveryTime = model.getTitle();
+                    selectedPosition = (Integer) v.getTag();
+                    notifyDataSetChanged();
+                }
             }
         });
 

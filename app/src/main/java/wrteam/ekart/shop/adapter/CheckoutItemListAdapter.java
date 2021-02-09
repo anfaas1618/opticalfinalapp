@@ -29,11 +29,15 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
     Context context;
     Session session;
 
-    public CheckoutItemListAdapter(Context context,Activity activity, ArrayList<Cart> carts) {
-        this.context = context;
-        this.activity = activity;
-        this.carts = carts;
-        session = new Session(context);
+    public CheckoutItemListAdapter(Context context, Activity activity, ArrayList<Cart> carts) {
+        try {
+            this.context = context;
+            this.activity = activity;
+            this.carts = carts;
+            session = new Session(context);
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -44,47 +48,40 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ItemHolder holder, final int position) {
-        final Cart cart = carts.get(position);
+        try {
 
-        float price;
-        if (cart.getItems().get(0).getDiscounted_price().equals("0")) {
-            price = Float.parseFloat(cart.getItems().get(0).getPrice());
-        } else {
-            price = Float.parseFloat(cart.getItems().get(0).getDiscounted_price());
-        }
+            final Cart cart = carts.get(position);
 
-        String taxPercentage = cart.getItems().get(0).getTax_percentage();
-
-        holder.tvItemName.setText(cart.getItems().get(0).getName() + " (" + cart.getItems().get(0).getMeasurement() + " " + ApiConfig.toTitleCase(cart.getItems().get(0).getUnit()) + ")");
-        holder.tvQty.setText(activity.getString(R.string.qty_1) + cart.getQty());
-        holder.tvPrice.setText(activity.getString(R.string.mrp) + session.getData(Constant.currency) + Constant.formater.format(price));
-
-        if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
-            if (cart.getItems().get(0).getTax_title().equals(null) && cart.getItems().get(0).getTax_title().equals("")) {
-                holder.tvTaxTitle.setText(activity.getString(R.string.tax));
-                holder.tvTaxAmount.setText(session.getData(Constant.currency) + "0.00");
-                holder.tvTaxPercent.setText("(0%)");
+            float price;
+            if (cart.getItems().get(0).getDiscounted_price().equals("0")) {
+                price = Float.parseFloat(cart.getItems().get(0).getPrice());
             } else {
+                price = Float.parseFloat(cart.getItems().get(0).getDiscounted_price());
+            }
+
+            String taxPercentage = cart.getItems().get(0).getTax_percentage();
+
+            holder.tvItemName.setText(cart.getItems().get(0).getName() + " (" + cart.getItems().get(0).getMeasurement() + " " + ApiConfig.toTitleCase(cart.getItems().get(0).getUnit()) + ")");
+            holder.tvQty.setText(activity.getString(R.string.qty_1) + cart.getQty());
+            holder.tvPrice.setText(activity.getString(R.string.mrp) + session.getData(Constant.currency) + Constant.formater.format(price));
+
+            if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
                 holder.tvTaxTitle.setText(cart.getItems().get(0).getTax_title());
                 holder.tvTaxAmount.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
                 holder.tvTaxPercent.setText("(" + cart.getItems().get(0).getTax_percentage() + "%)");
-            }
-        } else {
-            if (cart.getItems().get(0).getTax_title().equals(null) && cart.getItems().get(0).getTax_title().equals("")) {
-                holder.tvTaxTitle.setText(activity.getString(R.string.tax));
-                holder.tvTaxAmount.setText(session.getData(Constant.currency) + "0.00");
-                holder.tvTaxPercent.setText("(0%)");
             } else {
                 holder.tvTaxTitle.setText(cart.getItems().get(0).getTax_title());
                 holder.tvTaxAmount.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
                 holder.tvTaxPercent.setText("(" + cart.getItems().get(0).getTax_percentage() + "%)");
             }
-        }
 
-        if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
-            holder.tvSubTotal.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-        } else {
-            holder.tvSubTotal.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+                holder.tvSubTotal.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            } else {
+                holder.tvSubTotal.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            }
+        } catch (Exception e) {
+
         }
     }
 

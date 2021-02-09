@@ -40,7 +40,7 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     Context context;
 
 
-    public TrackerAdapter(Context context,Activity activity, ArrayList<OrderTracker> orderTrackerArrayList) {
+    public TrackerAdapter(Context context, Activity activity, ArrayList<OrderTracker> orderTrackerArrayList) {
         this.context = context;
         this.activity = activity;
         this.orderTrackerArrayList = orderTrackerArrayList;

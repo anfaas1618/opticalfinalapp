@@ -27,16 +27,16 @@ public class CartItems {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getTax_title() {
         return tax_title;
     }
 
     public void setTax_title(String tax_title) {
         this.tax_title = tax_title;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getProduct_id() {

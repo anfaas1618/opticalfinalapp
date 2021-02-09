@@ -69,7 +69,6 @@ import wrteam.ekart.shop.model.BookingDate;
 import wrteam.ekart.shop.model.Slot;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
 
 public class PaymentFragment extends Fragment implements PaytmPaymentTransactionCallback {
     public static String customerId, razorPayId, paymentMethod = "", deliveryTime = "", deliveryDay = "", pCode = "", TAG = CheckoutFragment.class.getSimpleName();
@@ -230,7 +229,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
                 if (result) {
                     try {
-                        System.out.println("=======payment res " + response);
+//                        System.out.println("=======payment res " + response);
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
                             if (objectbject.has(Constant.PAYMENT_METHODS)) {
@@ -283,7 +282,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                         }
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -479,33 +478,91 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
     public void getTimeSlots() {
         GetTimeSlotConfig(session, getActivity());
-        GetTimeSlots();
+    }
 
-        if (session.getData(Constant.IS_TIME_SLOTS_ENABLE).equals(Constant.GetVal)) {
 
-            deliveryTimeLyt.setVisibility(View.VISIBLE);
+    public void GetTimeSlotConfig(final Session session, Activity activity) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.SETTINGS, Constant.GetVal);
+        params.put(Constant.GET_TIME_SLOT_CONFIG, Constant.GetVal);
 
-            StartDate = Calendar.getInstance();
-            EndDate = Calendar.getInstance();
-            mYear = StartDate.get(Calendar.YEAR);
-            mMonth = StartDate.get(Calendar.MONTH);
-            mDay = StartDate.get(Calendar.DAY_OF_MONTH);
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject1 = new JSONObject(response);
+                    if (!jsonObject1.getBoolean(Constant.ERROR)) {
+                        JSONObject jsonObject = new JSONObject(jsonObject1.getJSONObject(Constant.TIME_SLOT_CONFIG).toString());
 
-            int DeliveryStartFrom = Integer.parseInt(session.getData(Constant.DELIVERY_STARTS_FROM)) - 1;
-            int DeliveryAllowFrom = Integer.parseInt(session.getData(Constant.ALLOWED_DAYS));
+                        session.setData(Constant.IS_TIME_SLOTS_ENABLE, jsonObject.getString(Constant.IS_TIME_SLOTS_ENABLE));
+                        session.setData(Constant.DELIVERY_STARTS_FROM, jsonObject.getString(Constant.DELIVERY_STARTS_FROM));
+                        session.setData(Constant.ALLOWED_DAYS, jsonObject.getString(Constant.ALLOWED_DAYS));
 
-            StartDate.add(Calendar.DATE, DeliveryStartFrom);
-            EndDate.add(Calendar.DATE, (DeliveryStartFrom + DeliveryAllowFrom));
+                        if (session.getData(Constant.IS_TIME_SLOTS_ENABLE).equals(Constant.GetVal)) {
+                            deliveryTimeLyt.setVisibility(View.VISIBLE);
 
-            dateList = ApiConfig.getDates(StartDate.get(Calendar.DATE) + "-" + (StartDate.get(Calendar.MONTH) + 1) + "-" + StartDate.get(Calendar.YEAR), EndDate.get(Calendar.DATE) + "-" + (EndDate.get(Calendar.MONTH) + 1) + "-" + EndDate.get(Calendar.YEAR));
-            setDateList(dateList);
+                            StartDate = Calendar.getInstance();
+                            EndDate = Calendar.getInstance();
+                            mYear = StartDate.get(Calendar.YEAR);
+                            mMonth = StartDate.get(Calendar.MONTH);
+                            mDay = StartDate.get(Calendar.DAY_OF_MONTH);
 
-        } else {
-            deliveryTimeLyt.setVisibility(View.GONE);
-            deliveryDay = "Date : N/A";
-            deliveryTime = "Time : N/A";
+                            int DeliveryStartFrom = Integer.parseInt(session.getData(Constant.DELIVERY_STARTS_FROM)) - 1;
+                            int DeliveryAllowFrom = Integer.parseInt(session.getData(Constant.ALLOWED_DAYS));
 
-        }
+                            StartDate.add(Calendar.DATE, DeliveryStartFrom);
+                            EndDate.add(Calendar.DATE, (DeliveryStartFrom + DeliveryAllowFrom));
+
+                            dateList = ApiConfig.getDates(StartDate.get(Calendar.DATE) + "-" + (StartDate.get(Calendar.MONTH) + 1) + "-" + StartDate.get(Calendar.YEAR), EndDate.get(Calendar.DATE) + "-" + (EndDate.get(Calendar.MONTH) + 1) + "-" + EndDate.get(Calendar.YEAR));
+                            setDateList(dateList);
+
+                            GetTimeSlots();
+
+                        } else {
+                            deliveryTimeLyt.setVisibility(View.GONE);
+                            deliveryDay = "Date : N/A";
+                            deliveryTime = "Time : N/A";
+
+                        }
+
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+        }, activity, Constant.SETTING_URL, params, false);
+    }
+
+    public void GetTimeSlots() {
+        slotList = new ArrayList<>();
+        Map<String, String> params = new HashMap<>();
+        params.put("get_time_slots", Constant.GetVal);
+
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject object = new JSONObject(response);
+
+                        if (!object.getBoolean(Constant.ERROR)) {
+                            JSONArray jsonArray = object.getJSONArray("time_slots");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject object1 = jsonArray.getJSONObject(i);
+                                slotList.add(new Slot(object1.getString("id"), object1.getString("title"), object1.getString("last_order_time")));
+                            }
+
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                            adapter = new SlotAdapter(deliveryTime, getActivity(), slotList);
+                            recyclerView.setAdapter(adapter);
+                        }
+
+                    } catch (JSONException e) {
+
+                    }
+                }
+            }
+        }, getActivity(), Constant.SETTING_URL, params, true);
     }
 
     public void setDateList(ArrayList<String> datesList) {
@@ -624,7 +681,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                                 Toast.makeText(getActivity(), object.getString(Constant.MESSAGE), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }, getActivity(), Constant.ORDERPROCESS_URL, sendparams, true);
@@ -697,7 +754,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                             startPayment(object.getString("id"), object.getString("amount"));
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -750,7 +807,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                                 }
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -779,7 +836,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                             startActivity(intent);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -823,7 +880,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -852,38 +909,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         }, getActivity(), Constant.PAPAL_URL, params, true);
     }
 
-    public void GetTimeSlots() {
-        slotList = new ArrayList<>();
-        Map<String, String> params = new HashMap<>();
-        params.put("get_time_slots", Constant.GetVal);
-
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-
-                        if (!object.getBoolean(Constant.ERROR)) {
-                            JSONArray jsonArray = object.getJSONArray("time_slots");
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject object1 = jsonArray.getJSONObject(i);
-                                slotList.add(new Slot(object1.getString("id"), object1.getString("title"), object1.getString("last_order_time")));
-                            }
-
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-                            adapter = new SlotAdapter(deliveryTime, getActivity(), slotList);
-                            recyclerView.setAdapter(adapter);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, getActivity(), Constant.SETTING_URL, params, true);
-    }
 
     public void startPayTmPayment() {
         Map<String, String> params = new HashMap<>();
@@ -901,13 +926,13 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
             params.put(Constant.WEBSITE, Constant.WEBSITE_LIVE_VAL);
         }
 
-        System.out.println("====" + params.toString());
+//        System.out.println("====" + params.toString());
         ApiConfig.RequestToVolley((result, response) -> {
             if (result) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject object = jsonObject.getJSONObject(Constant.DATA);
-                    System.out.println("=======res  " + response);
+//                    System.out.println("=======res  " + response);
 
                     PaytmPGService Service = null;
                     if (Constant.PAYTM_MODE.equals("sandbox")) {
@@ -948,7 +973,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                     Service.startPaymentTransaction(getActivity(), true, true, this);
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
             }
         }, Constant.GENERATE_PAYTM_CHECKSUM, params);
@@ -983,7 +1008,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                         PlaceOrder(getActivity(), getString(R.string.paytm), txnId, true, sendparams, Constant.SUCCESS);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
             }
         }, Constant.VALID_TRANSACTION, params);
@@ -1071,7 +1096,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                     Toast.makeText(getContext(), getString(R.string.order_cancel), Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+
             }
         }
     }
@@ -1090,7 +1115,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

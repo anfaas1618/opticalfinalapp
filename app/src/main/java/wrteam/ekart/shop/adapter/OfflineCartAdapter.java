@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Build;
-import android.se.omapi.SEService;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     Context context;
 
 
-    public OfflineCartAdapter(Activity activity, ArrayList<OfflineCart> items) {
+    public OfflineCartAdapter(Context context, Activity activity, ArrayList<OfflineCart> items) {
         this.activity = activity;
         this.context = context;
         this.items = items;

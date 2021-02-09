@@ -106,7 +106,7 @@ public class MyNotificationManager {
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
             return myBitmap;
         } catch (IOException e) {
-            e.printStackTrace();
+
             return null;
         }
     }

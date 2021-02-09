@@ -12,20 +12,23 @@ public class ProgressDisplay {
     public static ProgressBar mProgressBar;
 
     public ProgressDisplay(Activity context) {
+        try {
+            ViewGroup layout = (ViewGroup) (context).findViewById(android.R.id.content).getRootView();
 
-        ViewGroup layout = (ViewGroup) (context).findViewById(android.R.id.content).getRootView();
-
-        mProgressBar = new ProgressBar(context, null, android.R.attr.progressBarStyle);
-        mProgressBar.setIndeterminate(true);
+            mProgressBar = new ProgressBar(context, null, android.R.attr.progressBarStyle);
+            mProgressBar.setIndeterminate(true);
 
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 
-        RelativeLayout rl = new RelativeLayout(context);
-        rl.setGravity(Gravity.CENTER);
-        rl.addView(mProgressBar);
-        layout.addView(rl, params);
-        hideProgress();
+            RelativeLayout rl = new RelativeLayout(context);
+            rl.setGravity(Gravity.CENTER);
+            rl.addView(mProgressBar);
+            layout.addView(rl, params);
+            hideProgress();
+        } catch (Exception e) {
+
+        }
     }
 
 

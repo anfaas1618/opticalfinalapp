@@ -174,7 +174,7 @@ public class ProfileFragment extends Fragment {
                                     }
                                     Toast.makeText(activity, objectbject.getString("message"), Toast.LENGTH_SHORT).show();
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+
                                 }
                             }
                         }
@@ -261,7 +261,7 @@ public class ProfileFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -398,7 +398,7 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
             } catch (JSONException e) {
-                e.printStackTrace();
+
             }
 
             progressBar.setVisibility(View.GONE);

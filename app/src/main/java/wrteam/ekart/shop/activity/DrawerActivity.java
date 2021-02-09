@@ -77,10 +77,9 @@ public class DrawerActivity extends AppCompatActivity {
         request.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 // We can get the ReviewInfo object
-                ReviewInfo reviewInfo = task.getResult();
-            } else {
-                // There was some problem, continue regardless of the result.
-            }
+                reviewInfo = task.getResult();
+            }  // There was some problem, continue regardless of the result.
+
         });
 
         if (session.isUserLoggedIn()) {
@@ -115,10 +114,11 @@ public class DrawerActivity extends AppCompatActivity {
 
         lytProfile.setOnClickListener(v -> {
             drawer_layout.closeDrawers();
-            if (session.isUserLoggedIn())
+            if (session.isUserLoggedIn()) {
                 MainActivity.fm.beginTransaction().add(R.id.container, new ProfileFragment()).addToBackStack(null).commit();
-            else
+            } else {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class).putExtra(Constant.FROM, "drawer"));
+            }
         });
         setupNavigationDrawer();
     }

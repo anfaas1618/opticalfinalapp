@@ -48,8 +48,8 @@ import wrteam.ekart.shop.fragment.HomeFragment;
 import wrteam.ekart.shop.fragment.OrderPlacedFragment;
 import wrteam.ekart.shop.fragment.PaymentFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
-import wrteam.ekart.shop.fragment.ProductListFragment;
 import wrteam.ekart.shop.fragment.SearchFragment;
+import wrteam.ekart.shop.fragment.SubCategoryFragment;
 import wrteam.ekart.shop.fragment.TrackOrderFragment;
 import wrteam.ekart.shop.fragment.TrackerDetailFragment;
 import wrteam.ekart.shop.fragment.WalletTransactionFragment;
@@ -207,52 +207,54 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             case "checkout":
                 bottomNavigationView.setVisibility(View.GONE);
                 ApiConfig.getCartItemCount(activity, session);
-                Fragment fragment1 = new AddressListFragment();
-                Bundle bundle1 = new Bundle();
-                bundle1.putString(Constant.FROM, "process");
-                bundle1.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);
-                fragment1.setArguments(bundle1);
-                fm.beginTransaction().add(R.id.container, fragment1).addToBackStack(null).commit();
-
+                Fragment fragment = new AddressListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.FROM, "process");
+                bundle.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);
+                fragment.setArguments(bundle);
+                fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 break;
             case "share":
-            case "product": {
-                Fragment fragment = new ProductDetailFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("vpos", getIntent().getIntExtra("vpos", 0));
-                bundle.putString("id", getIntent().getStringExtra("id"));
-                bundle.putString(Constant.FROM, "share");
-                fragment.setArguments(bundle);
-                fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                Fragment fragment0 = new ProductDetailFragment();
+                Bundle bundle0 = new Bundle();
+                bundle0.putInt("vpos", getIntent().getIntExtra("vpos", 0));
+                bundle0.putString("id", getIntent().getStringExtra("id"));
+                bundle0.putString(Constant.FROM, "share");
+                fragment0.setArguments(bundle0);
+                fm.beginTransaction().add(R.id.container, fragment0).addToBackStack(null).commit();
                 break;
-            }
-            case "category": {
-                Fragment fragment = new ProductListFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("id", getIntent().getStringExtra("id"));
-                bundle.putString("name", getIntent().getStringExtra("name"));
-                bundle.putString(Constant.FROM, "category");
-                fragment.setArguments(bundle);
-                fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+            case "product":
+                Fragment fragment1 = new ProductDetailFragment();
+                Bundle bundle1 = new Bundle();
+                bundle1.putInt("vpos", getIntent().getIntExtra("vpos", 0));
+                bundle1.putString("id", getIntent().getStringExtra("id"));
+                bundle1.putString(Constant.FROM, "product");
+                fragment1.setArguments(bundle1);
+                fm.beginTransaction().add(R.id.container, fragment1).addToBackStack(null).commit();
                 break;
-            }
-            case "order": {
-                Fragment fragment = new TrackerDetailFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("model", "");
-                bundle.putString("id", getIntent().getStringExtra("id"));
-                fragment.setArguments(bundle);
-                fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+            case "category":
+                Fragment fragment2 = new SubCategoryFragment();
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("id", getIntent().getStringExtra("id"));
+                bundle2.putString("name", getIntent().getStringExtra("name"));
+                bundle2.putString(Constant.FROM, "category");
+                fragment2.setArguments(bundle2);
+                fm.beginTransaction().add(R.id.container, fragment2).addToBackStack(null).commit();
                 break;
-            }
-            case "payment_success": {
+            case "order":
+                Fragment fragment3 = new TrackerDetailFragment();
+                Bundle bundle3 = new Bundle();
+                bundle3.putSerializable("model", "");
+                bundle3.putString("id", getIntent().getStringExtra("id"));
+                fragment3.setArguments(bundle3);
+                fm.beginTransaction().add(R.id.container, fragment3).addToBackStack(null).commit();
+                break;
+            case "payment_success":
                 fm.beginTransaction().add(R.id.container, new OrderPlacedFragment()).addToBackStack(null).commit();
                 break;
-            }
-            case "wallet": {
+            case "wallet":
                 fm.beginTransaction().add(R.id.container, new WalletTransactionFragment()).addToBackStack(null).commit();
                 break;
-            }
         }
 
         bottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
@@ -302,9 +304,6 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 }
             }
         });
-
-        ApiConfig.GetSettings(activity);
-
     }
 
 //    public void setAppLocal(String languageCode) {
@@ -330,7 +329,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                         session.setData(Constant.FCM_ID, token);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
 
             }

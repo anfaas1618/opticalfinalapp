@@ -92,7 +92,7 @@ public class OrderPlacedFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         progressBar.setVisibility(View.GONE);
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -113,7 +113,7 @@ public class OrderPlacedFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

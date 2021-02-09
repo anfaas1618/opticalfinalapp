@@ -183,11 +183,11 @@ public class SubCategoryFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
 
                             if (offset == 0) {
@@ -250,11 +250,11 @@ public class SubCategoryFragment extends Fragment {
                                                                                         }
                                                                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                                                                     } catch (JSONException e) {
-                                                                                        e.printStackTrace();
+
                                                                                     }
                                                                                 }
                                                                             } catch (Exception e) {
-                                                                                e.printStackTrace();
+
                                                                             }
 
                                                                             mAdapter.notifyDataSetChanged();
@@ -262,7 +262,7 @@ public class SubCategoryFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-                                                                        e.printStackTrace();
+
                                                                     }
                                                                 }
                                                             }
@@ -281,7 +281,7 @@ public class SubCategoryFragment extends Fragment {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -317,7 +317,7 @@ public class SubCategoryFragment extends Fragment {
                         } else {
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -363,11 +363,11 @@ public class SubCategoryFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
                             if (offset == 0) {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
@@ -426,11 +426,11 @@ public class SubCategoryFragment extends Fragment {
                                                                                         }
                                                                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                                                                     } catch (JSONException e) {
-                                                                                        e.printStackTrace();
+
                                                                                     }
                                                                                 }
                                                                             } catch (Exception e) {
-                                                                                e.printStackTrace();
+
                                                                             }
 
                                                                             mAdapter.notifyDataSetChanged();
@@ -438,7 +438,7 @@ public class SubCategoryFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-                                                                        e.printStackTrace();
+
                                                                     }
                                                                 }
                                                             }
@@ -455,7 +455,7 @@ public class SubCategoryFragment extends Fragment {
                             activity.invalidateOptionsMenu();
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -485,9 +485,14 @@ public class SubCategoryFragment extends Fragment {
                             filterBy = Constant.LOW;
                             break;
                     }
-                    if (item1 != -1)
-                        GetData();
-                    dialog.dismiss();
+                    if (item1 != -1) {
+                        if (from.equals("regular")) {
+                            GetData();
+                        } else if (from.equals("category")) {
+                            GetProducts();
+                        }
+                        dialog.dismiss();
+                    }
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -521,7 +526,7 @@ public class SubCategoryFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

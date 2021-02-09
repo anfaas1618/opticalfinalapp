@@ -18,6 +18,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
@@ -35,7 +37,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     ArrayList<Address> addresses;
     String id = "0";
 
-    public AddressAdapter(Context context,Activity activity, ArrayList<Address> addresses) {
+    public AddressAdapter(Context context, Activity activity, ArrayList<Address> addresses) {
         this.context = context;
         this.activity = activity;
         this.addresses = addresses;
@@ -47,14 +49,14 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, final int viewType) {
         View view = LayoutInflater.from(activity).inflate(R.layout.lyt_address_list, parent, false);
         return new AddressItemHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holderparent, final int position) {
+    public void onBindViewHolder(@NotNull RecyclerView.ViewHolder holderparent, final int position) {
         final AddressItemHolder holder = (AddressItemHolder) holderparent;
         final Address address = addresses.get(position);
         id = address.getId();

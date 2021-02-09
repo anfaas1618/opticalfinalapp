@@ -108,7 +108,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             try {
                 taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
 
             final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();

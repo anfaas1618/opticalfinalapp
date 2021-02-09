@@ -109,7 +109,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 try {
                     taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
                 } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
 
                 final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
@@ -206,7 +206,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
                 SetSelectedData(holder, priceVariations.get(0));
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
         } else if (holderparent instanceof FavoriteLoadMoreAdapter.ViewHolderLoading) {
             FavoriteLoadMoreAdapter.ViewHolderLoading loadingViewHolder = (FavoriteLoadMoreAdapter.ViewHolderLoading) holderparent;

@@ -151,7 +151,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
 
                     }
                 } catch (ParseException e) {
-                    e.printStackTrace();
+
                 }
             }
         });
@@ -254,7 +254,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
                                 if (pBar != null)
                                     pBar.setVisibility(View.GONE);
                             } catch (JSONException e) {
-                                e.printStackTrace();
+
                             }
                         }
                     }

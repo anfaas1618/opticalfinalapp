@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -332,6 +332,7 @@
                     android:background="@color/bggray" />
 
                 <LinearLayout
+                    android:id="@+id/lytMainTracker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/line3"

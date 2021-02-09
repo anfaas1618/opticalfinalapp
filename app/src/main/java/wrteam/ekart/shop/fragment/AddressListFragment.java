@@ -76,7 +76,7 @@ public class AddressListFragment extends Fragment {
                             Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -218,14 +218,14 @@ public class AddressListFragment extends Fragment {
                                 }
 
                             }
-                            addressAdapter = new AddressAdapter(getContext(),activity, addresses);
+                            addressAdapter = new AddressAdapter(getContext(), activity, addresses);
                             recyclerView.setAdapter(addressAdapter);
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             tvAlert.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -246,7 +246,7 @@ public class AddressListFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

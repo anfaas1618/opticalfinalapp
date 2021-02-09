@@ -2,8 +2,6 @@ package wrteam.ekart.shop.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,9 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -53,8 +48,6 @@ import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Category;
 import wrteam.ekart.shop.model.Slider;
-
-import static wrteam.ekart.shop.helper.ApiConfig.GetTimeSlotConfig;
 
 
 public class HomeFragment extends Fragment {
@@ -90,22 +83,8 @@ public class HomeFragment extends Fragment {
         session = new Session(getContext());
         activity = getActivity();
 
-        if(!session.getIsUpdateSkipped("update_skip")){
-            String versionName = "";
-            try {
-                PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-                versionName = packageInfo.versionName;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            if (ApiConfig.compareVersion(versionName, session.getData(Constant.minimum_version_required)) < 0) {
-                ApiConfig.OpenBottomDialog(activity);
-            }
-        }
-
         timerDelay = 3000;
         timerWaiting = 3000;
-        GetTimeSlotConfig(session, activity);
         setHasOptionsMenu(true);
 
         swipeLayout = root.findViewById(R.id.swipeLayout);
@@ -256,7 +235,7 @@ public class HomeFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         progressBar.setVisibility(View.GONE);
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -273,7 +252,7 @@ public class HomeFragment extends Fragment {
                 offerView.setAdapter(new OfferAdapter(offerList, R.layout.offer_lyt));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+
         }
 
     }
@@ -317,7 +296,7 @@ public class HomeFragment extends Fragment {
                 lytCategory.setVisibility(View.GONE);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -339,7 +318,7 @@ public class HomeFragment extends Fragment {
             sectionView.setAdapter(sectionAdapter);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+
         }
 
     }
@@ -361,7 +340,7 @@ public class HomeFragment extends Fragment {
                 try {
                     mPager.setCurrentItem(currentPage++, true);
                 } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
             };
             swipeTimer = new Timer();
@@ -373,7 +352,7 @@ public class HomeFragment extends Fragment {
             }, timerDelay, timerWaiting);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+
         }
         progressBar.setVisibility(View.GONE);
     }
@@ -394,7 +373,7 @@ public class HomeFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

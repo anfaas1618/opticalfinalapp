@@ -130,7 +130,7 @@ public class StripeActivity extends AppCompatActivity {
                         });
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -183,7 +183,7 @@ public class StripeActivity extends AppCompatActivity {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }

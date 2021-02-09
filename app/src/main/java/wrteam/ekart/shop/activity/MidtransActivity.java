@@ -84,7 +84,7 @@ public class MidtransActivity extends AppCompatActivity {
                         String status = jsonObject.getString("transaction_status");
                         AddTransaction(MidtransActivity.this, orderId, getString(R.string.midtrans), orderId, status, jsonObject.getString(Constant.MESSAGE), sendParams);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 },
                 (VolleyError error) -> error.printStackTrace());
@@ -132,7 +132,7 @@ public class MidtransActivity extends AppCompatActivity {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }

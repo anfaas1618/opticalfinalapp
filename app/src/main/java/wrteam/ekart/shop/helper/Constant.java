@@ -5,8 +5,9 @@ import java.util.HashMap;
 
 public class Constant {
     //MODIFICATION PART
-
     public static String MAINBASEUrl = "https://ekart.wrteam.in/"; //Admin panel url
+    public static final String GENERATE_PAYTM_CHECKSUM = MAINBASEUrl + "paytm/generate-checksum.php";
+    public static final String VALID_TRANSACTION = MAINBASEUrl + "/paytm/valid-transction.php";
 
     //If you have eCart Website then place here website URL otherwise domain url not admin panel url
     public static String WebsiteUrl = "https://webekart.wrteam.in/";
@@ -18,12 +19,29 @@ public class Constant {
     public static int LOAD_ITEM_LIMIT = 10; //Load items limit in listing ,Maximum load item once
 
     //MODIFICATION PART END
+    public static final String CALLBACK_URL = "CALLBACK_URL";
+    public static final String CHECKSUMHASH = "CHECKSUMHASH";
+    //*************************************************************************************
+    public static final String ORDER_ID_ = "ORDER_ID";
+    public static final String WEBSITE_LIVE_VAL = "WEB";
+    public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";
+    public static final String MOBILE_APP_CHANNEL_ID_LIVE_VAL = "WAP";
+    public static final String PAYTM_ORDER_PROCESS_LIVE_URL = "https://securegw.paytm.in/order/process";
+    public static final String WEBSITE_DEMO_VAL = "WEBSTAGING";
+    public static final String INDUSTRY_TYPE_ID_DEMO_VAL = "Retail";
+    public static final String MOBILE_APP_CHANNEL_ID_DEMO_VAL = "WAP";
+    public static final String PAYTM_ORDER_PROCESS_DEMO_VAL = "https://securegw-stage.paytm.in/order/process";
+    //PayTm configs
+
+    public static final String CHANNEL_ID = "CHANNEL_ID";
+    public static final String INDUSTRY_TYPE_ID = "INDUSTRY_TYPE_ID";
+    public static final String WEBSITE = "WEBSITE";
+    public static final String TXN_AMOUNT = "TXN_AMOUNT";
+    public static final String MID = "MID";
 
     //Do not change anything in this link**************************************************
     public static String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=";
     public static String BaseUrl = MAINBASEUrl + "api-firebase/";
-    //*************************************************************************************
-
     //**********APIS**********
     public static String FAQ_URL = BaseUrl + "get-faqs.php";
     public static String CategoryUrl = BaseUrl + "get-categories.php";
@@ -56,7 +74,6 @@ public class Constant {
     public static String PROMO_CODE_CHECK_URL = BaseUrl + "validate-promo-code.php";
     public static String VERIFY_PAYMENT_REQUEST = BaseUrl + "payment-request.php";
     public static String REGISTER_DEVICE_URL = BaseUrl + "store-fcm-id.php";
-
     //**************parameters***************
     public static String VERIFY_PAYSTACK = "verify_paystack_transaction";
     public static String DISCOUNTED_AMOUNT = "discounted_amount";
@@ -280,19 +297,10 @@ public class Constant {
     public static String SLUG = "slug";
     public static String PROMO_CODE = "promo_code";
     public static CharSequence[] filtervalues = {" Newest to Oldest ", " Oldest to Newest ", " Price Highest to Lowest ", " Price Lowest to Highest "};
-    public static final String CHANNEL_ID = "CHANNEL_ID";
-    public static final String INDUSTRY_TYPE_ID = "INDUSTRY_TYPE_ID";
-    public static final String WEBSITE = "WEBSITE";
-    public static final String TXN_AMOUNT = "TXN_AMOUNT";
-    public static final String MID = "MID";
-    public static final String CALLBACK_URL = "CALLBACK_URL";
-    public static final String CHECKSUMHASH = "CHECKSUMHASH";
-    public static final String ORDER_ID_ = "ORDER_ID";
     public static String CUST_ID = "CUST_ID";
     public static String ORDERID = "ORDERID";
     public static String STATUS_ = "STATUS";
     public static String TXN_SUCCESS = "TXN_SUCCESS";
-
     public static String minimum_version_required = "minimum_version_required";
     public static String is_version_system_on = "is_version_system_on";
     public static String currency = "currency";
@@ -307,8 +315,6 @@ public class Constant {
     public static String max_product_return_days = "max_product_return_days";
     public static String user_wallet_refill_limit = "user_wallet_refill_limit";
     public static String min_refer_earn_order_amount = "min_refer_earn_order_amount";
-
-
     //**************Constants Values***************
     public static String selectedAddressId = "";
     public static String DefaultAddress = "";
@@ -352,21 +358,6 @@ public class Constant {
     public static String FLUTTERWAVE_SECRET_KEY_VAL = "";
     public static String FLUTTERWAVE_ENCRYPTION_KEY_VAL = "";
     public static String FLUTTERWAVE_CURRENCY_CODE_VAL = "";
-
-
-    //PayTm configs
-    public static final String GENERATE_PAYTM_CHECKSUM = MAINBASEUrl + "paytm/generate-checksum.php";
-    public static final String VALID_TRANSACTION = MAINBASEUrl + "/paytm/valid-transction.php";
-
-    public static final String WEBSITE_LIVE_VAL = "WEB";
-    public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";
-    public static final String MOBILE_APP_CHANNEL_ID_LIVE_VAL = "WAP";
-    public static final String PAYTM_ORDER_PROCESS_LIVE_URL = "https://securegw.paytm.in/order/process";
-
-    public static final String WEBSITE_DEMO_VAL = "WEBSTAGING";
-    public static final String INDUSTRY_TYPE_ID_DEMO_VAL = "Retail";
-    public static final String MOBILE_APP_CHANNEL_ID_DEMO_VAL = "WAP";
-    public static final String PAYTM_ORDER_PROCESS_DEMO_VAL = "https://securegw-stage.paytm.in/order/process";
 
     public static String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();

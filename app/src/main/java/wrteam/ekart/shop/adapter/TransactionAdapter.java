@@ -38,7 +38,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     Context context;
 
 
-    public TransactionAdapter(Context context,Activity activity, ArrayList<Transaction> transactions) {
+    public TransactionAdapter(Context context, Activity activity, ArrayList<Transaction> transactions) {
         this.context = context;
         this.activity = activity;
         this.transactions = transactions;

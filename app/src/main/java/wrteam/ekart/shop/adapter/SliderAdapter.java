@@ -20,7 +20,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.FullScreenViewFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
-import wrteam.ekart.shop.fragment.ProductListFragment;
 import wrteam.ekart.shop.fragment.SubCategoryFragment;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Slider;

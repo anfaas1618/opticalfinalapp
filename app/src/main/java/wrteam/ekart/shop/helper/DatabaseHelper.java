@@ -68,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ar = new ArrayList<String>(Arrays.asList(c.getColumnNames()));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         } finally {
             if (c != null)
                 c.close();
@@ -202,9 +202,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.close();
             }
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

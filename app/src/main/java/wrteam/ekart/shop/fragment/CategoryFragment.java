@@ -117,7 +117,7 @@ public class CategoryFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         progressBar.setVisibility(View.GONE);
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -138,7 +138,7 @@ public class CategoryFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

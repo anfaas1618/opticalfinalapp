@@ -114,7 +114,7 @@ public class CartFragment extends Fragment {
         tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ApiConfig.isConnected(getActivity())) {
+                if (ApiConfig.isConnected(requireActivity())) {
                     if (!isSoldOut) {
                         if (Constant.SETTING_MINIMUM_ORDER_AMOUNT <= Constant.FLOAT_TOTAL_AMOUNT) {
                             if (session.isUserLoggedIn()) {
@@ -185,7 +185,7 @@ public class CartFragment extends Fragment {
                                         break;
                                     }
                                 }
-                                offlineCartAdapter = new OfflineCartAdapter(getActivity(), offlineCarts);
+                                offlineCartAdapter = new OfflineCartAdapter(getContext(), getActivity(), offlineCarts);
                                 offlineCartAdapter.setHasStableIds(true);
                                 cartrecycleview.setAdapter(offlineCartAdapter);
                                 lytTotal.setVisibility(View.VISIBLE);
@@ -197,7 +197,7 @@ public class CartFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             progressBar.setVisibility(View.GONE);
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -229,24 +229,28 @@ public class CartFragment extends Fragment {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                                 if (jsonObject1 != null) {
-                                    Cart cart = g.fromJson(jsonObject1.toString(), Cart.class);
+                                    try {
+                                        Cart cart = g.fromJson(jsonObject1.toString(), Cart.class);
 
-                                    float price;
-                                    int qty = Integer.parseInt(cart.getQty());
-                                    String taxPercentage = cart.getItems().get(0).getTax_percentage();
+                                        float price;
+                                        int qty = Integer.parseInt(cart.getQty());
+                                        String taxPercentage = cart.getItems().get(0).getTax_percentage();
 
-                                    if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
-                                        price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
-                                    } else {
-                                        price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                                        if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
+                                            price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+                                        } else {
+                                            price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                                        }
+                                        Constant.FLOAT_TOTAL_AMOUNT += (price * qty);
+                                        carts.add(cart);
+                                    } catch (Exception e) {
+
                                     }
-                                    Constant.FLOAT_TOTAL_AMOUNT += (price * qty);
-                                    carts.add(cart);
                                 } else {
                                     break;
                                 }
                             }
-                            cartAdapter = new CartAdapter(getContext(),getActivity(), carts);
+                            cartAdapter = new CartAdapter(getContext(), getActivity(), carts);
                             cartAdapter.setHasStableIds(true);
                             cartrecycleview.setAdapter(cartAdapter);
                             lytTotal.setVisibility(View.VISIBLE);
@@ -262,7 +266,7 @@ public class CartFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         progressBar.setVisibility(View.GONE);
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -291,7 +295,7 @@ public class CartFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

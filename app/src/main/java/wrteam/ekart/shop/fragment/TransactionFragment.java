@@ -203,7 +203,7 @@ public class TransactionFragment extends Fragment {
                                                                                     isLoadMore = false;
                                                                                 }
                                                                             } catch (JSONException e) {
-                                                                                e.printStackTrace();
+
                                                                             }
                                                                         }
                                                                     }
@@ -225,7 +225,7 @@ public class TransactionFragment extends Fragment {
                             tvAlert.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -248,7 +248,7 @@ public class TransactionFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 

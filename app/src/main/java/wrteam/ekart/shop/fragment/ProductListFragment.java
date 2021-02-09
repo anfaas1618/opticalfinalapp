@@ -2,11 +2,9 @@ package wrteam.ekart.shop.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +115,7 @@ public class ProductListFragment extends Fragment {
                     offset = 0;
                     swipeLayout.setRefreshing(false);
                     productArrayList.clear();
-                    if (from.equals("regular")|| from.equals("sub_cate")) {
+                    if (from.equals("regular") || from.equals("sub_cate")) {
                         GetData();
                     } else if (from.equals("similar")) {
                         GetSimilarData();
@@ -151,7 +149,7 @@ public class ProductListFragment extends Fragment {
                             recyclerView.setAdapter(mAdapter);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -201,11 +199,11 @@ public class ProductListFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
                             if (offset == 0) {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
@@ -266,18 +264,18 @@ public class ProductListFragment extends Fragment {
                                                                                         }
                                                                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                                                                     } catch (JSONException e) {
-                                                                                        e.printStackTrace();
+
                                                                                     }
                                                                                 }
                                                                             } catch (Exception e) {
-                                                                                e.printStackTrace();
+
                                                                             }
                                                                             mAdapter.notifyDataSetChanged();
                                                                             mAdapter.setLoaded();
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-                                                                        e.printStackTrace();
+
                                                                     }
                                                                 }
                                                             }
@@ -296,7 +294,7 @@ public class ProductListFragment extends Fragment {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -344,11 +342,11 @@ public class ProductListFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
 
                             if (offset == 0) {
@@ -409,11 +407,11 @@ public class ProductListFragment extends Fragment {
                                                                                         }
                                                                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                                                                     } catch (JSONException e) {
-                                                                                        e.printStackTrace();
+
                                                                                     }
                                                                                 }
                                                                             } catch (Exception e) {
-                                                                                e.printStackTrace();
+
                                                                             }
 
                                                                             mAdapter.notifyDataSetChanged();
@@ -421,7 +419,7 @@ public class ProductListFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-                                                                        e.printStackTrace();
+
                                                                     }
                                                                 }
                                                             }
@@ -440,7 +438,7 @@ public class ProductListFragment extends Fragment {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }
@@ -449,33 +447,33 @@ public class ProductListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-            if (item.getItemId() == R.id.toolbar_sort) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(activity.getResources().getString(R.string.filterby));
-                builder.setSingleChoiceItems(Constant.filtervalues, filterIndex, (dialog, item1) -> {
-                    filterIndex = item1;
-                    switch (item1) {
-                        case 0:
-                            filterBy = Constant.NEW;
-                            break;
-                        case 1:
-                            filterBy = Constant.OLD;
-                            break;
-                        case 2:
-                            filterBy = Constant.HIGH;
-                            break;
-                        case 3:
-                            filterBy = Constant.LOW;
-                            break;
-                    }
-                    if (item1 != -1)
-                        GetData();
-                    dialog.dismiss();
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-            return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.toolbar_sort) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle(activity.getResources().getString(R.string.filterby));
+            builder.setSingleChoiceItems(Constant.filtervalues, filterIndex, (dialog, item1) -> {
+                filterIndex = item1;
+                switch (item1) {
+                    case 0:
+                        filterBy = Constant.NEW;
+                        break;
+                    case 1:
+                        filterBy = Constant.OLD;
+                        break;
+                    case 2:
+                        filterBy = Constant.HIGH;
+                        break;
+                    case 3:
+                        filterBy = Constant.LOW;
+                        break;
+                }
+                if (item1 != -1)
+                    GetData();
+                dialog.dismiss();
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -501,7 +499,7 @@ public class ProductListFragment extends Fragment {
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
