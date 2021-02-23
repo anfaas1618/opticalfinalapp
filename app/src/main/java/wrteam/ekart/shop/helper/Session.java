@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.preference.PreferenceManager;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.activity.MainActivity;
@@ -15,11 +15,10 @@ import wrteam.ekart.shop.activity.MainActivity;
 
 public class Session {
     public static final String PREFER_NAME = "eKart";
-
+    final int PRIVATE_MODE = 0;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     Context _context;
-    int PRIVATE_MODE = 0;
 
 
     public Session(Context context) {
@@ -90,19 +89,6 @@ public class Session {
         editor.putString(Constant.REFERRAL_CODE, referCode);
         editor.putString(Constant.PROFILE, profile);
         editor.commit();
-    }
-
-    public void logoutUser(Activity activity) {
-
-        editor.clear();
-        editor.commit();
-
-        Intent intent = new Intent(activity, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Constant.FROM, "");
-        activity.startActivity(intent);
-
     }
 
     public boolean isUserLoggedIn() {

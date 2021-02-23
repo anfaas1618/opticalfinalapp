@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/default_bg"
@@ -10,8 +11,7 @@
         android:id="@+id/lytSearchview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_50dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary">
+        android:layout_alignParentTop="true">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchview"
@@ -20,7 +20,8 @@
             android:layout_marginStart="@dimen/dimen_10dp"
             android:layout_marginEnd="@dimen/dimen_10dp"
             android:layout_marginBottom="@dimen/dimen_10dp"
-            android:background="@drawable/bg_search" />
+            android:background="@drawable/bg_search"
+            app:defaultQueryHint="@string/search_hint" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -56,5 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progress_dialog"
         android:visibility="gone" />
 </RelativeLayout>

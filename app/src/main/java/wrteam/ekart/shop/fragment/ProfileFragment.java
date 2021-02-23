@@ -3,7 +3,6 @@ package wrteam.ekart.shop.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +12,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -50,6 +50,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,23 +71,25 @@ import static wrteam.ekart.shop.helper.ApiConfig.createJWT;
 
 public class ProfileFragment extends Fragment {
 
-    public static int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    public static int SELECT_FILE = 110;
+    public static final int SELECT_FILE = 110;
+    public static final int REQUEST_IMAGE_CAPTURE = 100;
+    public static final int REQUEST_CROP_IMAGE = 120;
+    public final int reqWritePermission = 2;
     final File output = null;
     public ImageView imgProfile;
     public FloatingActionButton fabProfile;
-    public int reqWritePermission = 2;
     public ProgressBar progressBar;
     View root;
     TextView txtchangepassword;
     Session session;
     Button btnsubmit;
     Activity activity;
-    Uri fileUri;
+    EditText edtname, edtemail, edtMobile;
+    String currentPhotoPath;
+    Uri fileUri, imageUri;
+    String filePath = null;
     File sourceFile;
     long totalSize = 0;
-    EditText edtname, edtemail, edtMobile;
-    String filePath = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -148,7 +152,7 @@ public class ProfileFragment extends Fragment {
                     edtemail.requestFocus();
                     edtemail.setError(getString(R.string.enter_valid_email));
                 } else if (ApiConfig.isConnected(activity)) {
-                    Map<String, String> params = new HashMap<String, String>();
+                    Map<String, String> params = new HashMap<>();
                     params.put(Constant.TYPE, Constant.EDIT_PROFILE);
                     params.put(Constant.ID, session.getData(Constant.ID));
                     params.put(Constant.NAME, name);
@@ -156,7 +160,7 @@ public class ProfileFragment extends Fragment {
                     params.put(Constant.MOBILE, mobile);
                     params.put(Constant.LONGITUDE, session.getCoordinates(Constant.LONGITUDE));
                     params.put(Constant.LATITUDE, session.getCoordinates(Constant.LATITUDE));
-                    params.put(Constant.FCM_ID, ApiConfig.getInstance().getDeviceToken());
+                    params.put(Constant.FCM_ID, session.getData(Constant.FCM_ID));
                     //System.out.println("====update res " + params.toString());
                     ApiConfig.RequestToVolley(new VolleyCallback() {
                         @Override
@@ -190,60 +194,6 @@ public class ProfileFragment extends Fragment {
         edtMobile.setText(session.getData(Constant.MOBILE));
 
         return root;
-    }
-
-
-    public void SelectProfileImage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, reqWritePermission);
-            } else {
-                selectDialog();
-            }
-        } else {
-            selectDialog();
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        for (String permission : permissions) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
-            } else {
-                if (ActivityCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(activity.getResources().getString(R.string.alert));
-                    builder.setMessage(activity.getResources().getString(R.string.image_permisison_msg));
-                    builder.setPositiveButton(activity.getResources().getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            }
-        }
-    }
-
-    public void selectDialog() {
-        final CharSequence[] items = {getString(R.string.from_library), getString(R.string.cancel)};
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        builder.setTitle("Add Photo!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals(getString(R.string.from_library))) {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, SELECT_FILE);
-                } else if (items[item].equals(getString(R.string.cancel))) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
     }
 
     @SuppressLint("SetTextI18n")
@@ -281,31 +231,109 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    public void SelectProfileImage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, reqWritePermission);
+            } else if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, reqWritePermission);
+            } else {
+                selectDialog();
+            }
+        } else {
+            selectDialog();
+        }
+    }
+
+    public void selectDialog() {
+        final CharSequence[] items = {getString(R.string.from_library), getString(R.string.from_camera), getString(R.string.cancel)};
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals(getString(R.string.from_library))) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, SELECT_FILE);
+                } else if (items[item].equals(getString(R.string.from_camera))) {
+                    dispatchTakePictureIntent();
+                } else if (items[item].equals(getString(R.string.cancel))) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "TUKUTUKU_" + timeStamp + "_";
+        File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                imageUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == SELECT_FILE && resultCode == RESULT_OK) {
-            Uri imageUri = data.getData();
-            CropImage.activity(imageUri)
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setOutputCompressQuality(80)
-                    .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
-                    .setAspectRatio(1, 1)
-                    .start(activity);
-
-        } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
-            CropImage.activity(FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", output)).start(activity);
-
-        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_FILE) {
+                imageUri = data.getData();
+                CropImage.activity(imageUri)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setOutputCompressQuality(90)
+                        .setRequestedSize(300, 300)
+                        .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .setAspectRatio(1, 1)
+                        .start(activity);
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                CropImage.activity(imageUri)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setOutputCompressQuality(90)
+                        .setRequestedSize(300, 300)
+                        .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .setAspectRatio(1, 1)
+                        .start(activity);
+            } else if (requestCode == REQUEST_CROP_IMAGE) {
+                CropImage.activity(FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", output)).start(activity);
+            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 fileUri = result.getUri();
                 new UploadFileToServer().execute();
             }
         }
     }
 
+
+    @SuppressLint("StaticFieldLeak")
     class UploadFileToServer extends AsyncTask<Void, Integer, String> {
         @Override
         protected void onPreExecute() {
@@ -330,7 +358,7 @@ public class ProfileFragment extends Fragment {
                         new AndroidMultiPartEntity.ProgressListener() {
                             @Override
                             public void transferred(long num) {
-                                //publishProgress((int) ((num / (float) totalSize) * 100));
+
                             }
                         });
 

@@ -60,15 +60,17 @@ import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 
 public class ProductDetailFragment extends Fragment {
+    private static final String ARG_POSITION = "position";
     static ArrayList<Slider> sliderArrayList;
     TextView showDiscount, tvMfg, tvMadeIn, txtProductName, txtqty, txtPrice, txtOriginalPrice, txtMeasurement, txtstatus, tvTitleMadeIn, tvTitleMfg;
     WebView webDescription;
     ViewPager viewPager;
     Spinner spinner;
+    LinearLayout lytSpinner;
     ImageView imgIndicator;
     SpannableString spannableString;
     LinearLayout mMarkersLayout, lytMfg, lytMadeIn;
-    RelativeLayout lytqty, lytmainprice, lytDiscount;
+    RelativeLayout lytmainprice, lytqty, lytDiscount;
     ScrollView scrollView;
     Session session;
     boolean favorite;
@@ -93,6 +95,16 @@ public class ProductDetailFragment extends Fragment {
     ImageView imgReturnable, imgCancellable;
     TextView tvReturnable, tvCancellable;
     String taxPercentage;
+
+    public static ProductDetailFragment newInstance(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_POSITION, position);
+
+        ProductDetailFragment fragment = new ProductDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -138,6 +150,7 @@ public class ProductDetailFragment extends Fragment {
         imgAdd = root.findViewById(R.id.btnaddqty);
         imgMinus = root.findViewById(R.id.btnminusqty);
         spinner = root.findViewById(R.id.spinner);
+        lytSpinner = root.findViewById(R.id.lytSpinner);
         imgIndicator = root.findViewById(R.id.imgIndicator);
         showDiscount = root.findViewById(R.id.showDiscount);
         lytshare = root.findViewById(R.id.lytshare);
@@ -470,7 +483,7 @@ public class ProductDetailFragment extends Fragment {
 
     void GetProductDetail(final String productid) {
         root.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         if (from.equals("share")) {
             params.put(Constant.SLUG, productid);
         } else {
@@ -487,7 +500,6 @@ public class ProductDetailFragment extends Fragment {
                     try {
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
                             product = new Product();
@@ -507,11 +519,11 @@ public class ProductDetailFragment extends Fragment {
                                             priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
                                         }
                                         product = new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR));
-                                    } catch (JSONException e) {
+                                    } catch (JSONException ignored) {
 
                                     }
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
 
                             }
                             priceVariationslist = product.getPriceVariations();
@@ -519,11 +531,8 @@ public class ProductDetailFragment extends Fragment {
                             SetProductDetails(product);
                             GetSimilarData(product);
 
-                            root.findViewById(R.id.progressBar).setVisibility(View.GONE);
-                        } else {
-                            root.findViewById(R.id.progressBar).setVisibility(View.GONE);
-
                         }
+                        root.findViewById(R.id.progressBar).setVisibility(View.GONE);
                     } catch (JSONException e) {
 
                         root.findViewById(R.id.progressBar).setVisibility(View.GONE);
@@ -537,7 +546,6 @@ public class ProductDetailFragment extends Fragment {
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     void SetProductDetails(final Product product) {
         try {
-
             try {
                 taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
             } catch (Exception e) {
@@ -613,7 +621,8 @@ public class ProductDetailFragment extends Fragment {
 
 
             if (priceVariationslist.size() == 1) {
-                spinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.INVISIBLE);
+                lytSpinner.setVisibility(View.INVISIBLE);
                 lytmainprice.setEnabled(false);
                 priceVariation = priceVariationslist.get(0);
                 session.setData(Constant.PRODUCT_VARIANT_ID, "" + 0);
@@ -666,7 +675,7 @@ public class ProductDetailFragment extends Fragment {
                 }
             });
             scrollView.setVisibility(View.VISIBLE);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -700,13 +709,13 @@ public class ProductDetailFragment extends Fragment {
 
         if (priceVariation.getDiscounted_price().equals("0") || priceVariation.getDiscounted_price().equals("")) {
             lytDiscount.setVisibility(View.INVISIBLE);
-            txtPrice.setText(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            txtPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtOriginalPrice.setText(spannableString);
 
-            txtPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getDiscounted_price()) + ((Float.parseFloat(priceVariation.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            txtPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getDiscounted_price()) + ((Float.parseFloat(priceVariation.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             lytDiscount.setVisibility(View.VISIBLE);
             showDiscount.setText(priceVariation.getDiscountpercent().replace("(", "").replace(")", ""));
         }

@@ -34,10 +34,10 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    final Activity activity;
+    final ArrayList<OrderTracker> orderTrackerArrayList;
+    final Context context;
     public boolean isLoading;
-    Activity activity;
-    ArrayList<OrderTracker> orderTrackerArrayList;
-    Context context;
 
 
     public TrackerAdapter(Context context, Activity activity, ArrayList<OrderTracker> orderTrackerArrayList) {
@@ -142,7 +142,7 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     static class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -151,8 +151,14 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class TrackerHolderItems extends RecyclerView.ViewHolder {
-        TextView txtorderid, txtorderdate, carddetail, txtorderamount, tvTotalItems, tvItems, status;
-        CardView cardView;
+        final TextView txtorderid;
+        final TextView txtorderdate;
+        final TextView carddetail;
+        final TextView txtorderamount;
+        final TextView tvTotalItems;
+        final TextView tvItems;
+        final TextView status;
+        final CardView cardView;
 
         public TrackerHolderItems(View itemView) {
             super(itemView);

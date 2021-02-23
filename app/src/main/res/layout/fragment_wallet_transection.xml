@@ -38,7 +38,7 @@
                         android:layout_marginStart="@dimen/dimen_5dp"
                         android:text="@string/your_balance"
                         android:textColor="@color/light_blue"
-                        android:textSize="@dimen/large_text" />
+                        android:textSize="@dimen/_20ssp" />
 
                     <TextView
                         android:id="@+id/tvBalance"
@@ -47,7 +47,7 @@
                         android:layout_below="@+id/tvTitleBalance"
                         android:layout_marginStart="@dimen/dimen_5dp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/xlarge_text"
+                        android:textSize="@dimen/_25ssp"
                         android:textStyle="bold" />
 
                     <Button
@@ -62,7 +62,7 @@
                         android:text="@string/recharge_your_wallet"
                         android:textAllCaps="false"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/mid_text"
+                        android:textSize="@dimen/_12ssp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>

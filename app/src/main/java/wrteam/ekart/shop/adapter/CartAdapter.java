@@ -37,12 +37,12 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    final Activity activity;
+    final ArrayList<Cart> items;
+    final Context context;
+    final Session session;
     public boolean isLoading;
-    Activity activity;
-    ArrayList<Cart> items;
     String taxPercentage;
-    Context context;
-    Session session;
 
 
     public CartAdapter(Context context, Activity activity, ArrayList<Cart> items) {
@@ -273,7 +273,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -282,9 +282,18 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class ProductHolderItems extends RecyclerView.ViewHolder {
-        ImageView imgproduct, imgdelete, btnminusqty, btnaddqty;
-        TextView txtproductname, txtmeasurement, txtprice, txtoriginalprice, txtQuantity, txttotalprice, txtstatus;
-        LinearLayout lytqty;
+        final ImageView imgproduct;
+        final ImageView imgdelete;
+        final ImageView btnminusqty;
+        final ImageView btnaddqty;
+        final TextView txtproductname;
+        final TextView txtmeasurement;
+        final TextView txtprice;
+        final TextView txtoriginalprice;
+        final TextView txtQuantity;
+        final TextView txttotalprice;
+        final TextView txtstatus;
+        final LinearLayout lytqty;
 
         public ProductHolderItems(@NonNull View itemView) {
             super(itemView);

@@ -111,7 +111,7 @@ public class SearchFragment extends Fragment {
 
 
     public void SearchRequest(final String query) {  //json request for product search
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.TYPE, Constant.PRODUCT_SEARCH);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.SEARCH, query);

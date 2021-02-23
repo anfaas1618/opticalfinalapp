@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,11 +25,11 @@ import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.model.Category;
 
 public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.ViewHolder> {
-    public ArrayList<Category> categorylist;
-    int layout;
+    public final ArrayList<Category> categorylist;
+    final int layout;
+    final Activity activity;
+    final Context context;
     String from = "";
-    Activity activity;
-    Context context;
 
 
     public SubCategoryAdapter(Context context, Activity activity, ArrayList<Category> categorylist, int layout, String from) {
@@ -82,9 +82,9 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txttitle;
-        ImageView imgcategory;
-        RelativeLayout lytMain;
+        public final TextView txttitle;
+        final ImageView imgcategory;
+        final CardView lytMain;
 
         public ViewHolder(View itemView) {
             super(itemView);

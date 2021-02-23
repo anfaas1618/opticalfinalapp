@@ -24,8 +24,8 @@ import wrteam.ekart.shop.model.BookingDate;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.VideoHolder> {
 
-    public ArrayList<BookingDate> bookingDates;
-    public Activity activity;
+    public final ArrayList<BookingDate> bookingDates;
+    public final Activity activity;
 
     public DateAdapter(Activity activity, ArrayList<BookingDate> bookingDates) {
         this.activity = activity;
@@ -96,8 +96,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.VideoHolder> {
 
     public class VideoHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvDate, tvMonth, tvDay;
-        RelativeLayout relativeLyt;
+        public final TextView tvDate;
+        public final TextView tvMonth;
+        public final TextView tvDay;
+        final RelativeLayout relativeLyt;
 
         public VideoHolder(View itemView) {
             super(itemView);

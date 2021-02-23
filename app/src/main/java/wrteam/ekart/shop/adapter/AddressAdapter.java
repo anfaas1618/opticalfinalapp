@@ -32,9 +32,9 @@ import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Address;
 
 public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    Activity activity;
-    Context context;
-    ArrayList<Address> addresses;
+    final Activity activity;
+    final Context context;
+    final ArrayList<Address> addresses;
     String id = "0";
 
     public AddressAdapter(Context context, Activity activity, ArrayList<Address> addresses) {
@@ -192,9 +192,15 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     class AddressItemHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName, tvAddress, tvAddressType, tvMobile, tvDefaultAddress;
-        ImageView imgEdit, imgDelete, imgSelect;
-        LinearLayout lytMain;
+        final TextView tvName;
+        final TextView tvAddress;
+        final TextView tvAddressType;
+        final TextView tvMobile;
+        final TextView tvDefaultAddress;
+        final ImageView imgEdit;
+        final ImageView imgDelete;
+        final ImageView imgSelect;
+        final LinearLayout lytMain;
 
         public AddressItemHolder(@NonNull View itemView) {
             super(itemView);

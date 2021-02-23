@@ -59,7 +59,7 @@ public class PinView extends AppCompatEditText {
 
     static final int BLINK = 500;
 
-    static final int DEFAULT_COUNT = 4;
+    static final int DEFAULT_COUNT = 6;
 
     static final InputFilter[] NO_FILTERS = new InputFilter[0];
 
@@ -125,19 +125,19 @@ public class PinView extends AppCompatEditText {
         mViewType = a.getInt(R.styleable.PinView_viewType, VIEW_TYPE_RECTANGLE);
         mPinItemCount = a.getInt(R.styleable.PinView_itemCount, DEFAULT_COUNT);
         mPinItemHeight = (int) a.getDimension(R.styleable.PinView_itemHeight,
-                res.getDimensionPixelSize(R.dimen.pv_pin_view_item_size));
+                res.getDimensionPixelSize(R.dimen._40sdp));
         mPinItemWidth = (int) a.getDimension(R.styleable.PinView_itemWidth,
-                res.getDimensionPixelSize(R.dimen.pv_pin_view_item_size));
+                res.getDimensionPixelSize(R.dimen._40sdp));
         mPinItemSpacing = a.getDimensionPixelSize(R.styleable.PinView_itemSpacing,
-                res.getDimensionPixelSize(R.dimen.pv_pin_view_item_spacing));
+                res.getDimensionPixelSize(R.dimen._3sdp));
         mPinItemRadius = (int) a.getDimension(R.styleable.PinView_itemRadius, 0);
         mLineWidth = (int) a.getDimension(R.styleable.PinView_lineWidth,
-                res.getDimensionPixelSize(R.dimen.pv_pin_view_item_line_width));
+                res.getDimensionPixelSize(R.dimen._2sdp));
         mLineColor = a.getColorStateList(R.styleable.PinView_lineColor);
         isCursorVisible = a.getBoolean(R.styleable.PinView_android_cursorVisible, true);
         mCursorColor = a.getColor(R.styleable.PinView_cursorColor, getCurrentTextColor());
         mCursorWidth = a.getDimensionPixelSize(R.styleable.PinView_cursorWidth,
-                res.getDimensionPixelSize(R.dimen.pv_pin_view_cursor_width));
+                res.getDimensionPixelSize(R.dimen._2sdp));
 
         mItemBackground = a.getDrawable(R.styleable.PinView_android_itemBackground);
         mHideLineWhenFilled = a.getBoolean(R.styleable.PinView_hideLineWhenFilled, false);
@@ -455,7 +455,6 @@ public class PinView extends AppCompatEditText {
         if (drawCursor) {
             float cx = mItemCenterPoint.x;
             float cy = mItemCenterPoint.y;
-            float x = cx;
             float y = cy - mCursorHeight / 2;
 
             int color = mPaint.getColor();
@@ -463,7 +462,7 @@ public class PinView extends AppCompatEditText {
             mPaint.setColor(mCursorColor);
             mPaint.setStrokeWidth(mCursorWidth);
 
-            canvas.drawLine(x, y, x, y + mCursorHeight, mPaint);
+            canvas.drawLine(cx, y, cx, y + mCursorHeight, mPaint);
 
             mPaint.setColor(color);
             mPaint.setStrokeWidth(width);
@@ -1003,12 +1002,12 @@ public class PinView extends AppCompatEditText {
     }
 
     void updateCursorHeight() {
-        int delta = 2 * dpToPx(2);
+        int delta = 2 * dpToPx();
         mCursorHeight = mPinItemHeight - getTextSize() > delta ? getTextSize() + delta : getTextSize();
     }
 
-    int dpToPx(float dp) {
-        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
+    int dpToPx() {
+        return (int) ((float) 2 * getResources().getDisplayMetrics().density + 0.5f);
     }
     //endregion
 

@@ -38,9 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/dimen_10dp"
-        android:background="@drawable/bg_button"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:background="@drawable/card_shadow"
+        android:backgroundTint="@color/colorPrimary"
+        android:paddingTop="@dimen/_18sdp"
+        android:paddingBottom="@dimen/_18sdp"
         android:text="@string/next"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
 </RelativeLayout>

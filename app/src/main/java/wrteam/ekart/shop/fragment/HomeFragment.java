@@ -135,7 +135,7 @@ public class HomeFragment extends Fragment {
                 } else {
                     MainActivity.fm.beginTransaction().show(MainActivity.categoryFragment).hide(MainActivity.active).commit();
                 }
-                MainActivity.bottomNavigationView.setSelectedItemId(R.id.navigation_category);
+                MainActivity.bottomNavigationView.setItemActiveIndex(1);
                 MainActivity.active = MainActivity.categoryFragment;
             }
         });
@@ -194,10 +194,42 @@ public class HomeFragment extends Fragment {
         });
 
         if (ApiConfig.isConnected(getActivity())) {
-            GetHomeData();
-            if (new Session(activity).isUserLoggedIn()) {
-                ApiConfig.getWalletBalance(activity, new Session(activity));
+            try {
+                if (!getArguments().getString("json").isEmpty()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(getArguments().getString("json"));
+                        if (!jsonObject.getBoolean(Constant.ERROR)) {
+                            offerList = new ArrayList<>();
+                            sliderArrayList = new ArrayList<>();
+                            categoryArrayList = new ArrayList<>();
+                            sectionList = new ArrayList<>();
+
+                            offerList.clear();
+                            sliderArrayList.clear();
+                            categoryArrayList.clear();
+                            sectionList.clear();
+
+                            GetOfferImage(jsonObject.getJSONArray(Constant.OFFER_IMAGES));
+                            GetCategory(jsonObject);
+                            SectionProductRequest(jsonObject.getJSONArray(Constant.SECTIONS));
+                            GetSlider(jsonObject.getJSONArray(Constant.SLIDER_IMAGES));
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    GetHomeData();
+                }
+                if (new Session(activity).isUserLoggedIn()) {
+                    ApiConfig.getWalletBalance(activity, new Session(activity));
+                }
+            } catch (Exception e) {
+                GetHomeData();
             }
+        } else {
+            progressBar.setVisibility(View.GONE);
         }
 
         return root;
@@ -205,7 +237,7 @@ public class HomeFragment extends Fragment {
 
     public void GetHomeData() {
         progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         if (session.isUserLoggedIn()) {
             params.put(Constant.USER_ID, session.getData(Constant.ID));
         }
@@ -265,11 +297,6 @@ public class HomeFragment extends Fragment {
             JSONArray jsonArray = object.getJSONArray(Constant.CATEGORIES);
             Gson gson = new Gson();
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Category category = gson.fromJson(jsonObject.toString(), Category.class);
-                categoryArrayList.add(category);
-            }
             if (jsonArray != null && jsonArray.length() > 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);

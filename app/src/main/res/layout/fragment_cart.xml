@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/margin_10dp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/confirm_bg"
             android:gravity="center"
             android:padding="@dimen/dimen_12dp"
@@ -110,6 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:indeterminateDrawable="@drawable/custom_progress_dialog"
         android:visibility="gone" />
 
 </RelativeLayout>

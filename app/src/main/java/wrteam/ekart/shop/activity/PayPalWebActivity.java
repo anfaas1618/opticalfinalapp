@@ -119,7 +119,7 @@ public class PayPalWebActivity extends AppCompatActivity {
         transparams.put(Constant.STATUS, status);
         transparams.put(Constant.MESSAGE, message);
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         transparams.put("transaction_date", df.format(c));
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override

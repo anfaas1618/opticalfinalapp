@@ -6,4 +6,4 @@
     android:layout_height="wrap_content"
     android:padding="5dp"
     android:textColor="@color/txt_color"
-    android:textSize="@dimen/txt_size_15" />
+    android:textSize="@dimen/_15sdp" />

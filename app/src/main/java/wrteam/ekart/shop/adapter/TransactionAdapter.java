@@ -31,11 +31,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    final Activity activity;
+    final ArrayList<Transaction> transactions;
+    final Context context;
     public boolean isLoading;
-    Activity activity;
-    ArrayList<Transaction> transactions;
     String id = "0";
-    Context context;
 
 
     public TransactionAdapter(Context context, Activity activity, ArrayList<Transaction> transactions) {
@@ -117,7 +117,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     static class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -127,8 +127,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public static class TransactionHolderItems extends RecyclerView.ViewHolder {
 
-        TextView tvTxNo, tvTxDateAndTime, tvTxMessage, tvTxAmount, tvTxStatus, tvPaymentMethod;
-        CardView cardViewTxStatus;
+        final TextView tvTxNo;
+        final TextView tvTxDateAndTime;
+        final TextView tvTxMessage;
+        final TextView tvTxAmount;
+        final TextView tvTxStatus;
+        final TextView tvPaymentMethod;
+        final CardView cardViewTxStatus;
 
         public TransactionHolderItems(@NonNull View itemView) {
             super(itemView);

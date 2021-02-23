@@ -24,11 +24,11 @@ import wrteam.ekart.shop.model.Slot;
 import static wrteam.ekart.shop.helper.ApiConfig.getMonth;
 
 public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
-    public ArrayList<Slot> categorylist;
+    public final ArrayList<Slot> categorylist;
+    final Activity activity;
+    final String deliveryTime;
     int selectedPosition = 0;
-    Activity activity;
     boolean isToday;
-    String deliveryTime;
 
     public SlotAdapter(String deliveryTime, Activity activity, ArrayList<Slot> categorylist) {
         this.deliveryTime = deliveryTime;
@@ -94,11 +94,18 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
         holder.rdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (finalCurrentTime.compareTo(finalSlotTime) < 0) {
+                if (isToday) {
+                    if (finalCurrentTime.compareTo(finalSlotTime) < 0) {
+                        PaymentFragment.deliveryTime = model.getTitle();
+                        selectedPosition = (Integer) v.getTag();
+                        notifyDataSetChanged();
+                    }
+                } else {
                     PaymentFragment.deliveryTime = model.getTitle();
                     selectedPosition = (Integer) v.getTag();
                     notifyDataSetChanged();
                 }
+
             }
         });
 
@@ -115,7 +122,7 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        RadioButton rdBtn;
+        final RadioButton rdBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);

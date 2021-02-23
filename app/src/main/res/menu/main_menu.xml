@@ -7,26 +7,26 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         android:visible="false"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/toolbar_sort"
         android:icon="@drawable/ic_sort"
         android:title="@string/filterby"
         android:visible="false"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/toolbar_cart"
         android:icon="@drawable/ic_cart"
         android:title="@string/title_cart"
         android:visible="false"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/toolbar_logout"
         android:icon="@drawable/ic_logout"
         android:title="@string/logout"
         android:visible="false"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

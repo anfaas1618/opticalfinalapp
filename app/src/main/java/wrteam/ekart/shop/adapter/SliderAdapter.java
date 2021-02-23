@@ -26,10 +26,10 @@ import wrteam.ekart.shop.model.Slider;
 
 public class SliderAdapter extends PagerAdapter {
 
-    ArrayList<Slider> dataList;
-    Activity activity;
-    int layout;
-    String from;
+    final ArrayList<Slider> dataList;
+    final Activity activity;
+    final int layout;
+    final String from;
 
     public SliderAdapter(ArrayList<Slider> dataList, Activity activity, int layout, String from) {
         this.dataList = dataList;

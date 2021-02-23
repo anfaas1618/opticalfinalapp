@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +36,7 @@ public class OrderPlacedFragment extends Fragment {
     Activity activity;
     ProgressBar progressBar;
     Button btnShopping, btnSummary;
+    LottieAnimationView lottieAnimationView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +47,7 @@ public class OrderPlacedFragment extends Fragment {
         progressBar = root.findViewById(R.id.progressBar);
         btnShopping = root.findViewById(R.id.btnShopping);
         btnSummary = root.findViewById(R.id.btnSummary);
+        lottieAnimationView = root.findViewById(R.id.lottieAnimationView);
         setHasOptionsMenu(true);
 
         RemoveAllItemFromCart(activity, session);
@@ -53,7 +57,7 @@ public class OrderPlacedFragment extends Fragment {
 
     public void RemoveAllItemFromCart(final Activity activity, Session session) {
         progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.REMOVE_FROM_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
 
@@ -68,6 +72,7 @@ public class OrderPlacedFragment extends Fragment {
                             Constant.TOTAL_CART_ITEM = 0;
                             activity.invalidateOptionsMenu();
                             progressBar.setVisibility(View.GONE);
+                            lottieAnimationView.playAnimation();
 
                             btnSummary.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -85,6 +90,7 @@ public class OrderPlacedFragment extends Fragment {
                                 @Override
                                 public void onClick(View view) {
                                     startActivity(new Intent(activity, MainActivity.class).putExtra(Constant.FROM, "").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
                                 }
                             });
 
@@ -103,6 +109,7 @@ public class OrderPlacedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.toolbar.setVisibility(View.GONE);
+        lottieAnimationView.setAnimation("placed-order.json");
         activity.invalidateOptionsMenu();
         hideKeyboard();
     }

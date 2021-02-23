@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
@@ -35,7 +37,7 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
             this.activity = activity;
             this.carts = carts;
             session = new Session(context);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -47,7 +49,7 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ItemHolder holder, final int position) {
+    public void onBindViewHolder(@NotNull final ItemHolder holder, final int position) {
         try {
 
             final Cart cart = carts.get(position);
@@ -63,28 +65,31 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
 
             holder.tvItemName.setText(cart.getItems().get(0).getName() + " (" + cart.getItems().get(0).getMeasurement() + " " + ApiConfig.toTitleCase(cart.getItems().get(0).getUnit()) + ")");
             holder.tvQty.setText(activity.getString(R.string.qty_1) + cart.getQty());
-            holder.tvPrice.setText(activity.getString(R.string.mrp) + session.getData(Constant.currency) + Constant.formater.format(price));
+            holder.tvPrice.setText(session.getData(Constant.currency) + Constant.formater.format(price));
 
             if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
                 holder.tvTaxTitle.setText(cart.getItems().get(0).getTax_title());
                 holder.tvTaxAmount.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
-                holder.tvTaxPercent.setText("(" + cart.getItems().get(0).getTax_percentage() + "%)");
             } else {
                 holder.tvTaxTitle.setText(cart.getItems().get(0).getTax_title());
                 holder.tvTaxAmount.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
-                holder.tvTaxPercent.setText("(" + cart.getItems().get(0).getTax_percentage() + "%)");
             }
+            if (cart.getItems().get(0).getTax_percentage().equals("0")) {
+                holder.tvTaxTitle.setText("TAX");
+            }
+            holder.tvTaxPercent.setText("(" + cart.getItems().get(0).getTax_percentage() + "%)");
 
             if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
                 holder.tvSubTotal.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             } else {
                 holder.tvSubTotal.setText(session.getData(Constant.currency) + (Integer.parseInt(cart.getQty()) * (Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
 
+    @NotNull
     @Override
     public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lyt_checkout_item_list, parent, false);
@@ -101,9 +106,15 @@ public class CheckoutItemListAdapter extends RecyclerView.Adapter<CheckoutItemLi
         return position;
     }
 
-    public class ItemHolder extends RecyclerView.ViewHolder {
+    public static class ItemHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvItemName, tvQty, tvPrice, tvSubTotal, tvTaxPercent, tvTaxTitle, tvTaxAmount;
+        public final TextView tvItemName;
+        public final TextView tvQty;
+        public final TextView tvPrice;
+        public final TextView tvSubTotal;
+        public final TextView tvTaxPercent;
+        public final TextView tvTaxTitle;
+        public final TextView tvTaxAmount;
 
         public ItemHolder(View itemView) {
             super(itemView);

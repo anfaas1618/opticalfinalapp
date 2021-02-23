@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_shadow"
-    android:padding="@dimen/margin_10dp">
+    android:padding="@dimen/_10sdp">
 
     <ImageView
         android:id="@+id/image"
@@ -18,10 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image"
-        android:paddingStart="@dimen/margin_10dp"
-        android:paddingEnd="@dimen/margin_10dp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/dark_gray"
-        android:textSize="@dimen/mid_text" />
+        android:textSize="@dimen/_12ssp" />
 
     <TextView
         android:id="@+id/tvMessage"
@@ -29,8 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
         android:maxLines="3"
-        android:paddingStart="@dimen/margin_10dp"
-        android:paddingEnd="@dimen/margin_10dp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
         android:paddingBottom="@dimen/dimen_5dp" />
 
 </RelativeLayout>

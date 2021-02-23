@@ -407,7 +407,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
 
     public void isAddressAvailable() {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_ADDRESSES, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -591,7 +591,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                 Intent intent = new Intent(activity, StripeActivity.class);
                 intent.putExtra(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID) + "-" + System.currentTimeMillis());
                 intent.putExtra(Constant.FROM, Constant.WALLET);
-                intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
+                intent.putExtra(Constant.PARAMS, sendparams);
                 startActivity(intent);
             } else {
                 Toast.makeText(activity, getString(R.string.address_msg), Toast.LENGTH_SHORT).show();
@@ -790,7 +790,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
         walletTransactions = new ArrayList<>();
 
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_TRANSACTION, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.TYPE, Constant.TYPE_WALLET_TRANSACTION);
@@ -921,7 +921,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
 
     public void CreateMidtransPayment(String orderId, String grossAmount, Map<String, String> sendparams) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID) + "-" + System.currentTimeMillis());
         params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));
         ApiConfig.RequestToVolley(new VolleyCallback() {

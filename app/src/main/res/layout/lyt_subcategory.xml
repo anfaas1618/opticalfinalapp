@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/lytMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clipToPadding="true"
-    android:orientation="vertical">
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="@dimen/_3sdp"
+    android:layout_weight="1"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="0.0px"
+    android:elevation="8dp"
+    app:cardCornerRadius="5dp"
+    card_view:cardElevation="7dp"
+    card_view:cardPreventCornerOverlap="false">
 
-    <ImageView
-        android:id="@+id/imgcategory"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/card_shadow"
-        android:scaleType="fitXY" />
-
-    <TextView
-        android:id="@+id/txttitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imgcategory"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:maxLines="2"
-        android:textColor="@color/black"
-        android:textSize="@dimen/mid_small_size" />
-</RelativeLayout>
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgcategory"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/txttitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:padding="@dimen/dimen_5dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_10ssp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+

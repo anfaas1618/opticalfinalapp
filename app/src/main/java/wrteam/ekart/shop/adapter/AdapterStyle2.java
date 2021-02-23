@@ -32,10 +32,10 @@ import wrteam.ekart.shop.model.Product;
 
 public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolder> {
 
-    public ArrayList<Product> productList;
-    public Activity activity;
-    Context context;
-    Session session;
+    public final ArrayList<Product> productList;
+    public final Activity activity;
+    final Context context;
+    final Session session;
 
     public AdapterStyle2(Context context, Activity activity, ArrayList<Product> productList) {
         this.context = context;
@@ -156,9 +156,18 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
 
     public class VideoHolder extends RecyclerView.ViewHolder {
 
-        public ImageView imgStyle2_1, imgStyle2_2, imgStyle2_3;
-        public TextView tvStyle2_1, tvStyle2_2, tvStyle2_3, tvSubStyle2_1, tvSubStyle2_2, tvSubStyle2_3;
-        public RelativeLayout layoutStyle2_1, layoutStyle2_2, layoutStyle2_3;
+        public final ImageView imgStyle2_1;
+        public final ImageView imgStyle2_2;
+        public final ImageView imgStyle2_3;
+        public final TextView tvStyle2_1;
+        public final TextView tvStyle2_2;
+        public final TextView tvStyle2_3;
+        public final TextView tvSubStyle2_1;
+        public final TextView tvSubStyle2_2;
+        public final TextView tvSubStyle2_3;
+        public final RelativeLayout layoutStyle2_1;
+        public final RelativeLayout layoutStyle2_2;
+        public final RelativeLayout layoutStyle2_3;
 
         public VideoHolder(View itemView) {
             super(itemView);

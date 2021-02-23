@@ -77,7 +77,7 @@ public class WebViewFragment extends Fragment {
 
     public void GetContent(final String type, final String key) {
         prgLoading.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.SETTINGS, Constant.GetVal);
         params.put(type, Constant.GetVal);
 

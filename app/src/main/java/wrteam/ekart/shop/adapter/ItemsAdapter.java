@@ -46,26 +46,22 @@ import static wrteam.ekart.shop.fragment.TrackerDetailFragment.pBar;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHolder> {
 
-    Activity activity;
-    ArrayList<OrderTracker> orderTrackerArrayList;
+    final Activity activity;
+    final ArrayList<OrderTracker> orderTrackerArrayList;
+    final Session session;
     String from = "";
-
-    public ItemsAdapter(Activity activity, ArrayList<OrderTracker> orderTrackerArrayList) {
-        this.activity = activity;
-        this.orderTrackerArrayList = orderTrackerArrayList;
-    }
 
     public ItemsAdapter(Activity activity, ArrayList<OrderTracker> orderTrackerArrayList, String from) {
         this.activity = activity;
         this.orderTrackerArrayList = orderTrackerArrayList;
         this.from = from;
+        session = new Session(activity);
     }
 
     @Override
     public CartItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.lyt_items, null);
-        CartItemHolder cartItemHolder = new CartItemHolder(v);
-        return cartItemHolder;
+        return new CartItemHolder(v);
     }
 
     @SuppressLint("SetTextI18n")
@@ -81,7 +77,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
             payType = order.getPayment_method();
         String activeStatus = order.getActiveStatus().substring(0, 1).toUpperCase() + order.getActiveStatus().substring(1).toLowerCase();
         holder.txtqty.setText(order.getQuantity());
-        holder.txtprice.setText(new Session(activity).getData(Constant.currency) + order.getPrice());
+
+        String taxPercentage = order.getTax_percent();
+        if (order.getDiscounted_price().equals("0") || order.getDiscounted_price().equals("")) {
+            holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(order.getPrice()) + ((Float.parseFloat(order.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+        } else {
+            holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(order.getDiscounted_price()) + ((Float.parseFloat(order.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+        }
+
         holder.txtpaytype.setText(activity.getResources().getString(R.string.via) + payType);
         holder.txtstatus.setText(activeStatus);
         if (activeStatus.equalsIgnoreCase(Constant.AWAITING_PAYMENT)) {
@@ -287,12 +290,18 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
     }
 
     public class CartItemHolder extends RecyclerView.ViewHolder {
-        TextView txtqty, txtprice, txtpaytype, txtstatus, txtstatusdate, txtname;
-        ImageView imgorder;
-        CardView carddetail;
-        RecyclerView recyclerView;
-        Button btnCancel, btnReturn;
-        LinearLayout returnLyt;
+        final TextView txtqty;
+        final TextView txtprice;
+        final TextView txtpaytype;
+        final TextView txtstatus;
+        final TextView txtstatusdate;
+        final TextView txtname;
+        final ImageView imgorder;
+        final CardView carddetail;
+        final RecyclerView recyclerView;
+        final Button btnCancel;
+        final Button btnReturn;
+        final LinearLayout returnLyt;
 
         public CartItemHolder(View itemView) {
             super(itemView);

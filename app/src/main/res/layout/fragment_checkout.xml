@@ -24,8 +24,8 @@
             android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10dp"
-            android:drawablePadding="@dimen/margin_10dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:drawablePadding="@dimen/_10sdp"
             android:text="@string/address"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/gray"
@@ -35,8 +35,8 @@
             android:id="@+id/tvSummary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10dp"
-            android:drawablePadding="@dimen/margin_10dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:drawablePadding="@dimen/_10sdp"
             android:text="@string/checkout"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/txt_color"
@@ -46,7 +46,7 @@
             android:id="@+id/tvPayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/_10sdp"
             android:text="@string/payment"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/gray"
@@ -81,7 +81,7 @@
                     android:layout_toStartOf="@+id/imgRefresh"
                     android:text="@string/promo_code_msg"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/mid_text" />
+                    android:textSize="@dimen/_12ssp" />
 
                 <ImageView
                     android:id="@+id/imgRefresh"
@@ -102,8 +102,9 @@
                     android:layout_toStartOf="@+id/btnApply"
                     android:background="@drawable/edt_bg"
                     android:hint="@string/promo_code"
+                    android:importantForAutofill="no"
                     android:inputType="text"
-                    android:padding="@dimen/margin_10dp" />
+                    android:padding="@dimen/_10sdp" />
 
                 <Button
                     android:id="@+id/btnApply"
@@ -111,10 +112,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/edtPromoCode"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="@dimen/margin_10dp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:background="@drawable/confirm_bg"
                     android:minHeight="0dp"
-                    android:padding="@dimen/margin_5dp"
+                    android:padding="@dimen/_5sdp"
                     android:text="@string/apply"
                     android:textColor="@color/white" />
 
@@ -126,7 +127,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:padding="@dimen/margin_5dp"
+                    android:indeterminateDrawable="@drawable/custom_progress_dialog"
+                    android:padding="@dimen/_5sdp"
                     android:visibility="gone" />
 
                 <TextView
@@ -135,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edtPromoCode"
                     android:textColor="@color/red"
-                    android:textSize="@dimen/small_size"
+                    android:textSize="@dimen/_12ssp"
                     android:visibility="gone" />
 
             </RelativeLayout>
@@ -149,7 +151,7 @@
                 android:padding="@dimen/dimen_5dp"
                 android:text="@string/order_list"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/mid_text" />
+                android:textSize="@dimen/_12ssp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -279,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/margin_10dp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:background="@drawable/confirm_bg"
                 android:gravity="center"
                 android:padding="@dimen/dimen_12dp"
@@ -296,6 +298,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:indeterminateDrawable="@drawable/custom_progress_dialog"
         android:visibility="gone" />
 
 </RelativeLayout>

@@ -37,12 +37,12 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    final Activity activity;
+    final ArrayList<OfflineCart> items;
+    final DatabaseHelper databaseHelper;
+    final Session session;
+    final Context context;
     public boolean isLoading;
-    Activity activity;
-    ArrayList<OfflineCart> items;
-    DatabaseHelper databaseHelper;
-    Session session;
-    Context context;
 
 
     public OfflineCartAdapter(Context context, Activity activity, ArrayList<OfflineCart> items) {
@@ -229,7 +229,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     static class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -238,8 +238,16 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public static class ProductHolderItems extends RecyclerView.ViewHolder {
-        ImageView imgproduct, imgdelete, btnminusqty, btnaddqty;
-        TextView txtproductname, txtmeasurement, txtprice, txtoriginalprice, txtQuantity, txttotalprice;
+        final ImageView imgproduct;
+        final ImageView imgdelete;
+        final ImageView btnminusqty;
+        final ImageView btnaddqty;
+        final TextView txtproductname;
+        final TextView txtmeasurement;
+        final TextView txtprice;
+        final TextView txtoriginalprice;
+        final TextView txtQuantity;
+        final TextView txttotalprice;
 
         public ProductHolderItems(@NonNull View itemView) {
             super(itemView);

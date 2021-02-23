@@ -82,7 +82,7 @@ public class OrderListReturnedFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_ORDERS, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.STATUS, Constant.RETURNED);
@@ -129,12 +129,7 @@ public class OrderListReturnedFragment extends Fragment {
                                         for (int j = 0; j < itemsarray.length(); j++) {
 
                                             JSONObject itemobj = itemsarray.getJSONObject(j);
-                                            double productPrice = 0.0;
-                                            if (itemobj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
-                                                productPrice = (Double.parseDouble(itemobj.getString(Constant.PRICE)) * Integer.parseInt(itemobj.getString(Constant.QUANTITY)));
-                                            else {
-                                                productPrice = (Double.parseDouble(itemobj.getString(Constant.DISCOUNTED_PRICE)) * Integer.parseInt(itemobj.getString(Constant.QUANTITY)));
-                                            }
+
                                             JSONArray statusarray1 = itemobj.getJSONArray("status");
                                             ArrayList<OrderTracker> statusList = new ArrayList<>();
 
@@ -148,7 +143,7 @@ public class OrderListReturnedFragment extends Fragment {
                                                     itemobj.getString(Constant.ORDER_ID),
                                                     itemobj.getString(Constant.PRODUCT_VARIANT_ID),
                                                     itemobj.getString(Constant.QUANTITY),
-                                                    String.valueOf(productPrice),
+                                                    itemobj.getString(Constant.PRICE),
                                                     itemobj.getString(Constant.DISCOUNT),
                                                     itemobj.getString(Constant.SUB_TOTAL),
                                                     itemobj.getString(Constant.DELIVER_BY),
@@ -162,7 +157,9 @@ public class OrderListReturnedFragment extends Fragment {
                                                     statusList,
                                                     itemobj.getString(Constant.RETURN_STATUS),
                                                     itemobj.getString(Constant.CANCELLABLE_STATUS),
-                                                    itemobj.getString(Constant.TILL_STATUS)));
+                                                    itemobj.getString(Constant.TILL_STATUS),
+                                                    itemobj.getString(Constant.DISCOUNTED_PRICE),
+                                                    itemobj.getString(Constant.TAX_PERCENT)));
                                         }
                                         OrderTracker orderTracker = new OrderTracker(
                                                 jsonObject.getString(Constant.OTP),
@@ -267,12 +264,7 @@ public class OrderListReturnedFragment extends Fragment {
                                                                                     for (int j = 0; j < itemsarray.length(); j++) {
 
                                                                                         JSONObject itemobj = itemsarray.getJSONObject(j);
-                                                                                        double productPrice = 0.0;
-                                                                                        if (itemobj.getString(Constant.DISCOUNTED_PRICE).equals("0"))
-                                                                                            productPrice = (Double.parseDouble(itemobj.getString(Constant.PRICE)) * Integer.parseInt(itemobj.getString(Constant.QUANTITY)));
-                                                                                        else {
-                                                                                            productPrice = (Double.parseDouble(itemobj.getString(Constant.DISCOUNTED_PRICE)) * Integer.parseInt(itemobj.getString(Constant.QUANTITY)));
-                                                                                        }
+
                                                                                         JSONArray statusarray1 = itemobj.getJSONArray("status");
                                                                                         ArrayList<OrderTracker> statusList = new ArrayList<>();
 
@@ -286,7 +278,7 @@ public class OrderListReturnedFragment extends Fragment {
                                                                                                 itemobj.getString(Constant.ORDER_ID),
                                                                                                 itemobj.getString(Constant.PRODUCT_VARIANT_ID),
                                                                                                 itemobj.getString(Constant.QUANTITY),
-                                                                                                String.valueOf(productPrice),
+                                                                                                itemobj.getString(Constant.PRICE),
                                                                                                 itemobj.getString(Constant.DISCOUNT),
                                                                                                 itemobj.getString(Constant.SUB_TOTAL),
                                                                                                 itemobj.getString(Constant.DELIVER_BY),
@@ -300,7 +292,9 @@ public class OrderListReturnedFragment extends Fragment {
                                                                                                 statusList,
                                                                                                 itemobj.getString(Constant.RETURN_STATUS),
                                                                                                 itemobj.getString(Constant.CANCELLABLE_STATUS),
-                                                                                                itemobj.getString(Constant.TILL_STATUS)));
+                                                                                                itemobj.getString(Constant.TILL_STATUS),
+                                                                                                itemobj.getString(Constant.DISCOUNTED_PRICE),
+                                                                                                itemobj.getString(Constant.TAX_PERCENT)));
                                                                                     }
                                                                                     OrderTracker orderTracker = new OrderTracker(
                                                                                             jsonObject.getString(Constant.OTP),

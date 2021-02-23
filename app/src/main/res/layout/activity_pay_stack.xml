@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_margin="@dimen/margin_dp"
+        android:layout_margin="@dimen/_15sdp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -26,15 +26,15 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_dp"
-                    android:layout_marginBottom="@dimen/margin_dp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
                     android:src="@mipmap/ic_launcher" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/margin_10dp"
+                    android:layout_margin="@dimen/_10sdp"
                     android:text="@string/total_"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@color/black" />
@@ -59,21 +59,22 @@
                 android:background="@drawable/gray_rec_bg"
                 android:hint="@string/email"
                 android:imeOptions="actionNext"
+                android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
-                android:padding="@dimen/margin_dp" />
+                android:padding="@dimen/_15sdp" />
             <!-- Expiry Text for credit card number-->
 
             <wrteam.ekart.shop.ui.CreditCardEditText
                 android:id="@+id/edit_card_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10dp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/gray_rec_bg"
                 android:hint="@string/card_number"
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="20"
-                android:padding="@dimen/margin_dp" />
+                android:padding="@dimen/_15sdp" />
             <!-- Divider-->
             <View
                 android:layout_width="0dp"
@@ -88,7 +89,7 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_weight="1.3">
 
                     <!-- Expiry Text -->
@@ -107,7 +108,7 @@
                         android:layout_marginTop="2dp"
                         android:background="@drawable/gray_rec_bg"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_dp">
+                        android:padding="@dimen/_15sdp">
 
                         <EditText
                             android:id="@+id/edit_expiry_month"
@@ -117,6 +118,7 @@
                             android:background="@color/transparent"
                             android:hint="@string/expiry_month"
                             android:imeOptions="actionNext"
+                            android:importantForAutofill="no"
                             android:inputType="number"
                             android:maxEms="4"
                             android:maxLength="2"
@@ -127,8 +129,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="@dimen/margin_10dp"
-                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:text="/"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/dark_gray" />
@@ -141,6 +143,7 @@
                             android:background="@color/transparent"
                             android:hint="@string/yy"
                             android:imeOptions="actionNext"
+                            android:importantForAutofill="no"
                             android:inputType="number"
                             android:maxEms="4"
                             android:maxLength="2"
@@ -153,7 +156,7 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_weight="1">
 
                     <!-- CVV text -->
@@ -174,10 +177,11 @@
                         android:layout_marginTop="2dp"
                         android:background="@drawable/gray_rec_bg"
                         android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:padding="@dimen/margin_dp" />
+                        android:padding="@dimen/_15sdp" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

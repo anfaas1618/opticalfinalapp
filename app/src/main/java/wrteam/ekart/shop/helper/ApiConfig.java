@@ -3,13 +3,15 @@ package wrteam.ekart.shop.helper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -80,9 +82,9 @@ public class ApiConfig extends Application {
 
     public static final String TAG = ApiConfig.class.getSimpleName();
     static ApiConfig mInstance;
-    AppEnvironment appEnvironment;
+    static AppEnvironment appEnvironment;
+    static boolean isDialogOpen = false;
     RequestQueue mRequestQueue;
-    SharedPreferences sharedPref;
 
     public static String VolleyErrorMessage(VolleyError error) {
         String message = "";
@@ -245,7 +247,7 @@ public class ApiConfig extends Application {
     }
 
     public static void getCartItemCount(final Activity activity, Session session) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
 
@@ -268,7 +270,7 @@ public class ApiConfig extends Application {
     }
 
     public static void AddOrRemoveFavorite(Activity activity, Session session, String productID, boolean isAdd) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         if (isAdd) {
             params.put(Constant.ADD_TO_FAVORITES, Constant.GetVal);
         } else {
@@ -313,7 +315,7 @@ public class ApiConfig extends Application {
 
                 @Override
                 public Map<String, String> getHeaders() {
-                    Map<String, String> params1 = new HashMap<String, String>();
+                    Map<String, String> params1 = new HashMap<>();
                     params1.put(Constant.AUTHORIZATION, "Bearer " + createJWT("eKart", "eKart Authentication"));
                     return params1;
                 }
@@ -441,7 +443,7 @@ public class ApiConfig extends Application {
             String ids = map.keySet().toString().replace("[", "").replace("]", "").replace(" ", "");
             String qty = map.values().toString().replace("[", "").replace("]", "").replace(" ", "");
 
-            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<>();
             params.put(Constant.ADD_MULTIPLE_ITEMS, Constant.GetVal);
             params.put(Constant.USER_ID, session.getData(Constant.ID));
             params.put(Constant.PRODUCT_VARIANT_ID, ids);
@@ -506,7 +508,7 @@ public class ApiConfig extends Application {
 
     public static void GetSettings(final Activity activity) {
         Session session = new Session(activity);
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.SETTINGS, Constant.GetVal);
         params.put(Constant.GET_TIMEZONE, Constant.GetVal);
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -567,7 +569,7 @@ public class ApiConfig extends Application {
 
     public static void OpenBottomDialog(final Activity activity) {
         try {
-            View sheetView = activity.getLayoutInflater().inflate(R.layout.lyt_update_app_alert, null);
+            View sheetView = activity.getLayoutInflater().inflate(R.layout.dialog_update_app, null);
             ViewGroup parentViewGroup = (ViewGroup) sheetView.getParent();
             if (parentViewGroup != null) {
                 parentViewGroup.removeAllViews();
@@ -620,7 +622,7 @@ public class ApiConfig extends Application {
         }
     }
 
-    public static double getWalletBalance(final Activity activity, Session session) {
+    public static void getWalletBalance(final Activity activity, Session session) {
         try {
             Map<String, String> params = new HashMap<>();
             params.put(Constant.GET_USER_DATA, Constant.GetVal);
@@ -641,7 +643,6 @@ public class ApiConfig extends Application {
         } catch (Exception e) {
 
         }
-        return Constant.WALLET_BALANCE;
     }
 
     public static void clearFCM(Activity activity, Session session) {
@@ -708,9 +709,37 @@ public class ApiConfig extends Application {
             if (networkInfo != null && networkInfo.isConnected()) {
                 check = true;
             } else {
-                Toast.makeText(activity, activity.getString(R.string.no_internet_connection_try_later), Toast.LENGTH_LONG).show();
+                try {
+                    if (!isDialogOpen) {
+                        View sheetView = activity.getLayoutInflater().inflate(R.layout.dialog_no_internet, null);
+                        ViewGroup parentViewGroup = (ViewGroup) sheetView.getParent();
+                        if (parentViewGroup != null) {
+                            parentViewGroup.removeAllViews();
+                        }
+
+                        final Dialog mBottomSheetDialog = new Dialog(activity);
+                        mBottomSheetDialog.setContentView(sheetView);
+                        mBottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        mBottomSheetDialog.show();
+                        isDialogOpen = true;
+                        Button btnRetry = sheetView.findViewById(R.id.btnRetry);
+                        mBottomSheetDialog.setCancelable(false);
+
+                        btnRetry.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (isConnected(activity)) {
+                                    isDialogOpen = false;
+                                    mBottomSheetDialog.dismiss();
+                                }
+                            }
+                        });
+                    }
+                } catch (Exception ignored) {
+
+                }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         return check;
@@ -774,32 +803,26 @@ public class ApiConfig extends Application {
         return productArrayList;
     }
 
+    public static void SetAppEnvironment(Activity activity) {
+        if (Constant.PAYUMONEY_MODE.equals("production")) {
+            appEnvironment = AppEnvironment.PRODUCTION;
+        } else if (Constant.PAYUMONEY_MODE.equals("sandbox")) {
+            appEnvironment = AppEnvironment.SANDBOX;
+        } else {
+            appEnvironment = AppEnvironment.SANDBOX;
+        }
+        PaystackSdk.initialize(activity);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        appEnvironment = AppEnvironment.SANDBOX;
-        sharedPref = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        PaystackSdk.initialize(getApplicationContext());
     }
 
     public AppEnvironment getAppEnvironment() {
         return appEnvironment;
     }
-
-    public String getData(String id) {
-        return sharedPref.getString(id, "");
-    }
-
-    public String getDeviceToken() {
-        return sharedPref.getString("DEVICETOKEN", "");
-    }
-
-    public void setDeviceToken(String token) {
-        sharedPref.edit().putString("DEVICETOKEN", token).apply();
-    }
-
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {

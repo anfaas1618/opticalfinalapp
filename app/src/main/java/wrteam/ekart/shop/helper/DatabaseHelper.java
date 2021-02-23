@@ -53,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + tableString);
 
         columns.retainAll(getColumns(db, tableName));
-        String cols = join(columns, ",");
+        String cols = join(columns);
         db.execSQL(String.format("INSERT INTO %s (%s) SELECT %s from temp_%s",
                 tableName, cols, cols, tableName));
         db.execSQL("DROP TABLE temp_" + tableName);
@@ -61,27 +61,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     List<String> getColumns(SQLiteDatabase db, String tableName) {
         List<String> ar = null;
-        Cursor c = null;
-        try {
-            c = db.rawQuery("SELECT * FROM " + tableName + " LIMIT 1", null);
+        try (Cursor c = db.rawQuery("SELECT * FROM " + tableName + " LIMIT 1", null)) {
             if (c != null) {
-                ar = new ArrayList<String>(Arrays.asList(c.getColumnNames()));
+                ar = new ArrayList<>(Arrays.asList(c.getColumnNames()));
             }
         } catch (Exception e) {
 
-        } finally {
-            if (c != null)
-                c.close();
         }
         return ar;
     }
 
-    String join(List<String> list, String divider) {
+    String join(List<String> list) {
         StringBuilder buf = new StringBuilder();
         int num = list.size();
         for (int i = 0; i < num; i++) {
             if (i != 0)
-                buf.append(divider);
+                buf.append(",");
             buf.append(list.get(i));
         }
         return buf.toString();
@@ -110,11 +105,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public long addFavourite(String id) {
+    public void addFavourite(String id) {
         ContentValues fav = new ContentValues();
         fav.put(DatabaseHelper.KEY_ID, id);
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.insert(TABLE_FAVOURITE_NAME, null, fav);
+        db.insert(TABLE_FAVOURITE_NAME, null, fav);
     }
 
     public ArrayList<String> getFavourite() {
@@ -201,8 +196,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.insert(TABLE_ORDER_NAME, null, values);
                 db.close();
             }
-        } catch (IllegalStateException e) {
-
         } catch (Exception e) {
 
         }

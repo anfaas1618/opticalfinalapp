@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/line2"
-                    android:layout_margin="@dimen/margin_10dp"
+                    android:layout_margin="@dimen/_10sdp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -284,7 +284,7 @@
                                 android:layout_weight="1"
                                 android:text="@string/final_total"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/mid_text"
+                                android:textSize="@dimen/_12ssp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -294,7 +294,7 @@
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/mid_text"
+                                android:textSize="@dimen/_12ssp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -326,9 +326,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:layout_below="@+id/lytotherdetail"
-                    android:layout_marginStart="@dimen/margin_10dp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/margin_10dp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:background="@color/bggray" />
 
                 <LinearLayout
@@ -336,7 +336,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/line3"
-                    android:layout_margin="@dimen/margin_10dp"
+                    android:layout_margin="@dimen/_10sdp"
                     android:orientation="vertical">
 
                     <TextView
@@ -359,7 +359,7 @@
                         android:id="@+id/lyttracker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_10dp"
+                        android:layout_margin="@dimen/_10sdp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:gravity="center_vertical"
@@ -563,6 +563,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:indeterminateDrawable="@drawable/custom_progress_dialog"
         android:visibility="gone" />
 
     <LinearLayout
@@ -577,7 +578,7 @@
             android:id="@+id/btncancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_3dp"
+            android:layout_margin="@dimen/_3sdp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn"
             android:onClick="OnBtnClick"
@@ -590,7 +591,7 @@
             android:id="@+id/btnreorder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_3dp"
+            android:layout_margin="@dimen/_3sdp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn"
             android:onClick="OnBtnClick"

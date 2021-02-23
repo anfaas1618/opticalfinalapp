@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import wrteam.ekart.shop.R;
+import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 
@@ -92,27 +93,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                     AddressAddUpdateFragment.tvCurrent.setText(getAddress(latitude, longitude, activity));
                     AddressAddUpdateFragment.mapFragment.getMapAsync(AddressAddUpdateFragment.mapReadyCallback);
                 }
-                getFragmentManager().popBackStack();
+                MainActivity.fm.popBackStack();
             }
         });
 
         mapReadyCallback = new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                final GoogleMap mMap = googleMap;
                 double saveLatitude = bundleLatitude;
                 double saveLongitude = bundleLongitude;
-                mMap.clear();
+                googleMap.clear();
 
                 LatLng latLng = new LatLng(saveLatitude, saveLongitude);
-                mMap.setMapType(mapType);
-                mMap.addMarker(new MarkerOptions()
+                googleMap.setMapType(mapType);
+                googleMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .draggable(true)
                         .title(getString(R.string.current_location)));
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
             }
         };
 

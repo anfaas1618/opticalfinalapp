@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -46,6 +47,7 @@ public class CreditCardEditText extends AppCompatEditText {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
 

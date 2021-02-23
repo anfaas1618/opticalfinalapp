@@ -62,7 +62,7 @@ public class AddressListFragment extends Fragment {
     private Session session;
 
     public static void GetDChargeSettings(final Activity activity) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_SETTINGS, Constant.GetVal);
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
@@ -179,7 +179,7 @@ public class AddressListFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_ADDRESSES, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         ApiConfig.RequestToVolley(new VolleyCallback() {

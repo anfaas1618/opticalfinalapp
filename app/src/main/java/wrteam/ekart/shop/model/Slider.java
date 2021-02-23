@@ -2,7 +2,10 @@ package wrteam.ekart.shop.model;
 
 
 public class Slider {
-    String type, type_id, name, image;
+    final String image;
+    String type;
+    String type_id;
+    String name;
 
     public Slider(String type, String type_id, String name, String image) {
         this.type = type;

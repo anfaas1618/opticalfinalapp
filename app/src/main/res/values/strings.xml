@@ -31,13 +31,15 @@
     <string name="search">Search</string>
     <string name="no_category_found">No Category Found</string>
     <string name="view_all">View All</string>
-    <string name="login_">Login</string>
+    <string name="welcome">Welcome to&#160;</string>
     <string name="password_">Password</string>
     <string name="verify">Verify</string>
-    <string name="mobile_send_msg">We will send you an OTP on this mobile number to verify. </string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="mobile_send_msg">We will send you an OTP on mobile number to verify. </string>
     <string name="please_type_verification_code_sent_to">Please Enter OTP sent via SMS on</string>
     <string name="personal_info">Personal Info</string>
-    <string name="not_registered">Not Registered yet? Click Here to SignUp</string>
+    <string name="not_registered">Sign up</string>
+    <string name="login">Log in</string>
     <string name="forgottext">Forgot password ?</string>
     <string name="forgot_message_hint">Registered mobile number</string>
     <string name="changepswtext">Change Password </string>
@@ -74,7 +76,6 @@
     <string name="limit_alert">Apologies, max product quantity limit reached.</string>
     <string name="deleteproductmsg">Are you sure, you want to remove this product from cart ?</string>
     <string name="delete_address_msg">Are you sure, you want to remove this address?</string>
-    <string name="image_permisison_msg">You have to enable storage permission.\n\nGo to app settings > Permissions > Enable Storage</string>
     <string name="deleteproducttitle">Remove Product</string>
     <string name="delete_address">Remove Address</string>
     <string name="stock_limit">Oops! Limited stock available. </string>
@@ -112,12 +113,12 @@
     <string name="paypal">PayPal</string>
     <string name="resend">Resend OTP</string>
     <string name="verify_message">Verify your registered number and reset your password. </string>
-    <string name="alert_register_num1">Mobile number is not registered on&#160;</string>
-    <string name="alert_register_num2">. Please register to continue. Return to Log In screen and select Sign Up.</string>
-    <string name="verify_alert_1">Mobile number already registered with&#160;</string>
-    <string name="verify_alert_2">. You can sign into account using your credentials.</string>
+    <string name="alert_not_register_num1">Mobile number is not registered on&#160;</string>
+    <string name="alert_not_register_num2">. Please register to continue. Return to Log In screen and select Sign Up.</string>
+    <string name="alert_register_num1">Mobile number already registered with&#160;</string>
+    <string name="alert_register_num2">. You can sign into account using your credentials.</string>
     <string name="reset_alert_msg">Are you sure, you want to reset password?</string>
-    <string name="verify_your_mobile">Verify Your Mobile </string>
+    <string name="verify_your_mobile">Verify Your Mobile Number</string>
     <string name="onlinepaytype">payumoney</string>
     <string name="codpaytype">cod</string>
     <string name="order_placed1">Order Placed!!!</string>
@@ -134,7 +135,6 @@
     <string name="no">No</string>
     <string name="qty_1">Qty:&#160;</string>
     <string name="update_alert">Update Alert</string>
-    <string name="alert">Alert!!!</string>
     <string name="up_location">Update Location</string>
     <string name="submit">Submit</string>
     <string name="update_msg_1">Update the app for a batter experience!</string>
@@ -232,7 +232,7 @@
     <string name="transaction_history">Transaction History</string>
     <string name="transaction">ID\u0020</string>
     <string name="amount_title">Amount\u0020:\u0020</string>
-    <string name="transaction_date_and_time"><![CDATA[Date & Time]]></string>
+    <string name="transaction_date_and_time">Date &amp; Time</string>
     <string name="tx_message">Message</string>
     <string name="status">Status</string>
     <string name="delivery_date">Preferred Delivery Date / Time</string>
@@ -250,7 +250,10 @@
     <string name="msg_sold_out">You can not buy sold-out items. </string>
     <string name="title_manufacturer">Manufacturer</string>
     <string name="title_made_in">Made In</string>
-    <string name="from_library"> Choose from Library"</string>
+    <string name="from_library">Choose from Library</string>
+    <string name="from_camera">Capture from Camera</string>
+    <string name="alert">Alert!!!</string>
+    <string name="image_permisison_msg">You have to enable storage permission.\n\nGo to app settings > Permissions > Enable Storage and Camera</string>
     <string name="your_orders">Your Orders</string>
     <string name="no_wish_list_found">No Wish List Found!!!</string>
     <string name="you_have_no_wish_list_items_yet">You have no Wish List items yet!</string>
@@ -320,4 +323,8 @@
     <string name="skip">Skip</string>
     <string name="special_note">Special Note</string>
     <string name="saved_price_txt_msg">You Saved</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="oops_no_internet_connection">Oops, No internet connection!</string>
+    <string name="make_sure_wifi_or_cellular_data_is_turned_on_and_that_retry">Make sure wifi or cellular data is turned on and that retry!</string>
+    <string name="add_to_cart">Add to Cart</string>
 </resources>

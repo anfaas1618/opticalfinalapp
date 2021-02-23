@@ -1,7 +1,11 @@
 package wrteam.ekart.shop.model;
 
 public class Slot {
-    public String id, title, fromTime, toTime, lastOrderTime;
+    public final String id;
+    public final String title;
+    public final String lastOrderTime;
+    public String fromTime;
+    public String toTime;
     boolean isSlotAvailable;
 
     public Slot(String id, String title, String lastOrderTime) {

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/recyclerView"
-    android:layout_marginTop="@dimen/default_margin"
-    android:background="@drawable/card_shadow"
+    android:layout_marginTop="@dimen/_10sdp"
     android:visibility="visible">
 
     <RelativeLayout
@@ -17,12 +16,11 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_toStartOf="@+id/tvMore"
-            android:text="section"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/mid_text"
+            android:textSize="@dimen/_12ssp"
             android:textStyle="bold" />
 
         <TextView
@@ -30,9 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvTitle"
-            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginStart="@dimen/_10sdp"
             android:layout_toStartOf="@+id/tvMore"
-            android:text="item"
             android:textColor="@color/gray_blue" />
 
         <TextView
@@ -41,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/margin_10dp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:background="@drawable/bg_btn"
             android:padding="5dp"
             android:text="@string/view_all"

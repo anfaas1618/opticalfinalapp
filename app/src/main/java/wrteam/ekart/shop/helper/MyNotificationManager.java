@@ -31,7 +31,7 @@ public class MyNotificationManager {
     public static final int ID_SMALL_NOTIFICATION = 235;
 
     final Context mCtx;
-    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
     public MyNotificationManager(Context mCtx) {
         this.mCtx = mCtx;
@@ -103,8 +103,7 @@ public class MyNotificationManager {
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
 
             return null;

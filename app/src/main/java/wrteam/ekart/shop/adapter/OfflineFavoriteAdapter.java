@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,16 +46,16 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    public final int resource;
     final Context context;
     final Activity activity;
+    final Session session;
+    final DatabaseHelper databaseHelper;
     // The minimum amount of items to have below your current scroll position
     // before loading more.
     public boolean isLoading;
-    public int resource;
     public ArrayList<Product> mDataset = new ArrayList<>();
     SpannableString spannableString;
-    Session session;
-    DatabaseHelper databaseHelper;
     String taxPercentage;
 
 
@@ -107,7 +106,8 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
             if (priceVariations.size() == 1) {
-                holder.spinner.setVisibility(View.GONE);
+                holder.spinner.setVisibility(View.INVISIBLE);
+                holder.lytSpinner.setVisibility(View.INVISIBLE);
             }
             if (!product.getIndicator().equals("0")) {
                 holder.imgIndicator.setVisibility(View.VISIBLE);
@@ -205,15 +205,26 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra) {
 
         holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
-        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + extra.getPrice());
+        holder.productPrice.setText(session.getData(Constant.currency) + extra.getPrice());
 
         if (session.isUserLoggedIn()) {
+            if (extra.getCart_count().equals("0")) {
+                holder.lytAddToCart.setVisibility(View.VISIBLE);
+            } else {
+                holder.lytAddToCart.setVisibility(View.GONE);
+            }
             if (Constant.CartValues.containsKey(extra.getId())) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     holder.txtqty.setText("" + Constant.CartValues.get(extra.getId()));
                 }
             }
         } else {
+            if (databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()).equals("0")) {
+                holder.lytAddToCart.setVisibility(View.VISIBLE);
+            } else {
+                holder.lytAddToCart.setVisibility(View.GONE);
+            }
+
             if (session.getData(extra.getId()) != null) {
                 holder.txtqty.setText(session.getData(extra.getId()));
             } else {
@@ -225,13 +236,13 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
 
-            holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             holder.lytDiscount.setVisibility(View.VISIBLE);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
         }
@@ -287,7 +298,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -296,13 +307,22 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public ImageButton imgAdd, imgMinus;
-        TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
-        ImageView imgThumb;
-        ImageView imgFav, imgIndicator;
-        RelativeLayout lytmain, lytDiscount;
-        AppCompatSpinner spinner;
-        LinearLayout qtyLyt;
+        public final ImageButton imgAdd;
+        public final ImageButton imgMinus;
+        final TextView productName;
+        final TextView productPrice;
+        final TextView txtqty;
+        final TextView Measurement;
+        final TextView showDiscount;
+        final TextView originalPrice;
+        final TextView txtstatus;
+        final ImageView imgThumb;
+        final ImageView imgFav;
+        final ImageView imgIndicator;
+        final RelativeLayout lytmain;
+        final RelativeLayout lytDiscount, lytSpinner, lytAddToCart;
+        final AppCompatSpinner spinner;
+        final RelativeLayout qtyLyt;
 
         public ViewHolderRow(View itemView) {
             super(itemView);
@@ -322,17 +342,18 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             lytmain = itemView.findViewById(R.id.lytmain);
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
-
+            lytSpinner = itemView.findViewById(R.id.lytSpinner);
+            lytAddToCart = itemView.findViewById(R.id.lytAddToCart);
         }
 
     }
 
     public class CustomAdapter extends BaseAdapter {
-        Context context;
-        ArrayList<PriceVariation> extraList;
-        LayoutInflater inflter;
-        ViewHolderRow holder;
-        Product product;
+        final Context context;
+        final ArrayList<PriceVariation> extraList;
+        final LayoutInflater inflter;
+        final ViewHolderRow holder;
+        final Product product;
 
         public CustomAdapter(Context applicationContext, ArrayList<PriceVariation> extraList, ViewHolderRow holder, Product product) {
             this.context = applicationContext;

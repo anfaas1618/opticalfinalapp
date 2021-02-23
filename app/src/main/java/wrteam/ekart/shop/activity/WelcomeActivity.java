@@ -22,7 +22,6 @@ public class WelcomeActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private Button button;
     private SliderPagerAdapter adapter;
-    private TextView tvSkip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class WelcomeActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.pagerIntroSlider);
         TabLayout tabLayout = findViewById(R.id.tabs);
         button = findViewById(R.id.button);
-        tvSkip = findViewById(R.id.tvSkip);
+        TextView tvSkip = findViewById(R.id.tvSkip);
 
         // init slider pager adapter
         adapter = new SliderPagerAdapter(getSupportFragmentManager(),

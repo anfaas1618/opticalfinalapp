@@ -1,8 +1,8 @@
 package wrteam.ekart.shop.activity;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -28,9 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONException;
@@ -39,6 +36,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.ibrahimsn.lib.OnItemReselectedListener;
+import me.ibrahimsn.lib.OnItemSelectedListener;
+import me.ibrahimsn.lib.SmoothBottomBar;
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.AddressListFragment;
 import wrteam.ekart.shop.fragment.CartFragment;
@@ -63,7 +63,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
 
     static final String TAG = "MAIN ACTIVITY";
     public static Toolbar toolbar;
-    public static BottomNavigationView bottomNavigationView;
+    public static SmoothBottomBar bottomNavigationView;
     public static Fragment active;
     public static FragmentManager fm = null;
     public static Fragment homeFragment, categoryFragment, favoriteFragment, trackOrderFragment;
@@ -106,7 +106,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         trackOrderFragment = new TrackOrderFragment();
 
         if (from.equals("tracker")) {
-            bottomNavigationView.setSelectedItemId(R.id.navigation_track_order);
+            bottomNavigationView.setItemActiveIndex(3);
             active = trackOrderFragment;
             trackingClicked = true;
             homeClicked = false;
@@ -114,20 +114,30 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             categoryClicked = false;
             fm.beginTransaction().add(R.id.container, trackOrderFragment).commit();
         } else {
-            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+            Bundle bundle = new Bundle();
+            bottomNavigationView.setItemActiveIndex(0);
             active = homeFragment;
             homeClicked = true;
             trackingClicked = false;
             favoriteClicked = false;
             categoryClicked = false;
-            fm.beginTransaction().add(R.id.container, homeFragment).commit();
+            try {
+                if (!getIntent().getStringExtra("json").isEmpty()) {
+                    bundle.putString("json", getIntent().getStringExtra("json"));
+                }
+                homeFragment.setArguments(bundle);
+                fm.beginTransaction().add(R.id.container, homeFragment).commit();
+            } catch (Exception e) {
+                fm.beginTransaction().add(R.id.container, homeFragment).commit();
+            }
         }
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
+            public boolean onItemSelect(int i) {
+
+                switch (i) {
+                    case 0:
                         if (!homeClicked) {
                             fm.beginTransaction().add(R.id.container, homeFragment).show(homeFragment).hide(active).commit();
                             homeClicked = true;
@@ -135,8 +145,8 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             fm.beginTransaction().show(homeFragment).hide(active).commit();
                         }
                         active = homeFragment;
-                        return true;
-                    case R.id.navigation_category:
+                        break;
+                    case 1:
                         if (!categoryClicked) {
                             fm.beginTransaction().add(R.id.container, categoryFragment).show(categoryFragment).hide(active).commit();
                             categoryClicked = true;
@@ -144,9 +154,8 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             fm.beginTransaction().show(categoryFragment).hide(active).commit();
                         }
                         active = categoryFragment;
-                        return true;
-
-                    case R.id.navigation_favorite:
+                        break;
+                    case 2:
                         if (!favoriteClicked) {
                             fm.beginTransaction().add(R.id.container, favoriteFragment).show(favoriteFragment).hide(active).commit();
                             favoriteClicked = true;
@@ -154,9 +163,9 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             fm.beginTransaction().show(favoriteFragment).hide(active).commit();
                         }
                         active = favoriteFragment;
-                        return true;
+                        break;
 
-                    case R.id.navigation_track_order:
+                    case 3:
                         if (session.isUserLoggedIn()) {
                             if (!trackingClicked) {
                                 fm.beginTransaction().add(R.id.container, trackOrderFragment).show(trackOrderFragment).hide(active).commit();
@@ -183,13 +192,13 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             alertDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (active == homeFragment) {
-                                        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+                                        bottomNavigationView.setItemActiveIndex(0);
                                     }
                                     if (active == categoryFragment) {
-                                        bottomNavigationView.setSelectedItemId(R.id.navigation_category);
+                                        bottomNavigationView.setItemActiveIndex(1);
                                     }
                                     if (active == favoriteFragment) {
-                                        bottomNavigationView.setSelectedItemId(R.id.navigation_favorite);
+                                        bottomNavigationView.setItemActiveIndex(2);
                                     }
                                     fm.beginTransaction().show(active).commit();
                                     alertDialog1.dismiss();
@@ -197,7 +206,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                             });
                             alertDialog.show();
                         }
-                        return true;
+                        break;
                 }
                 return false;
             }
@@ -257,22 +266,13 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 break;
         }
 
-        bottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
-                int id = item.getItemId();
 
-                switch (id) {
-                    case R.id.navigation_home:
-                    case R.id.navigation_track_order:
-                    case R.id.navigation_favorite:
-                    case R.id.navigation_category:
-                        break;
-                }
+        bottomNavigationView.setOnItemReselectedListener(new OnItemReselectedListener() {
+            @Override
+            public void onItemReselect(int i) {
+
             }
         });
-
         drawerToggle = new ActionBarDrawerToggle
                 (
                         this,
@@ -295,12 +295,12 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             }
         });
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String token = instanceIdResult.getToken();
+            public void onSuccess(String token) {
                 if (!token.equals(session.getData(Constant.FCM_ID))) {
-                    Register_FCM(instanceIdResult.getToken());
+                    session.setData(Constant.FCM_ID, token);
+                    Register_FCM(token);
                 }
             }
         });
@@ -328,7 +328,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                     if (!jsonObject.getBoolean(Constant.ERROR)) {
                         session.setData(Constant.FCM_ID, token);
                     }
-                } catch (JSONException e) {
+                } catch (JSONException ignored) {
 
                 }
 
@@ -354,7 +354,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
             if (active != homeFragment) {
 
                 this.doubleBackToExitPressedOnce = false;
-                bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+                bottomNavigationView.setItemActiveIndex(0);
                 homeClicked = true;
                 fm.beginTransaction().hide(active).show(homeFragment).commit();
                 active = homeFragment;

@@ -31,10 +31,10 @@ import wrteam.ekart.shop.model.Product;
 
 public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolder> {
 
-    public ArrayList<Product> productList;
-    public Activity activity;
-    public int itemResource;
-    Context context;
+    public final ArrayList<Product> productList;
+    public final Activity activity;
+    public final int itemResource;
+    final Context context;
 
     public AdapterStyle1(Context context, Activity activity, ArrayList<Product> productList, int itemResource) {
         this.context = context;
@@ -46,13 +46,7 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
 
     @Override
     public int getItemCount() {
-        int product;
-        if (productList.size() > 4) {
-            product = 4;
-        } else {
-            product = productList.size();
-        }
-        return product;
+        return Math.min(productList.size(), 4);
     }
 
     @SuppressLint("SetTextI18n")
@@ -108,9 +102,10 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
 
     public class VideoHolder extends RecyclerView.ViewHolder {
 
-        public ImageView thumbnail;
-        public TextView tvTitle, tvPrice;
-        public RelativeLayout relativeLayout;
+        public final ImageView thumbnail;
+        public final TextView tvTitle;
+        public final TextView tvPrice;
+        public final RelativeLayout relativeLayout;
 
         public VideoHolder(View itemView) {
             super(itemView);

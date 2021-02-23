@@ -25,7 +25,7 @@
             android:text="@string/discover"
             android:textAlignment="center"
             android:textColor="@color/txt_color"
-            android:textSize="@dimen/large_text"
+            android:textSize="@dimen/_20ssp"
             android:textStyle="bold" />
 
         <TextView

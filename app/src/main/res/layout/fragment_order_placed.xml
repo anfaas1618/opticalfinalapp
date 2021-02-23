@@ -14,16 +14,16 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_margin="@dimen/dimen_20dp"
-            android:src="@drawable/ic_orderplaced" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_margin="@dimen/dimen_20dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10dp"
+            android:layout_margin="@dimen/_10sdp"
             android:text="@string/order_placed1"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/black" />
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/margin_10dp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="20dp"
             android:paddingStart="@dimen/dimen_50dp"
             android:paddingEnd="@dimen/dimen_50dp"
@@ -67,6 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:indeterminateDrawable="@drawable/custom_progress_dialog"
         android:visibility="gone" />
 
 </RelativeLayout>

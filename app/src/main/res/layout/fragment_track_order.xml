@@ -20,19 +20,19 @@
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:overScrollMode="never"
+            android:background="@color/bg_color"
             app:tabGravity="fill"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/white"
+            app:tabRippleColor="@color/colorPrimaryLight"
+            app:tabSelectedTextColor="@color/colorPrimary"
             app:tabTextAppearance="@style/TabLayoutStyle"
-            app:tabTextColor="@color/trans_white" />
+            app:tabTextColor="@color/gray" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_5dp"
+            android:layout_marginTop="@dimen/_5sdp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </LinearLayout>

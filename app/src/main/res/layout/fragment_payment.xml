@@ -23,8 +23,8 @@
             android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10dp"
-            android:drawablePadding="@dimen/margin_10dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:drawablePadding="@dimen/_10sdp"
             android:text="@string/address"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/gray"
@@ -34,8 +34,8 @@
             android:id="@+id/tvSummary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10dp"
-            android:drawablePadding="@dimen/margin_10dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:drawablePadding="@dimen/_10sdp"
             android:text="@string/checkout"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/gray"
@@ -45,7 +45,7 @@
             android:id="@+id/tvPayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/_10sdp"
             android:text="@string/payment"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/txt_color"
@@ -72,15 +72,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card_shadow"
-                android:padding="@dimen/margin_10dp">
+                android:padding="@dimen/_10sdp">
 
                 <ImageView
                     android:id="@+id/imgWallet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/margin_5dp"
-                    android:padding="@dimen/margin_10dp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
                     app:srcCompat="@drawable/ic_wallet" />
 
                 <LinearLayout
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/card_shadow"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_10dp"
+                android:padding="@dimen/_10sdp"
                 android:visibility="gone">
 
 
@@ -141,13 +141,13 @@
                             android:layout_marginStart="5dp"
                             android:text="@string/delivery_date"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_13ssp" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerViewDates"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/margin_5dp" />
+                            android:padding="@dimen/_5sdp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -160,7 +160,7 @@
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_5dp" />
+                        android:padding="@dimen/_5sdp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -169,28 +169,28 @@
                 android:id="@+id/lytPayOption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_10dp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:background="@drawable/card_shadow"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_10dp"
+                android:padding="@dimen/_10sdp"
                 android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="@dimen/margin_10dp"
-                    android:layout_marginBottom="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
                     android:text="@string/payment_mathod"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/mid_text" />
+                    android:textSize="@dimen/_13ssp" />
 
                 <LinearLayout
                     android:id="@+id/CODLinearLyt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="@dimen/margin_5dp"
+                    android:padding="@dimen/_5sdp"
                     android:visibility="gone"
                     android:weightSum="10">
 
@@ -208,16 +208,16 @@
                         android:layout_weight="7"
                         android:text="@string/cod_pay"
                         android:textColor="@color/txt_color"
-                        android:textSize="@dimen/mid_text" />
+                        android:textSize="@dimen/_12ssp" />
 
                     <RadioButton
                         android:id="@+id/rbcod"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:padding="@dimen/margin_10dp"
+                        android:padding="@dimen/_10sdp"
                         android:tag="@string/codpaytype"
-                        android:textSize="@dimen/mid_text" />
+                        android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -236,7 +236,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -253,16 +253,16 @@
                             android:layout_weight="7"
                             android:text="@string/pay_u_pay"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbPayU"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/pay_u"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -282,7 +282,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -299,16 +299,16 @@
                             android:layout_weight="7"
                             android:text="@string/razor_payment"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbRazorPay"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/razor_pay"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -328,7 +328,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -345,16 +345,16 @@
                             android:layout_weight="7"
                             android:text="@string/paystack"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbPayStack"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/paystack"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -374,7 +374,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -391,16 +391,16 @@
                             android:layout_weight="7"
                             android:text="@string/flutterwave"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbFlutterWave"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/flutterwave"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -420,7 +420,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -437,16 +437,16 @@
                             android:layout_weight="7"
                             android:text="@string/paypal_pay"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbPayPal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/paypal"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -467,7 +467,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -484,16 +484,16 @@
                             android:layout_weight="7"
                             android:text="@string/midtrans"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbMidTrans"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/midtrans"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -514,7 +514,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -531,16 +531,16 @@
                             android:layout_weight="7"
                             android:text="@string/stripe"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbStripe"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/stripe"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -561,7 +561,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/margin_5dp"
+                        android:padding="@dimen/_5sdp"
                         android:weightSum="10">
 
                         <ImageView
@@ -578,16 +578,16 @@
                             android:layout_weight="7"
                             android:text="@string/paytm"
                             android:textColor="@color/txt_color"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <RadioButton
                             android:id="@+id/rbPayTm"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/margin_10dp"
+                            android:padding="@dimen/_10sdp"
                             android:tag="@string/paytm"
-                            android:textSize="@dimen/mid_text" />
+                            android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -629,7 +629,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/margin_10dp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/confirm_bg"
             android:gravity="center"
             android:padding="@dimen/dimen_12dp"

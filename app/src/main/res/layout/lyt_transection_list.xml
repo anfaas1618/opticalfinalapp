@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_shadow"
-    android:padding="@dimen/margin_10dp">
+    android:padding="@dimen/_10sdp">
 
     <RelativeLayout
         android:id="@+id/lyt_tx"
@@ -20,7 +20,7 @@
             android:layout_alignParentTop="true"
             android:text="@string/transaction"
             android:textColor="@color/black"
-            android:textSize="@dimen/mid_text"
+            android:textSize="@dimen/_12ssp"
             android:textStyle="bold" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/tvTxNoTitle"
             android:textColor="@color/black"
-            android:textSize="@dimen/mid_text"
+            android:textSize="@dimen/_12ssp"
             android:textStyle="bold" />
 
 
@@ -41,8 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_1dp"
         android:layout_below="@+id/lyt_tx"
-        android:layout_marginTop="@dimen/margin_5dp"
-        android:layout_marginBottom="@dimen/margin_5dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:background="@color/light_gray" />
 
 
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/view"
         android:layout_marginTop="@dimen/dimen_5dp"
-        android:layout_marginBottom="@dimen/dimen_3dp">
+        android:layout_marginBottom="@dimen/_3sdp">
 
         <TextView
             android:id="@+id/tvPaymentMethod"
@@ -75,8 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingStart="@dimen/margin_15dp"
-                android:paddingEnd="@dimen/margin_15dp"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_15sdp"
                 android:text="@string/status"
                 android:textColor="@color/status_text"
                 android:textStyle="bold" />
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/lyt_order1"
         android:layout_marginTop="@dimen/dimen_5dp"
-        android:layout_marginBottom="@dimen/dimen_3dp">
+        android:layout_marginBottom="@dimen/_3sdp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -129,8 +129,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lyt_order2"
-        android:layout_marginTop="@dimen/dimen_3dp"
-        android:layout_marginBottom="@dimen/dimen_3dp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
         android:orientation="horizontal">
 
         <TextView

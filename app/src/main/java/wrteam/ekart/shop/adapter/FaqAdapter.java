@@ -24,9 +24,9 @@ public class FaqAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    final Activity activity;
+    final ArrayList<Faq> faqs;
     public boolean isLoading;
-    Activity activity;
-    ArrayList<Faq> faqs;
     boolean visible;
     String id = "0";
 
@@ -112,7 +112,7 @@ public class FaqAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -122,8 +122,9 @@ public class FaqAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class FaqHolder extends RecyclerView.ViewHolder {
 
-        TextView tvQue, tvAns;
-        RelativeLayout mainLyt;
+        final TextView tvQue;
+        final TextView tvAns;
+        final RelativeLayout mainLyt;
 
 
         public FaqHolder(@NonNull View itemView) {

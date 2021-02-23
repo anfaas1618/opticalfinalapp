@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
     <!-- Drop Shadow Stack -->
     <item>
         <shape>
@@ -9,8 +10,8 @@
                 android:right="1dp"
                 android:top="1dp" />
 
-            <!--            <solid android:color="#00bbbdcb" />-->
-            <corners android:radius="3dp" />
+            <solid android:color="#00bbbdcb" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -21,9 +22,9 @@
                 android:right="1dp"
                 android:top="1dp" />
 
-            <!--            <solid android:color="#05bbbdcb" />-->
+            <solid android:color="#05bbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -34,9 +35,9 @@
                 android:right="1dp"
                 android:top="1dp" />
 
-            <!--            <solid android:color="#0abbbdcb" />-->
+            <solid android:color="#0abbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -47,9 +48,9 @@
                 android:right="1dp"
                 android:top="1dp" />
 
-            <!--            <solid android:color="#0fbbbdcb" />-->
+            <solid android:color="#0fbbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -60,18 +61,19 @@
                 android:right="1dp"
                 android:top="1dp" />
 
-            <!--            <solid android:color="#14bbbdcb" />-->
+            <solid android:color="#14bbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
 
     <!-- Background -->
-
     <item>
-        <shape>
+        <shape
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <solid android:color="@color/lightest_gray" />
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
 

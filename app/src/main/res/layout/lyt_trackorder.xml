@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/dimen_5dp"
+        android:layout_margin="@dimen/_3sdp"
         app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="@dimen/dimen_5dp">
 

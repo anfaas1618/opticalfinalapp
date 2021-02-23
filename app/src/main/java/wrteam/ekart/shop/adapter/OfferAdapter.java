@@ -4,9 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import wrteam.ekart.shop.R;
 
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> {
-    public ArrayList<String> offerlist;
-    int layout;
+    public final ArrayList<String> offerlist;
+    final int layout;
 
     public OfferAdapter(ArrayList<String> offerlist, int layout) {
         this.offerlist = offerlist;
@@ -55,8 +55,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView offerImage;
-        LinearLayout lytOfferImage;
+        final ImageView offerImage;
+        final CardView lytOfferImage;
 
         public ViewHolder(View itemView) {
             super(itemView);

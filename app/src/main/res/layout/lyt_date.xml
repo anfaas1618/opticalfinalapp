@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLyt"
     android:layout_width="@dimen/dimen_60dp"
     android:layout_height="wrap_content"
+    android:background="@drawable/card_shadow"
     android:gravity="center_horizontal"
     android:padding="@dimen/dimen_15dp">
 
@@ -28,7 +30,8 @@
         android:textColor="@color/txt_color"
         android:textFontWeight="100"
         android:textSize="@dimen/dimen_17sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:targetApi="p" />
 
     <TextView
         android:id="@+id/tvMonth"

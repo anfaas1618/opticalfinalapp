@@ -3,6 +3,7 @@ package wrteam.ekart.shop.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -17,10 +18,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.play.core.review.ReviewInfo;
-import com.google.android.play.core.review.ReviewManager;
-import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import wrteam.ekart.shop.R;
@@ -40,6 +37,7 @@ import wrteam.ekart.shop.ui.CircleTransform;
 
 @SuppressLint("StaticFieldLeak")
 public class DrawerActivity extends AppCompatActivity {
+    static final float END_SCALE = 0.7f;
     public static TextView tvName, tvWallet;
     public static DrawerLayout drawer_layout;
     public static ImageView imgProfile;
@@ -50,9 +48,6 @@ public class DrawerActivity extends AppCompatActivity {
     Session session;
     LinearLayout lytProfile;
     Activity activity;
-    ReviewManager manager;
-    Task<ReviewInfo> request;
-    ReviewInfo reviewInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +57,20 @@ public class DrawerActivity extends AppCompatActivity {
         frameLayout = findViewById(R.id.content_frame);
         navigationView = findViewById(R.id.nav_view);
         drawer_layout = findViewById(R.id.drawer_layout);
-        View header = navigationView.getHeaderView(0);
-        tvWallet = header.findViewById(R.id.tvWallet);
-        tvName = header.findViewById(R.id.header_name);
-        tvMobile = header.findViewById(R.id.tvMobile);
-        lytProfile = header.findViewById(R.id.lytProfile);
-        imgProfile = header.findViewById(R.id.imgProfile);
+        try {
+            View header = navigationView.getHeaderView(0);
+            tvWallet = header.findViewById(R.id.tvWallet);
+            tvName = header.findViewById(R.id.header_name);
+            tvMobile = header.findViewById(R.id.tvMobile);
+            lytProfile = header.findViewById(R.id.lytProfile);
+            imgProfile = header.findViewById(R.id.imgProfile);
+        } catch (Exception e) {
 
+        }
         activity = DrawerActivity.this;
         session = new Session(activity);
 
-        manager = ReviewManagerFactory.create(this);
-        request = manager.requestReviewFlow();
-        request.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // We can get the ReviewInfo object
-                reviewInfo = task.getResult();
-            }  // There was some problem, continue regardless of the result.
-
-        });
+        animateNavigationDrawer();
 
         if (session.isUserLoggedIn()) {
             tvName.setText(session.getData(Constant.NAME));
@@ -123,6 +113,26 @@ public class DrawerActivity extends AppCompatActivity {
         setupNavigationDrawer();
     }
 
+    private void animateNavigationDrawer() {
+        //Add any color or remove it to use the default one!
+        //To make it transparent use Color.Transparent in side setScrimColor();
+        //drawerLayout.setScrimColor(Color.TRANSPARENT);
+        drawer_layout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // Scale the View based on current slide offset
+                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
+                final float offsetScale = 1 - diffScaledOffset;
+                frameLayout.setScaleX(offsetScale);
+                frameLayout.setScaleY(offsetScale);
+                // Translate the View, accounting for the scaled width
+                final float xOffset = drawerView.getWidth() * slideOffset;
+                final float xOffsetDiff = frameLayout.getWidth() * diffScaledOffset / 2;
+                final float xTranslation = xOffset - xOffsetDiff;
+                frameLayout.setTranslationX(xTranslation);
+            }
+        });
+    }
 
     @SuppressLint("NonConstantResourceId")
     void setupNavigationDrawer() {
@@ -241,12 +251,11 @@ public class DrawerActivity extends AppCompatActivity {
                     startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
                     break;
                 case R.id.menu_rate:
-                    Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
-                    flow.addOnCompleteListener(task -> {
-                        // The flow has finished. The API does not indicate whether the user
-                        // reviewed or not, or even whether the review dialog was shown. Thus, no
-                        // matter the result, we continue our app flow.
-                    });
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constant.PLAY_STORE_RATE_US_LINK + this.getPackageName())));
+                    } catch (android.content.ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constant.PLAY_STORE_LINK + this.getPackageName())));
+                    }
                     break;
                 case R.id.menu_logout:
                     session.logoutUserConfirmation(activity);

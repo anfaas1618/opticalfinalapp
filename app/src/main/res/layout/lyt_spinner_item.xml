@@ -16,7 +16,7 @@
         android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/txt_color"
-        android:textSize="@dimen/p_text_size"
+        android:textSize="@dimen/_12ssp"
         android:textStyle="bold" />
 
     <!--    <TextView-->
@@ -28,7 +28,7 @@
     <!--        android:layout_marginEnd="@dimen/dimen_15dp"-->
     <!--        android:gravity="end"-->
     <!--        android:textColor="@color/txt_color"-->
-    <!--        android:textSize="@dimen/p_text_size"-->
+    <!--        android:textSize="@dimen/_12ssp"-->
     <!--        android:textStyle="bold" />-->
 
 </RelativeLayout>

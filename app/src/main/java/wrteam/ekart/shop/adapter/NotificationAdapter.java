@@ -27,9 +27,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    final Activity activity;
+    final ArrayList<Notification> Notifications;
     public boolean isLoading;
-    Activity activity;
-    ArrayList<Notification> Notifications;
     String id = "0";
 
 
@@ -125,7 +125,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     static class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -135,8 +135,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class NotificationItemHolder extends RecyclerView.ViewHolder {
 
-        ImageView image;
-        TextView tvTitle, tvMessage;
+        final ImageView image;
+        final TextView tvTitle;
+        final TextView tvMessage;
 
 
         public NotificationItemHolder(@NonNull View itemView) {

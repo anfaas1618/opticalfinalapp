@@ -1,6 +1,7 @@
 package wrteam.ekart.shop.helper;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -31,8 +32,8 @@ import wrteam.ekart.shop.fragment.CheckoutFragment;
 import wrteam.ekart.shop.fragment.WalletTransactionFragment;
 
 public class PaymentModelClass {
+    public final Activity activity;
     final String TAG = CheckoutFragment.class.getSimpleName();
-    public Activity activity;
     public PayUmoneySdkInitializer.PaymentParam mPaymentParams;
     public String status, udf5, udf4, udf3, udf2, udf1, email, firstName, productInfo, amount, txnId, key, addedOn, msg, Product, address;
     Map<String, String> sendparams;
@@ -112,7 +113,6 @@ public class PaymentModelClass {
         String phone = sendparams.get(Constant.MOBILE);
         String firstName = sendparams.get(Constant.USER_NAME);
         String email = sendparams.get(Constant.EMAIL);
-        String pName = OrderType;
         String udf1 = "";
         String udf2 = "";
         String udf3 = "";
@@ -128,7 +128,7 @@ public class PaymentModelClass {
         builder.setAmount(amount)
                 .setTxnId(txnId)
                 .setPhone(phone)
-                .setProductName(pName)
+                .setProductName(OrderType)
                 .setFirstName(firstName)
                 .setEmail(email)
                 .setsUrl(appEnvironment.surl())
@@ -294,7 +294,7 @@ public class PaymentModelClass {
         transparams.put(Constant.STATUS, status);
         transparams.put(Constant.MESSAGE, message);
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         transparams.put("transaction_date", df.format(c));
         //System.out.println ("====trans params " + transparams);
         ApiConfig.RequestToVolley(new VolleyCallback() {

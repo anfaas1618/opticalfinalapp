@@ -196,7 +196,7 @@ public class PayStackActivity extends AppCompatActivity {
     }
 
     public void verifyReference(String amount, String reference, String email) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.VERIFY_PAYSTACK, Constant.GetVal);
         params.put(Constant.AMOUNT, amount);
         params.put(Constant.REFERENCE, reference);

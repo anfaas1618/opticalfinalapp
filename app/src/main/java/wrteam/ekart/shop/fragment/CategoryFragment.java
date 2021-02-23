@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -45,12 +45,13 @@ public class CategoryFragment extends Fragment {
     SwipeRefreshLayout swipeLayout;
     View root;
     Activity activity;
-    ProgressBar progressBar;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_category, container, false);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         activity = getActivity();
 
@@ -59,8 +60,8 @@ public class CategoryFragment extends Fragment {
 
         txtnodata = root.findViewById(R.id.txtnodata);
         swipeLayout = root.findViewById(R.id.swipeLayout);
-        progressBar = root.findViewById(R.id.progressBar);
         categoryrecycleview = root.findViewById(R.id.categoryrecycleview);
+
         categoryrecycleview.setLayoutManager(new GridLayoutManager(getContext(), Constant.GRIDCOLUMN));
         swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
@@ -88,8 +89,10 @@ public class CategoryFragment extends Fragment {
     }
 
     void GetCategory() {
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<String, String>();
+        categoryrecycleview.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
+        Map<String, String> params = new HashMap<>();
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
@@ -109,15 +112,19 @@ public class CategoryFragment extends Fragment {
                                 categoryArrayList.add(category);
                             }
                             categoryrecycleview.setAdapter(new CategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory, "category", 0));
-                            progressBar.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            categoryrecycleview.setVisibility(View.VISIBLE);
                         } else {
                             txtnodata.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
                             categoryrecycleview.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
-                        progressBar.setVisibility(View.GONE);
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        categoryrecycleview.setVisibility(View.GONE);
                     }
                 }
             }

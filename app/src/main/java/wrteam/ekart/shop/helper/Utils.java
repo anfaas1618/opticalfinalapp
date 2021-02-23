@@ -21,11 +21,11 @@ public class Utils {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (edtPassword.getRight() - edtPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         if (edtPassword.getTag().equals("show")) {
-                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_hide, 0);
+                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pass, 0, R.drawable.ic_hide, 0);
                             edtPassword.setTransformationMethod(null);
                             edtPassword.setTag("hide");
                         } else {
-                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_show, 0);
+                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pass, 0, R.drawable.ic_show, 0);
                             edtPassword.setTransformationMethod(new PasswordTransformationMethod());
                             edtPassword.setTag("show");
                         }

@@ -145,7 +145,7 @@ public class CartFragment extends Fragment {
         btnShowNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                MainActivity.fm.popBackStack();
             }
         });
 
@@ -155,7 +155,7 @@ public class CartFragment extends Fragment {
     private void GetOfflineCart() {
         progressBar.setVisibility(View.VISIBLE);
         if (databaseHelper.getTotalItemOfCart(activity) >= 1) {
-            offlineCarts = new ArrayList<OfflineCart>();
+            offlineCarts = new ArrayList<>();
             offlineCartAdapter = null;
             Map<String, String> params = new HashMap<>();
             params.put(Constant.GET_CART_OFFLINE, Constant.GetVal);
@@ -211,7 +211,7 @@ public class CartFragment extends Fragment {
 
     private void getCartData() {
         progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
 

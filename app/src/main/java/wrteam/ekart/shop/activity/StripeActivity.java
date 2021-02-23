@@ -93,7 +93,7 @@ public class StripeActivity extends AppCompatActivity {
             address = Constant.DefaultAddress;
         }
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.NAME, session.getData(Constant.NAME));
         params.put(Constant.ADDRESS_LINE1, address);
         if (Constant.DefaultPinCode.length() > 5) {
@@ -155,7 +155,7 @@ public class StripeActivity extends AppCompatActivity {
         transparams.put(Constant.STATUS, status);
         transparams.put(Constant.MESSAGE, message);
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         transparams.put("transaction_date", df.format(c));
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override

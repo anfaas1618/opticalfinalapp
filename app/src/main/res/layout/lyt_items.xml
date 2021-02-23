@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10dp">
+        android:layout_margin="@dimen/_10sdp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                 android:layout_below="@+id/txtprice"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/p_text_size"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
 
 
@@ -138,8 +138,8 @@
 
         <ImageView
             android:id="@+id/imgorder"
-            android:layout_width="@dimen/c_thumb_width"
-            android:layout_height="@dimen/c_thumb_height" />
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp" />
 
     </RelativeLayout>
 
@@ -147,7 +147,7 @@
         android:id="@+id/lyttracker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10dp"
+        android:layout_margin="@dimen/_10sdp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:gravity="center_vertical"

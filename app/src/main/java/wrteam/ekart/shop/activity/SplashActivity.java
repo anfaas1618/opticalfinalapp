@@ -10,13 +10,15 @@ import android.os.Handler;
 import android.view.Window;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import java.util.HashMap;
+import java.util.Map;
 
 import wrteam.ekart.shop.R;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends Activity {
 
     Session session;
     Activity activity;
@@ -24,6 +26,10 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        activity = SplashActivity.this;
+        session = new Session(activity);
+        session.setIsUpdateSkipped("update_skip", false);
 
         Uri data = this.getIntent().getData();
         if (data != null && data.isHierarchical()) {
@@ -55,30 +61,52 @@ public class SplashActivity extends AppCompatActivity {
                     break;
             }
         } else {
+
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-
             setContentView(R.layout.activity_splash);
-            activity = SplashActivity.this;
-            session = new Session(activity);
 
-            int SPLASH_TIME_OUT = 1500;
+            int SPLASH_TIME_OUT = 1000;
 
-            new Handler().postDelayed(() -> {
-                session.setIsUpdateSkipped("update_skip", false);
-                if (!session.getIsFirstTime("is_first_time")) {
-                    startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                } else {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(Constant.FROM, "");
-                    startActivity(intent);
-                    finish();
-                }
-            }, SPLASH_TIME_OUT);
-
+            if (!session.getIsFirstTime("is_first_time")) {
+                new Handler().postDelayed(() -> startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)), SPLASH_TIME_OUT);
+            } else {
+                GetHomeData();
+            }
         }
     }
 
 
+    public void GetHomeData() {
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constant.FROM, "");
+        if (ApiConfig.isConnected(this)) {
+            Map<String, String> params = new HashMap<>();
+            if (session.isUserLoggedIn()) {
+                params.put(Constant.USER_ID, session.getData(Constant.ID));
+            }
+            ApiConfig.RequestToVolley((result, response) -> {
+                if (result) {
+                    try {
+                        intent.putExtra("json", response);
+                        startActivity(intent);
+                        finish();
+                    } catch (Exception e) {
+                        intent.putExtra("json", "");
+                        startActivity(intent);
+                        finish();
+                    }
+                } else {
+                    intent.putExtra("json", "");
+                    startActivity(intent);
+                    finish();
+                }
+            }, this, Constant.GET_ALL_DATA_URL, params, false);
+        } else {
+            intent.putExtra("json", "");
+            startActivity(intent);
+            finish();
+        }
+    }
 }

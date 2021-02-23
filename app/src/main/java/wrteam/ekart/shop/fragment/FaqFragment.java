@@ -90,7 +90,7 @@ public class FaqFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_FAQS, Constant.GetVal);
         params.put(Constant.OFFSET, "" + offset);
         params.put(Constant.LIMIT, "" + Constant.LOAD_ITEM_LIMIT + 10);

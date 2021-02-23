@@ -25,9 +25,9 @@ import wrteam.ekart.shop.model.Category;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionHolder> {
 
-    public ArrayList<Category> sectionList;
-    public Activity activity;
-    Context context;
+    public final ArrayList<Category> sectionList;
+    public final Activity activity;
+    final Context context;
 
     public SectionAdapter(Context context, Activity activity, ArrayList<Category> sectionList) {
         this.context = context;
@@ -44,29 +44,28 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionH
     public void onBindViewHolder(SectionHolder holder1, final int position) {
         final Category section;
         section = sectionList.get(position);
-        SectionHolder holder = holder1;
-        holder.tvTitle.setText(section.getName());
-        holder.tvSubTitle.setText(section.getSubtitle());
+        holder1.tvTitle.setText(section.getName());
+        holder1.tvSubTitle.setText(section.getSubtitle());
 
         switch (section.getStyle()) {
             case "style_1":
-                holder.recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+                holder1.recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
                 AdapterStyle1 adapter = new AdapterStyle1(context, activity, section.getProductList(), R.layout.offer_layout);
-                holder.recyclerView.setAdapter(adapter);
+                holder1.recyclerView.setAdapter(adapter);
                 break;
             case "style_2":
-                holder.recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+                holder1.recyclerView.setLayoutManager(new LinearLayoutManager(activity));
                 AdapterStyle2 adapterStyle2 = new AdapterStyle2(context, activity, section.getProductList());
-                holder.recyclerView.setAdapter(adapterStyle2);
+                holder1.recyclerView.setAdapter(adapterStyle2);
                 break;
             case "style_3":
-                holder.recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
+                holder1.recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
                 AdapterStyle1 adapter3 = new AdapterStyle1(context, activity, section.getProductList(), R.layout.lyt_style_3);
-                holder.recyclerView.setAdapter(adapter3);
+                holder1.recyclerView.setAdapter(adapter3);
                 break;
         }
 
-        holder.tvMore.setOnClickListener(new View.OnClickListener() {
+        holder1.tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -95,9 +94,11 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionH
     }
 
     public class SectionHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvSubTitle, tvMore;
-        RecyclerView recyclerView;
-        RelativeLayout relativeLayout;
+        final TextView tvTitle;
+        final TextView tvSubTitle;
+        final TextView tvMore;
+        final RecyclerView recyclerView;
+        final RelativeLayout relativeLayout;
 
         public SectionHolder(View itemView) {
             super(itemView);

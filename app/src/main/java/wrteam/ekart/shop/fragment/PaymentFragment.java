@@ -71,7 +71,13 @@ import wrteam.ekart.shop.model.Slot;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class PaymentFragment extends Fragment implements PaytmPaymentTransactionCallback {
-    public static String customerId, razorPayId, paymentMethod = "", deliveryTime = "", deliveryDay = "", pCode = "", TAG = CheckoutFragment.class.getSimpleName();
+    public static final String TAG = CheckoutFragment.class.getSimpleName();
+    public static String customerId;
+    public static String razorPayId;
+    public static String paymentMethod = "";
+    public static String deliveryTime = "";
+    public static String deliveryDay = "";
+    public static String pCode = "";
     public static Map<String, String> sendparams;
     public static RecyclerView recyclerView;
     public static SlotAdapter adapter;
@@ -239,9 +245,11 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                                 }
                                 if (object.has(Constant.payu_method)) {
                                     Constant.PAYUMONEY = object.getString(Constant.payu_method);
+                                    Constant.PAYUMONEY_MODE = object.getString(Constant.payumoney_mode);
                                     Constant.MERCHANT_KEY = object.getString(Constant.PAY_M_KEY);
                                     Constant.MERCHANT_ID = object.getString(Constant.PAYU_M_ID);
                                     Constant.MERCHANT_SALT = object.getString(Constant.PAYU_SALT);
+                                    ApiConfig.SetAppEnvironment(activity);
                                 }
                                 if (object.has(Constant.razor_pay_method)) {
                                     Constant.RAZORPAY = object.getString(Constant.razor_pay_method);
@@ -333,7 +341,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(false);
                     rbMidTrans.setChecked(false);
-                    rbPayTm.setChecked(false);
                     paymentMethod = rbCod.getTag().toString();
 
                 });
@@ -346,6 +353,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                     rbFlutterWave.setChecked(false);
                     rbStripe.setChecked(false);
                     rbMidTrans.setChecked(false);
+                    rbPayTm.setChecked(false);
                     paymentMethod = rbPayU.getTag().toString();
 
                 });
@@ -482,7 +490,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
 
     public void GetTimeSlotConfig(final Session session, Activity activity) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.SETTINGS, Constant.GetVal);
         params.put(Constant.GET_TIME_SLOT_CONFIG, Constant.GetVal);
 
@@ -818,9 +826,9 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
     }
 
     public void CreateMidtransPayment(String orderId, String grossAmount) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.ORDER_ID, orderId);
-        params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));
+        params.put(Constant.GROSS_AMOUNT, grossAmount.split(",")[0]);
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {

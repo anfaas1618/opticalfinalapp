@@ -18,13 +18,13 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,13 +44,13 @@ import wrteam.ekart.shop.model.Product;
 import static wrteam.ekart.shop.helper.ApiConfig.AddOrRemoveFavorite;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductHolder> {
-    public ArrayList<Product> productList;
-    public Activity activity;
-    public int resource;
+    public final ArrayList<Product> productList;
+    public final Activity activity;
+    public final int resource;
+    final Session session;
+    final DatabaseHelper databaseHelper;
     SpannableString spannableString;
     boolean isFavorite = false;
-    Session session;
-    DatabaseHelper databaseHelper;
     String taxPercentage;
 
     public ProductAdapter(ArrayList<Product> productList, int resource, Activity activity) {
@@ -65,8 +65,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     @Override
     public ProductHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(resource, null);
-        ProductHolder productHolder = new ProductHolder(v);
-        return productHolder;
+        return new ProductHolder(v);
     }
 
     @Override
@@ -82,7 +81,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
         final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
         if (priceVariations.size() == 1) {
-            holder.spinner.setVisibility(View.GONE);
+            holder.spinner.setVisibility(View.INVISIBLE);
+            holder.lytSpinner.setVisibility(View.INVISIBLE);
         }
 
         if (!product.getIndicator().equals("0")) {
@@ -109,6 +109,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
         if (session.isUserLoggedIn()) {
 
+            holder.txtqty.setText(priceVariations.get(0).getCart_count());
             holder.txtqty.setText(priceVariations.get(0).getCart_count());
 
             if (product.isIs_favorite()) {
@@ -207,22 +208,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     public void SetSelectedData(final ProductHolder holder, final PriceVariation extra) {
 
         holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
-        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + extra.getPrice());
+        holder.productPrice.setText(session.getData(Constant.currency) + extra.getPrice());
         holder.txtstatus.setText(extra.getServe_for());
 
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
 
-            holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             holder.lytDiscount.setVisibility(View.VISIBLE);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
         }
-
 
         if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
             holder.txtstatus.setVisibility(View.VISIBLE);
@@ -234,6 +234,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         }
 
         if (session.isUserLoggedIn()) {
+            if (extra.getCart_count().equals("0")) {
+                holder.lytAddToCart.setVisibility(View.VISIBLE);
+            } else {
+                holder.lytAddToCart.setVisibility(View.GONE);
+            }
+
             if (Constant.CartValues.containsKey(extra.getId())) {
                 holder.txtqty.setText(Constant.CartValues.get(extra.getId()));
             } else {
@@ -286,7 +292,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                     }
                 }
             });
-        } else {
+        }
+        else {
+            if (databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()).equals("0")) {
+                holder.lytAddToCart.setVisibility(View.VISIBLE);
+            } else {
+                holder.lytAddToCart.setVisibility(View.GONE);
+            }
+
             holder.txtqty.setText(databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()));
 
             holder.imgAdd.setOnClickListener(new View.OnClickListener() {
@@ -330,11 +343,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     }
 
     public class CustomAdapter extends BaseAdapter {
-        Context context;
-        ArrayList<PriceVariation> extraList;
-        LayoutInflater inflter;
-        ProductHolder holder;
-        Product product;
+        final Context context;
+        final ArrayList<PriceVariation> extraList;
+        final LayoutInflater inflter;
+        final ProductHolder holder;
+        final Product product;
 
         public CustomAdapter(Context applicationContext, ArrayList<PriceVariation> extraList, ProductHolder holder, Product product) {
             this.context = applicationContext;
@@ -396,13 +409,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     }
 
     public class ProductHolder extends RecyclerView.ViewHolder {
-        public ImageButton imgAdd, imgMinus;
-        TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
-        ImageView imgThumb;
-        ImageView imgFav, imgIndicator;
-        RelativeLayout lytmain, lytDiscount;
-        AppCompatSpinner spinner;
-        LinearLayout qtyLyt;
+        public final ImageButton imgAdd;
+        public final ImageButton imgMinus;
+        final TextView productName;
+        final TextView productPrice;
+        final TextView txtqty;
+        final TextView Measurement;
+        final TextView showDiscount;
+        final TextView originalPrice;
+        final TextView txtstatus;
+        final ImageView imgThumb;
+        final ImageView imgFav;
+        final ImageView imgIndicator;
+        final RelativeLayout lytDiscount, lytSpinner, lytAddToCart;
+        final AppCompatSpinner spinner;
+        final RelativeLayout qtyLyt;
+        final CardView lytmain;
 
         public ProductHolder(View itemView) {
             super(itemView);
@@ -422,6 +444,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             lytmain = itemView.findViewById(R.id.lytmain);
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
+            lytSpinner = itemView.findViewById(R.id.lytSpinner);
+            lytAddToCart = itemView.findViewById(R.id.lytAddToCart);
         }
     }
 }

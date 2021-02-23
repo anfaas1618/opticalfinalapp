@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class OfflineItems {
 
     String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock, stock_unit_id, name, image, unit, cart_count;
-    ArrayList<String> other_images;
+    ArrayList other_images;
 
     public String getCart_count() {
         return cart_count;
@@ -111,7 +111,7 @@ public class OfflineItems {
         this.image = image;
     }
 
-    public ArrayList<String> getOther_images() {
+    public ArrayList getOther_images() {
         return other_images;
     }
 

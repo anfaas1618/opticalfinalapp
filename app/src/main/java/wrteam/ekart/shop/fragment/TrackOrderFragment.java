@@ -18,6 +18,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import wrteam.ekart.shop.activity.LoginActivity;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
-import wrteam.ekart.shop.model.OrderTracker;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static wrteam.ekart.shop.activity.MainActivity.active;
@@ -37,7 +38,6 @@ import static wrteam.ekart.shop.activity.MainActivity.homeFragment;
 
 
 public class TrackOrderFragment extends Fragment {
-    public static ArrayList<OrderTracker> orderTrackerslist, cancelledlist, deliveredlist, processedlist, shippedlist, returnedList;
     View root;
     LinearLayout lytempty, lytdata;
     Session session;
@@ -73,20 +73,17 @@ public class TrackOrderFragment extends Fragment {
             startActivity(new Intent(activity, LoginActivity.class).putExtra(Constant.FROM, "tracker"));
         }
 
-        root.findViewById(R.id.btnorder).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fm.beginTransaction().show(homeFragment).hide(active).commit();
-                bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-                homeClicked = true;
-            }
+        root.findViewById(R.id.btnorder).setOnClickListener(view -> {
+            fm.beginTransaction().show(homeFragment).hide(active).commit();
+            bottomNavigationView.setItemActiveIndex(0);
+            homeClicked = true;
         });
 
         return root;
     }
 
     void setupViewPager(ViewPager viewPager) {
-        adapter = new TrackOrderFragment.ViewPagerAdapter(getFragmentManager());
+        adapter = new TrackOrderFragment.ViewPagerAdapter(fm);
         adapter.addFrag(new OrderListAllFragment(), tabs[0]);
         adapter.addFrag(new OrderListReceivedFragment(), tabs[1]);
         adapter.addFrag(new OrderListShippedFragment(), tabs[2]);
@@ -100,7 +97,7 @@ public class TrackOrderFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Constant.TOOLBAR_TITLE = getString(R.string._title_order_track);
-        getActivity().invalidateOptionsMenu();
+        activity.invalidateOptionsMenu();
         hideKeyboard();
     }
 
@@ -109,7 +106,7 @@ public class TrackOrderFragment extends Fragment {
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(INPUT_METHOD_SERVICE);
             assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(root.getApplicationWindowToken(), 0);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -130,6 +127,7 @@ public class TrackOrderFragment extends Fragment {
             super(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
+        @NotNull
         @Override
         public Fragment getItem(int position) {
             Bundle data = new Bundle();
@@ -148,6 +146,7 @@ public class TrackOrderFragment extends Fragment {
             } else if (position == 5) {
                 fragment = new OrderListReturnedFragment();
             }
+            assert fragment != null;
             fragment.setArguments(data);
             return fragment;
         }
@@ -170,7 +169,7 @@ public class TrackOrderFragment extends Fragment {
         }
 
         @Override
-        public int getItemPosition(Object object) {
+        public int getItemPosition(@NotNull Object object) {
             return POSITION_NONE;
         }
     }

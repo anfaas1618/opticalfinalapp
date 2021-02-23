@@ -31,11 +31,11 @@ public class WalletTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    final Activity activity;
+    final ArrayList<WalletTransaction> walletTransactions;
+    final Context context;
     public boolean isLoading;
-    Activity activity;
-    ArrayList<WalletTransaction> walletTransactions;
     String id = "0";
-    Context context;
 
     public WalletTransactionAdapter(Context context, Activity activity, ArrayList<WalletTransaction> walletTransactions) {
         this.context = context;
@@ -115,7 +115,7 @@ public class WalletTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -125,8 +125,12 @@ public class WalletTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class TransactionHolderItems extends RecyclerView.ViewHolder {
 
-        TextView tvTxNo, tvTxDateAndTime, tvTxMessage, tvTxAmount, tvTxStatus;
-        CardView cardViewTxStatus;
+        final TextView tvTxNo;
+        final TextView tvTxDateAndTime;
+        final TextView tvTxMessage;
+        final TextView tvTxAmount;
+        final TextView tvTxStatus;
+        final CardView cardViewTxStatus;
 
         public TransactionHolderItems(@NonNull View itemView) {
             super(itemView);

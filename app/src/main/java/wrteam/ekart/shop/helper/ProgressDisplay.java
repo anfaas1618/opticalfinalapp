@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.Gravity;
 import android.view.View;
@@ -7,15 +8,19 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import wrteam.ekart.shop.R;
+
 public class ProgressDisplay {
 
     public static ProgressBar mProgressBar;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     public ProgressDisplay(Activity context) {
         try {
             ViewGroup layout = (ViewGroup) (context).findViewById(android.R.id.content).getRootView();
 
             mProgressBar = new ProgressBar(context, null, android.R.attr.progressBarStyle);
+            mProgressBar.setIndeterminateDrawable(context.getDrawable(R.drawable.custom_progress_dialog));
             mProgressBar.setIndeterminate(true);
 
 

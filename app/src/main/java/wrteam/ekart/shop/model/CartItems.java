@@ -2,6 +2,7 @@ package wrteam.ekart.shop.model;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("ALL")
 public class CartItems {
 
     String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock, stock_unit_id, name, image, unit, tax_percentage, tax_title, isAvailable;

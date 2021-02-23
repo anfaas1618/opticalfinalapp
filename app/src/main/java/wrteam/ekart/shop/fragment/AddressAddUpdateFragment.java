@@ -285,7 +285,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
             edtCounty.requestFocus();
             edtCounty.setError("Please enter country");
         } else {
-            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<>();
             if (For.equalsIgnoreCase("add")) {
                 params.put(Constant.ADD_ADDRESS, Constant.GetVal);
             } else if (For.equalsIgnoreCase("update")) {
@@ -367,7 +367,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                                         Constant.selectedAddressId = "";
                                 }
 
-                                getFragmentManager().popBackStack();
+                                MainActivity.fm.popBackStack();
                                 Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
@@ -381,7 +381,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
 
     void SetSpinnerData() {
         try {
-            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<>();
             cityArrayList.clear();
             Activity activity = getActivity();
             if (activity != null) {
@@ -434,7 +434,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
     }
 
     void SetAreaSpinnerData() {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.CITY_ID, cityId);
         areaList.clear();
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -456,7 +456,7 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
                                         pos = i;
                                     }
                                 }
-                                areaSpinner.setAdapter(new ArrayAdapter<City>(getActivity(), R.layout.spinner_item, areaList));
+                                areaSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_item, areaList));
                                 areaSpinner.setSelection(Math.max((pos + 1), 0));
                             }
                         }
@@ -481,11 +481,6 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -507,10 +502,10 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        final GoogleMap mMap = googleMap;
         double saveLatitude, saveLongitude;
         if (For.equals("update")) {
             btnsubmit.setText(getString(R.string.update));
+            assert getArguments() != null;
             address1 = (Address) getArguments().getSerializable("model");
             cityId = address1.getCity_id();
             areaId = address1.getArea_id();
@@ -524,17 +519,17 @@ public class AddressAddUpdateFragment extends Fragment implements OnMapReadyCall
             saveLatitude = latitude;
             saveLongitude = longitude;
         }
-        mMap.clear();
+        googleMap.clear();
 
         LatLng latLng = new LatLng(saveLatitude, saveLongitude);
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.addMarker(new MarkerOptions()
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .draggable(true)
                 .title(getString(R.string.current_location)));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
     }
 
     @Override

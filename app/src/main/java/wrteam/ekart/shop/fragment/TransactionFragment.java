@@ -103,7 +103,7 @@ public class TransactionFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_TRANSACTION, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.TYPE, Constant.TYPE_TRANSACTION);

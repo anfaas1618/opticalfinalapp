@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import wrteam.ekart.shop.R;
+import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.FavoriteFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
@@ -52,15 +54,15 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     // for load more
     public final int VIEW_TYPE_ITEM = 0;
     public final int VIEW_TYPE_LOADING = 1;
+    public final int resource;
+    public final ArrayList<Favorite> mDataset;
     final Context context;
     final Activity activity;
+    final Session session;
+    final boolean isLogin;
+    final DatabaseHelper databaseHelper;
     public boolean isLoading;
-    public int resource;
-    public ArrayList<Favorite> mDataset;
     SpannableString spannableString;
-    Session session;
-    boolean isLogin;
-    DatabaseHelper databaseHelper;
     String taxPercentage;
 
 
@@ -114,7 +116,8 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
                 if (priceVariations.size() == 1) {
-                    holder.spinner.setVisibility(View.GONE);
+                    holder.spinner.setVisibility(View.INVISIBLE);
+                    holder.lytSpinner.setVisibility(View.INVISIBLE);
                 }
                 if (!product.getIndicator().equals("0")) {
                     holder.imgIndicator.setVisibility(View.VISIBLE);
@@ -154,6 +157,25 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                         bundle.putString(Constant.FROM, "favorite");
                         fragment.setArguments(bundle);
                         activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+
+                        ProductDetailFragment kittenDetails = ProductDetailFragment.newInstance(position);
+
+                        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
+                        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
+                        // ARE available in the support library (though they don't do anything on API < 21)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            kittenDetails.setSharedElementEnterTransition(new ProductDetailFragment());
+                            kittenDetails.setEnterTransition(new Fade());
+                            kittenDetails.setExitTransition(new Fade());
+                            kittenDetails.setSharedElementReturnTransition(new ProductDetailFragment());
+                        }
+
+                        MainActivity.fm
+                                .beginTransaction()
+                                .addSharedElement(holder.imgThumb, "product_position")
+                                .replace(R.id.container, kittenDetails)
+                                .addToBackStack(null)
+                                .commit();
                     }
                 });
 
@@ -243,7 +265,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void SetSelectedData(final FavoriteLoadMoreAdapter.ViewHolderRow holder, final PriceVariation extra) {
 
         holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
-        holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + extra.getPrice());
+        holder.productPrice.setText(session.getData(Constant.currency) + extra.getPrice());
 
         if (session.isUserLoggedIn()) {
             if (Constant.CartValues.containsKey(extra.getId())) {
@@ -259,13 +281,13 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
-            spannableString = new SpannableString(activity.getResources().getString(R.string.mrp) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
             spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.originalPrice.setText(spannableString);
 
-            holder.productPrice.setText(activity.getResources().getString(R.string.offer_price) + session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
             holder.lytDiscount.setVisibility(View.VISIBLE);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
         }
@@ -280,6 +302,12 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         if (isLogin) {
+            if (extra.getCart_count().equals("0")) {
+                holder.lytAddToCart.setVisibility(View.VISIBLE);
+            } else {
+                holder.lytAddToCart.setVisibility(View.GONE);
+            }
+
             holder.txtqty.setText(extra.getCart_count());
             holder.imgAdd.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
@@ -327,7 +355,14 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 }
             });
-        } else {
+        }
+        else {
+            if (databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()).equals("0")) {
+                holder.lytAddToCart.setVisibility(View.VISIBLE);
+            } else {
+                holder.lytAddToCart.setVisibility(View.GONE);
+            }
+
             holder.txtqty.setText(databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()));
 
             holder.imgAdd.setOnClickListener(new View.OnClickListener() {
@@ -371,7 +406,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     class ViewHolderLoading extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
+        public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
             super(view);
@@ -380,12 +415,22 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public ImageButton imgAdd, imgMinus;
-        TextView productName, productPrice, txtqty, Measurement, showDiscount, originalPrice, txtstatus;
-        ImageView imgThumb, imgFav, imgIndicator;
-        RelativeLayout lytmain, lytDiscount;
-        AppCompatSpinner spinner;
-        LinearLayout qtyLyt;
+        public final ImageButton imgAdd;
+        public final ImageButton imgMinus;
+        final TextView productName;
+        final TextView productPrice;
+        final TextView txtqty;
+        final TextView Measurement;
+        final TextView showDiscount;
+        final TextView originalPrice;
+        final TextView txtstatus;
+        final ImageView imgThumb;
+        final ImageView imgFav;
+        final ImageView imgIndicator;
+        final CardView lytmain;
+        final RelativeLayout lytDiscount, lytSpinner, lytAddToCart;
+        final AppCompatSpinner spinner;
+        final RelativeLayout qtyLyt;
 
         public ViewHolderRow(View itemView) {
             super(itemView);
@@ -405,17 +450,18 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
             lytmain = itemView.findViewById(R.id.lytmain);
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
-
+            lytSpinner = itemView.findViewById(R.id.lytSpinner);
+            lytAddToCart = itemView.findViewById(R.id.lytAddToCart);
         }
 
     }
 
     public class CustomAdapter extends BaseAdapter {
-        Context context;
-        ArrayList<PriceVariation> extraList;
-        LayoutInflater inflter;
-        FavoriteLoadMoreAdapter.ViewHolderRow holder;
-        Favorite product;
+        final Context context;
+        final ArrayList<PriceVariation> extraList;
+        final LayoutInflater inflter;
+        final FavoriteLoadMoreAdapter.ViewHolderRow holder;
+        final Favorite product;
 
         public CustomAdapter(Context applicationContext, ArrayList<PriceVariation> extraList, FavoriteLoadMoreAdapter.ViewHolderRow holder, Favorite product) {
             this.context = applicationContext;

@@ -11,7 +11,7 @@
                 android:top="1dp" />
 
             <solid android:color="#00bbbdcb" />
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -24,7 +24,7 @@
 
             <solid android:color="#05bbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -37,7 +37,7 @@
 
             <solid android:color="#0abbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -50,7 +50,7 @@
 
             <solid android:color="#0fbbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
@@ -63,15 +63,15 @@
 
             <solid android:color="#14bbbdcb" />
 
-            <corners android:radius="3dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
 
     <!-- Background -->
     <item>
         <shape>
-            <solid android:color="@color/white" />
-            <corners android:radius="3dp" />
+            <solid android:color="@color/trans_white" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
 
