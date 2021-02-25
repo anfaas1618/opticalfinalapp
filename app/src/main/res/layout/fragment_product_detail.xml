@@ -106,11 +106,24 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp">
 
-                        <ImageView
-                            android:id="@+id/imgFav"
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_is_not_favorite" />
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:id="@+id/imgFav"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_is_not_favorite" />
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/lottieAnimationView"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                app:lottie_autoPlay="false"
+                                app:lottie_loop="false" />
+
+                        </RelativeLayout>
 
                         <TextView
                             android:layout_width="wrap_content"

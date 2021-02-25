@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,9 +18,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -40,7 +41,9 @@ import wrteam.ekart.shop.adapter.OfflineCartAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
+import wrteam.ekart.shop.helper.OfflineSwipeToDeleteCallback;
 import wrteam.ekart.shop.helper.Session;
+import wrteam.ekart.shop.helper.SwipeToDeleteCallback;
 import wrteam.ekart.shop.helper.VolleyCallback;
 import wrteam.ekart.shop.model.Cart;
 import wrteam.ekart.shop.model.OfflineCart;
@@ -65,9 +68,9 @@ public class CartFragment extends Fragment {
     RecyclerView cartrecycleview;
     NestedScrollView scrollView;
     double total;
-    ProgressBar progressBar;
     Button btnShowNow;
-    private DatabaseHelper databaseHelper;
+    DatabaseHelper databaseHelper;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @SuppressLint("SetTextI18n")
     public static void SetData() {
@@ -83,7 +86,6 @@ public class CartFragment extends Fragment {
         values = new HashMap<>();
         activity = getActivity();
         session = new Session(getActivity());
-        progressBar = root.findViewById(R.id.progressBar);
         lytTotal = root.findViewById(R.id.lytTotal);
         lytempty = root.findViewById(R.id.lytempty);
         btnShowNow = root.findViewById(R.id.btnShowNow);
@@ -92,6 +94,7 @@ public class CartFragment extends Fragment {
         scrollView = root.findViewById(R.id.scrollView);
         cartrecycleview = root.findViewById(R.id.cartrecycleview);
         tvConfirmOrder = root.findViewById(R.id.tvConfirmOrder);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
         databaseHelper = new DatabaseHelper(activity);
 
         ApiConfig.GetSettings(activity);
@@ -153,7 +156,9 @@ public class CartFragment extends Fragment {
     }
 
     private void GetOfflineCart() {
-        progressBar.setVisibility(View.VISIBLE);
+        cartrecycleview.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         if (databaseHelper.getTotalItemOfCart(activity) >= 1) {
             offlineCarts = new ArrayList<>();
             offlineCartAdapter = null;
@@ -188,29 +193,38 @@ public class CartFragment extends Fragment {
                                 offlineCartAdapter = new OfflineCartAdapter(getContext(), getActivity(), offlineCarts);
                                 offlineCartAdapter.setHasStableIds(true);
                                 cartrecycleview.setAdapter(offlineCartAdapter);
+                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new OfflineSwipeToDeleteCallback(offlineCartAdapter, activity));
+                                itemTouchHelper.attachToRecyclerView(cartrecycleview);
                                 lytTotal.setVisibility(View.VISIBLE);
-
-                                progressBar.setVisibility(View.GONE);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                cartrecycleview.setVisibility(View.VISIBLE);
                             } else {
                                 cartrecycleview.setVisibility(View.GONE);
                                 lytempty.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
-                            progressBar.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            cartrecycleview.setVisibility(View.VISIBLE);
 
                         }
                     }
                 }
             }, getActivity(), Constant.GET_OFFLINE_CART_URL, params, false);
         } else {
-            progressBar.setVisibility(View.GONE);
+            mShimmerViewContainer.stopShimmer();
+            mShimmerViewContainer.setVisibility(View.GONE);
+            cartrecycleview.setVisibility(View.VISIBLE);
             cartrecycleview.setVisibility(View.GONE);
             lytempty.setVisibility(View.VISIBLE);
         }
     }
 
     private void getCartData() {
-        progressBar.setVisibility(View.VISIBLE);
+        cartrecycleview.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -254,18 +268,26 @@ public class CartFragment extends Fragment {
                             cartAdapter.setHasStableIds(true);
                             cartrecycleview.setAdapter(cartAdapter);
                             lytTotal.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            cartrecycleview.setVisibility(View.VISIBLE);
                             total = Double.parseDouble(objectbject.getString(Constant.TOTAL));
                             session.setData(Constant.TOTAL, String.valueOf(total));
                             Constant.TOTAL_CART_ITEM = Integer.parseInt(objectbject.getString(Constant.TOTAL));
+                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(cartAdapter, activity));
+                            itemTouchHelper.attachToRecyclerView(cartrecycleview);
                             SetData();
                         } else {
-                            progressBar.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            cartrecycleview.setVisibility(View.VISIBLE);
                             lytempty.setVisibility(View.VISIBLE);
                             lytTotal.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
-                        progressBar.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        cartrecycleview.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -306,5 +328,4 @@ public class CartFragment extends Fragment {
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
-
 }

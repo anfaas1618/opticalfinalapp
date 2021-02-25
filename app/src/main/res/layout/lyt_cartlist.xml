@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/lytmain"
+    android:id="@+id/lytMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_shadow"
@@ -35,21 +35,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtstatus"
-        android:layout_toStartOf="@+id/imgdelete"
         android:layout_toEndOf="@+id/imgproduct"
         android:text="@string/name"
         android:textColor="@color/black"
         android:textStyle="bold" />
-
-
-    <ImageView
-        android:id="@+id/imgdelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="center"
-        android:padding="5dp"
-        app:srcCompat="@drawable/ic_cross" />
 
     <LinearLayout
         android:id="@+id/lytprice"

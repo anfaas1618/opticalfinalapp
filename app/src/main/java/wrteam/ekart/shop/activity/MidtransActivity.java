@@ -47,6 +47,7 @@ public class MidtransActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApiConfig.transparentStatusAndNavigation(this);
         setContentView(R.layout.activity_web_view);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

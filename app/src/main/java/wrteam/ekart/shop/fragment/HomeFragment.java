@@ -1,5 +1,6 @@
 package wrteam.ekart.shop.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -52,7 +54,7 @@ import wrteam.ekart.shop.model.Slider;
 
 public class HomeFragment extends Fragment {
 
-    public static Session session;
+    public Session session;
     public static ArrayList<Category> categoryArrayList, sectionList;
     ArrayList<Slider> sliderArrayList;
     Activity activity;
@@ -73,8 +75,8 @@ public class HomeFragment extends Fragment {
     Menu menu;
     TextView tvMore;
     boolean searchVisible = false;
-    RelativeLayout progressBar;
     private ArrayList<String> offerList;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,7 +106,7 @@ public class HomeFragment extends Fragment {
         lytCategory = root.findViewById(R.id.lytCategory);
         lytSearchview = root.findViewById(R.id.lytSearchview);
         tvMore = root.findViewById(R.id.tvMore);
-        progressBar = root.findViewById(R.id.progressBar);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         searchview = root.findViewById(R.id.searchview);
 
@@ -214,7 +216,9 @@ public class HomeFragment extends Fragment {
                             SectionProductRequest(jsonObject.getJSONArray(Constant.SECTIONS));
                             GetSlider(jsonObject.getJSONArray(Constant.SLIDER_IMAGES));
                         } else {
-                            progressBar.setVisibility(View.GONE);
+                            nestedScrollView.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -229,14 +233,18 @@ public class HomeFragment extends Fragment {
                 GetHomeData();
             }
         } else {
-            progressBar.setVisibility(View.GONE);
+            nestedScrollView.setVisibility(View.VISIBLE);
+            mShimmerViewContainer.setVisibility(View.GONE);
+            mShimmerViewContainer.stopShimmer();
         }
 
         return root;
     }
 
     public void GetHomeData() {
-        progressBar.setVisibility(View.VISIBLE);
+        nestedScrollView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         if (session.isUserLoggedIn()) {
             params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -263,10 +271,14 @@ public class HomeFragment extends Fragment {
                             SectionProductRequest(jsonObject.getJSONArray(Constant.SECTIONS));
                             GetSlider(jsonObject.getJSONArray(Constant.SLIDER_IMAGES));
                         } else {
-                            progressBar.setVisibility(View.GONE);
+                            nestedScrollView.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
                         }
                     } catch (JSONException e) {
-                        progressBar.setVisibility(View.GONE);
+                        nestedScrollView.setVisibility(View.VISIBLE);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
 
                     }
                 }
@@ -295,7 +307,6 @@ public class HomeFragment extends Fragment {
             int column_count = 0;
 
             JSONArray jsonArray = object.getJSONArray(Constant.CATEGORIES);
-            Gson gson = new Gson();
 
             if (jsonArray != null && jsonArray.length() > 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -381,7 +392,9 @@ public class HomeFragment extends Fragment {
         } catch (JSONException e) {
 
         }
-        progressBar.setVisibility(View.GONE);
+        nestedScrollView.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.setVisibility(View.GONE);
+        mShimmerViewContainer.stopShimmer();
     }
 
     @Override

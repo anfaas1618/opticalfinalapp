@@ -78,6 +78,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApiConfig.transparentStatusAndNavigation(this);
         getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

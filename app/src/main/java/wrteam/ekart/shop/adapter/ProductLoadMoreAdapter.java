@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -30,7 +29,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieComposition;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -64,7 +62,6 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     SpannableString spannableString;
     boolean isFavorite;
     String taxPercentage;
-
 
     public ProductLoadMoreAdapter(Context context, ArrayList<Product> myDataset, int resource, String from) {
         this.context = context;
@@ -266,13 +263,6 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         if (session.isUserLoggedIn()) {
-            if (extra.getCart_count().equals("0")) {
-                holder.qtyLyt.setVisibility(View.GONE);
-                holder.lytAddToCart.setVisibility(View.VISIBLE);
-            } else {
-                holder.qtyLyt.setVisibility(View.VISIBLE);
-                holder.lytAddToCart.setVisibility(View.GONE);
-            }
 
             if (Constant.CartValues.containsKey(extra.getId())) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -280,12 +270,6 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             }
         } else {
-            if (databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()).equals("0")) {
-                holder.lytAddToCart.setVisibility(View.VISIBLE);
-            } else {
-                holder.lytAddToCart.setVisibility(View.GONE);
-            }
-
             if (session.getData(extra.getId()) != null) {
                 holder.txtqty.setText(session.getData(extra.getId()));
             } else {
@@ -417,7 +401,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     }
 
-    class ViewHolderLoading extends RecyclerView.ViewHolder {
+    static class ViewHolderLoading extends RecyclerView.ViewHolder {
         public final ProgressBar progressBar;
 
         public ViewHolderLoading(View view) {
@@ -439,7 +423,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         final ImageView imgThumb;
         final ImageView imgFav;
         final ImageView imgIndicator;
-        final RelativeLayout lytDiscount, lytSpinner, lytAddToCart;
+        final RelativeLayout lytDiscount, lytSpinner;
         final CardView lytmain;
         final AppCompatSpinner spinner;
         final RelativeLayout qtyLyt;
@@ -464,7 +448,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
             lytSpinner = itemView.findViewById(R.id.lytSpinner);
-            lytAddToCart = itemView.findViewById(R.id.lytAddToCart);
+
             lottieAnimationView = itemView.findViewById(R.id.lottieAnimationView);
 
             lottieAnimationView.setAnimation("add_to_wish_list.json");

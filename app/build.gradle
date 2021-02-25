@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//Code Version 2.0.9.2
+//Code Version 2.0.10
 
 android {
     compileSdkVersion 29
@@ -107,6 +107,9 @@ dependencies {
 
     //Lottie animation
     implementation 'com.airbnb.android:lottie:3.4.0'
+
+    //Guide Showcase
+    implementation 'com.github.mreram:showcaseview:1.2.0'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'

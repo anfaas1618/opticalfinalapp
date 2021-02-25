@@ -303,9 +303,9 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         if (isLogin) {
             if (extra.getCart_count().equals("0")) {
-                holder.lytAddToCart.setVisibility(View.VISIBLE);
+
             } else {
-                holder.lytAddToCart.setVisibility(View.GONE);
+                
             }
 
             holder.txtqty.setText(extra.getCart_count());
@@ -357,11 +357,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
             });
         }
         else {
-            if (databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()).equals("0")) {
-                holder.lytAddToCart.setVisibility(View.VISIBLE);
-            } else {
-                holder.lytAddToCart.setVisibility(View.GONE);
-            }
+
 
             holder.txtqty.setText(databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()));
 
@@ -428,7 +424,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
         final ImageView imgFav;
         final ImageView imgIndicator;
         final CardView lytmain;
-        final RelativeLayout lytDiscount, lytSpinner, lytAddToCart;
+        final RelativeLayout lytDiscount, lytSpinner;
         final AppCompatSpinner spinner;
         final RelativeLayout qtyLyt;
 
@@ -451,7 +447,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
             lytSpinner = itemView.findViewById(R.id.lytSpinner);
-            lytAddToCart = itemView.findViewById(R.id.lytAddToCart);
+
         }
 
     }

@@ -133,7 +133,6 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_alignParentEnd="true"
-                        app:tint="@color/colorPrimaryLight"
                         app:lottie_autoPlay="false"
                         app:lottie_loop="false" />
 
@@ -212,7 +211,7 @@
                 <Spinner
                     android:id="@+id/spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:spinnerMode="dropdown"
                     android:textSize="@dimen/_10ssp" />
@@ -224,7 +223,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:layout_weight="1"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageButton
                     android:id="@+id/btnminusqty"
@@ -257,35 +256,6 @@
                     app:srcCompat="@drawable/ic_add" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/lytAddToCart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/card_shadow"
-                android:backgroundTint="@color/colorPrimary"
-                android:padding="@dimen/_10sdp"
-                android:paddingStart="@dimen/_15sdp"
-                android:paddingEnd="@dimen/_15sdp">
-
-
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/add_to_cart"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/tvTitle"
-                    android:paddingStart="@dimen/_5sdp"
-                    android:src="@drawable/ic_add_to_cart" />
-            </RelativeLayout>
         </LinearLayout>
 
     </RelativeLayout>

@@ -57,6 +57,7 @@ public class StripeActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApiConfig.transparentStatusAndNavigation(this);
         setContentView(R.layout.activity_stripe_payment);
 
         session = new Session(StripeActivity.this);

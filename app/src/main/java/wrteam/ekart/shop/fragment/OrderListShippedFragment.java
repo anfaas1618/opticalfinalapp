@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -39,7 +40,6 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 public class OrderListShippedFragment extends Fragment {
     RecyclerView recyclerView;
     TextView nodata;
-    ProgressBar progressbar;
     Session session;
     Activity activity;
     View root;
@@ -48,6 +48,7 @@ public class OrderListShippedFragment extends Fragment {
     private int offset = 0;
     private int total = 0;
     private NestedScrollView scrollView;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,9 +56,9 @@ public class OrderListShippedFragment extends Fragment {
 
         activity = getActivity();
         session = new Session(activity);
-        progressbar = root.findViewById(R.id.progressbar);
         recyclerView = root.findViewById(R.id.recyclerView);
         scrollView = root.findViewById(R.id.scrollView);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
         nodata = root.findViewById(R.id.nodata);
         setHasOptionsMenu(true);
         SwipeRefreshLayout swipeLayout;
@@ -193,6 +194,9 @@ public class OrderListShippedFragment extends Fragment {
                             if (offset == 0) {
                                 trackerAdapter = new TrackerAdapter(getContext(), activity, orderTrackerArrayList);
                                 recyclerView.setAdapter(trackerAdapter);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     private boolean isLoadMore;
 
@@ -329,7 +333,9 @@ public class OrderListShippedFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-
+                                                                        mShimmerViewContainer.stopShimmer();
+                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                        recyclerView.setVisibility(View.VISIBLE);
                                                                     }
                                                                 }
                                                             }
@@ -346,15 +352,19 @@ public class OrderListShippedFragment extends Fragment {
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             nodata.setVisibility(View.VISIBLE);
-
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
 
                 }
             }
-        }, activity, Constant.ORDERPROCESS_URL, params, true);
+        }, activity, Constant.ORDERPROCESS_URL, params, false);
     }
 
 

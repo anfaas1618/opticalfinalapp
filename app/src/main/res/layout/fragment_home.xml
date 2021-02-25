@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
@@ -104,7 +105,7 @@
                                 android:padding="@dimen/_10sdp"
                                 android:text="@string/shopbycategory"
                                 android:textColor="@color/txt_color"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_13ssp" />
 
                             <TextView
                                 android:id="@+id/tvMore"
@@ -142,20 +143,27 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <RelativeLayout
-        android:id="@+id/progressBar"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/mShimmerViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        shimmer:shimmer_duration="1200">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:indeterminateDrawable="@drawable/custom_progress_dialog" />
+        <!-- Adding rows of placeholders -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </RelativeLayout>
+            <include layout="@layout/simmer_home_fragment" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </RelativeLayout>

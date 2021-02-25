@@ -51,6 +51,7 @@ public class PayPalWebActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApiConfig.transparentStatusAndNavigation(this);
         setContentView(R.layout.activity_web_view);
 
         sendParams = (Map<String, String>) getIntent().getSerializableExtra(Constant.PARAMS);

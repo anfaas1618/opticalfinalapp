@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -39,7 +39,6 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 public class OrderListReturnedFragment extends Fragment {
     RecyclerView recyclerView;
     TextView nodata;
-    ProgressBar progressbar;
     Session session;
     Activity activity;
     View root;
@@ -48,6 +47,7 @@ public class OrderListReturnedFragment extends Fragment {
     private int offset = 0;
     private int total = 0;
     private NestedScrollView scrollView;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,9 +55,9 @@ public class OrderListReturnedFragment extends Fragment {
 
         activity = getActivity();
         session = new Session(activity);
-        progressbar = root.findViewById(R.id.progressbar);
         recyclerView = root.findViewById(R.id.recyclerView);
         scrollView = root.findViewById(R.id.scrollView);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
         nodata = root.findViewById(R.id.nodata);
         setHasOptionsMenu(true);
         SwipeRefreshLayout swipeLayout;
@@ -78,6 +78,9 @@ public class OrderListReturnedFragment extends Fragment {
     }
 
     void getAllOrders() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         orderTrackerArrayList = new ArrayList<>();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -329,7 +332,9 @@ public class OrderListReturnedFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-
+                                                                        mShimmerViewContainer.stopShimmer();
+                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                        recyclerView.setVisibility(View.VISIBLE);
                                                                     }
                                                                 }
                                                             }
@@ -346,15 +351,19 @@ public class OrderListReturnedFragment extends Fragment {
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             nodata.setVisibility(View.VISIBLE);
-
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
 
                 }
             }
-        }, activity, Constant.ORDERPROCESS_URL, params, true);
+        }, activity, Constant.ORDERPROCESS_URL, params, false);
     }
 
 

@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,6 +61,7 @@ public class FavoriteFragment extends Fragment {
     boolean isLoadMore = false;
     boolean isGrid = false;
     int resource;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +95,7 @@ public class FavoriteFragment extends Fragment {
 
         tvAlert = root.findViewById(R.id.tvAlert);
         nestedScrollView = root.findViewById(R.id.nestedScrollView);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
 
         GetSettings(activity);
@@ -132,6 +136,9 @@ public class FavoriteFragment extends Fragment {
     }
 
     void GetData() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_FAVORITES, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -159,6 +166,9 @@ public class FavoriteFragment extends Fragment {
                                 favoriteLoadMoreAdapter = new FavoriteLoadMoreAdapter(getContext(), favoriteArrayList, resource);
                                 favoriteLoadMoreAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(favoriteLoadMoreAdapter);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -200,7 +210,9 @@ public class FavoriteFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-
+                                                                        mShimmerViewContainer.stopShimmer();
+                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                        recyclerView.setVisibility(View.VISIBLE);
                                                                     }
                                                                 }
                                                             }
@@ -215,21 +227,28 @@ public class FavoriteFragment extends Fragment {
                             }
                         } else {
                             if (offset == 0) {
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 recyclerView.setVisibility(View.GONE);
                                 tvAlert.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
-        }, activity, Constant.GET_FAVORITES_URL, params, true);
+        }, activity, Constant.GET_FAVORITES_URL, params,false);
     }
 
 
     void GetOfflineData() {
-
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         if (databaseHelper.getFavourite().size() >= 1) {
             Map<String, String> params = new HashMap<>();
             params.put(Constant.GET_FAVORITES_OFFLINE, Constant.GetVal);
@@ -251,19 +270,30 @@ public class FavoriteFragment extends Fragment {
                                 offlineFavoriteAdapter.setHasStableIds(true);
                                 productArrayList.addAll(ApiConfig.GetProductList(jsonArray));
                                 recyclerView.setAdapter(offlineFavoriteAdapter);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             } else {
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 recyclerView.setVisibility(View.GONE);
                                 tvAlert.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
-
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     }
                 }
-            }, activity, Constant.GET_OFFLINE_FAVORITES_URL, params, true);
+            }, activity, Constant.GET_OFFLINE_FAVORITES_URL, params,false);
         } else {
             recyclerView.setVisibility(View.GONE);
             tvAlert.setVisibility(View.VISIBLE);
+            mShimmerViewContainer.stopShimmer();
+            mShimmerViewContainer.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
     }

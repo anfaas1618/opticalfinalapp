@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,6 +97,7 @@ public class ProductDetailFragment extends Fragment {
     ImageView imgReturnable, imgCancellable;
     TextView tvReturnable, tvCancellable;
     String taxPercentage;
+    LottieAnimationView lottieAnimationView;
 
     public static ProductDetailFragment newInstance(int position) {
         Bundle bundle = new Bundle();
@@ -167,11 +170,14 @@ public class ProductDetailFragment extends Fragment {
         relativeLayout = root.findViewById(R.id.relativeLayout);
         tvMore = root.findViewById(R.id.tvMore);
 
-
         tvReturnable = root.findViewById(R.id.tvReturnable);
         tvCancellable = root.findViewById(R.id.tvCancellable);
         imgReturnable = root.findViewById(R.id.imgReturnable);
         imgCancellable = root.findViewById(R.id.imgCancellable);
+
+        lottieAnimationView = root.findViewById(R.id.lottieAnimationView);
+        lottieAnimationView.setAnimation("add_to_wish_list.json");
+
 
         GetProductDetail(id);
         GetSettings(activity);
@@ -226,12 +232,14 @@ public class ProductDetailFragment extends Fragment {
                     if (ApiConfig.isConnected(activity)) {
                         if (favorite) {
                             favorite = false;
+                            lottieAnimationView.setVisibility(View.GONE);
                             product.setIs_favorite(false);
                             imgFav.setImageResource(R.drawable.ic_is_not_favorite);
                         } else {
                             favorite = true;
                             product.setIs_favorite(true);
-                            imgFav.setImageResource(R.drawable.ic_is_favorite);
+                            lottieAnimationView.setVisibility(View.VISIBLE);
+                            lottieAnimationView.playAnimation();
                         }
                         AddOrRemoveFavorite(activity, session, product.getId(), favorite);
                     }
@@ -239,10 +247,12 @@ public class ProductDetailFragment extends Fragment {
                     favorite = databaseHelper.getFavouriteById(product.getId());
                     if (favorite) {
                         favorite = false;
+                        lottieAnimationView.setVisibility(View.GONE);
                         imgFav.setImageResource(R.drawable.ic_is_not_favorite);
                     } else {
                         favorite = true;
-                        imgFav.setImageResource(R.drawable.ic_is_favorite);
+                        lottieAnimationView.setVisibility(View.VISIBLE);
+                        lottieAnimationView.playAnimation();
                     }
                     databaseHelper.AddOrRemoveFavorite(product.getId(), favorite);
                 }

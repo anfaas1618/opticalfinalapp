@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +45,7 @@ import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 public class ProductListFragment extends Fragment {
     public static ArrayList<Product> productArrayList;
+    @SuppressLint("StaticFieldLeak")
     public static ProductLoadMoreAdapter mAdapter;
     View root;
     Session session;
@@ -58,6 +61,7 @@ public class ProductListFragment extends Fragment {
     boolean isSort = false, isLoadMore = false;
     boolean isGrid = false;
     int resource;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +94,7 @@ public class ProductListFragment extends Fragment {
         swipeLayout = root.findViewById(R.id.swipeLayout);
         tvAlert = root.findViewById(R.id.tvAlert);
         nestedScrollView = root.findViewById(R.id.nestedScrollView);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         GetSettings(activity);
 
@@ -130,6 +135,9 @@ public class ProductListFragment extends Fragment {
     }
 
     private void GetSectionData() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         params.put(Constant.GET_ALL_SECTIONS, Constant.GetVal);
@@ -147,16 +155,24 @@ public class ProductListFragment extends Fragment {
                             productArrayList = ApiConfig.GetProductList(object.getJSONArray(Constant.SECTIONS).getJSONObject(0).getJSONArray(Constant.PRODUCTS));
                             mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
                             recyclerView.setAdapter(mAdapter);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
-        }, activity, Constant.GET_SECTION_URL, params, true);
+        }, activity, Constant.GET_SECTION_URL, params,false);
     }
 
     void GetData() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.SUB_CATEGORY_ID, id);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -199,17 +215,23 @@ public class ProductListFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-
+                                        mShimmerViewContainer.stopShimmer();
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                        recyclerView.setVisibility(View.VISIBLE);
                                     }
                                 }
                             } catch (Exception e) {
-
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }
                             if (offset == 0) {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
-
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -290,18 +312,26 @@ public class ProductListFragment extends Fragment {
                             }
                         } else {
                             if (offset == 0) {
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 tvAlert.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
-        }, activity, Constant.GET_PRODUCT_BY_SUB_CATE, params, true);
+        }, activity, Constant.GET_PRODUCT_BY_SUB_CATE, params,false);
     }
 
     void GetSimilarData() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_SIMILAR_PRODUCT, Constant.GetVal);
         params.put(Constant.PRODUCT_ID, id);
@@ -342,17 +372,24 @@ public class ProductListFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-
+                                        mShimmerViewContainer.stopShimmer();
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                        recyclerView.setVisibility(View.VISIBLE);
                                     }
                                 }
                             } catch (Exception e) {
-
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }
 
                             if (offset == 0) {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -434,15 +471,20 @@ public class ProductListFragment extends Fragment {
                             }
                         } else {
                             if (offset == 0) {
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 tvAlert.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
-        }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params, true);
+        }, activity, Constant.GET_SIMILAR_PRODUCT_URL, params,false);
     }
 
     @Override

@@ -4,8 +4,6 @@
     <color name="colorPrimaryDark">#0470C3</color>
     <color name="colorAccent">#0470C3</color>
     <color name="colorPrimaryLight">#DEF1FF</color>
-
-
     <color name="bg_color">#FFFFFF</color>
 
     <color name="black">#000000</color>
@@ -39,4 +37,5 @@
 
     <color name="background">#1A070707</color>
     <color name="transparent">#00000000</color>
+    <color name="swipe_delete">#EA4235</color>
 </resources>

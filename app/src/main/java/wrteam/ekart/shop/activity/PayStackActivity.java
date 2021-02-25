@@ -59,6 +59,7 @@ public class PayStackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApiConfig.transparentStatusAndNavigation(this);
         //init paystack sdk
         PaystackSdk.initialize(getApplicationContext());
         setContentView(R.layout.activity_pay_stack);

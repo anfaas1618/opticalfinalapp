@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.adapter.SliderPagerAdapter;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 
@@ -27,6 +28,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ApiConfig.transparentStatusAndNavigation(this);
         setContentView(R.layout.activity_welcome);
 
         // bind views
@@ -52,6 +54,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 } else {
                     new Session(WelcomeActivity.this).setIsFirstTime("is_first_time", true);
+                    new Session(WelcomeActivity.this).setIsFirstTime("isCartFirstTime", true);
                     startActivity(new Intent(WelcomeActivity.this, MainActivity.class).putExtra(Constant.FROM, ""));
                     finish();
                 }
@@ -62,6 +65,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new Session(WelcomeActivity.this).setIsFirstTime("is_first_time", true);
+                new Session(WelcomeActivity.this).setIsFirstTime("isCartFirstTime", true);
                 startActivity(new Intent(WelcomeActivity.this, MainActivity.class).putExtra(Constant.FROM, ""));
                 finish();
             }

@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dimen_1dp"
-    android:background="@drawable/address_card_shadow"
+    android:background="@drawable/card_shadow"
     android:orientation="horizontal"
     android:padding="@dimen/_15sdp">
 
-    <ImageView
+    <View
         android:id="@+id/imgSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
         android:layout_gravity="top"
         android:layout_marginEnd="@dimen/_5sdp"
         android:src="@drawable/ic_uncheck_circle" />

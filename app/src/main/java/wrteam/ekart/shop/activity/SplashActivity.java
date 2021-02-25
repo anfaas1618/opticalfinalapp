@@ -26,7 +26,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ApiConfig.transparentStatusAndNavigation(this);
         activity = SplashActivity.this;
         session = new Session(activity);
         session.setIsUpdateSkipped("update_skip", false);
