@@ -341,63 +341,6 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
-//
-//    public void ChangePassword() {
-//        final Session sessionpsw = new Session(activity);
-//        String oldpsw = edtoldpsw.getText().toString();
-//        String password = edtnewpsw.getText().toString();
-//        String cpassword = edtcnewpsw.getText().toString();
-//
-//        if (!password.equals(cpassword)) {
-//            edtcnewpsw.requestFocus();
-//            edtcnewpsw.setError(getString(R.string.pass_not_match));
-//        } else if (ApiConfig.CheckValidattion(oldpsw, false, false)) {
-//            edtoldpsw.requestFocus();
-//            edtoldpsw.setError(getString(R.string.enter_old_pass));
-//        } else if (ApiConfig.CheckValidattion(password, false, false)) {
-//            edtnewpsw.requestFocus();
-//            edtnewpsw.setError(getString(R.string.enter_new_pass));
-//        } else if (!oldpsw.equals(sessionpsw.getData(Constant.PASSWORD))) {
-//            edtoldpsw.requestFocus();
-//            edtoldpsw.setError(getString(R.string.no_match_old_pass));
-//        } else if (ApiConfig.isConnected(activity)) {
-//            final Map<String, String> params = new HashMap<>();
-//            params.put(Constant.TYPE, Constant.CHANGE_PASSWORD);
-//            params.put(Constant.PASSWORD, password);
-//            params.put(Constant.ID, sessionpsw.getData(Constant.ID));
-//
-//            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-//            // Setting Dialog Message
-//            alertDialog.setTitle(getString(R.string.change_pass));
-//            alertDialog.setMessage(getString(R.string.reset_alert_msg));
-//            alertDialog.setCancelable(false);
-//            final AlertDialog alertDialog1 = alertDialog.create();
-//
-//            // Setting OK Button
-//            alertDialog.setPositiveButton(getString(R.string.yes), (dialog, which) -> ApiConfig.RequestToVolley((result, response) -> {
-//                //  System.out.println("=================*changepsw " + response);
-//                if (result) {
-//                    try {
-//                        JSONObject object = new JSONObject(response);
-//                        if (!object.getBoolean(Constant.ERROR)) {
-//                            sessionpsw.logoutUser(activity);
-//                        }
-//                        Toast.makeText(activity, object.getString("message"), Toast.LENGTH_SHORT).show();
-//                    } catch (JSONException e) {
-//
-//                    }
-//                }
-//            }, activity, Constant.RegisterUrl, params, true));
-//            alertDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                    alertDialog1.dismiss();
-//                }
-//            });
-//            // Showing Alert Message
-//            alertDialog.show();
-//        }
-//    }
-
     public void ResetPassword() {
 
         String reset_psw = edtResetPass.getText().toString();

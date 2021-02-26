@@ -117,7 +117,7 @@
     <string name="alert_not_register_num2">. Please register to continue. Return to Log In screen and select Sign Up.</string>
     <string name="alert_register_num1">Mobile number already registered with&#160;</string>
     <string name="alert_register_num2">. You can sign into account using your credentials.</string>
-    <string name="reset_alert_msg">Are you sure, you want to reset password?</string>
+    <string name="reset_alert_msg">Are you sure, you want to reset password?\nAfter changed password session will be logout.</string>
     <string name="verify_your_mobile">Verify Your Mobile Number</string>
     <string name="onlinepaytype">payumoney</string>
     <string name="codpaytype">cod</string>

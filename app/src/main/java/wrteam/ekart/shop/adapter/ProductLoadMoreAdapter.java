@@ -215,7 +215,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                 });
             }
-            SetSelectedData(holder, priceVariations.get(0), priceVariations.size() <= 1);
+            SetSelectedData(holder, priceVariations.get(0));
 
 
         } else if (holderparent instanceof ViewHolderLoading) {
@@ -250,17 +250,12 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @SuppressLint("SetTextI18n")
-    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra, boolean multiVerients) {
+    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra) {
 
 //        GST_Amount (Original Cost x GST %)/100
 //        Net_Price Original Cost + GST Amount
 
-        if (!multiVerients) {
-            holder.txtmeasurement.setVisibility(View.GONE);
-        } else {
-            holder.txtmeasurement.setVisibility(View.VISIBLE);
-            holder.txtmeasurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
-        }
+        holder.txtmeasurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
 
         if (session.isUserLoggedIn()) {
 
@@ -511,7 +506,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     PriceVariation priceVariation = extraList.get(i);
-                    SetSelectedData(holder, priceVariation, false);
+                    SetSelectedData(holder, priceVariation);
                 }
 
                 @Override

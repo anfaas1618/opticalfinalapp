@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -54,6 +55,7 @@ public class TransactionFragment extends Fragment {
     int offset = 0;
     Session session;
     boolean isLoadMore = false;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class TransactionFragment extends Fragment {
         tvAlert = root.findViewById(R.id.tvAlert);
         tvAlertTitle = root.findViewById(R.id.tvAlertTitle);
         tvAlertSubTitle = root.findViewById(R.id.tvAlertSubTitle);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         tvAlertTitle.setText(getString(R.string.no_transaction_history_found));
         tvAlertSubTitle.setText(getString(R.string.you_have_not_any_transactional_history_yet));
@@ -99,6 +102,9 @@ public class TransactionFragment extends Fragment {
 
 
     void getTransactionData() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         transactions = new ArrayList<>();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -141,6 +147,9 @@ public class TransactionFragment extends Fragment {
                                 transactionAdapter = new TransactionAdapter(getContext(), activity, transactions);
                                 transactionAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(transactionAdapter);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -203,7 +212,9 @@ public class TransactionFragment extends Fragment {
                                                                                     isLoadMore = false;
                                                                                 }
                                                                             } catch (JSONException e) {
-
+                                                                                mShimmerViewContainer.stopShimmer();
+                                                                                mShimmerViewContainer.setVisibility(View.GONE);
+                                                                                recyclerView.setVisibility(View.VISIBLE);
                                                                             }
                                                                         }
                                                                     }
@@ -223,9 +234,14 @@ public class TransactionFragment extends Fragment {
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             tvAlert.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }

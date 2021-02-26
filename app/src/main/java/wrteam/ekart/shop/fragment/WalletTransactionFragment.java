@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.flutterwave.raveandroid.RaveConstants;
 import com.flutterwave.raveandroid.RavePayActivity;
 import com.flutterwave.raveandroid.RavePayManager;
@@ -86,6 +87,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     boolean isLoadMore = false;
     String paymentMethod = null;
     String customerId;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -106,6 +108,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
         tvAlertSubTitle = root.findViewById(R.id.tvAlertSubTitle);
         tvBalance = root.findViewById(R.id.tvBalance);
         btnRechargeWallet = root.findViewById(R.id.btnRechargeWallet);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         tvAlertTitle.setText(getString(R.string.no_wallet_history_found));
         tvAlertSubTitle.setText(getString(R.string.you_have_not_any_wallet_history_yet));
@@ -444,7 +447,6 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     }
 
     public void AddWalletBalance(Activity activity, Session session, String amount, String msg, String txID) {
-
         Map<String, String> params = new HashMap<>();
         params.put(Constant.ADD_WALLET_BALANCE, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -787,9 +789,10 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     }
 
     public void getTransactionData(Activity activity, Session session) {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         walletTransactions = new ArrayList<>();
-
-
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_TRANSACTION, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -820,12 +823,14 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                                 } else {
                                     break;
                                 }
-
                             }
                             if (offset == 0) {
                                 walletTransactionAdapter = new WalletTransactionAdapter(getContext(), activity, walletTransactions);
                                 walletTransactionAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(walletTransactionAdapter);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -887,7 +892,9 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                                                                                     isLoadMore = false;
                                                                                 }
                                                                             } catch (JSONException e) {
-
+                                                                                mShimmerViewContainer.stopShimmer();
+                                                                                mShimmerViewContainer.setVisibility(View.GONE);
+                                                                                recyclerView.setVisibility(View.GONE);
                                                                             }
                                                                         }
                                                                     }
@@ -907,15 +914,20 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             tvAlert.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.GONE);
 
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                     }
 
                 }
             }
-        }, activity, Constant.TRANSACTION_URL, params, true);
+        }, activity, Constant.TRANSACTION_URL, params, false);
 
     }
 

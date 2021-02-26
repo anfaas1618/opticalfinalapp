@@ -2,23 +2,38 @@ package wrteam.ekart.shop.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.AddressListFragment;
@@ -33,6 +48,7 @@ import wrteam.ekart.shop.fragment.WebViewFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
+import wrteam.ekart.shop.helper.Utils;
 import wrteam.ekart.shop.ui.CircleTransform;
 
 @SuppressLint("StaticFieldLeak")
@@ -238,10 +254,7 @@ public class DrawerActivity extends AppCompatActivity {
                     break;
 
                 case R.id.menu_change_pass:
-                    Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
-                    if (session.isUserLoggedIn())
-                        intent1.putExtra(Constant.FROM, "changepsw");
-                    startActivity(intent1);
+                    OpenBottomDialog(activity);
                     break;
                 case R.id.menu_share:
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -265,6 +278,111 @@ public class DrawerActivity extends AppCompatActivity {
 
             return true;
         });
+    }
+
+    public void OpenBottomDialog(final Activity activity) {
+        try {
+            View sheetView = activity.getLayoutInflater().inflate(R.layout.dialog_change_password, null);
+            ViewGroup parentViewGroup = (ViewGroup) sheetView.getParent();
+            if (parentViewGroup != null) {
+                parentViewGroup.removeAllViews();
+            }
+
+            final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetTheme);
+            mBottomSheetDialog.setContentView(sheetView);
+            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            mBottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            EditText edtoldpsw = sheetView.findViewById(R.id.edtoldpsw);
+            EditText edtnewpsw = sheetView.findViewById(R.id.edtnewpsw);
+            EditText edtcnewpsw = sheetView.findViewById(R.id.edtcnewpsw);
+            ImageView imgChangePasswordClose = sheetView.findViewById(R.id.imgChangePasswordClose);
+            Button btnchangepsw = sheetView.findViewById(R.id.btnchangepsw);
+
+            edtoldpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pass, 0, R.drawable.ic_show, 0);
+            edtnewpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pass, 0, R.drawable.ic_show, 0);
+            edtcnewpsw.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pass, 0, R.drawable.ic_show, 0);
+
+            Utils.setHideShowPassword(edtoldpsw);
+            Utils.setHideShowPassword(edtnewpsw);
+            Utils.setHideShowPassword(edtcnewpsw);
+            mBottomSheetDialog.setCancelable(true);
+
+
+            imgChangePasswordClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBottomSheetDialog.dismiss();
+                }
+            });
+
+            btnchangepsw.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String oldpsw = edtoldpsw.getText().toString();
+                    String password = edtnewpsw.getText().toString();
+                    String cpassword = edtcnewpsw.getText().toString();
+
+                    if (!password.equals(cpassword)) {
+                        edtcnewpsw.requestFocus();
+                        edtcnewpsw.setError(activity.getString(R.string.pass_not_match));
+                    } else if (ApiConfig.CheckValidattion(oldpsw, false, false)) {
+                        edtoldpsw.requestFocus();
+                        edtoldpsw.setError(activity.getString(R.string.enter_old_pass));
+                    } else if (ApiConfig.CheckValidattion(password, false, false)) {
+                        edtnewpsw.requestFocus();
+                        edtnewpsw.setError(activity.getString(R.string.enter_new_pass));
+                    } else if (!oldpsw.equals(new Session(activity).getData(Constant.PASSWORD))) {
+                        edtoldpsw.requestFocus();
+                        edtoldpsw.setError(activity.getString(R.string.no_match_old_pass));
+                    } else if (ApiConfig.isConnected(activity)) {
+                        ChangePassword(password);
+                    }
+                }
+            });
+
+            mBottomSheetDialog.show();
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void ChangePassword(String password) {
+
+        final Map<String, String> params = new HashMap<>();
+        params.put(Constant.TYPE, Constant.CHANGE_PASSWORD);
+        params.put(Constant.PASSWORD, password);
+        params.put(Constant.ID, session.getData(Constant.ID));
+
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+        // Setting Dialog Message
+        alertDialog.setTitle(getString(R.string.change_pass));
+        alertDialog.setMessage(getString(R.string.reset_alert_msg));
+        alertDialog.setCancelable(false);
+        final AlertDialog alertDialog1 = alertDialog.create();
+
+        // Setting OK Button
+        alertDialog.setPositiveButton(getString(R.string.yes), (dialog, which) -> ApiConfig.RequestToVolley((result, response) -> {
+            //  System.out.println("=================*changepsw " + response);
+            if (result) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    if (!object.getBoolean(Constant.ERROR)) {
+                        session.logoutUser(activity);
+                    }
+                    Toast.makeText(activity, object.getString("message"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+
+                }
+            }
+        }, activity, Constant.RegisterUrl, params, true));
+        alertDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog1.dismiss();
+            }
+        });
+        // Showing Alert Message
+        alertDialog.show();
     }
 
     @Override

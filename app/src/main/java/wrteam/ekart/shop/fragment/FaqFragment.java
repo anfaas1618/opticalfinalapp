@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -50,6 +51,7 @@ public class FaqFragment extends Fragment {
     int offset = 0;
     Session session;
     boolean isLoadMore = false;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class FaqFragment extends Fragment {
         recyclerView = root.findViewById(R.id.recyclerView);
         swipeLayout = root.findViewById(R.id.swipeLayout);
         tvAlert = root.findViewById(R.id.tvAlert);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         setHasOptionsMenu(true);
 
@@ -86,6 +89,9 @@ public class FaqFragment extends Fragment {
 
 
     void getFaqData() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Faqs = new ArrayList<>();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -126,6 +132,9 @@ public class FaqFragment extends Fragment {
                                 FaqAdapter = new FaqAdapter(activity, Faqs);
                                 FaqAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(FaqAdapter);
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -183,7 +192,9 @@ public class FaqFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-
+                                                                        mShimmerViewContainer.stopShimmer();
+                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                        recyclerView.setVisibility(View.VISIBLE);
                                                                     }
                                                                 }
                                                             }
@@ -200,15 +211,19 @@ public class FaqFragment extends Fragment {
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             tvAlert.setVisibility(View.VISIBLE);
-
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
 
                 }
             }
-        }, activity, Constant.FAQ_URL, params, true);
+        }, activity, Constant.FAQ_URL, params, false);
     }
 
     @Override

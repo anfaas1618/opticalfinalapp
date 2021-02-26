@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -59,13 +59,13 @@ public class CheckoutFragment extends Fragment {
     boolean isApplied;
     ImageView imgRefresh;
     Button btnApply;
-    ProgressBar progressBar;
     EditText edtPromoCode;
     Session session;
     Activity activity;
     CheckoutItemListAdapter checkoutItemListAdapter;
     ArrayList<Cart> carts;
     float OriginalAmount = 0, DiscountedAmount = 0;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -75,7 +75,6 @@ public class CheckoutFragment extends Fragment {
 
         activity = getActivity();
         session = new Session(activity);
-        progressBar = root.findViewById(R.id.progressBar);
         tvDelivery = root.findViewById(R.id.tvSummary);
         tvPayment = root.findViewById(R.id.tvPayment);
         tvAlert = root.findViewById(R.id.tvAlert);
@@ -92,6 +91,7 @@ public class CheckoutFragment extends Fragment {
         lytSaveAmount = root.findViewById(R.id.lytSaveAmount);
         btnApply = root.findViewById(R.id.btnApply);
         recyclerView = root.findViewById(R.id.recyclerView);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         carts = new ArrayList<>();
@@ -154,10 +154,12 @@ public class CheckoutFragment extends Fragment {
 
 
     void getCartData() {
-        subtotal = 0;
-        ApiConfig.getCartItemCount(activity, session);
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
 
-        progressBar.setVisibility(View.VISIBLE);
+        ApiConfig.getCartItemCount(activity, session);
+        subtotal = 0;
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_USER_CART, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -206,12 +208,16 @@ public class CheckoutFragment extends Fragment {
                         SetDataTotal();
 
                         confirmLyt.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
 
                     } catch (JSONException e) {
 
                         confirmLyt.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -227,7 +233,7 @@ public class CheckoutFragment extends Fragment {
                 if (pCodeDiscount != 0) {
                     tvSaveAmount.setText(session.getData(Constant.currency) + ((OriginalAmount - DiscountedAmount) + pCodeDiscount));
                 } else {
-                    tvSaveAmount.setText(session.getData(Constant.currency) + (OriginalAmount - DiscountedAmount));
+                    tvSaveAmount.setText(session.getData(Constant.currency) + ((OriginalAmount - DiscountedAmount) - pCodeDiscount));
                 }
             } else {
                 if (pCodeDiscount == 0) {
@@ -272,7 +278,6 @@ public class CheckoutFragment extends Fragment {
                     }
                     tvAlert.setVisibility(View.GONE);
                     btnApply.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
                     Map<String, String> params = new HashMap<>();
                     params.put(Constant.VALIDATE_PROMO_CODE, Constant.GetVal);
                     params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -306,14 +311,13 @@ public class CheckoutFragment extends Fragment {
                                         tvAlert.setText(object.getString("message"));
                                     }
                                     SetDataTotal();
-                                    progressBar.setVisibility(View.GONE);
                                     btnApply.setVisibility(View.VISIBLE);
                                 } catch (JSONException e) {
 
                                 }
                             }
                         }
-                    }, activity, Constant.PROMO_CODE_CHECK_URL, params, false);
+                    }, activity, Constant.PROMO_CODE_CHECK_URL, params, true);
 
                 }
             }

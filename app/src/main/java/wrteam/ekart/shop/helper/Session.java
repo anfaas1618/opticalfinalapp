@@ -95,6 +95,19 @@ public class Session {
         return pref.getBoolean(Constant.IS_USER_LOGIN, false);
     }
 
+    public void logoutUser(Activity activity) {
+        editor.clear();
+        editor.commit();
+
+        new Session(_context).setIsFirstTime("is_first_time", true);
+
+        Intent i = new Intent(activity, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra(Constant.FROM, "");
+        activity.startActivity(i);
+        activity.finish();
+    }
 
     public void logoutUserConfirmation(final Activity activity) {
 

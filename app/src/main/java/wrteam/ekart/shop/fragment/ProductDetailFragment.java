@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,6 +99,7 @@ public class ProductDetailFragment extends Fragment {
     TextView tvReturnable, tvCancellable;
     String taxPercentage;
     LottieAnimationView lottieAnimationView;
+    ShimmerFrameLayout mShimmerViewContainer;
 
     public static ProductDetailFragment newInstance(int position) {
         Bundle bundle = new Bundle();
@@ -178,6 +180,7 @@ public class ProductDetailFragment extends Fragment {
         lottieAnimationView = root.findViewById(R.id.lottieAnimationView);
         lottieAnimationView.setAnimation("add_to_wish_list.json");
 
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         GetProductDetail(id);
         GetSettings(activity);
@@ -492,7 +495,9 @@ public class ProductDetailFragment extends Fragment {
     }
 
     void GetProductDetail(final String productid) {
-        root.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         if (from.equals("share")) {
             params.put(Constant.SLUG, productid);
@@ -542,10 +547,13 @@ public class ProductDetailFragment extends Fragment {
                             GetSimilarData(product);
 
                         }
-                        root.findViewById(R.id.progressBar).setVisibility(View.GONE);
+                        scrollView.setVisibility(View.VISIBLE);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
                     } catch (JSONException e) {
-
-                        root.findViewById(R.id.progressBar).setVisibility(View.GONE);
+                        scrollView.setVisibility(View.VISIBLE);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
                     }
                 }
             }
@@ -718,7 +726,7 @@ public class ProductDetailFragment extends Fragment {
         txtstatus.setText(priceVariation.getServe_for());
 
         if (priceVariation.getDiscounted_price().equals("0") || priceVariation.getDiscounted_price().equals("")) {
-            lytDiscount.setVisibility(View.INVISIBLE);
+            lytDiscount.setVisibility(View.GONE);
             txtPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
         } else {
             spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));

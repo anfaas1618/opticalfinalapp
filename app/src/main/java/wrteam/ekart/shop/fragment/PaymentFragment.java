@@ -17,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -31,6 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.flutterwave.raveandroid.RaveConstants;
 import com.flutterwave.raveandroid.RavePayActivity;
 import com.flutterwave.raveandroid.RavePayManager;
@@ -99,11 +99,11 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
     ImageView imgRefresh;
     Activity activity;
     CheckBox chWallet;
-    ProgressBar pBar;
     Button btnApply;
     Session session;
     double total;
     View root;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -179,7 +179,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
     public void getAllWidgets(View root) {
         recyclerView = root.findViewById(R.id.recyclerView);
-        pBar = root.findViewById(R.id.pBar);
 
         lytPayStack = root.findViewById(R.id.lytPayStack);
         lytPayTm = root.findViewById(R.id.lytPayTm);
@@ -222,9 +221,14 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         scrollPaymentLyt = root.findViewById(R.id.scrollPaymentLyt);
         tvWltBalance = root.findViewById(R.id.tvWltBalance);
         btnApply = root.findViewById(R.id.btnApply);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
+
     }
 
     public void GetPaymentConfig() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.SETTINGS, Constant.GetVal);
         params.put(Constant.GET_PAYMENT_METHOD, Constant.GetVal);
@@ -285,12 +289,17 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
                                 setPaymentMethod();
                             } else {
+                                mShimmerViewContainer.stopShimmer();
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 Toast.makeText(activity, getString(R.string.alert_payment_methods_blank), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -461,6 +470,9 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         } else {
             lytWallet.setVisibility(View.GONE);
             lytPayOption.setVisibility(View.GONE);
+            mShimmerViewContainer.stopShimmer();
+            mShimmerViewContainer.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -530,11 +542,16 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                             deliveryDay = "Date : N/A";
                             deliveryTime = "Time : N/A";
 
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
 
                     }
                 } catch (JSONException e) {
-
+                    mShimmerViewContainer.stopShimmer();
+                    mShimmerViewContainer.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
             }
         }, activity, Constant.SETTING_URL, params, false);
@@ -563,10 +580,15 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
                             adapter = new SlotAdapter(deliveryTime, getActivity(), slotList);
                             recyclerView.setAdapter(adapter);
+
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
-
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -590,7 +612,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
         recyclerViewDates.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewDates.setAdapter(dateAdapter);
-
     }
 
 

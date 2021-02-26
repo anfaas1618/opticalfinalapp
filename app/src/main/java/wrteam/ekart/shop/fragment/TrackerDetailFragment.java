@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +62,8 @@ public class TrackerDetailFragment extends Fragment {
     Session session;
     HashMap<String, String> hashMap;
     LinearLayout lytMainTracker;
+    private ShimmerFrameLayout mShimmerViewContainer;
+    ScrollView scrollView;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -97,6 +102,8 @@ public class TrackerDetailFragment extends Fragment {
         txtorderotp = root.findViewById(R.id.txtorderotp);
         lytotp = root.findViewById(R.id.lytotp);
         lytMainTracker = root.findViewById(R.id.lytMainTracker);
+        scrollView = root.findViewById(R.id.scrollView);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
         hashMap = new HashMap<>();
 
         id = getArguments().getString("id");
@@ -192,7 +199,6 @@ public class TrackerDetailFragment extends Fragment {
     }
 
     public void GetReOrderData() {
-
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_REORDER_DATA, Constant.GetVal);
         params.put(Constant.ID, id);
@@ -217,6 +223,9 @@ public class TrackerDetailFragment extends Fragment {
     }
 
     public void getOrderDetails(String id) {
+        scrollView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.GET_ORDERS, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -229,7 +238,6 @@ public class TrackerDetailFragment extends Fragment {
 
                 if (result) {
                     try {
-//                        System.out.println("=====res order details " + response);
                         JSONObject jsonObject1 = new JSONObject(response);
                         if (!jsonObject1.getBoolean(Constant.ERROR)) {
                             JSONObject jsonObject = jsonObject1.getJSONArray(Constant.DATA).getJSONObject(0);
@@ -313,9 +321,15 @@ public class TrackerDetailFragment extends Fragment {
 
                             SetData(orderTracker);
 
+                        } else {
+                            scrollView.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        scrollView.setVisibility(View.VISIBLE);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
                     }
                 }
             }
@@ -405,8 +419,14 @@ public class TrackerDetailFragment extends Fragment {
                     }
                 }
             }
+
+            scrollView.setVisibility(View.VISIBLE);
+            mShimmerViewContainer.setVisibility(View.GONE);
+            mShimmerViewContainer.stopShimmer();
         } catch (Exception e) {
-            lytMainTracker.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
+            mShimmerViewContainer.setVisibility(View.GONE);
+            mShimmerViewContainer.stopShimmer();
         }
         recyclerView.setAdapter(new ItemsAdapter(activity, order.getItemsList(), "detail"));
         relativeLyt.setVisibility(View.VISIBLE);

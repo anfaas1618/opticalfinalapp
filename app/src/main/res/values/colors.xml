@@ -37,5 +37,6 @@
 
     <color name="background">#1A070707</color>
     <color name="transparent">#00000000</color>
+    <color name="half_transparent">#1A000000</color>
     <color name="swipe_delete">#EA4235</color>
 </resources>

@@ -14,7 +14,4 @@
     app:menu="@menu/main_menu"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:titleTextColor="@color/colorPrimary"
-    local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-</androidx.appcompat.widget.Toolbar>
+    local:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
@@ -60,28 +61,7 @@ public class AddressListFragment extends Fragment {
     RelativeLayout confirmLyt;
     int offset = 0;
     private Session session;
-
-    public static void GetDChargeSettings(final Activity activity) {
-        Map<String, String> params = new HashMap<>();
-        params.put(Constant.GET_SETTINGS, Constant.GetVal);
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject objectbject = new JSONObject(response);
-                        if (!objectbject.getBoolean(Constant.ERROR)) {
-                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
-                            Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(object.getString(Constant.MINIMUM_AMOUNT));
-                            Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
-                        }
-                    } catch (JSONException e) {
-
-                    }
-                }
-            }
-        }, activity, Constant.ORDERPROCESS_URL, params, false);
-    }
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -105,6 +85,7 @@ public class AddressListFragment extends Fragment {
         tvSubTotal = root.findViewById(R.id.tvSubTotal);
         txttotalitems = root.findViewById(R.id.txttotalitems);
         confirmLyt = root.findViewById(R.id.confirmLyt);
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
         linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
         recyclerView.getItemAnimator().setChangeDuration(0);
@@ -129,6 +110,13 @@ public class AddressListFragment extends Fragment {
                         bundle.putString("address", selectedAddress);
                         fragment.setArguments(bundle);
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                        try {
+                            if (CheckoutFragment.pCodeDiscount != 0) {
+                                CheckoutFragment.pCodeDiscount = 0;
+                            }
+                        } catch (Exception ignore) {
+
+                        }
                     } else {
                         Toast.makeText(activity, R.string.select_delivery_address, Toast.LENGTH_SHORT).show();
                     }
@@ -163,6 +151,29 @@ public class AddressListFragment extends Fragment {
         return root;
     }
 
+    public static void GetDChargeSettings(final Activity activity) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constant.GET_SETTINGS, Constant.GetVal);
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject objectbject = new JSONObject(response);
+                        if (!objectbject.getBoolean(Constant.ERROR)) {
+                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
+                            Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = Double.parseDouble(object.getString(Constant.MINIMUM_AMOUNT));
+                            Constant.SETTING_DELIVERY_CHARGE = Double.parseDouble(object.getString(Constant.DELIEVERY_CHARGE));
+                        }
+                    } catch (JSONException e) {
+
+                    }
+                }
+            }
+        }, activity, Constant.ORDERPROCESS_URL, params, false);
+    }
+
+
     public void addNewAddress() {
         Fragment fragment = new AddressAddUpdateFragment();
         Bundle bundle = new Bundle();
@@ -175,11 +186,14 @@ public class AddressListFragment extends Fragment {
     }
 
     public void getAddresses() {
+        recyclerView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         addresses = new ArrayList<>();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put(Constant.GET_ADDRESSES, Constant.GetVal);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
         ApiConfig.RequestToVolley(new VolleyCallback() {
@@ -220,16 +234,24 @@ public class AddressListFragment extends Fragment {
                             }
                             addressAdapter = new AddressAdapter(getContext(), activity, addresses);
                             recyclerView.setAdapter(addressAdapter);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         } else {
                             recyclerView.setVisibility(View.GONE);
                             tvAlert.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.stopShimmer();
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-
+                        mShimmerViewContainer.stopShimmer();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
-        }, activity, Constant.GET_ADDRESS_URL, params, true);
+        }, activity, Constant.GET_ADDRESS_URL, params, false);
     }
 
     @Override

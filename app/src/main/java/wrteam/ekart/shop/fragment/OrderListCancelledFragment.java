@@ -366,7 +366,7 @@ public class OrderListCancelledFragment extends Fragment {
 
                 }
             }
-        }, activity, Constant.ORDERPROCESS_URL, params, true);
+        }, activity, Constant.ORDERPROCESS_URL, params, false);
     }
 
 
