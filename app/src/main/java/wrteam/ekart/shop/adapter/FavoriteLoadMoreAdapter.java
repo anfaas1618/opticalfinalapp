@@ -4,13 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
-import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import wrteam.ekart.shop.R;
-import wrteam.ekart.shop.activity.MainActivity;
 import wrteam.ekart.shop.fragment.FavoriteFragment;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
 import wrteam.ekart.shop.helper.ApiConfig;
@@ -44,6 +41,7 @@ import wrteam.ekart.shop.helper.DatabaseHelper;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Favorite;
 import wrteam.ekart.shop.model.PriceVariation;
+import wrteam.ekart.shop.model.Product;
 
 import static wrteam.ekart.shop.fragment.FavoriteFragment.recyclerView;
 import static wrteam.ekart.shop.fragment.FavoriteFragment.tvAlert;
@@ -62,7 +60,6 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     final boolean isLogin;
     final DatabaseHelper databaseHelper;
     public boolean isLoading;
-    SpannableString spannableString;
     String taxPercentage;
 
 
@@ -140,7 +137,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 FavoriteLoadMoreAdapter.CustomAdapter customAdapter = new FavoriteLoadMoreAdapter.CustomAdapter(context, priceVariations, holder, product);
                 holder.spinner.setAdapter(customAdapter);
 
-                holder.lytmain.setOnClickListener(new View.OnClickListener() {
+                holder.lytMain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -157,25 +154,6 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                         bundle.putString(Constant.FROM, "favorite");
                         fragment.setArguments(bundle);
                         activity1.getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-
-                        ProductDetailFragment kittenDetails = ProductDetailFragment.newInstance(position);
-
-                        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
-                        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
-                        // ARE available in the support library (though they don't do anything on API < 21)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            kittenDetails.setSharedElementEnterTransition(new ProductDetailFragment());
-                            kittenDetails.setEnterTransition(new Fade());
-                            kittenDetails.setExitTransition(new Fade());
-                            kittenDetails.setSharedElementReturnTransition(new ProductDetailFragment());
-                        }
-
-                        MainActivity.fm
-                                .beginTransaction()
-                                .addSharedElement(holder.imgThumb, "product_position")
-                                .replace(R.id.container, kittenDetails)
-                                .addToBackStack(null)
-                                .commit();
                     }
                 });
 
@@ -226,7 +204,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                         }
                     });
                 }
-                SetSelectedData(holder, priceVariations.get(0));
+                SetSelectedData(holder, priceVariations.get(0), product);
             } catch (Exception e) {
 
             }
@@ -262,7 +240,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @SuppressLint("SetTextI18n")
-    public void SetSelectedData(final FavoriteLoadMoreAdapter.ViewHolderRow holder, final PriceVariation extra) {
+    public void SetSelectedData(final FavoriteLoadMoreAdapter.ViewHolderRow holder, final PriceVariation extra, Product product) {
 
         holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
         holder.productPrice.setText(session.getData(Constant.currency) + extra.getPrice());
@@ -279,18 +257,27 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         holder.txtstatus.setText(extra.getServe_for());
 
+        double price, oPrice;
+        String taxPercentage = "0";
+        try {
+            taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
+        } catch (Exception e) {
+
+        }
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            price = ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
         } else {
-            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-            spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.originalPrice.setText(spannableString);
+            price = ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+            oPrice = (Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100));
 
-            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.originalPrice.setPaintFlags(holder.originalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.originalPrice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + oPrice));
+
             holder.lytDiscount.setVisibility(View.VISIBLE);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
         }
+        holder.productPrice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
         if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
             holder.txtstatus.setVisibility(View.VISIBLE);
@@ -305,7 +292,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (extra.getCart_count().equals("0")) {
 
             } else {
-                
+
             }
 
             holder.txtqty.setText(extra.getCart_count());
@@ -355,8 +342,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 }
             });
-        }
-        else {
+        } else {
 
 
             holder.txtqty.setText(databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()));
@@ -423,7 +409,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
         final ImageView imgThumb;
         final ImageView imgFav;
         final ImageView imgIndicator;
-        final CardView lytmain;
+        final CardView lytMain;
         final RelativeLayout lytDiscount, lytSpinner;
         final AppCompatSpinner spinner;
         final RelativeLayout qtyLyt;
@@ -443,7 +429,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
             txtqty = itemView.findViewById(R.id.txtqty);
             qtyLyt = itemView.findViewById(R.id.qtyLyt);
             imgFav = itemView.findViewById(R.id.imgFav);
-            lytmain = itemView.findViewById(R.id.lytmain);
+            lytMain = itemView.findViewById(R.id.lytMain);
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
             lytSpinner = itemView.findViewById(R.id.lytSpinner);
@@ -506,7 +492,7 @@ public class FavoriteLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     PriceVariation priceVariation = extraList.get(i);
-                    SetSelectedData(holder, priceVariation);
+                    SetSelectedData(holder, priceVariation, product);
                 }
 
                 @Override

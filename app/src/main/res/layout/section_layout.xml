@@ -39,11 +39,11 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@drawable/bg_btn"
             android:padding="5dp"
+            android:textSize="@dimen/_12ssp"
             android:text="@string/view_all"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@color/white"
+            android:textColor="@color/colorSecondary"
             android:textStyle="bold" />
     </RelativeLayout>
 

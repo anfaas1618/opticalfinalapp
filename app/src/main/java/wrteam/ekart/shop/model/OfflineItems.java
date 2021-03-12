@@ -4,24 +4,8 @@ import java.util.ArrayList;
 
 public class OfflineItems {
 
-    String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock, stock_unit_id, name, image, unit, cart_count, tax_title, tax_percentage;
+    String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock, stock_unit_id, name, image, unit, cart_count;
     ArrayList other_images;
-
-    public String getTax_title() {
-        return tax_title;
-    }
-
-    public void setTax_title(String tax_title) {
-        this.tax_title = tax_title;
-    }
-
-    public String getTax_percentage() {
-        return tax_percentage;
-    }
-
-    public void setTax_percentage(String tax_percentage) {
-        this.tax_percentage = tax_percentage;
-    }
 
     public String getCart_count() {
         return cart_count;

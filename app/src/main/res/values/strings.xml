@@ -63,7 +63,7 @@
     <string name="pincode">PinCode</string>
     <string name="is_login">Welcome Guest</string>
     <string name="is_mobile">Login&#160;/&#160;Register</string>
-    <string name="next">Next</string>
+    <string name="next">NEXT</string>
     <string name="otp">Enter OTP</string>
     <string name="no_data_found">NO DATA FOUND</string>
     <string name="fav_text">Wish List</string>
@@ -104,7 +104,7 @@
     <string name="change_layout">Change Layout</string>
     <string name="payment_mathod">Payment Method</string>
     <string name="cod_pay">Cash On Delivery</string>
-    <string name="pay_u_pay">PayUMoney</string>
+    <string name="pay_u_pay">PayU Money</string>
     <string name="paypal_pay">PayPal</string>
     <string name="paystack">Paystack</string>
     <string name="razor_payment">RazorPay</string>
@@ -319,8 +319,8 @@
     <string name="discover_text">Look for things around you</string>
     <string name="shop_text">Get the best deals &amp; Coupons</string>
     <string name="offers_text">Find great offers while you discover</string>
-    <string name="get_started">Get Started</string>
-    <string name="skip">Skip</string>
+    <string name="get_started">GET STARTED</string>
+    <string name="skip">SKIP</string>
     <string name="special_note">Special Note</string>
     <string name="saved_price_txt_msg">You Saved</string>
     <string name="send_otp">Send OTP</string>
@@ -331,4 +331,7 @@
     <string name="undo_message">1 deleted</string>
     <string name="remove_item_from_cart">Remove item</string>
     <string name="remove_item_from_cart_message">You can remove item by swipe left on item.</string>
+    <string name="hi_user">Hi, There!</string>
+    <string name="hi">Hi,&#160;</string>
+    <string name="search_by_product_name">Search by Product Name</string>
 </resources>

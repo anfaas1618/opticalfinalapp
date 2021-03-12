@@ -16,7 +16,6 @@ import wrteam.ekart.shop.R;
 
 public class CreditCardEditText extends AppCompatEditText {
 
-    final char mSeparator = ' ';
     final int mDefaultDrawableResId = R.drawable.ic_credit_cards; //default credit card image
     SparseArray<Pattern> mCCPatterns = null;
     int mCurrentDrawableResId = 0;

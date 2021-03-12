@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Product;
@@ -31,10 +32,10 @@ import wrteam.ekart.shop.model.Product;
 
 public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolder> {
 
-    public final ArrayList<Product> productList;
-    public final Activity activity;
-    public final int itemResource;
-    final Context context;
+    public ArrayList<Product> productList;
+    public Activity activity;
+    public int itemResource;
+    Context context;
 
     public AdapterStyle1(Context context, Activity activity, ArrayList<Product> productList, int itemResource) {
         this.context = context;
@@ -46,13 +47,20 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
 
     @Override
     public int getItemCount() {
-        return Math.min(productList.size(), 4);
+        int product;
+        if (productList.size() > 4) {
+            product = 4;
+        } else {
+            product = productList.size();
+        }
+        return product;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(VideoHolder holder, final int position) {
         final Product product = productList.get(position);
+
 
         Picasso.get()
                 .load(product.getImage())
@@ -62,8 +70,23 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
                 .error(R.drawable.placeholder)
                 .into(holder.thumbnail);
 
+
         holder.tvTitle.setText(product.getName());
-        holder.tvPrice.setText(new Session(activity).getData(Constant.currency) + (product.getPriceVariations().get(0).getDiscounted_price().equals("0") ? product.getPriceVariations().get(0).getPrice() : product.getPriceVariations().get(0).getDiscounted_price()));
+        
+        double price = 0;
+        String taxPercentage = "0";
+        try {
+            taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
+        } catch (Exception e) {
+
+        }
+
+        if (product.getPriceVariations().get(0).getDiscounted_price().equals("0") || product.getPriceVariations().get(0).getDiscounted_price().equals("")) {
+            price = ((Float.parseFloat(product.getPriceVariations().get(0).getPrice()) + ((Float.parseFloat(product.getPriceVariations().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+        } else {
+            price = ((Float.parseFloat(product.getPriceVariations().get(0).getDiscounted_price()) + ((Float.parseFloat(product.getPriceVariations().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+        }
+        holder.tvPrice.setText(new Session(activity).getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,10 +125,9 @@ public class AdapterStyle1 extends RecyclerView.Adapter<AdapterStyle1.VideoHolde
 
     public class VideoHolder extends RecyclerView.ViewHolder {
 
-        public final ImageView thumbnail;
-        public final TextView tvTitle;
-        public final TextView tvPrice;
-        public final RelativeLayout relativeLayout;
+        public ImageView thumbnail;
+        public TextView tvTitle, tvPrice;
+        public RelativeLayout relativeLayout;
 
         public VideoHolder(View itemView) {
             super(itemView);

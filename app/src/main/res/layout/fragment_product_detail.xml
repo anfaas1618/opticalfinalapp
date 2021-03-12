@@ -8,13 +8,28 @@
     android:clickable="true"
     android:focusable="true">
 
+    <TextView
+        android:id="@+id/txtstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/sold_out"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/txtstatus"
         android:layout_marginBottom="@dimen/dimen_50dp"
         android:scrollbars="none"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,46 +59,38 @@
 
                 <RelativeLayout
                     android:id="@+id/lytDiscount"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
-                    android:layout_marginStart="@dimen/_5sdp">
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_offer" />
 
 
                     <TextView
                         android:id="@+id/showDiscount"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_10sdp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_6ssp"
+                        android:textSize="@dimen/_10ssp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/showDiscount"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/off"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_5ssp" />
 
                 </RelativeLayout>
 
                 <ImageView
                     android:id="@+id/imgIndicator"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_5sdp"
                     android:visibility="visible" />
             </RelativeLayout>
 
@@ -114,8 +121,8 @@
 
                             <ImageView
                                 android:id="@+id/imgFav"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
                                 android:layout_centerInParent="true"
                                 app:srcCompat="@drawable/ic_is_not_favorite" />
 
@@ -132,7 +139,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="@string/fav_text" />
+                            android:text="@string/fav_text"
+                            android:textSize="@dimen/_10sdp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -146,15 +154,16 @@
                         android:paddingBottom="5dp">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             app:srcCompat="@drawable/ic_share" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="@string/share_text" />
+                            android:text="@string/share_text"
+                            android:textSize="@dimen/_10sdp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -168,15 +177,16 @@
                         android:paddingBottom="5dp">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             app:srcCompat="@drawable/ic_similar" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="@string/similarproduct" />
+                            android:text="@string/similarproduct"
+                            android:textSize="@dimen/_10sdp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -325,17 +335,6 @@
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/txtstatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:textColor="@color/red"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
                 <View
                     android:id="@+id/view"
                     android:layout_width="match_parent"
@@ -388,18 +387,20 @@
                             android:id="@+id/btnaddqty"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+
                             android:background="@android:color/transparent"
                             android:padding="7dp"
                             app:srcCompat="@drawable/ic_add" />
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:background="@color/bggray" />
+
                 </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@color/bggray" />
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -547,11 +548,11 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:background="@drawable/bg_btn"
                         android:gravity="center_vertical"
                         android:padding="5dp"
                         android:text="@string/view_all"
-                        android:textColor="@color/white"
+                        android:textColor="@color/colorSecondary"
+                        android:textSize="@dimen/_12ssp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -574,6 +575,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:orientation="vertical"
+        android:visibility="gone"
         shimmer:shimmer_duration="1200">
 
         <!-- Adding rows of placeholders -->

@@ -11,12 +11,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -35,8 +40,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-import me.ibrahimsn.lib.OnItemReselectedListener;
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
 import wrteam.ekart.shop.R;
@@ -74,15 +79,29 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     Menu menu;
     DatabaseHelper databaseHelper;
     String from;
+    CardView cardViewHamburger;
+    TextView toolbarTitle;
+    ImageView imageMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ApiConfig.transparentStatusAndNavigation(this);
         getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
-        toolbar = findViewById(R.id.toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+
+        drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer_layout, R.string.drawer_open, R.string.drawer_close);
+        drawer_layout.addDrawerListener(actionBarDrawerToggle);
+        cardViewHamburger = findViewById(R.id.cardViewHamburger);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
+        imageMenu = findViewById(R.id.imageMenu);
+        actionBarDrawerToggle.syncState();
+
         activity = MainActivity.this;
         session = new Session(activity);
 
@@ -90,6 +109,21 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         from = getIntent().getStringExtra(Constant.FROM);
         databaseHelper = new DatabaseHelper(activity);
 
+        drawerToggle = new ActionBarDrawerToggle
+                (
+                        activity,
+                        drawer_layout, toolbar,
+                        R.string.drawer_open,
+                        R.string.drawer_close
+                ) {
+        };
+
+        cardViewHamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer_layout.openDrawer(GravityCompat.START);
+            }
+        });
 
         if (session.isUserLoggedIn()) {
             ApiConfig.getCartItemCount(activity, session);
@@ -220,7 +254,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 Fragment fragment = new AddressListFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.FROM, "process");
-                bundle.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);
+                bundle.putDouble("total", Double.parseDouble(ApiConfig.StringFormat("" + Constant.FLOAT_TOTAL_AMOUNT)));
                 fragment.setArguments(bundle);
                 fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 break;
@@ -267,26 +301,9 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 break;
         }
 
-
-        bottomNavigationView.setOnItemReselectedListener(new OnItemReselectedListener() {
-            @Override
-            public void onItemReselect(int i) {
-
-            }
-        });
-        drawerToggle = new ActionBarDrawerToggle
-                (
-                        this,
-                        drawer_layout, toolbar,
-                        R.string.drawer_open,
-                        R.string.drawer_close
-                ) {
-        };
-
         fm.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-
                 ApiConfig.updateNavItemCounter(DrawerActivity.navigationView, R.id.menu_transaction_history, Session.getCount(Constant.UNREAD_TRANSACTION_COUNT, getApplicationContext()));
                 ApiConfig.updateNavItemCounter(DrawerActivity.navigationView, R.id.menu_wallet_history, Session.getCount(Constant.UNREAD_WALLET_COUNT, getApplicationContext()));
                 ApiConfig.updateNavItemCounter(DrawerActivity.navigationView, R.id.menu_notifications, Session.getCount(Constant.UNREAD_NOTIFICATION_COUNT, getApplicationContext()));
@@ -305,6 +322,7 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
                 }
             }
         });
+        GetProductsName();
     }
 
 //    public void setAppLocal(String languageCode) {
@@ -400,47 +418,52 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.toolbar_cart).setVisible(true);
         menu.findItem(R.id.toolbar_search).setVisible(true);
-        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, R.drawable.ic_cart, activity));
-        invalidateOptionsMenu();
+        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, activity));
 
         if (fm.getBackStackEntryCount() > 0) {
 
+            drawerToggle.onDrawerClosed(drawer_layout);
+
+            toolbarTitle.setText(Constant.TOOLBAR_TITLE);
             bottomNavigationView.setVisibility(View.GONE);
-
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-            toolbar.setTitle(Constant.TOOLBAR_TITLE);
-
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            imageMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_back));
+            cardViewHamburger.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     fm.popBackStack();
                 }
             });
+            lockDrawer();
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    DrawerActivity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                }
-            }, 500);
         } else {
-            DrawerActivity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            if (session.isUserLoggedIn()) {
+                toolbarTitle.setText(getString(R.string.hi) + session.getData(Constant.NAME) + "!");
+            } else {
+                toolbarTitle.setText(getString(R.string.hi_user));
+            }
             bottomNavigationView.setVisibility(View.VISIBLE);
-            toolbar.setNavigationIcon(R.drawable.ic_menu);
-            toolbar.setTitle(getString(R.string.app_name));
-            drawerToggle = new ActionBarDrawerToggle
-                    (
-                            this,
-                            drawer_layout, toolbar,
-                            R.string.drawer_open,
-                            R.string.drawer_close
-                    ) {
-            };
+            imageMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu));
+            cardViewHamburger.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    drawer_layout.openDrawer(GravityCompat.START);
+                }
+            });
+            unLockDrawer();
         }
+
+        invalidateOptionsMenu();
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void lockDrawer() {
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).requestDisallowInterceptTouchEvent(true);
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
+    }
+
+    public void unLockDrawer() {
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).requestDisallowInterceptTouchEvent(false);
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
@@ -480,6 +503,25 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         }
     }
 
+    public void GetProductsName() {
+        Map<String, String> params = new HashMap<>();
+        params.put(Constant.GET_ALL_PRODUCTS_NAME, Constant.GetVal);
+
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (!jsonObject.getBoolean(Constant.ERROR)) {
+                        session.setData(Constant.GET_ALL_PRODUCTS_NAME, jsonObject.getString(Constant.DATA));
+                    }
+                } catch (JSONException ignored) {
+
+                }
+
+            }
+        }, activity, Constant.GET_ALL_PRODUCTS_URL, params, false);
+    }
+
     @Override
     public void onPaymentError(int code, String response) {
         try {
@@ -487,6 +529,12 @@ public class MainActivity extends DrawerActivity implements OnMapReadyCallback, 
         } catch (Exception e) {
             Log.d(TAG, "onPaymentError  ", e);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        invalidateOptionsMenu();
+        super.onPause();
     }
 
     @Override

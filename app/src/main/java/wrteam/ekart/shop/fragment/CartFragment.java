@@ -49,7 +49,6 @@ import wrteam.ekart.shop.model.Cart;
 import wrteam.ekart.shop.model.OfflineCart;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 public class CartFragment extends Fragment {
     public static LinearLayout lytempty;
@@ -74,7 +73,7 @@ public class CartFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public static void SetData() {
-        txttotalamount.setText(session.getData(Constant.currency) + Constant.formater.format(Constant.FLOAT_TOTAL_AMOUNT));
+        txttotalamount.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(String.valueOf(Constant.FLOAT_TOTAL_AMOUNT)));
         txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
     }
 
@@ -107,7 +106,6 @@ public class CartFragment extends Fragment {
         cartrecycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (ApiConfig.isConnected(getActivity())) {
             if (session.isUserLoggedIn()) {
-                getCartData();
                 GetSettings(getActivity());
             } else {
                 GetOfflineCart();
@@ -136,7 +134,7 @@ public class CartFragment extends Fragment {
                                 startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("fromto", "checkout").putExtra("total", Constant.FLOAT_TOTAL_AMOUNT).putExtra(Constant.FROM, "checkout"));
                             }
                         } else {
-                            Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + session.getData(Constant.currency) + Constant.formater.format(Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, getString(R.string.msg_minimum_order_amount) + session.getData(Constant.currency) + ApiConfig.StringFormat(""+Constant.SETTING_MINIMUM_ORDER_AMOUNT), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(activity, getString(R.string.msg_sold_out), Toast.LENGTH_SHORT).show();
@@ -182,13 +180,8 @@ public class CartFragment extends Fragment {
 
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                    if (jsonObject1 != null) {
-                                        OfflineCart cart = g.fromJson(jsonObject1.toString(), OfflineCart.class);
-                                        offlineCarts.add(cart);
-                                    } else {
-                                        break;
-                                    }
+                                    OfflineCart cart = g.fromJson(jsonObject1.toString(), OfflineCart.class);
+                                    offlineCarts.add(cart);
                                 }
                                 offlineCartAdapter = new OfflineCartAdapter(getContext(), getActivity(), offlineCarts);
                                 offlineCartAdapter.setHasStableIds(true);
@@ -219,6 +212,40 @@ public class CartFragment extends Fragment {
             cartrecycleview.setVisibility(View.GONE);
             lytempty.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void GetSettings(final Activity activity) {
+        Session session = new Session(activity);
+        Map<String, String> params = new HashMap<>();
+        params.put(Constant.SETTINGS, Constant.GetVal);
+        params.put(Constant.GET_TIMEZONE, Constant.GetVal);
+        ApiConfig.RequestToVolley(new VolleyCallback() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onSuccess(boolean result, String response) {
+                if (result) {
+                    try {
+                        JSONObject objectbject = new JSONObject(response);
+                        if (!objectbject.getBoolean(Constant.ERROR)) {
+                            JSONObject object = objectbject.getJSONObject(Constant.SETTINGS);
+
+                            session.setData(Constant.minimum_version_required, object.getString(Constant.minimum_version_required));
+                            session.setData(Constant.is_version_system_on, object.getString(Constant.is_version_system_on));
+
+                            session.setData(Constant.currency, object.getString(Constant.currency));
+
+                            session.setData(Constant.min_order_amount, object.getString(Constant.min_order_amount));
+                            session.setData(Constant.max_cart_items_count, object.getString(Constant.max_cart_items_count));
+                            session.setData(Constant.area_wise_delivery_charge, object.getString(Constant.area_wise_delivery_charge));
+
+                            getCartData();
+                        }
+                    } catch (JSONException e) {
+
+                    }
+                }
+            }
+        }, activity, Constant.SETTING_URL, params, false);
     }
 
     private void getCartData() {
@@ -267,6 +294,8 @@ public class CartFragment extends Fragment {
                             cartAdapter = new CartAdapter(getContext(), getActivity(), carts);
                             cartAdapter.setHasStableIds(true);
                             cartrecycleview.setAdapter(cartAdapter);
+                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(cartAdapter, activity));
+                            itemTouchHelper.attachToRecyclerView(cartrecycleview);
                             lytTotal.setVisibility(View.VISIBLE);
                             mShimmerViewContainer.stopShimmer();
                             mShimmerViewContainer.setVisibility(View.GONE);
@@ -274,8 +303,6 @@ public class CartFragment extends Fragment {
                             total = Double.parseDouble(objectbject.getString(Constant.TOTAL));
                             session.setData(Constant.TOTAL, String.valueOf(total));
                             Constant.TOTAL_CART_ITEM = Integer.parseInt(objectbject.getString(Constant.TOTAL));
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(cartAdapter, activity));
-                            itemTouchHelper.attachToRecyclerView(cartrecycleview);
                             SetData();
                         } else {
                             mShimmerViewContainer.stopShimmer();

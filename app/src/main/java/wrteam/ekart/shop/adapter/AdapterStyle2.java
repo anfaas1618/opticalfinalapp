@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.fragment.ProductDetailFragment;
+import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.model.Product;
@@ -32,10 +33,10 @@ import wrteam.ekart.shop.model.Product;
 
 public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolder> {
 
-    public final ArrayList<Product> productList;
-    public final Activity activity;
-    final Context context;
-    final Session session;
+    public ArrayList<Product> productList;
+    public Activity activity;
+    Context context;
+    Session session;
 
     public AdapterStyle2(Context context, Activity activity, ArrayList<Product> productList) {
         this.context = context;
@@ -54,9 +55,23 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
     public void onBindViewHolder(VideoHolder holder, final int position) {
 
         if (productList.size() > 0) {
-            holder.tvStyle2_1.setText(productList.get(0).getName());
 
-            holder.tvSubStyle2_1.setText(session.getData(Constant.currency) + (productList.get(0).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(0).getPriceVariations().get(0).getPrice() : productList.get(0).getPriceVariations().get(0).getDiscounted_price()));
+            double price = 0;
+            String taxPercentage = "0";
+            try {
+                taxPercentage = (Double.parseDouble(productList.get(0).getTax_percentage()) > 0 ? productList.get(0).getTax_percentage() : "0");
+            } catch (Exception e) {
+
+            }
+
+            if (productList.get(0).getPriceVariations().get(0).getDiscounted_price().equals("0") || productList.get(0).getPriceVariations().get(0).getDiscounted_price().equals("")) {
+                price = ((Float.parseFloat(productList.get(0).getPriceVariations().get(0).getPrice()) + ((Float.parseFloat(productList.get(0).getPriceVariations().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+            } else {
+                price = ((Float.parseFloat(productList.get(0).getPriceVariations().get(0).getDiscounted_price()) + ((Float.parseFloat(productList.get(0).getPriceVariations().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+            }
+            holder.tvSubStyle2_1.setText(new Session(activity).getData(Constant.currency) + ApiConfig.StringFormat("" + price));
+
+            holder.tvStyle2_1.setText(productList.get(0).getName());
 
             Picasso.get()
                     .load(productList.get(0).getImage())
@@ -69,7 +84,20 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
         if (productList.size() > 1) {
             holder.tvStyle2_2.setText(productList.get(1).getName());
 
-            holder.tvSubStyle2_2.setText(session.getData(Constant.currency) + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(1).getPriceVariations().get(0).getPrice() : productList.get(1).getPriceVariations().get(0).getDiscounted_price()));
+            double price = 0;
+            String taxPercentage = "0";
+            try {
+                taxPercentage = (Double.parseDouble(productList.get(1).getTax_percentage()) > 0 ? productList.get(1).getTax_percentage() : "0");
+            } catch (Exception e) {
+
+            }
+
+            if (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") || productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("")) {
+                price = ((Float.parseFloat(productList.get(1).getPriceVariations().get(0).getPrice()) + ((Float.parseFloat(productList.get(1).getPriceVariations().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+            } else {
+                price = ((Float.parseFloat(productList.get(1).getPriceVariations().get(0).getDiscounted_price()) + ((Float.parseFloat(productList.get(1).getPriceVariations().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+            }
+            holder.tvSubStyle2_2.setText(new Session(activity).getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
             Picasso.get()
                     .load(productList.get(1).getImage())
@@ -83,7 +111,21 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
         if (productList.size() > 2) {
             holder.tvStyle2_3.setText(productList.get(2).getName());
 
-            holder.tvSubStyle2_3.setText(session.getData(Constant.currency) + (productList.get(1).getPriceVariations().get(0).getDiscounted_price().equals("0") ? productList.get(2).getPriceVariations().get(0).getPrice() : productList.get(2).getPriceVariations().get(0).getDiscounted_price()));
+            double price = 0;
+            String taxPercentage = "0";
+            try {
+                taxPercentage = (Double.parseDouble(productList.get(2).getTax_percentage()) > 0 ? productList.get(2).getTax_percentage() : "0");
+            } catch (Exception e) {
+
+            }
+
+            if (productList.get(2).getPriceVariations().get(0).getDiscounted_price().equals("0") || productList.get(2).getPriceVariations().get(0).getDiscounted_price().equals("")) {
+                price = ((Float.parseFloat(productList.get(2).getPriceVariations().get(0).getPrice()) + ((Float.parseFloat(productList.get(2).getPriceVariations().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+            } else {
+                price = ((Float.parseFloat(productList.get(2).getPriceVariations().get(0).getDiscounted_price()) + ((Float.parseFloat(productList.get(2).getPriceVariations().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+            }
+
+            holder.tvSubStyle2_3.setText(new Session(activity).getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
             Picasso.get()
                     .load(productList.get(2).getImage())
@@ -93,6 +135,7 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
                     .error(R.drawable.placeholder)
                     .into(holder.imgStyle2_3);
         }
+
         holder.layoutStyle2_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,18 +199,9 @@ public class AdapterStyle2 extends RecyclerView.Adapter<AdapterStyle2.VideoHolde
 
     public class VideoHolder extends RecyclerView.ViewHolder {
 
-        public final ImageView imgStyle2_1;
-        public final ImageView imgStyle2_2;
-        public final ImageView imgStyle2_3;
-        public final TextView tvStyle2_1;
-        public final TextView tvStyle2_2;
-        public final TextView tvStyle2_3;
-        public final TextView tvSubStyle2_1;
-        public final TextView tvSubStyle2_2;
-        public final TextView tvSubStyle2_3;
-        public final RelativeLayout layoutStyle2_1;
-        public final RelativeLayout layoutStyle2_2;
-        public final RelativeLayout layoutStyle2_3;
+        public ImageView imgStyle2_1, imgStyle2_2, imgStyle2_3;
+        public TextView tvStyle2_1, tvStyle2_2, tvStyle2_3, tvSubStyle2_1, tvSubStyle2_2, tvSubStyle2_3;
+        public RelativeLayout layoutStyle2_1, layoutStyle2_2, layoutStyle2_3;
 
         public VideoHolder(View itemView) {
             super(itemView);

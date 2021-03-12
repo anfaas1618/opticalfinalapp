@@ -69,8 +69,7 @@ public class CheckoutFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_checkout, container, false);
 
         activity = getActivity();
@@ -225,15 +224,15 @@ public class CheckoutFragment extends Fragment {
         }, activity, Constant.CART_URL, params, false);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     public void SetDataTotal() {
         try {
             if ((OriginalAmount - DiscountedAmount) != 0) {
                 lytSaveAmount.setVisibility(View.VISIBLE);
                 if (pCodeDiscount != 0) {
-                    tvSaveAmount.setText(session.getData(Constant.currency) + ((OriginalAmount - DiscountedAmount) + pCodeDiscount));
+                    tvSaveAmount.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + ((OriginalAmount - DiscountedAmount) + pCodeDiscount)));
                 } else {
-                    tvSaveAmount.setText(session.getData(Constant.currency) + ((OriginalAmount - DiscountedAmount) - pCodeDiscount));
+                    tvSaveAmount.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + ((OriginalAmount - DiscountedAmount) - pCodeDiscount)));
                 }
             } else {
                 if (pCodeDiscount == 0) {
@@ -242,10 +241,10 @@ public class CheckoutFragment extends Fragment {
             }
 
             subtotal = Constant.FLOAT_TOTAL_AMOUNT;
-            tvTotalBeforeTax.setText(session.getData(Constant.currency) + Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
+            tvTotalBeforeTax.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + Constant.FLOAT_TOTAL_AMOUNT));
             if (Constant.FLOAT_TOTAL_AMOUNT <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
                 tvDeliveryCharge.setText(session.getData(Constant.currency) + Constant.SETTING_DELIVERY_CHARGE);
-                subtotal = Double.parseDouble("" + (subtotal + Constant.SETTING_DELIVERY_CHARGE));
+                subtotal = (subtotal + Constant.SETTING_DELIVERY_CHARGE);
                 deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
             } else {
                 tvDeliveryCharge.setText(getResources().getString(R.string.free));
@@ -255,7 +254,7 @@ public class CheckoutFragment extends Fragment {
             if (!pCode.isEmpty()) {
                 subtotal = subtotal - pCodeDiscount;
             }
-            tvSubTotal.setText(session.getData(Constant.currency) + "" + Double.parseDouble("" + subtotal));
+            tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + subtotal));
         } catch (Exception e) {
 
         }
@@ -302,7 +301,7 @@ public class CheckoutFragment extends Fragment {
                                         dCharge = tvDeliveryCharge.getText().toString().equals(getString(R.string.free)) ? 0.0 : Constant.SETTING_DELIVERY_CHARGE;
                                         subtotal = (object.getDouble(Constant.DISCOUNTED_AMOUNT));
                                         pCodeDiscount = Double.parseDouble(object.getString(Constant.DISCOUNT));
-                                        tvSubTotal.setText(session.getData(Constant.currency) + Double.parseDouble("" + subtotal));
+                                        tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + subtotal));
                                     } else {
                                         btnApply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                                         btnApply.setText("Apply");

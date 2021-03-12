@@ -1,13 +1,12 @@
 package wrteam.ekart.shop.helper;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 
 public class Constant {
     //MODIFICATION PART
     public static final String MAINBASEUrl = "https://newekart.wrteam.in/"; //Admin panel url
 
-    //If you have eCart Website then place here website URL otherwise domain url not admin panel url
+    //If you have eCart Website then place here website URL otherwise admin panel url
     public static final String WebsiteUrl = "https://webekart.wrteam.in/";
 
     //set your jwt secret key here...key must same in PHP and Android
@@ -18,6 +17,7 @@ public class Constant {
     public static final int LOAD_ITEM_LIMIT = 10; //Load items limit in listing ,Maximum load item once
 
     //MODIFICATION PART END
+
     public static final String BaseUrl = MAINBASEUrl + "api-firebase/";
 
     //Do not change anything in this link**************************************************
@@ -25,13 +25,6 @@ public class Constant {
     public static final String PLAY_STORE_RATE_US_LINK = "market://details?id=";
 
     //*************************************************************************************
-    public static final String ORDER_ID_ = "ORDER_ID";
-    public static final String CHANNEL_ID = "CHANNEL_ID";
-    public static final String INDUSTRY_TYPE_ID = "INDUSTRY_TYPE_ID";
-    public static final String WEBSITE = "WEBSITE";
-    public static final String TXN_AMOUNT = "TXN_AMOUNT";
-    public static final String MID = "MID";
-
     //PayTm configs
     public static final String WEBSITE_LIVE_VAL = "WEB";
     public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";
@@ -45,6 +38,13 @@ public class Constant {
     public static final String VALID_TRANSACTION = MAINBASEUrl + "/paytm/valid-transction.php";
     public static final String CALLBACK_URL = "CALLBACK_URL";
     public static final String CHECKSUMHASH = "CHECKSUMHASH";
+    public static final String ORDER_ID_ = "ORDER_ID";
+    public static final String CHANNEL_ID = "CHANNEL_ID";
+    public static final String INDUSTRY_TYPE_ID = "INDUSTRY_TYPE_ID";
+    public static final String WEBSITE = "WEBSITE";
+    public static final String TXN_AMOUNT = "TXN_AMOUNT";
+    public static final String MID = "MID";
+
 
     //**********APIS**********
     public static final String FAQ_URL = BaseUrl + "get-faqs.php";
@@ -57,6 +57,7 @@ public class Constant {
     public static final String PAPAL_URL = MAINBASEUrl + "paypal/create-payment.php";
     public static final String LoginUrl = BaseUrl + "login.php";
     public static final String GET_ALL_DATA_URL = BaseUrl + "get-all-data.php";
+    public static final String GET_ALL_PRODUCTS_URL = BaseUrl + "get-all-products.php";
     public static final String PRODUCT_SEARCH_URL = BaseUrl + "products-search.php";
     public static final String SETTING_URL = BaseUrl + "settings.php";
     public static final String GET_PRODUCT_BY_SUB_CATE = BaseUrl + "get-products-by-subcategory-id.php";
@@ -78,6 +79,7 @@ public class Constant {
     public static final String PROMO_CODE_CHECK_URL = BaseUrl + "validate-promo-code.php";
     public static final String VERIFY_PAYMENT_REQUEST = BaseUrl + "payment-request.php";
     public static final String REGISTER_DEVICE_URL = BaseUrl + "store-fcm-id.php";
+
 
     //**************parameters***************
     public static final String VERIFY_PAYSTACK = "verify_paystack_transaction";
@@ -183,6 +185,7 @@ public class Constant {
     public static final String ALTERNATE_MOBILE = "alternate_mobile";
     public static final String PASSWORD = "password";
     public static final String FCM_ID = "fcm_id";
+    public static final String GET_ALL_PRODUCTS_NAME = "get_all_products_name";
     public static final String IS_USER_LOGIN = "is_user_login";
     public static final String PINCODE = "pincode";
     public static final String STATE = "state";
@@ -320,11 +323,12 @@ public class Constant {
     public static final String user_wallet_refill_limit = "user_wallet_refill_limit";
     public static final String min_refer_earn_order_amount = "min_refer_earn_order_amount";
     public static final Double SETTING_MINIMUM_ORDER_AMOUNT = 0.0;
-    public static final DecimalFormat formater = new DecimalFormat("0.00");
     public static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghjiklmnopqrstuvwxyz";
     public static final String NUMERIC_STRING = "123456789";
     public static String TOOLBAR_TITLE;
     public static String delivery_charge = "delivery_charge";
+
+
     //**************Constants Values***************
     public static String selectedAddressId = "";
     public static String DefaultAddress = "";

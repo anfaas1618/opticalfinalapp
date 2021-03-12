@@ -16,7 +16,7 @@
         android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/txt_color"
-        android:textSize="@dimen/_12sdp"
+        android:textSize="@dimen/_11sdp"
         android:textStyle="bold" />
 
     <!--    <TextView-->

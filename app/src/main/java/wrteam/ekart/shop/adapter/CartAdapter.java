@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -140,6 +139,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 final Cart cart = items.get(position);
 
                 double price = 0;
+                double oPrice = 0;
 
                 try {
                     taxPercentage = (Double.parseDouble(cart.getItems().get(0).getTax_percentage()) > 0 ? cart.getItems().get(0).getTax_percentage() : "0");
@@ -159,8 +159,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 holder.txtmeasurement.setText(cart.getItems().get(0).getMeasurement() + "\u0020" + cart.getItems().get(0).getUnit());
 
-                holder.txtprice.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(cart.getItems().get(0).getDiscounted_price())));
-
                 if (cart.getItems().get(0).getIsAvailable().equals("false")) {
                     holder.txtstatus.setVisibility(View.VISIBLE);
                     holder.txtstatus.setText(activity.getString(R.string.sold_out));
@@ -170,18 +168,17 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 if (cart.getItems().get(0).getDiscounted_price().equals("0") || cart.getItems().get(0).getDiscounted_price().equals("")) {
                     price = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
-                    holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
                 } else {
                     price = ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                    oPrice = ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
                     holder.txtoriginalprice.setPaintFlags(holder.txtoriginalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    holder.txtoriginalprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) + ((Float.parseFloat(cart.getItems().get(0).getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-
-                    holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItems().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+                    holder.txtoriginalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + oPrice));
                 }
+                holder.txtprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
                 holder.txtQuantity.setText(cart.getQty());
 
-                holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(price * Integer.parseInt(cart.getQty())));
+                holder.txttotalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price * Integer.parseInt(cart.getQty())));
 
                 final double finalPrice = price;
                 holder.btnaddqty.setOnClickListener(new View.OnClickListener() {
@@ -195,7 +192,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     count++;
                                     cart.setQty("" + count);
                                     holder.txtQuantity.setText("" + count);
-                                    holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(finalPrice * count));
+                                    holder.txttotalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + finalPrice * count));
                                     Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + finalPrice;
                                     if (CartFragment.values.containsKey(items.get(position).getProduct_variant_id())) {
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -228,7 +225,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 count--;
                                 cart.setQty("" + count);
                                 holder.txtQuantity.setText("" + count);
-                                holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(finalPrice * count));
+                                holder.txttotalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + finalPrice * count));
                                 Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT - finalPrice;
                                 if (CartFragment.values.containsKey(items.get(position).getProduct_variant_id())) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

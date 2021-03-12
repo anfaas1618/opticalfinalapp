@@ -27,7 +27,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     final String FavouriteTableInfo = TABLE_FAVOURITE_NAME + "(" + KEY_ID + " TEXT" + ")";
     final String OrderTableInfo = TABLE_ORDER_NAME + "(" + VID + " TEXT ," + PID + " TEXT ," + QTY + " TEXT)";
 
-
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

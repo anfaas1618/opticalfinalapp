@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +44,6 @@ import wrteam.ekart.shop.model.Product;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
-
 public class SubCategoryFragment extends Fragment {
     public static ArrayList<Product> productArrayList;
     public static ArrayList<Category> categoryArrayList;
@@ -62,6 +63,7 @@ public class SubCategoryFragment extends Fragment {
     boolean isSort = false, isLoadMore = false;
     boolean isGrid = false;
     int resource;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class SubCategoryFragment extends Fragment {
 
         subCategoryrecycleview = root.findViewById(R.id.subCategoryrecycleview);
         subCategoryrecycleview.setLayoutManager(new GridLayoutManager(getContext(), Constant.GRIDCOLUMN));
+        mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
 
         GetSettings(activity);
 
@@ -142,6 +145,9 @@ public class SubCategoryFragment extends Fragment {
     }
 
     void GetData() {
+        nestedScrollView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.SUB_CATEGORY_ID, id);
         params.put(Constant.USER_ID, session.getData(Constant.ID));
@@ -182,18 +188,29 @@ public class SubCategoryFragment extends Fragment {
                                             priceVariations.add(new PriceVariation(obj.getString(Constant.CART_ITEM_COUNT), obj.getString(Constant.ID), obj.getString(Constant.PRODUCT_ID), obj.getString(Constant.TYPE), obj.getString(Constant.MEASUREMENT), obj.getString(Constant.MEASUREMENT_UNIT_ID), obj.getString(Constant.PRICE), obj.getString(Constant.DISCOUNTED_PRICE), obj.getString(Constant.SERVE_FOR), obj.getString(Constant.STOCK), obj.getString(Constant.STOCK_UNIT_ID), obj.getString(Constant.MEASUREMENT_UNIT_NAME), obj.getString(Constant.STOCK_UNIT_NAME), discountpercent));
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
-                                    } catch (JSONException e) {
 
+                                        nestedScrollView.setVisibility(View.VISIBLE);
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                        mShimmerViewContainer.stopShimmer();
+                                    } catch (JSONException e) {
+                                        nestedScrollView.setVisibility(View.VISIBLE);
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                        mShimmerViewContainer.stopShimmer();
                                     }
                                 }
                             } catch (Exception e) {
-
+                                nestedScrollView.setVisibility(View.VISIBLE);
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                mShimmerViewContainer.stopShimmer();
                             }
 
                             if (offset == 0) {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
+                                nestedScrollView.setVisibility(View.VISIBLE);
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                mShimmerViewContainer.stopShimmer();
 
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
@@ -250,11 +267,15 @@ public class SubCategoryFragment extends Fragment {
                                                                                         }
                                                                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                                                                     } catch (JSONException e) {
-
+                                                                                        nestedScrollView.setVisibility(View.VISIBLE);
+                                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                                        mShimmerViewContainer.stopShimmer();
                                                                                     }
                                                                                 }
                                                                             } catch (Exception e) {
-
+                                                                                nestedScrollView.setVisibility(View.VISIBLE);
+                                                                                mShimmerViewContainer.setVisibility(View.GONE);
+                                                                                mShimmerViewContainer.stopShimmer();
                                                                             }
 
                                                                             mAdapter.notifyDataSetChanged();
@@ -262,7 +283,9 @@ public class SubCategoryFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-
+                                                                        nestedScrollView.setVisibility(View.VISIBLE);
+                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                        mShimmerViewContainer.stopShimmer();
                                                                     }
                                                                 }
                                                             }
@@ -278,17 +301,25 @@ public class SubCategoryFragment extends Fragment {
                         } else {
                             if (offset == 0) {
                                 tvAlert.setVisibility(View.VISIBLE);
+                                nestedScrollView.setVisibility(View.VISIBLE);
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                mShimmerViewContainer.stopShimmer();
                             }
                         }
                     } catch (JSONException e) {
-
+                        nestedScrollView.setVisibility(View.VISIBLE);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
                     }
                 }
             }
-        }, activity, Constant.GET_PRODUCT_BY_SUB_CATE, params, true);
+        }, activity, Constant.GET_PRODUCT_BY_SUB_CATE, params, false);
     }
 
     void GetCategory() {
+        nestedScrollView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.CATEGORY_ID, id);
 
@@ -314,10 +345,18 @@ public class SubCategoryFragment extends Fragment {
                                 categoryArrayList.add(category);
                             }
                             subCategoryrecycleview.setAdapter(new SubCategoryAdapter(getContext(), activity, categoryArrayList, R.layout.lyt_subcategory, "sub_cate"));
+                            nestedScrollView.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
                         } else {
+                            nestedScrollView.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
                         }
                     } catch (JSONException e) {
-
+                        nestedScrollView.setVisibility(View.VISIBLE);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
                     }
                 }
             }
@@ -325,6 +364,9 @@ public class SubCategoryFragment extends Fragment {
     }
 
     void GetProducts() {
+        nestedScrollView.setVisibility(View.GONE);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmer();
         productArrayList = new ArrayList<>();
         Map<String, String> params = new HashMap<>();
         params.put(Constant.CATEGORY_ID, id);
@@ -363,16 +405,23 @@ public class SubCategoryFragment extends Fragment {
                                         }
                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                     } catch (JSONException e) {
-
+                                        nestedScrollView.setVisibility(View.VISIBLE);
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                        mShimmerViewContainer.stopShimmer();
                                     }
                                 }
                             } catch (Exception e) {
-
+                                nestedScrollView.setVisibility(View.VISIBLE);
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                mShimmerViewContainer.stopShimmer();
                             }
                             if (offset == 0) {
                                 mAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, from);
                                 mAdapter.setHasStableIds(true);
                                 recyclerView.setAdapter(mAdapter);
+                                nestedScrollView.setVisibility(View.VISIBLE);
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                                mShimmerViewContainer.stopShimmer();
                                 nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                                     @Override
                                     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -426,11 +475,15 @@ public class SubCategoryFragment extends Fragment {
                                                                                         }
                                                                                         productArrayList.add(new Product(jsonObject.getString(Constant.TAX_PERCENT), jsonObject.getString(Constant.ROW_ORDER), jsonObject.getString(Constant.TILL_STATUS), jsonObject.getString(Constant.CANCELLABLE_STATUS), jsonObject.getString(Constant.MANUFACTURER), jsonObject.getString(Constant.MADE_IN), jsonObject.getString(Constant.RETURN_STATUS), jsonObject.getString(Constant.ID), jsonObject.getString(Constant.NAME), jsonObject.getString(Constant.SLUG), jsonObject.getString(Constant.SUC_CATE_ID), jsonObject.getString(Constant.IMAGE), jsonObject.getJSONArray(Constant.OTHER_IMAGES), jsonObject.getString(Constant.DESCRIPTION), jsonObject.getString(Constant.STATUS), jsonObject.getString(Constant.DATE_ADDED), jsonObject.getBoolean(Constant.IS_FAVORITE), jsonObject.getString(Constant.CATEGORY_ID), priceVariations, jsonObject.getString(Constant.INDICATOR)));
                                                                                     } catch (JSONException e) {
-
+                                                                                        nestedScrollView.setVisibility(View.VISIBLE);
+                                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                                        mShimmerViewContainer.stopShimmer();
                                                                                     }
                                                                                 }
                                                                             } catch (Exception e) {
-
+                                                                                nestedScrollView.setVisibility(View.VISIBLE);
+                                                                                mShimmerViewContainer.setVisibility(View.GONE);
+                                                                                mShimmerViewContainer.stopShimmer();
                                                                             }
 
                                                                             mAdapter.notifyDataSetChanged();
@@ -438,7 +491,9 @@ public class SubCategoryFragment extends Fragment {
                                                                             isLoadMore = false;
                                                                         }
                                                                     } catch (JSONException e) {
-
+                                                                        nestedScrollView.setVisibility(View.VISIBLE);
+                                                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                                                        mShimmerViewContainer.stopShimmer();
                                                                     }
                                                                 }
                                                             }
@@ -453,13 +508,18 @@ public class SubCategoryFragment extends Fragment {
                             }
                         } else {
                             activity.invalidateOptionsMenu();
+                            nestedScrollView.setVisibility(View.VISIBLE);
+                            mShimmerViewContainer.setVisibility(View.GONE);
+                            mShimmerViewContainer.stopShimmer();
                         }
                     } catch (JSONException e) {
-
+                        nestedScrollView.setVisibility(View.VISIBLE);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        mShimmerViewContainer.stopShimmer();
                     }
                 }
             }
-        }, activity, Constant.GET_PRODUCT_BY_CATE, params, true);
+        }, activity, Constant.GET_PRODUCT_BY_CATE, params, false);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -507,7 +567,8 @@ public class SubCategoryFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.toolbar_sort).setVisible(isSort);
-        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, R.drawable.ic_cart, activity));
+        menu.findItem(R.id.toolbar_search).setVisible(true);
+        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, activity));
 
 
     }

@@ -100,12 +100,6 @@ public class TouchImageView extends androidx.appcompat.widget.AppCompatImageView
         });
     }
 
-    public void setMaxZoom(float x) {
-
-        maxScale = x;
-
-    }
-
     private void fixTrans() {
 
         matrix.getValues(m);
@@ -157,7 +151,6 @@ public class TouchImageView extends androidx.appcompat.widget.AppCompatImageView
             return;
 
         oldMeasuredHeight = viewHeight;
-        int oldMeasuredWidth = viewWidth;
 
         if (saveScale == 1) {
             //Fit to screen.

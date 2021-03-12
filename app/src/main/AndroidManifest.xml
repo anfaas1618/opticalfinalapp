@@ -37,13 +37,11 @@
 
         <activity
             android:name=".activity.WelcomeActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.PayStackActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -64,20 +62,16 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".activity.MainActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.DrawerActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -102,23 +96,28 @@
 
                 <data
                     android:host="webekart.wrteam.in"
-                    android:pathPrefix="/product"
+                    android:pathPrefix="/itemdetail"
                     android:scheme="https" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".activity.PayPalWebActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MidtransActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.StripeActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".helper.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -129,7 +128,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
 
         <service
             android:name=".helper.MyFirebaseMessagingService"

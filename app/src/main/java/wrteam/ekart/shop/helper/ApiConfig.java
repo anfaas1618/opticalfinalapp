@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,9 +79,6 @@ import wrteam.ekart.shop.model.PriceVariation;
 import wrteam.ekart.shop.model.Product;
 import wrteam.ekart.shop.model.Slider;
 
-import static com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-import static com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
-
 public class ApiConfig extends Application {
 
     public static final String TAG = ApiConfig.class.getSimpleName();
@@ -111,17 +109,17 @@ public class ApiConfig extends Application {
     }
 
     public static void transparentStatusAndNavigation(Activity activity) {
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true, activity);
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
+        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         if (Build.VERSION.SDK_INT >= 21) {
             setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false, activity);
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
             //context.getWindow().setNavigationBarColor(Color.TRANSPARENT);
         }
+    }
+
+    @SuppressLint("DefaultLocale")
+    public static String StringFormat(String number) {
+        return String.format("%.2f", Double.parseDouble(number));
     }
 
     public static void setWindowFlag(final int bits, boolean on, Activity context) {
@@ -355,7 +353,7 @@ public class ApiConfig extends Application {
                 }
             };
 
-            stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, DEFAULT_MAX_RETRIES, DEFAULT_BACKOFF_MULT));
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0));
             ApiConfig.getInstance().getRequestQueue().getCache().clear();
             ApiConfig.getInstance().addToRequestQueue(stringRequest);
         }
@@ -508,22 +506,18 @@ public class ApiConfig extends Application {
         }
     }
 
-    public static Drawable buildCounterDrawable(int count, int backgroundImageId, Activity
-            activity) {
+    public static Drawable buildCounterDrawable(int count, Activity activity) {
         LayoutInflater inflater = LayoutInflater.from(activity);
         View view = inflater.inflate(R.layout.counter_menuitem_layout, null);
-        view.setBackgroundResource(backgroundImageId);
+        TextView textView = view.findViewById(R.id.count);
+        RelativeLayout lytCount = view.findViewById(R.id.lytCount);
         if (count == 0) {
-            View counterTextPanel = view.findViewById(R.id.counterValuePanel);
-            counterTextPanel.setVisibility(View.GONE);
+            lytCount.setVisibility(View.GONE);
         } else {
-            TextView textView = view.findViewById(R.id.count);
-            textView.setVisibility(View.VISIBLE);
+            lytCount.setVisibility(View.VISIBLE);
             textView.setText("" + count);
         }
-        view.measure(
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
 
         view.setDrawingCacheEnabled(true);
@@ -603,7 +597,7 @@ public class ApiConfig extends Application {
                 parentViewGroup.removeAllViews();
             }
 
-            final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity);
+            final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetTheme);
             mBottomSheetDialog.setContentView(sheetView);
             mBottomSheetDialog.show();
             mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

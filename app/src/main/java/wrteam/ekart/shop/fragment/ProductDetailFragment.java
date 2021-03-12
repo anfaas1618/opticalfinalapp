@@ -3,6 +3,7 @@ package wrteam.ekart.shop.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -34,6 +35,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.common.api.Api;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,15 +65,13 @@ import static wrteam.ekart.shop.helper.ApiConfig.GetSettings;
 
 
 public class ProductDetailFragment extends Fragment {
-    private static final String ARG_POSITION = "position";
     static ArrayList<Slider> sliderArrayList;
-    TextView showDiscount, tvMfg, tvMadeIn, txtProductName, txtqty, txtPrice, txtOriginalPrice, txtMeasurement, txtstatus, tvTitleMadeIn, tvTitleMfg;
+    TextView showDiscount, tvMfg, tvMadeIn, txtProductName, txtqty, txtPrice, txtoriginalprice, txtMeasurement, txtstatus, tvTitleMadeIn, tvTitleMfg;
     WebView webDescription;
     ViewPager viewPager;
     Spinner spinner;
     LinearLayout lytSpinner;
     ImageView imgIndicator;
-    SpannableString spannableString;
     LinearLayout mMarkersLayout, lytMfg, lytMadeIn;
     RelativeLayout lytmainprice, lytqty, lytDiscount;
     ScrollView scrollView;
@@ -100,16 +100,6 @@ public class ProductDetailFragment extends Fragment {
     String taxPercentage;
     LottieAnimationView lottieAnimationView;
     ShimmerFrameLayout mShimmerViewContainer;
-
-    public static ProductDetailFragment newInstance(int position) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(ARG_POSITION, position);
-
-        ProductDetailFragment fragment = new ProductDetailFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -143,7 +133,7 @@ public class ProductDetailFragment extends Fragment {
         sliderArrayList = new ArrayList<>();
         viewPager = root.findViewById(R.id.viewPager);
         txtProductName = root.findViewById(R.id.txtproductname);
-        txtOriginalPrice = root.findViewById(R.id.txtoriginalprice);
+        txtoriginalprice = root.findViewById(R.id.txtoriginalprice);
         webDescription = root.findViewById(R.id.txtDescription);
         txtPrice = root.findViewById(R.id.txtprice);
         lytDiscount = root.findViewById(R.id.lytDiscount);
@@ -216,14 +206,19 @@ public class ProductDetailFragment extends Fragment {
         lytshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = Constant.WebsiteUrl + "product/" + product.getSlug();
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-                sendIntent.setType("text/plain");
-                Intent shareIntent = Intent.createChooser(sendIntent, getString(R.string.share_via));
-                startActivity(shareIntent);
+                lytshare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String message = Constant.WebsiteUrl + "itemdetail/" + product.getSlug();
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+                        sendIntent.setType("text/plain");
+                        Intent shareIntent = Intent.createChooser(sendIntent, getString(R.string.share_via));
+                        startActivity(shareIntent);
+                    }
+                });
             }
         });
 
@@ -564,6 +559,8 @@ public class ProductDetailFragment extends Fragment {
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     void SetProductDetails(final Product product) {
         try {
+
+            txtProductName.setText(product.getName());
             try {
                 taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
             } catch (Exception e) {
@@ -720,23 +717,30 @@ public class ProductDetailFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     public void SetSelectedData() {
 
-
         txtMeasurement.setText(" ( " + priceVariation.getMeasurement() + priceVariation.getMeasurement_unit_name() + " ) ");
-        txtPrice.setText(getString(R.string.offer_price) + session.getData(Constant.currency) + priceVariation.getPrice());
         txtstatus.setText(priceVariation.getServe_for());
 
-        if (priceVariation.getDiscounted_price().equals("0") || priceVariation.getDiscounted_price().equals("")) {
-            lytDiscount.setVisibility(View.GONE);
-            txtPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-        } else {
-            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-            spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            txtOriginalPrice.setText(spannableString);
+        double price, oPrice;
+        String taxPercentage = "0";
+        try {
+            taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
+        } catch (Exception e) {
 
-            txtPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(priceVariation.getDiscounted_price()) + ((Float.parseFloat(priceVariation.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+        }
+        if (priceVariation.getDiscounted_price().equals("0") || priceVariation.getDiscounted_price().equals("")) {
+            lytDiscount.setVisibility(View.INVISIBLE);
+            price = ((Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+        } else {
+            price = ((Float.parseFloat(priceVariation.getDiscounted_price()) + ((Float.parseFloat(priceVariation.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+            oPrice = (Float.parseFloat(priceVariation.getPrice()) + ((Float.parseFloat(priceVariation.getPrice()) * Float.parseFloat(taxPercentage)) / 100));
+
+            txtoriginalprice.setPaintFlags(txtoriginalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            txtoriginalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + oPrice));
+
             lytDiscount.setVisibility(View.VISIBLE);
             showDiscount.setText(priceVariation.getDiscountpercent().replace("(", "").replace(")", ""));
         }
+        txtPrice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
 
         if (isLogin) {
@@ -765,7 +769,7 @@ public class ProductDetailFragment extends Fragment {
         menu.findItem(R.id.toolbar_cart).setVisible(true);
         menu.findItem(R.id.toolbar_sort).setVisible(false);
         menu.findItem(R.id.toolbar_search).setVisible(true);
-        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, R.drawable.ic_cart, activity));
+        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, activity));
         activity.invalidateOptionsMenu();
     }
 
@@ -799,11 +803,11 @@ public class ProductDetailFragment extends Fragment {
             TextView measurement = view.findViewById(R.id.txtmeasurement);
 //            TextView price = view.findViewById(R.id.txtprice);
 
-            PriceVariation extra = product.getPriceVariations().get(i);
-            measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-//            price.setText(session.getData(Constant.currency) + extra.getPrice());
+            PriceVariation priceVariation = product.getPriceVariations().get(i);
+            measurement.setText(priceVariation.getMeasurement() + " " + priceVariation.getMeasurement_unit_name());
+//            price.setText(session.getData(Constant.currency) + priceVariation.getPrice());
 
-            if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
+            if (priceVariation.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(getResources().getColor(R.color.red));
 //                price.setTextColor(getResources().getColor(R.color.red));
             } else {

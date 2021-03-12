@@ -4,12 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -129,7 +129,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             CustomAdapter customAdapter = new CustomAdapter(context, priceVariations, holder, product);
             holder.spinner.setAdapter(customAdapter);
 
-            holder.lytmain.setOnClickListener(new View.OnClickListener() {
+            holder.lytMain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -167,7 +167,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
 
-            SetSelectedData(holder, priceVariations.get(0));
+            SetSelectedData(holder, priceVariations.get(0), product);
 
 
         } else if (holderparent instanceof ViewHolderLoading) {
@@ -202,95 +202,100 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @SuppressLint("SetTextI18n")
-    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra) {
+    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra, Product product) {
+        try {
+            holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
+            holder.productPrice.setText(session.getData(Constant.currency) + extra.getPrice());
 
-        holder.Measurement.setText(extra.getMeasurement() + extra.getMeasurement_unit_name());
-        holder.productPrice.setText(session.getData(Constant.currency) + extra.getPrice());
+            if (session.isUserLoggedIn()) {
 
-        if (session.isUserLoggedIn()) {
-            if (extra.getCart_count().equals("0")) {
-
-            } else {
-                
-            }
-            if (Constant.CartValues.containsKey(extra.getId())) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    holder.txtqty.setText("" + Constant.CartValues.get(extra.getId()));
-                }
-            }
-        } else {
-
-
-            if (session.getData(extra.getId()) != null) {
-                holder.txtqty.setText(session.getData(extra.getId()));
-            } else {
-                holder.txtqty.setText(extra.getCart_count());
-            }
-        }
-
-        holder.txtstatus.setText(extra.getServe_for());
-
-        if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
-            holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-        } else {
-            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-            spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.originalPrice.setText(spannableString);
-
-            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
-            holder.lytDiscount.setVisibility(View.VISIBLE);
-            holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
-        }
-
-        if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
-            holder.txtstatus.setVisibility(View.VISIBLE);
-            holder.txtstatus.setTextColor(Color.RED);
-            holder.qtyLyt.setVisibility(View.GONE);
-        } else {
-            holder.txtstatus.setVisibility(View.GONE);
-            holder.qtyLyt.setVisibility(View.VISIBLE);
-        }
-
-        holder.txtqty.setText(databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()));
-
-        holder.imgAdd.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View view) {
-                int count = Integer.parseInt(holder.txtqty.getText().toString());
-                if (count < Float.parseFloat(extra.getStock())) {
-                    if (count < Integer.parseInt(session.getData(Constant.max_cart_items_count))) {
-                        count++;
-                        holder.txtqty.setText("" + count);
-                        databaseHelper.AddOrderData(extra.getId(), extra.getProduct_id(), "" + count);
-                        databaseHelper.getTotalItemOfCart(activity);
-                    } else {
-                        Toast.makeText(activity, activity.getString(R.string.limit_alert), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(activity, activity.getString(R.string.stock_limit), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        holder.imgMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int count = Integer.parseInt(holder.txtqty.getText().toString());
-                if (!(count <= 0)) {
+                if (Constant.CartValues.containsKey(extra.getId())) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        if (count != 0) {
-                            count--;
+                        holder.txtqty.setText("" + Constant.CartValues.get(extra.getId()));
+                    }
+                }
+            } else {
+                if (session.getData(extra.getId()) != null) {
+                    holder.txtqty.setText(session.getData(extra.getId()));
+                } else {
+                    holder.txtqty.setText(extra.getCart_count());
+                }
+            }
+
+            holder.txtstatus.setText(extra.getServe_for());
+
+            double price, oPrice;
+            String taxPercentage = "0";
+            try {
+                taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
+            } catch (Exception e) {
+
+            }
+            if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
+                holder.lytDiscount.setVisibility(View.INVISIBLE);
+                price = ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+            } else {
+                price = ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                oPrice = (Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100));
+
+                holder.originalPrice.setPaintFlags(holder.originalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.originalPrice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + oPrice));
+
+                holder.lytDiscount.setVisibility(View.VISIBLE);
+                holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
+            }
+            holder.productPrice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price));
+
+            if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
+                holder.txtstatus.setVisibility(View.VISIBLE);
+                holder.txtstatus.setTextColor(Color.RED);
+                holder.qtyLyt.setVisibility(View.GONE);
+            } else {
+                holder.txtstatus.setVisibility(View.GONE);
+                holder.qtyLyt.setVisibility(View.VISIBLE);
+            }
+
+            holder.txtqty.setText(databaseHelper.CheckOrderExists(extra.getId(), extra.getProduct_id()));
+
+            holder.imgAdd.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View view) {
+                    int count = Integer.parseInt(holder.txtqty.getText().toString());
+                    if (count < Float.parseFloat(extra.getStock())) {
+                        if (count < Integer.parseInt(session.getData(Constant.max_cart_items_count))) {
+                            count++;
                             holder.txtqty.setText("" + count);
                             databaseHelper.AddOrderData(extra.getId(), extra.getProduct_id(), "" + count);
                             databaseHelper.getTotalItemOfCart(activity);
+                        } else {
+                            Toast.makeText(activity, activity.getString(R.string.limit_alert), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(activity, activity.getString(R.string.stock_limit), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            holder.imgMinus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int count = Integer.parseInt(holder.txtqty.getText().toString());
+                    if (!(count <= 0)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            if (count != 0) {
+                                count--;
+                                holder.txtqty.setText("" + count);
+                                databaseHelper.AddOrderData(extra.getId(), extra.getProduct_id(), "" + count);
+                                databaseHelper.getTotalItemOfCart(activity);
+                            }
                         }
                     }
                 }
-            }
-        });
-
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     class ViewHolderLoading extends RecyclerView.ViewHolder {
@@ -315,7 +320,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         final ImageView imgThumb;
         final ImageView imgFav;
         final ImageView imgIndicator;
-        final RelativeLayout lytmain;
+        final CardView lytMain;
         final RelativeLayout lytDiscount, lytSpinner;
         final AppCompatSpinner spinner;
         final RelativeLayout qtyLyt;
@@ -335,7 +340,7 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             txtqty = itemView.findViewById(R.id.txtqty);
             qtyLyt = itemView.findViewById(R.id.qtyLyt);
             imgFav = itemView.findViewById(R.id.imgFav);
-            lytmain = itemView.findViewById(R.id.lytmain);
+            lytMain = itemView.findViewById(R.id.lytMain);
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
             lytSpinner = itemView.findViewById(R.id.lytSpinner);
@@ -379,26 +384,25 @@ public class OfflineFavoriteAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = inflter.inflate(R.layout.lyt_spinner_item, null);
             TextView measurement = view.findViewById(R.id.txtmeasurement);
-            TextView price = view.findViewById(R.id.txtprice);
-
+//            TextView price = view.findViewById(R.id.txtprice);
 
             PriceVariation extra = extraList.get(i);
             measurement.setText(extra.getMeasurement() + " " + extra.getMeasurement_unit_name());
-            price.setText(session.getData(Constant.currency) + extra.getPrice());
+//            price.setText(session.getData(Constant.currency) + extra.getPrice());
 
             if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
                 measurement.setTextColor(context.getResources().getColor(R.color.red));
-                price.setTextColor(context.getResources().getColor(R.color.red));
+//                price.setTextColor(context.getResources().getColor(R.color.red));
             } else {
                 measurement.setTextColor(context.getResources().getColor(R.color.black));
-                price.setTextColor(context.getResources().getColor(R.color.black));
+//                price.setTextColor(context.getResources().getColor(R.color.black));
             }
 
             holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     PriceVariation priceVariation = extraList.get(i);
-                    SetSelectedData(holder, priceVariation);
+                    SetSelectedData(holder, priceVariation, product);
                 }
 
                 @Override

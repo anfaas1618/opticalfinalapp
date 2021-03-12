@@ -275,7 +275,6 @@ public class DrawerActivity extends AppCompatActivity {
                     ApiConfig.clearFCM(activity, session);
                     break;
             }
-
             return true;
         });
     }
@@ -385,10 +384,10 @@ public class DrawerActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        //Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle.syncState();
-    }
+//    @Override
+//    protected void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        //Sync the toggle state after onRestoreInstanceState has occurred.
+//        drawerToggle.syncState();
+//    }
 }

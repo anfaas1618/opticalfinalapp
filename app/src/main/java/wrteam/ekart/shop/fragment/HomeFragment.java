@@ -8,15 +8,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
     SwipeRefreshLayout swipeLayout;
     View root;
     int timerDelay = 0, timerWaiting = 0;
-    SearchView searchview;
+    EditText searchview;
     RecyclerView categoryRecyclerView, sectionView, offerView;
     ViewPager mPager;
     LinearLayout mMarkersLayout;
@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> offerList;
     private ShimmerFrameLayout mShimmerViewContainer;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -142,13 +143,9 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        searchview.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchview.setIconified(true);
-                searchview.onActionViewCollapsed();
-                MainActivity.fm.beginTransaction().add(R.id.container, new SearchFragment()).addToBackStack(null).commit();
-            }
+        searchview.setOnTouchListener((View v, MotionEvent event) -> {
+            MainActivity.fm.beginTransaction().add(R.id.container, new SearchFragment()).addToBackStack(null).commit();
+            return false;
         });
 
         lytSearchview.setOnClickListener(new View.OnClickListener() {
@@ -400,11 +397,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Constant.TOOLBAR_TITLE = getString(R.string.app_name);
-        getActivity().invalidateOptionsMenu();
-        hideKeyboard();
-
+        activity.invalidateOptionsMenu();
         ApiConfig.GetSettings(activity);
+        hideKeyboard();
     }
 
     public void hideKeyboard() {

@@ -12,16 +12,14 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
+            android:layout_height="@dimen/_300sdp"
             android:src="@drawable/intro_a" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageView"
-            android:layout_marginTop="@dimen/dimen_30dp"
+            android:layout_marginTop="@dimen/dimen_60dp"
             android:text="@string/discover"
             android:textAlignment="center"
             android:textColor="@color/txt_color"
@@ -32,7 +30,6 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:text="@string/discover_text"

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0470C3</color>
+    <color name="colorPrimary">#067EED</color>
+    <color name="colorSecondary">#FF7C1F</color>
     <color name="colorPrimaryDark">#0470C3</color>
     <color name="colorAccent">#0470C3</color>
-    <color name="colorPrimaryLight">#DEF1FF</color>
+    <color name="colorPrimaryLight">#C1E6FF</color>
     <color name="bg_color">#FFFFFF</color>
+    <color name="title_txt_color">#0E3854</color>
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
@@ -38,5 +40,6 @@
     <color name="background">#1A070707</color>
     <color name="transparent">#00000000</color>
     <color name="half_transparent">#1A000000</color>
+    <color name="half_transparent_white">#99FFFFFF</color>
     <color name="swipe_delete">#EA4235</color>
 </resources>

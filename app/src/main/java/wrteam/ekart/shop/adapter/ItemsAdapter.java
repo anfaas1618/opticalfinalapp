@@ -79,11 +79,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.CartItemHold
         holder.txtqty.setText(order.getQuantity());
 
         String taxPercentage = order.getTax_percent();
+        double price = 0;
+
         if (order.getDiscounted_price().equals("0") || order.getDiscounted_price().equals("")) {
-            holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(order.getPrice()) + ((Float.parseFloat(order.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            price = ((Float.parseFloat(order.getPrice()) + ((Float.parseFloat(order.getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
         } else {
-            holder.txtprice.setText(session.getData(Constant.currency) + ((Float.parseFloat(order.getDiscounted_price()) + ((Float.parseFloat(order.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            price = ((Float.parseFloat(order.getDiscounted_price()) + ((Float.parseFloat(order.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
         }
+        holder.txtprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
         holder.txtpaytype.setText(activity.getResources().getString(R.string.via) + payType);
         holder.txtstatus.setText(activeStatus);

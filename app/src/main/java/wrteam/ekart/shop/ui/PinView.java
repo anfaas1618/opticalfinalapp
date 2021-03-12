@@ -53,8 +53,6 @@ import wrteam.ekart.shop.helper.DefaultMovementMethod;
 
 public class PinView extends AppCompatEditText {
 
-    static final String TAG = "PinView";
-
     static final boolean DBG = false;
 
     static final int BLINK = 500;
@@ -68,7 +66,6 @@ public class PinView extends AppCompatEditText {
 
     static final int VIEW_TYPE_RECTANGLE = 0;
     static final int VIEW_TYPE_LINE = 1;
-    static final int VIEW_TYPE_NONE = 2;
     final Paint mPaint;
     final TextPaint mAnimatorTextPaint = new TextPaint();
     final Rect mTextRect = new Rect();

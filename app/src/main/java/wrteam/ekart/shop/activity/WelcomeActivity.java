@@ -3,7 +3,6 @@ package wrteam.ekart.shop.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,7 @@ import wrteam.ekart.shop.helper.Session;
 public class WelcomeActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private Button button;
+    private TextView tvSkip, tvNext;
     private SliderPagerAdapter adapter;
 
     @Override
@@ -34,8 +33,8 @@ public class WelcomeActivity extends AppCompatActivity {
         // bind views
         viewPager = findViewById(R.id.pagerIntroSlider);
         TabLayout tabLayout = findViewById(R.id.tabs);
-        button = findViewById(R.id.button);
-        TextView tvSkip = findViewById(R.id.tvSkip);
+        tvSkip = findViewById(R.id.tvSkip);
+        tvNext = findViewById(R.id.tvNext);
 
         // init slider pager adapter
         adapter = new SliderPagerAdapter(getSupportFragmentManager(),
@@ -47,7 +46,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // set dot indicators
         tabLayout.setupWithViewPager(viewPager);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        tvNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if ((viewPager.getCurrentItem() + 1) < adapter.getCount()) {
@@ -84,9 +83,9 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 if (position == adapter.getCount() - 1) {
-                    button.setText(R.string.get_started);
+                    tvNext.setText(R.string.get_started);
                 } else {
-                    button.setText(R.string.next);
+                    tvNext.setText(R.string.next);
                 }
             }
 

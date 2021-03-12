@@ -57,7 +57,11 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void add(int position, OfflineCart item) {
-        items.add(position, item);
+        if (position != (getItemCount() + 1)) {
+            items.add(position, item);
+        } else {
+            items.add(item);
+        }
         notifyItemInserted(position);
     }
 
@@ -66,7 +70,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         String taxPercentage1 = "0";
         OfflineCart cart = items.get(position);
         try {
-            taxPercentage1 = (Double.parseDouble(cart.getItem().get(0).getTax_percentage()) > 0 ? cart.getItem().get(0).getTax_percentage() : "0");
+            taxPercentage1 = (Double.parseDouble(cart.getTax_percentage()) > 0 ? cart.getTax_percentage() : "0");
         } catch (Exception e) {
 
         }
@@ -79,7 +83,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         databaseHelper.DeleteOrderData(cart.getId(), cart.getProduct_id());
-        Constant.FLOAT_TOTAL_AMOUNT = Double.parseDouble(Constant.formater.format(Constant.FLOAT_TOTAL_AMOUNT - (price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id())))));
+        Constant.FLOAT_TOTAL_AMOUNT = Double.parseDouble(ApiConfig.StringFormat("" + (Constant.FLOAT_TOTAL_AMOUNT - (price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id()))))));
         CartFragment.SetData();
 
         items.remove(cart);
@@ -122,8 +126,6 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final ProductHolderItems holder = (ProductHolderItems) holderparent;
             final OfflineCart cart = items.get(position);
 
-            double price = Double.parseDouble(cart.getItem().get(0).getDiscounted_price());
-
             Picasso.get()
                     .load(cart.getItem().get(0).getImage())
                     .fit()
@@ -134,20 +136,31 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             holder.txtproductname.setText(cart.getItem().get(0).getName());
             holder.txtmeasurement.setText(cart.getItem().get(0).getMeasurement() + "\u0020" + cart.getItem().get(0).getUnit());
-            holder.txtprice.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(cart.getItem().get(0).getDiscounted_price())));
+            double price, oPrice;
+            String taxPercentage = "0";
+            try {
+                taxPercentage = (Double.parseDouble(cart.getTax_percentage()) > 0 ? cart.getTax_percentage() : "0");
+            } catch (Exception e) {
 
-
-            if (cart.getItem().get(0).getDiscounted_price().equals("0")) {
-                holder.txtprice.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(cart.getItem().get(0).getPrice())));
-                price = Double.parseDouble(cart.getItem().get(0).getPrice());
-            } else if (!cart.getItem().get(0).getDiscounted_price().equalsIgnoreCase(cart.getItem().get(0).getPrice())) {
-                holder.txtoriginalprice.setPaintFlags(holder.txtoriginalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                holder.txtoriginalprice.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(cart.getItem().get(0).getPrice())));
             }
+            holder.txtprice.setText(new Session(activity).getData(Constant.currency) + (cart.getDiscounted_price().equals("0") ? cart.getPrice() : cart.getDiscounted_price()));
+
+            if (cart.getDiscounted_price().equals("0") || cart.getDiscounted_price().equals("")) {
+                price = ((Float.parseFloat(cart.getPrice()) + ((Float.parseFloat(cart.getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+            } else {
+                price = ((Float.parseFloat(cart.getDiscounted_price()) + ((Float.parseFloat(cart.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+                oPrice = ((Float.parseFloat(cart.getPrice()) + ((Float.parseFloat(cart.getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
+                holder.txtoriginalprice.setPaintFlags(holder.txtoriginalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.txtoriginalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + oPrice));
+            }
+            holder.txtprice.setText(new Session(activity).getData(Constant.currency) + ApiConfig.StringFormat("" + price));
+
+            holder.txtproductname.setText(cart.getItem().get(0).getName());
+            holder.txtmeasurement.setText(cart.getItem().get(0).getMeasurement() + "\u0020" + cart.getItem().get(0).getUnit());
 
             holder.txtQuantity.setText(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id()));
 
-            holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id()))));
+            holder.txttotalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id()))));
 
             Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + (price * Integer.parseInt(databaseHelper.CheckOrderExists(cart.getId(), cart.getProduct_id())));
             CartFragment.SetData();
@@ -162,7 +175,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             count++;
                             cart.getItem().get(0).setCart_count("" + count);
                             holder.txtQuantity.setText("" + count);
-                            holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(finalPrice * count));
+                            holder.txttotalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + finalPrice * count));
                             Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT + finalPrice;
                             databaseHelper.AddOrderData(cart.getId(), cart.getProduct_id(), "" + count);
                             CartFragment.SetData();
@@ -183,7 +196,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         count--;
                         cart.getItem().get(0).setCart_count("" + count);
                         holder.txtQuantity.setText("" + count);
-                        holder.txttotalprice.setText(session.getData(Constant.currency) + Constant.formater.format(finalPrice * count));
+                        holder.txttotalprice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + finalPrice * count));
                         Constant.FLOAT_TOTAL_AMOUNT = Constant.FLOAT_TOTAL_AMOUNT - finalPrice;
                         databaseHelper.AddOrderData(cart.getId(), cart.getProduct_id(), "" + count);
                         CartFragment.SetData();
@@ -262,7 +275,7 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 snackbar.dismiss();
                 String taxPercentage1 = "0";
                 try {
-                    taxPercentage1 = (Double.parseDouble(cart.getItem().get(0).getTax_percentage()) > 0 ? cart.getItem().get(0).getTax_percentage() : "0");
+                    taxPercentage1 = (Double.parseDouble(cart.getTax_percentage()) > 0 ? cart.getTax_percentage() : "0");
                 } catch (Exception ignored) {
 
                 }
@@ -274,17 +287,17 @@ public class OfflineCartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     price = ((Float.parseFloat(cart.getItem().get(0).getDiscounted_price()) + ((Float.parseFloat(cart.getItem().get(0).getDiscounted_price()) * Float.parseFloat(taxPercentage1)) / 100)));
                 }
 
-                Constant.FLOAT_TOTAL_AMOUNT += (price * Integer.parseInt(cart.getItem().get(0).getCart_count()));
-
-                CartFragment.values.put(items.get(position).getItem().get(0).getId(), cart.getItem().get(0).getCart_count());
-
                 add(position, cart);
+
                 notifyDataSetChanged();
                 CartFragment.SetData();
                 CartFragment.isSoldOut = false;
                 Constant.TOTAL_CART_ITEM = getItemCount();
+                Constant.FLOAT_TOTAL_AMOUNT += (price * Integer.parseInt(cart.getItem().get(0).getCart_count()));
+                CartFragment.values.put(items.get(position).getItem().get(0).getId(), cart.getItem().get(0).getCart_count());
                 CartFragment.SetData();
                 activity.invalidateOptionsMenu();
+
             }
         });
         snackbar.setActionTextColor(Color.WHITE);

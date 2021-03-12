@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class OfflineCart {
 
-    String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock_unit_id;
+    String id, product_id, type, measurement, measurement_unit_id, price, discounted_price, serve_for, stock_unit_id, tax_title, tax_percentage;
     ArrayList<OfflineItems> item;
 
-    public OfflineCart(String id, String product_id, String type, String measurement, String measurement_unit_id, String price, String discounted_price, String serve_for, String stock_unit_id, ArrayList<OfflineItems> item) {
+    public OfflineCart(String id, String product_id, String type, String measurement, String measurement_unit_id, String price, String discounted_price, String serve_for, String stock_unit_id, ArrayList<OfflineItems> item, String tax_title, String tax_percentage) {
         this.id = id;
         this.product_id = product_id;
         this.type = type;
@@ -18,6 +18,24 @@ public class OfflineCart {
         this.serve_for = serve_for;
         this.stock_unit_id = stock_unit_id;
         this.item = item;
+        this.tax_title = tax_title;
+        this.tax_percentage = tax_percentage;
+    }
+
+    public String getTax_title() {
+        return tax_title;
+    }
+
+    public void setTax_title(String tax_title) {
+        this.tax_title = tax_title;
+    }
+
+    public String getTax_percentage() {
+        return tax_percentage;
+    }
+
+    public void setTax_percentage(String tax_percentage) {
+        this.tax_percentage = tax_percentage;
     }
 
     public String getId() {

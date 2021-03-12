@@ -116,7 +116,7 @@ public class ProductListFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (productArrayList.size() > 0) {
+                if (productArrayList!=null && productArrayList.size() > 0) {
                     offset = 0;
                     swipeLayout.setRefreshing(false);
                     productArrayList.clear();
@@ -522,7 +522,8 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.toolbar_sort).setVisible(isSort);
-        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, R.drawable.ic_cart, activity));
+        menu.findItem(R.id.toolbar_search).setVisible(true);
+        menu.findItem(R.id.toolbar_cart).setIcon(ApiConfig.buildCounterDrawable(Constant.TOTAL_CART_ITEM, activity));
 
         super.onPrepareOptionsMenu(menu);
     }

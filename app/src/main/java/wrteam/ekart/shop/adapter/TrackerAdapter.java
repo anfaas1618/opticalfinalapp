@@ -80,7 +80,7 @@ public class TrackerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.txtorderid.setText(activity.getString(R.string.order_number) + order.getOrder_id());
             String[] date = order.getDate_added().split("\\s+");
             holder.txtorderdate.setText(activity.getString(R.string.ordered_on) + date[0]);
-            holder.txtorderamount.setText(activity.getString(R.string.for_amount_on) + new Session(context).getData(Constant.currency) + order.getTotal());
+            holder.txtorderamount.setText(activity.getString(R.string.for_amount_on) + new Session(context).getData(Constant.currency) + ApiConfig.StringFormat(order.getTotal()));
 
             holder.carddetail.setOnClickListener(new View.OnClickListener() {
                 @Override

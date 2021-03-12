@@ -22,6 +22,7 @@ public class SplashActivity extends Activity {
 
     Session session;
     Activity activity;
+    String res = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +66,15 @@ public class SplashActivity extends Activity {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.activity_splash);
 
-            int SPLASH_TIME_OUT = 1000;
+            int SPLASH_TIME_OUT = 500;
 
             if (!session.getIsFirstTime("is_first_time")) {
-                new Handler().postDelayed(() -> startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)), SPLASH_TIME_OUT);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                }, SPLASH_TIME_OUT);
             } else {
                 GetHomeData();
             }
@@ -88,25 +94,12 @@ public class SplashActivity extends Activity {
             }
             ApiConfig.RequestToVolley((result, response) -> {
                 if (result) {
-                    try {
-                        intent.putExtra("json", response);
-                        startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        intent.putExtra("json", "");
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    intent.putExtra("json", "");
-                    startActivity(intent);
-                    finish();
+                    res = response;
                 }
+                intent.putExtra("json", res);
+                startActivity(intent);
+                finish();
             }, this, Constant.GET_ALL_DATA_URL, params, false);
-        } else {
-            intent.putExtra("json", "");
-            startActivity(intent);
-            finish();
         }
     }
 }

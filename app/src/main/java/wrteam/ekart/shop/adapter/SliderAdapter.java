@@ -43,8 +43,8 @@ public class SliderAdapter extends PagerAdapter {
         View imageLayout = LayoutInflater.from(activity).inflate(layout, view, false);
 
         assert imageLayout != null;
-        ImageView imgslider = imageLayout.findViewById(R.id.imgslider);
-        CardView lytmain = imageLayout.findViewById(R.id.lytmain);
+        ImageView imgSlider = imageLayout.findViewById(R.id.imgSlider);
+        CardView lytMain = imageLayout.findViewById(R.id.lytMain);
 
         final Slider singleItem = dataList.get(position);
 
@@ -55,10 +55,10 @@ public class SliderAdapter extends PagerAdapter {
                 .centerInside()
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
-                .into(imgslider);
+                .into(imgSlider);
         view.addView(imageLayout, 0);
 
-        lytmain.setOnClickListener(new View.OnClickListener() {
+        lytMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (from.equalsIgnoreCase("detail")) {

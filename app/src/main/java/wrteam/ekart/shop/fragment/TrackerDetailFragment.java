@@ -348,14 +348,14 @@ public class TrackerDetailFragment extends Fragment {
         txtorderdate.setText(date[0]);
         txtotherdetails.setText(getString(R.string.name_1) + order.getUsername() + getString(R.string.mobile_no_1) + order.getMobile() + getString(R.string.address_1) + order.getAddress());
         totalAfterTax = (Double.parseDouble(order.getTotal()) + Double.parseDouble(order.getDelivery_charge()) + Double.parseDouble(order.getTax_amt()));
-        tvItemTotal.setText(session.getData(Constant.currency) + order.getTotal());
-        tvDeliveryCharge.setText("+ " + session.getData(Constant.currency) + order.getDelivery_charge());
+        tvItemTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(order.getTotal()));
+        tvDeliveryCharge.setText("+ " + session.getData(Constant.currency) + ApiConfig.StringFormat(order.getDelivery_charge()));
         tvDPercent.setText(getString(R.string.discount) + "(" + order.getdPercent() + "%) :");
-        tvDAmount.setText("- " + session.getData(Constant.currency) + order.getdAmount());
+        tvDAmount.setText("- " + session.getData(Constant.currency) + ApiConfig.StringFormat(order.getdAmount()));
         tvTotal.setText(session.getData(Constant.currency) + totalAfterTax);
-        tvPCAmount.setText("- " + session.getData(Constant.currency) + order.getPromoDiscount());
-        tvWallet.setText("- " + session.getData(Constant.currency) + order.getWalletBalance());
-        tvFinalTotal.setText(session.getData(Constant.currency) + order.getFinal_total());
+        tvPCAmount.setText("- " + session.getData(Constant.currency) + ApiConfig.StringFormat(order.getPromoDiscount()));
+        tvWallet.setText("- " + session.getData(Constant.currency) + ApiConfig.StringFormat(order.getWalletBalance()));
+        tvFinalTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(order.getFinal_total()));
 
         try {
             if (!order.getStatus().equalsIgnoreCase("delivered") && !order.getStatus().equalsIgnoreCase("cancelled") && !order.getStatus().equalsIgnoreCase("returned")) {
@@ -413,7 +413,7 @@ public class TrackerDetailFragment extends Fragment {
 
                     if (textview != 0 && root.findViewById(textview) != null) {
                         TextView view1 = root.findViewById(textview);
-                        String str = order.getDate_added();
+                        String str = order.getOrderStatusArrayList().get(i).getStatusdate();
                         String[] splited = str.split("\\s+");
                         view1.setText(splited[0] + "\n" + splited[1]);
                     }

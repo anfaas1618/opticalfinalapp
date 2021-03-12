@@ -1,16 +1,26 @@
 package wrteam.ekart.shop.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,11 +31,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import wrteam.ekart.shop.R;
-import wrteam.ekart.shop.adapter.ProductAdapter;
+import wrteam.ekart.shop.adapter.ProductLoadMoreAdapter;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.Session;
@@ -36,20 +47,21 @@ import wrteam.ekart.shop.model.Product;
 
 public class SearchFragment extends Fragment {
     public static ArrayList<Product> productArrayList;
-    public static ProductAdapter productAdapter;
+    public static ProductLoadMoreAdapter productAdapter;
     public ProgressBar progressBar;
     View root;
     RecyclerView recyclerView;
     TextView noResult, msg;
     Session session;
     Activity activity;
-    SearchView searchview;
+    EditText searchview;
     boolean isGrid = false;
     int resource;
+    ListView listView;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_search, container, false);
         activity = getActivity();
 
@@ -62,53 +74,89 @@ public class SearchFragment extends Fragment {
         msg = root.findViewById(R.id.msg);
         progressBar = root.findViewById(R.id.pBar);
         searchview = root.findViewById(R.id.searchview);
+        listView = root.findViewById(R.id.listView);
         progressBar.setVisibility(View.GONE);
         session = new Session(getContext());
 
         Constant.CartValues = new HashMap<>();
+        String[] productsName = session.getData(Constant.GET_ALL_PRODUCTS_NAME).split(",");
+        searchview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, R.drawable.ic_close_, 0);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(productsName)));
+        listView.setAdapter(arrayAdapter);
 
-        if (session.getGrid("grid")) {
-            resource = R.layout.lyt_item_grid;
-            isGrid = true;
-
-            recyclerView = root.findViewById(R.id.recyclerView);
-            recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
-
-        } else {
-            resource = R.layout.lyt_item_list;
-            isGrid = false;
-
-            recyclerView = root.findViewById(R.id.recyclerView);
-            recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        }
-
-        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchview.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.length() > 0) {
-                    SearchRequest(newText);
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                arrayAdapter.getFilter().filter(searchview.getText().toString().trim());
+                if (searchview.getText().toString().trim().length() > 0) {
+                    listView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    searchview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, R.drawable.ic_close, 0);
                 } else {
-                    if (activity != null && productArrayList.size() > 0) {
-                        productArrayList.clear();
-                        productAdapter.notifyDataSetChanged();
-                    }
+                    listView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    searchview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, R.drawable.ic_close_, 0);
                 }
-                if (Constant.CartValues.size() > 0) {
-                    ApiConfig.AddMultipleProductInCart(session, activity, Constant.CartValues);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        searchview.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                SearchRequest(v.getText().toString().trim());
+                return false;
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                searchview.setText(arrayAdapter.getItem(position));
+                SearchRequest(arrayAdapter.getItem(position));
+            }
+        });
+
+        searchview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (searchview.getText().toString().trim().length() > 0) {
+                        if (event.getRawX() >= (searchview.getRight() - searchview.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            searchview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, R.drawable.ic_close_, 0);
+                            searchview.setText("");
+                        }
+                        return true;
+                    }
                 }
                 return false;
             }
         });
 
+
+        recyclerView = root.findViewById(R.id.recyclerView);
+
+        if (session.getGrid("grid")) {
+            resource = R.layout.lyt_item_grid;
+            isGrid = true;
+            recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
+
+        } else {
+            resource = R.layout.lyt_item_list;
+            isGrid = false;
+            recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        }
+
         return root;
     }
-
 
     public void SearchRequest(final String query) {  //json request for product search
         Map<String, String> params = new HashMap<>();
@@ -124,7 +172,6 @@ public class SearchFragment extends Fragment {
                         productArrayList = new ArrayList<>();
                         JSONObject objectbject = new JSONObject(response);
                         if (!objectbject.getBoolean(Constant.ERROR)) {
-
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray(Constant.DATA);
                             try {
@@ -151,16 +198,18 @@ public class SearchFragment extends Fragment {
 
                             }
 
-                            productAdapter = new ProductAdapter(productArrayList, resource, activity);
+                            productAdapter = new ProductLoadMoreAdapter(activity, productArrayList, resource, "search");
                             recyclerView.setAdapter(productAdapter);
                             noResult.setVisibility(View.GONE);
                             msg.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         } else {
                             noResult.setVisibility(View.VISIBLE);
                             msg.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                             productArrayList.clear();
-                            recyclerView.setAdapter(new ProductAdapter(productArrayList, resource, activity));
+                            recyclerView.setAdapter(new ProductLoadMoreAdapter(activity, productArrayList, resource, "search"));
                         }
                     } catch (JSONException e) {
 
@@ -169,6 +218,13 @@ public class SearchFragment extends Fragment {
             }
         }, activity, Constant.PRODUCT_SEARCH_URL, params, false);
 
+    }
+
+    public void showSoftKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     @Override
@@ -184,10 +240,8 @@ public class SearchFragment extends Fragment {
         super.onResume();
         Constant.TOOLBAR_TITLE = getString(R.string.search);
         activity.invalidateOptionsMenu();
-        searchview.setIconifiedByDefault(true);
-        searchview.setFocusable(true);
-        searchview.setIconified(false);
-        searchview.requestFocusFromTouch();
+        searchview.requestFocus();
+        showSoftKeyboard(searchview);
     }
 
     @Override

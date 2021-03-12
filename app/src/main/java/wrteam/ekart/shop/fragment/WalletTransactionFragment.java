@@ -16,10 +16,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -88,6 +90,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     String paymentMethod = null;
     String customerId;
     private ShimmerFrameLayout mShimmerViewContainer;
+    RadioGroup lytPayment;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -109,6 +112,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
         tvBalance = root.findViewById(R.id.tvBalance);
         btnRechargeWallet = root.findViewById(R.id.btnRechargeWallet);
         mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
+        lytPayment = root.findViewById(R.id.lytPayment);
 
         tvAlertTitle.setText(getString(R.string.no_wallet_history_found));
         tvAlertSubTitle.setText(getString(R.string.you_have_not_any_wallet_history_yet));
@@ -132,6 +136,14 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
         tvBalance.setText(session.getData(Constant.currency) + Constant.WALLET_BALANCE);
 
+        lytPayment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                RadioButton rb = (RadioButton) root.findViewById(checkedId);
+                paymentMethod = rb.getTag().toString();
+            }
+        });
+
         btnRechargeWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +158,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                 Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                 TextView tvDialogSend, tvDialogCancel, edtAmount, edtMsg;
-                LinearLayout lytPayOption, lytFlutterWave, lytPayU, lytPayPal, lytRazorPay, lytPayStack, lytMidTrans, lytStripe, lytPayTm;
+                LinearLayout lytPayOption;
                 RadioButton rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe, rbPayTm;
 
                 edtAmount = dialogView.findViewById(R.id.edtAmount);
@@ -154,24 +166,15 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                 tvDialogCancel = dialogView.findViewById(R.id.tvDialogCancel);
                 tvDialogSend = dialogView.findViewById(R.id.tvDialogRecharge);
                 lytPayOption = dialogView.findViewById(R.id.lytPayOption);
-                lytPayStack = dialogView.findViewById(R.id.lytPayStack);
 
                 rbPayStack = dialogView.findViewById(R.id.rbPayStack);
                 rbFlutterWave = dialogView.findViewById(R.id.rbFlutterWave);
-                rbPayU = dialogView.findViewById(R.id.rbPayU);
                 rbPayPal = dialogView.findViewById(R.id.rbPayPal);
                 rbRazorPay = dialogView.findViewById(R.id.rbRazorPay);
                 rbMidTrans = dialogView.findViewById(R.id.rbMidTrans);
                 rbStripe = dialogView.findViewById(R.id.rbStripe);
                 rbPayTm = dialogView.findViewById(R.id.rbPayTm);
-
-                lytPayPal = dialogView.findViewById(R.id.lytPayPal);
-                lytRazorPay = dialogView.findViewById(R.id.lytRazorPay);
-                lytPayU = dialogView.findViewById(R.id.lytPayU);
-                lytFlutterWave = dialogView.findViewById(R.id.lytFlutterWave);
-                lytMidTrans = dialogView.findViewById(R.id.lytMidTrans);
-                lytStripe = dialogView.findViewById(R.id.lytStripe);
-                lytPayTm = dialogView.findViewById(R.id.lytPayTm);
+                rbPayU = dialogView.findViewById(R.id.rbPayU);
 
                 Map<String, String> params = new HashMap<>();
                 params.put(Constant.SETTINGS, Constant.GetVal);
@@ -232,130 +235,29 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                                             lytPayOption.setVisibility(View.VISIBLE);
 
                                             if (Constant.PAYUMONEY.equals("1")) {
-                                                lytPayU.setVisibility(View.VISIBLE);
+                                                rbPayU.setVisibility(View.VISIBLE);
                                             }
                                             if (Constant.RAZORPAY.equals("1")) {
-                                                lytRazorPay.setVisibility(View.VISIBLE);
+                                                rbRazorPay.setVisibility(View.VISIBLE);
                                             }
                                             if (Constant.PAYSTACK.equals("1")) {
-                                                lytPayStack.setVisibility(View.VISIBLE);
+                                                rbPayStack.setVisibility(View.VISIBLE);
                                             }
                                             if (Constant.FLUTTERWAVE.equals("1")) {
-                                                lytFlutterWave.setVisibility(View.VISIBLE);
+                                                rbFlutterWave.setVisibility(View.VISIBLE);
                                             }
                                             if (Constant.PAYPAL.equals("1")) {
-                                                lytPayPal.setVisibility(View.VISIBLE);
+                                                rbPayPal.setVisibility(View.VISIBLE);
                                             }
                                             if (Constant.MIDTRANS.equals("1")) {
-                                                lytMidTrans.setVisibility(View.VISIBLE);
+                                                rbMidTrans.setVisibility(View.VISIBLE);
                                             }
                                             if (Constant.STRIPE.equals("1")) {
-                                                lytStripe.setVisibility(View.VISIBLE);
+                                                rbStripe.setVisibility(View.VISIBLE);
                                             }
                                             if (Constant.PAYTM.equals("1")) {
-                                                lytPayTm.setVisibility(View.VISIBLE);
+                                                rbPayTm.setVisibility(View.VISIBLE);
                                             }
-
-                                            rbPayU.setOnClickListener(v -> {
-                                                rbPayU.setChecked(true);
-                                                rbPayPal.setChecked(false);
-                                                rbRazorPay.setChecked(false);
-                                                rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(false);
-                                                rbStripe.setChecked(false);
-                                                rbMidTrans.setChecked(false);
-                                                rbPayTm.setChecked(false);
-                                                paymentMethod = rbPayU.getTag().toString();
-
-                                            });
-
-                                            rbPayPal.setOnClickListener(v -> {
-                                                rbPayU.setChecked(false);
-                                                rbPayPal.setChecked(true);
-                                                rbRazorPay.setChecked(false);
-                                                rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(false);
-                                                rbStripe.setChecked(false);
-                                                rbMidTrans.setChecked(false);
-                                                rbPayTm.setChecked(false);
-                                                paymentMethod = rbPayPal.getTag().toString();
-
-                                            });
-
-                                            rbRazorPay.setOnClickListener(v -> {
-                                                rbPayU.setChecked(false);
-                                                rbPayPal.setChecked(false);
-                                                rbRazorPay.setChecked(true);
-                                                rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(false);
-                                                rbStripe.setChecked(false);
-                                                rbMidTrans.setChecked(false);
-                                                rbPayTm.setChecked(false);
-                                                paymentMethod = rbRazorPay.getTag().toString();
-                                                Checkout.preload(getContext());
-                                            });
-
-                                            rbPayStack.setOnClickListener(v -> {
-                                                rbPayU.setChecked(false);
-                                                rbPayPal.setChecked(false);
-                                                rbRazorPay.setChecked(false);
-                                                rbPayStack.setChecked(true);
-                                                rbFlutterWave.setChecked(false);
-                                                rbStripe.setChecked(false);
-                                                rbMidTrans.setChecked(false);
-                                                rbPayTm.setChecked(false);
-                                                paymentMethod = rbPayStack.getTag().toString();
-
-                                            });
-
-                                            rbFlutterWave.setOnClickListener(v -> {
-                                                rbPayU.setChecked(false);
-                                                rbPayPal.setChecked(false);
-                                                rbRazorPay.setChecked(false);
-                                                rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(true);
-                                                rbStripe.setChecked(false);
-                                                rbMidTrans.setChecked(false);
-                                                rbPayTm.setChecked(false);
-                                                paymentMethod = rbFlutterWave.getTag().toString();
-
-                                            });
-
-                                            rbStripe.setOnClickListener(v -> {
-                                                rbPayU.setChecked(false);
-                                                rbPayPal.setChecked(false);
-                                                rbRazorPay.setChecked(false);
-                                                rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(false);
-                                                rbStripe.setChecked(true);
-                                                rbMidTrans.setChecked(false);
-                                                rbPayTm.setChecked(false);
-                                                paymentMethod = rbStripe.getTag().toString();
-                                            });
-
-                                            rbMidTrans.setOnClickListener(v -> {
-                                                rbPayU.setChecked(false);
-                                                rbPayPal.setChecked(false);
-                                                rbRazorPay.setChecked(false);
-                                                rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(false);
-                                                rbStripe.setChecked(false);
-                                                rbMidTrans.setChecked(true);
-                                                rbPayTm.setChecked(false);
-                                                paymentMethod = rbMidTrans.getTag().toString();
-                                            });
-
-                                            rbPayTm.setOnClickListener(v -> {
-                                                rbPayU.setChecked(false);
-                                                rbPayPal.setChecked(false);
-                                                rbRazorPay.setChecked(false);
-                                                rbPayStack.setChecked(false);
-                                                rbFlutterWave.setChecked(false);
-                                                rbStripe.setChecked(false);
-                                                rbMidTrans.setChecked(false);
-                                                rbPayTm.setChecked(true);
-                                                paymentMethod = rbPayTm.getTag().toString();
-                                            });
                                         }
                                     } else {
                                         Toast.makeText(activity, getString(R.string.alert_payment_methods_blank), Toast.LENGTH_SHORT).show();
@@ -462,8 +364,8 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                     try {
                         JSONObject object = new JSONObject(response);
                         if (!object.getBoolean(Constant.ERROR)) {
-                            DrawerActivity.tvWallet.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
-                            tvBalance.setText(session.getData(Constant.currency) + Constant.formater.format(Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
+                            DrawerActivity.tvWallet.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
+                            tvBalance.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+Double.parseDouble(object.getString(Constant.NEW_BALANCE))));
                         }
                     } catch (JSONException e) {
 
@@ -727,7 +629,8 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     }
 
     @Override
-    public void onErrorLoadingWebPage(int iniErrorCode, String inErrorMessage, String inFailingUrl) {
+    public void onErrorLoadingWebPage(int iniErrorCode, String inErrorMessage, String
+            inFailingUrl) {
 
     }
 
@@ -932,7 +835,8 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     }
 
 
-    public void CreateMidtransPayment(String orderId, String grossAmount, Map<String, String> sendparams) {
+    public void CreateMidtransPayment(String orderId, String
+            grossAmount, Map<String, String> sendparams) {
         Map<String, String> params = new HashMap<>();
         params.put(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID) + "-" + System.currentTimeMillis());
         params.put(Constant.GROSS_AMOUNT, "" + (int) Math.round(Double.parseDouble(grossAmount)));

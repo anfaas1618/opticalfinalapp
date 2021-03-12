@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +57,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     final DatabaseHelper databaseHelper;
     final String from;
     public boolean isLoading;
-    SpannableString spannableString;
     boolean isFavorite;
-    String taxPercentage;
 
     public ProductLoadMoreAdapter(Context context, ArrayList<Product> myDataset, int resource, String from) {
         this.context = context;
@@ -73,7 +69,6 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         isLogin = session.isUserLoggedIn();
         Constant.CartValues = new HashMap<>();
         databaseHelper = new DatabaseHelper(activity);
-        taxPercentage = "0";
     }
 
     public void add(int position, Product item) {
@@ -105,12 +100,6 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holder.setIsRecyclable(false);
             final Product product = mDataset.get(position);
 
-            try {
-                taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
-            } catch (Exception e) {
-
-            }
-
             final ArrayList<PriceVariation> priceVariations = product.getPriceVariations();
             if (priceVariations.size() == 1) {
                 holder.spinner.setVisibility(View.INVISIBLE);
@@ -136,7 +125,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             CustomAdapter customAdapter = new CustomAdapter(context, priceVariations, holder, product);
             holder.spinner.setAdapter(customAdapter);
 
-            holder.lytmain.setOnClickListener(new View.OnClickListener() {
+            holder.lytMain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -161,7 +150,6 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 
             if (isLogin) {
-
                 holder.txtqty.setText(priceVariations.get(0).getCart_count());
 
                 if (product.isIs_favorite()) {
@@ -215,7 +203,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                 });
             }
-            SetSelectedData(holder, priceVariations.get(0));
+            SetSelectedData(holder, priceVariations.get(0), product);
 
 
         } else if (holderparent instanceof ViewHolderLoading) {
@@ -250,7 +238,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @SuppressLint("SetTextI18n")
-    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra) {
+    public void SetSelectedData(final ViewHolderRow holder, final PriceVariation extra, Product product) {
 
 //        GST_Amount (Original Cost x GST %)/100
 //        Net_Price Original Cost + GST Amount
@@ -274,19 +262,27 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         holder.txtstatus.setText(extra.getServe_for());
 
+        double price, oPrice = 0;
+        String taxPercentage = "0";
+        try {
+            taxPercentage = (Double.parseDouble(product.getTax_percentage()) > 0 ? product.getTax_percentage() : "0");
+        } catch (Exception e) {
 
+        }
         if (extra.getDiscounted_price().equals("0") || extra.getDiscounted_price().equals("")) {
             holder.lytDiscount.setVisibility(View.INVISIBLE);
-            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
+            price = ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100)));
         } else {
-            spannableString = new SpannableString(session.getData(Constant.currency) + ((Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100))));
-            spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.originalPrice.setText(spannableString);
+            price = ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100)));
+            oPrice = (Float.parseFloat(extra.getPrice()) + ((Float.parseFloat(extra.getPrice()) * Float.parseFloat(taxPercentage)) / 100));
 
-            holder.productPrice.setText(session.getData(Constant.currency) + ((Float.parseFloat(extra.getDiscounted_price()) + ((Float.parseFloat(extra.getDiscounted_price()) * Float.parseFloat(taxPercentage)) / 100))));
+            holder.originalPrice.setPaintFlags(holder.originalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.originalPrice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + oPrice));
+
             holder.lytDiscount.setVisibility(View.VISIBLE);
             holder.showDiscount.setText(extra.getDiscountpercent().replace("(", "").replace(")", ""));
         }
+        holder.productPrice.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + price));
 
         if (extra.getServe_for().equalsIgnoreCase(Constant.SOLDOUT_TEXT)) {
             holder.txtstatus.setVisibility(View.VISIBLE);
@@ -419,7 +415,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         final ImageView imgFav;
         final ImageView imgIndicator;
         final RelativeLayout lytDiscount, lytSpinner;
-        final CardView lytmain;
+        final CardView lytMain;
         final AppCompatSpinner spinner;
         final RelativeLayout qtyLyt;
         final LottieAnimationView lottieAnimationView;
@@ -439,14 +435,12 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             txtqty = itemView.findViewById(R.id.txtqty);
             qtyLyt = itemView.findViewById(R.id.qtyLyt);
             imgFav = itemView.findViewById(R.id.imgFav);
-            lytmain = itemView.findViewById(R.id.lytmain);
+            lytMain = itemView.findViewById(R.id.lytMain);
             spinner = itemView.findViewById(R.id.spinner);
             lytDiscount = itemView.findViewById(R.id.lytDiscount);
             lytSpinner = itemView.findViewById(R.id.lytSpinner);
 
             lottieAnimationView = itemView.findViewById(R.id.lottieAnimationView);
-
-            lottieAnimationView.setAnimation("add_to_wish_list.json");
 
         }
 
@@ -506,7 +500,7 @@ public class ProductLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     PriceVariation priceVariation = extraList.get(i);
-                    SetSelectedData(holder, priceVariation);
+                    SetSelectedData(holder, priceVariation, product);
                 }
 
                 @Override

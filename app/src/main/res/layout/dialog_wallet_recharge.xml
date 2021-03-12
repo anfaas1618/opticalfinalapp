@@ -70,9 +70,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/card_shadow"
                 android:orientation="vertical"
-                android:padding="@dimen/dimen_5dp"
-                android:visibility="visible">
+                android:padding="@dimen/_10sdp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -82,383 +83,141 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:text="@string/payment_mathod"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_13ssp" />
 
-                <LinearLayout
-                    android:id="@+id/lytPayU"
+                <RadioGroup
+                    android:id="@+id/lytPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:divider="@color/light_gray"
+                    android:showDividers="middle">
 
-                    <View
+                    <RadioButton
+                        android:id="@+id/rbCOD"
                         android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/bg_color" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_cod"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:weightSum="10">
+                        android:tag="@string/codpaytype"
+                        android:text="@string/cod_pay"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:src="@drawable/ic_payu" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="7"
-                            android:text="@string/pay_u_pay"
-                            android:textColor="@color/txt_color"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <RadioButton
-                            android:id="@+id/rbPayU"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_10sdp"
-                            android:tag="@string/pay_u"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lytRazorPay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <View
+                    <RadioButton
+                        android:id="@+id/rbPayU"
                         android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/bg_color" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_payu"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:weightSum="10">
+                        android:tag="@string/pay_u"
+                        android:text="@string/pay_u_pay"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:src="@drawable/ic_razorpay" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="7"
-                            android:text="@string/razor_payment"
-                            android:textColor="@color/txt_color"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <RadioButton
-                            android:id="@+id/rbRazorPay"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_10sdp"
-                            android:tag="@string/razor_pay"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lytPayStack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <View
+                    <RadioButton
+                        android:id="@+id/rbRazorPay"
                         android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/bg_color" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_razorpay"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:weightSum="10">
+                        android:tag="@string/paystack"
+                        android:text="@string/razor_payment"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:src="@drawable/ic_paystack" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="7"
-                            android:text="@string/paystack"
-                            android:textColor="@color/txt_color"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <RadioButton
-                            android:id="@+id/rbPayStack"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_10sdp"
-                            android:tag="@string/paystack"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lytFlutterWave"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <View
+                    <RadioButton
+                        android:id="@+id/rbPayStack"
                         android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/bg_color" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_paystack"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:weightSum="10">
+                        android:text="@string/paystack"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:src="@drawable/ic_flutterwave" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="7"
-                            android:text="@string/flutterwave"
-                            android:textColor="@color/txt_color"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <RadioButton
-                            android:id="@+id/rbFlutterWave"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_10sdp"
-                            android:tag="@string/flutterwave"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lytPayPal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <View
+                    <RadioButton
+                        android:id="@+id/rbFlutterWave"
                         android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/bg_color" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_flutterwave"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:weightSum="10">
+                        android:tag="@string/flutterwave"
+                        android:text="@string/flutterwave"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:src="@drawable/ic_paypal" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="7"
-                            android:text="@string/paypal_pay"
-                            android:textColor="@color/txt_color"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <RadioButton
-                            android:id="@+id/rbPayPal"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_10sdp"
-                            android:tag="@string/paypal"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lytMidTrans"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <View
+                    <RadioButton
+                        android:id="@+id/rbPayPal"
                         android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/bg_color" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_paypal"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:weightSum="10">
+                        android:tag="@string/paypal"
+                        android:text="@string/paypal_pay"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:src="@drawable/ic_midtrans" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="7"
-                            android:text="@string/midtrans"
-                            android:textColor="@color/txt_color"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <RadioButton
-                            android:id="@+id/rbMidTrans"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_10sdp"
-                            android:tag="@string/midtrans"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lytStripe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <View
+                    <RadioButton
+                        android:id="@+id/rbMidTrans"
                         android:layout_width="match_parent"
-                        android:layout_height="1.5dp"
-                        android:background="@color/bg_color" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_midtrans"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:weightSum="10">
+                        android:tag="@string/midtrans"
+                        android:text="@string/midtrans"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:src="@drawable/ic_stripe" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="7"
-                            android:text="@string/stripe"
-                            android:textColor="@color/txt_color"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <RadioButton
-                            android:id="@+id/rbStripe"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_10sdp"
-                            android:tag="@string/stripe"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/lytPayTm"
+                    <RadioButton
+                        android:id="@+id/rbStripe"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_stripe"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
+                        android:padding="@dimen/_5sdp"
+                        android:tag="@string/stripe"
+                        android:text="@string/stripe"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1.5dp"
-                            android:background="@color/bg_color" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5sdp"
-                            android:weightSum="10">
-
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                android:src="@drawable/ic_paytm" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="7"
-                                android:text="@string/paytm"
-                                android:textColor="@color/txt_color"
-                                android:textSize="@dimen/_12ssp" />
-
-                            <RadioButton
-                                android:id="@+id/rbPayTm"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:padding="@dimen/_10sdp"
-                                android:tag="@string/paytm"
-                                android:textSize="@dimen/_12ssp" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
+                    <RadioButton
+                        android:id="@+id/rbPayTm"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:button="@drawable/ic_radio_button"
+                        android:drawableEnd="@drawable/ic_paytm"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:layoutDirection="rtl"
+                        android:padding="@dimen/_5sdp"
+                        android:tag="@string/paytm"
+                        android:text="@string/paytm"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone" />
+                </RadioGroup>
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"

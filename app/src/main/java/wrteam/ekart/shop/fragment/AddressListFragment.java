@@ -98,7 +98,7 @@ public class AddressListFragment extends Fragment {
         if (getArguments().getString(Constant.FROM).equalsIgnoreCase("process")) {
             processLyt.setVisibility(View.VISIBLE);
             confirmLyt.setVisibility(View.VISIBLE);
-            tvSubTotal.setText(session.getData(Constant.currency) + Constant.formater.format(getArguments().getDouble("total")));
+            tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + getArguments().getDouble("total")));
             txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
             tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")

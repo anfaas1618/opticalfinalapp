@@ -2,6 +2,7 @@ package wrteam.ekart.shop.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -59,7 +60,6 @@ import wrteam.ekart.shop.R;
 import wrteam.ekart.shop.helper.ApiConfig;
 import wrteam.ekart.shop.helper.Constant;
 import wrteam.ekart.shop.helper.DatabaseHelper;
-import wrteam.ekart.shop.helper.ProgressDisplay;
 import wrteam.ekart.shop.helper.Session;
 import wrteam.ekart.shop.helper.Utils;
 import wrteam.ekart.shop.helper.VolleyCallback;
@@ -69,9 +69,8 @@ import static com.paytm.pgsdk.easypay.manager.PaytmAssist.getContext;
 
 public class LoginActivity extends AppCompatActivity {
 
-    ProgressDisplay progress;
     LinearLayout lytPrivacy, lytOTP;
-    EditText edtResetPass, edtResetCPass, edtRefer, edtforgotmobile, edtloginpassword, edtLoginMobile, edtname, edtemail, edtpsw, edtcpsw, edtMobileVerify;
+    EditText edtResetPass, edtResetCPass, edtRefer, edtloginpassword, edtLoginMobile, edtname, edtemail, edtpsw, edtcpsw, edtMobileVerify;
     Button btnVerify, btnsubmit, btnResetPass;
     CountryCodePicker edtCountryCodePicker;
     PinView pinViewOTP;
@@ -86,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
     String phoneNumber, firebase_otp = "", otpFor = "";
     boolean resendOTP = false;
     FirebaseAuth auth;
+    
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
     DatabaseHelper databaseHelper;
     Activity activity;
@@ -94,6 +94,10 @@ public class LoginActivity extends AppCompatActivity {
     RelativeLayout lytWebView;
     WebView webView;
     String from, mobile, countryCode;
+    TextView tvCountryCodePicker;
+    ProgressDialog dialog;
+    boolean forMultipleCountryUse = true;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -145,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
         img = findViewById(R.id.img);
         lytWebView = findViewById(R.id.lytWebView);
         webView = findViewById(R.id.webView);
+        tvCountryCodePicker = findViewById(R.id.tvCountryCodePicker);
 
         tvForgotPass.setText(underlineSpannable(getString(R.string.forgottext)));
         edtLoginMobile.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_phone, 0, 0, 0);
@@ -170,10 +175,9 @@ public class LoginActivity extends AppCompatActivity {
 
         tvWelcome.setText(getString(R.string.welcome) + getString(R.string.app_name));
 
-        progress = new ProgressDisplay(this);
+//        edtCountryCodePicker.setDefaultCountryUsingNameCode("IN");
 
-//        edtCountryCodePicker.setCountryForNameCode("CODE");
-//        edtFCode.setCountryForNameCode("CODE");
+//        forMultipleCountryUse = false;
 
         if (from != null) {
             switch (from) {
@@ -183,6 +187,12 @@ public class LoginActivity extends AppCompatActivity {
                     lytLogin.setVisibility(View.VISIBLE);
                     lytLogin.startAnimation(animShow);
                     new Handler().postDelayed(() -> edtLoginMobile.requestFocus(), 1500);
+                    break;
+                case "refer":
+                    otpFor = "new_user";
+                    lytVerify.setVisibility(View.VISIBLE);
+                    lytVerify.startAnimation(animShow);
+                    new Handler().postDelayed(() -> edtMobileVerify.requestFocus(), 1500);
                     break;
                 default:
                     lytVerify.setVisibility(View.GONE);
@@ -207,6 +217,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void generateOTP() {
+        dialog = ProgressDialog.show(activity, "", "OTP is being sent....", true);
         session.setData(Constant.COUNTRY_CODE, countryCode);
         Map<String, String> params = new HashMap<>();
         params.put(Constant.TYPE, Constant.VERIFY_USER);
@@ -218,6 +229,7 @@ public class LoginActivity extends AppCompatActivity {
                     phoneNumber = ("+" + session.getData(Constant.COUNTRY_CODE) + mobile);
                     if (otpFor.equals("new_user")) {
                         if (object.getBoolean(Constant.ERROR)) {
+                            dialog.dismiss();
                             setSnackBar(getString(R.string.alert_register_num1) + getString(R.string.app_name) + getString(R.string.alert_register_num2), getString(R.string.btn_ok), from);
                         } else {
                             sentRequest(phoneNumber);
@@ -227,6 +239,7 @@ public class LoginActivity extends AppCompatActivity {
                             Constant.U_ID = object.getString(Constant.ID);
                             sentRequest(phoneNumber);
                         } else {
+                            dialog.dismiss();
                             setSnackBar(getString(R.string.alert_not_register_num1) + getString(R.string.app_name) + getString(R.string.alert_not_register_num2), getString(R.string.btn_ok), from);
                         }
                     }
@@ -234,7 +247,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             }
-        }, activity, Constant.RegisterUrl, params, true);
+        }, activity, Constant.RegisterUrl, params, false);
     }
 
 
@@ -266,6 +279,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
+                dialog.dismiss();
                 firebase_otp = s;
                 pinViewOTP.requestFocus();
                 if (resendOTP) {
@@ -401,52 +415,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void RecoverPassword() {
-        mobile = edtforgotmobile.getText().toString().trim();
-        countryCode = "0";//edtFCode.getSelectedCountryCode();
-        if (ApiConfig.CheckValidattion(mobile, false, false)) {
-            edtforgotmobile.requestFocus();
-            edtforgotmobile.setError(getString(R.string.enter_mobile_no));
-        } else if (mobile.length() != 0 && ApiConfig.CheckValidattion(mobile, false, true)) {
-            edtforgotmobile.requestFocus();
-            edtforgotmobile.setError(getString(R.string.enter_valid_mobile_no));
-
-        } else {
-            session.setData(Constant.COUNTRY_CODE, countryCode);
-            Map<String, String> params = new HashMap<>();
-            params.put(Constant.TYPE, Constant.VERIFY_USER);
-            params.put(Constant.MOBILE, mobile);
-            ApiConfig.RequestToVolley(new VolleyCallback() {
-                @Override
-                public void onSuccess(boolean result, String response) {
-                    if (result) {
-                        try {
-                            //System.out.println("=================*verify  " + response);
-                            JSONObject object = new JSONObject(response);
-                            phoneNumber = ("+" + session.getData(Constant.COUNTRY_CODE) + mobile);
-                            if (otpFor.equals("new_user")) {
-                                if (object.getBoolean(Constant.ERROR)) {
-                                    setSnackBar(getString(R.string.alert_register_num1) + getString(R.string.app_name) + getString(R.string.alert_register_num2), getString(R.string.btn_ok), from);
-                                } else {
-                                    sentRequest(phoneNumber);
-                                }
-                            } else if (otpFor.equals("exist_user")) {
-                                if (object.getBoolean(Constant.ERROR)) {
-                                    Constant.U_ID = object.getString(Constant.ID);
-                                    sentRequest(phoneNumber);
-                                } else {
-                                    setSnackBar(getString(R.string.alert_not_register_num1) + getString(R.string.app_name) + getString(R.string.alert_not_register_num2), getString(R.string.btn_ok), from);
-                                }
-                            }
-                        } catch (JSONException e) {
-
-                        }
-                    }
-                }
-            }, activity, Constant.RegisterUrl, params, true);
-        }
-    }
-
     public void UserLogin(String mobile, String password) {
 
         Map<String, String> params = new HashMap<>();
@@ -554,7 +522,7 @@ public class LoginActivity extends AppCompatActivity {
             otpFor = "new_user";
             edtMobileVerify.setText("");
             edtMobileVerify.setEnabled(true);
-            edtCountryCodePicker.setCcpClickable(true);
+            edtCountryCodePicker.setCcpClickable(forMultipleCountryUse);
             lytOTP.setVisibility(View.GONE);
             lytVerify.setVisibility(View.VISIBLE);
             lytVerify.startAnimation(animShow);
@@ -562,7 +530,7 @@ public class LoginActivity extends AppCompatActivity {
             otpFor = "exist_user";
             edtMobileVerify.setText("");
             edtMobileVerify.setEnabled(true);
-            edtCountryCodePicker.setCcpClickable(true);
+            edtCountryCodePicker.setCcpClickable(forMultipleCountryUse);
             lytOTP.setVisibility(View.GONE);
             lytVerify.setVisibility(View.VISIBLE);
             lytVerify.startAnimation(animShow);
@@ -648,7 +616,7 @@ public class LoginActivity extends AppCompatActivity {
             lytVerify.startAnimation(animHide);
             edtMobileVerify.setText("");
             edtMobileVerify.setEnabled(true);
-            edtCountryCodePicker.setCcpClickable(true);
+            edtCountryCodePicker.setCcpClickable(forMultipleCountryUse);
             pinViewOTP.setText("");
         } else if (id == R.id.imgResetPasswordClose) {
             edtResetPass.setText("");
@@ -705,7 +673,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Constant.FROM, "");
             if (from != null && from.equals("checkout")) {
-                intent.putExtra("total", Constant.FLOAT_TOTAL_AMOUNT);
+                intent.putExtra("total", ApiConfig.StringFormat("" + Constant.FLOAT_TOTAL_AMOUNT));
                 intent.putExtra(Constant.FROM, "checkout");
             } else if (from != null && from.equals("tracker")) {
                 intent.putExtra(Constant.FROM, "tracker");
