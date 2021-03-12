@@ -36,7 +36,7 @@ public class SplashActivity extends Activity {
         if (data != null && data.isHierarchical()) {
 
             switch (data.getPath().split("/")[1]) {
-                case "product": // Handle the item detail deep link
+                case "itemdetail": // Handle the item detail deep link
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
