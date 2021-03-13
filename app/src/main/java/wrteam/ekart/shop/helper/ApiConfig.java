@@ -46,7 +46,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.api.Api;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 
@@ -54,7 +53,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.security.Key;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -677,19 +675,16 @@ public class ApiConfig extends Application {
     }
 
     public static String getAddress(double lat, double lng, Activity activity) {
-        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
-        String address = "";
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(activity, Locale.getDefault());
         try {
-            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-            if (addresses.size() != 0) {
-                Address obj = addresses.get(0);
-                address = obj.getAddressLine(0);
-            }
-        } catch (IOException e) {
-
-            Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show();
+            addresses = geocoder.getFromLocation(lat, lng, 1);
+            return addresses.get(0).getAddressLine(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
-        return address;
     }
 
     public static int compareVersion(String version1, String version2) {

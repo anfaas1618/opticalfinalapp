@@ -229,28 +229,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         0);
             }
-        }
-
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(activity, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                // Got last known location. In some rare situations, this can be null.
-                if (location != null) {
-                    c_longitude = location.getLongitude();
-                    c_latitude = location.getLatitude();
-                    if (bundleLatitude <= 0.00 && bundleLongitude <= 0.00) {
-                        longitude = location.getLongitude();
-                        latitude = location.getLatitude();
-                    } else {
-                        longitude = bundleLongitude;
-                        latitude = bundleLatitude;
+        } else {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(activity, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations, this can be null.
+                    if (location != null) {
+                        c_longitude = location.getLongitude();
+                        c_latitude = location.getLatitude();
+                        if (bundleLatitude <= 0.00 && bundleLongitude <= 0.00) {
+                            longitude = location.getLongitude();
+                            latitude = location.getLatitude();
+                        } else {
+                            longitude = bundleLongitude;
+                            latitude = bundleLatitude;
+                        }
+                        moveMap(true);
                     }
-                    moveMap(true);
                 }
-            }
-        });
-
+            });
+        }
     }
 
     private void moveMap(boolean isfirst) {
