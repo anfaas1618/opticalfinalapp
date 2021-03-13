@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentIntentResult;
@@ -53,6 +55,10 @@ public class StripeActivity extends AppCompatActivity {
     private Stripe stripe;
     private String paymentIntentClientSecret, stripePublishableKey, orderId, from;
 
+    CardView cardViewHamburger;
+    TextView toolbarTitle;
+    ImageView imageMenu;
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,26 @@ public class StripeActivity extends AppCompatActivity {
         from = getIntent().getStringExtra(Constant.FROM);
         amount = sendparams.get(Constant.FINAL_TOTAL);
 
+
+
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        cardViewHamburger = findViewById(R.id.cardViewHamburger);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
+        imageMenu = findViewById(R.id.imageMenu);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbarTitle.setText(getString(R.string.paystack));
+
+        imageMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_back));
+        cardViewHamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         payButton = findViewById(R.id.payButton);
         tvTitle = findViewById(R.id.tvTitle);
         tvPayableAmount = findViewById(R.id.tvPayableAmount);

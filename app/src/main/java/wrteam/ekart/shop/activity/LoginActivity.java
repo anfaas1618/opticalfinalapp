@@ -167,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
         Utils.setHideShowPassword(edtResetCPass);
 
         lytResetPass.setVisibility(View.GONE);
-        lytLogin.setVisibility(View.GONE);
+        lytLogin.setVisibility(View.VISIBLE);
         lytVerify.setVisibility(View.GONE);
         lytSignUp.setVisibility(View.GONE);
         lytOTP.setVisibility(View.GONE);
@@ -243,7 +243,7 @@ public class LoginActivity extends AppCompatActivity {
                             setSnackBar(getString(R.string.alert_not_register_num1) + getString(R.string.app_name) + getString(R.string.alert_not_register_num2), getString(R.string.btn_ok), from);
                         }
                     }
-                } catch (JSONException e) {
+                } catch (JSONException ignored) {
 
                 }
             }
@@ -277,7 +277,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+            public void onCodeSent(@NotNull String s, @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 dialog.dismiss();
                 firebase_otp = s;
@@ -308,45 +308,39 @@ public class LoginActivity extends AppCompatActivity {
                             img.setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary));
                             tvResend.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
 
-                            tvResend.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    resendOTP = true;
-                                    sentRequest("+" + session.getData(Constant.COUNTRY_CODE) + mobile);
+                            tvResend.setOnClickListener(v -> {
+                                resendOTP = true;
+                                sentRequest("+" + session.getData(Constant.COUNTRY_CODE) + mobile);
 
-                                    new CountDownTimer(120000, 1000) {
-                                        @SuppressLint("SetTextI18n")
-                                        public void onTick(long millisUntilFinished) {
+                                new CountDownTimer(120000, 1000) {
+                                    @SuppressLint("SetTextI18n")
+                                    public void onTick(long millisUntilFinished) {
 
-                                            tvTimer.setVisibility(View.VISIBLE);
-                                            img.setColorFilter(ContextCompat.getColor(activity, R.color.gray));
-                                            tvResend.setTextColor(activity.getResources().getColor(R.color.gray));
+                                        tvTimer.setVisibility(View.VISIBLE);
+                                        img.setColorFilter(ContextCompat.getColor(activity, R.color.gray));
+                                        tvResend.setTextColor(activity.getResources().getColor(R.color.gray));
 
-                                            timerOn = true;
-                                            // Used for formatting digit to be in 2 digits only
-                                            NumberFormat f = new DecimalFormat("00");
-                                            long min = (millisUntilFinished / 60000) % 60;
-                                            long sec = (millisUntilFinished / 1000) % 60;
-                                            tvTimer.setText(f.format(min) + ":" + f.format(sec));
-                                        }
+                                        timerOn = true;
+                                        // Used for formatting digit to be in 2 digits only
+                                        NumberFormat f = new DecimalFormat("00");
+                                        long min = (millisUntilFinished / 60000) % 60;
+                                        long sec = (millisUntilFinished / 1000) % 60;
+                                        tvTimer.setText(f.format(min) + ":" + f.format(sec));
+                                    }
 
-                                        public void onFinish() {
-                                            resendOTP = false;
-                                            timerOn = false;
-                                            tvTimer.setVisibility(View.GONE);
-                                            img.setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary));
-                                            tvResend.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
+                                    public void onFinish() {
+                                        resendOTP = false;
+                                        timerOn = false;
+                                        tvTimer.setVisibility(View.GONE);
+                                        img.setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary));
+                                        tvResend.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
 
-                                            tvResend.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    resendOTP = true;
-                                                    sentRequest("+" + session.getData(Constant.COUNTRY_CODE) + mobile);
-                                                }
-                                            });
-                                        }
-                                    }.start();
-                                }
+                                        tvResend.setOnClickListener(v1 -> {
+                                            resendOTP = true;
+                                            sentRequest("+" + session.getData(Constant.COUNTRY_CODE) + mobile);
+                                        });
+                                    }
+                                }.start();
                             });
                         }
                     }.start();
@@ -383,33 +377,21 @@ public class LoginActivity extends AppCompatActivity {
             alertDialog.setCancelable(false);
             final AlertDialog alertDialog1 = alertDialog.create();
             // Setting OK Button
-            alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ApiConfig.RequestToVolley(new VolleyCallback() {
-                        @Override
-                        public void onSuccess(boolean result, String response) {
+            alertDialog.setPositiveButton(getString(R.string.yes), (dialog, which) -> ApiConfig.RequestToVolley((result, response) -> {
 
-                            if (result) {
-                                try {
-                                    JSONObject object = new JSONObject(response);
-                                    if (!object.getBoolean(Constant.ERROR)) {
-                                        setSnackBar(getString(R.string.msg_reset_pass_success), getString(R.string.btn_ok), from);
-                                    }
-
-                                } catch (JSONException e) {
-
-                                }
-                            }
+                if (result) {
+                    try {
+                        JSONObject object = new JSONObject(response);
+                        if (!object.getBoolean(Constant.ERROR)) {
+                            setSnackBar(getString(R.string.msg_reset_pass_success), getString(R.string.btn_ok), from);
                         }
-                    }, activity, Constant.RegisterUrl, params, true);
 
+                    } catch (JSONException e) {
+
+                    }
                 }
-            });
-            alertDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alertDialog1.dismiss();
-                }
-            });
+            }, activity, Constant.RegisterUrl, params, true));
+            alertDialog.setNegativeButton(getString(R.string.no), (dialog, which) -> alertDialog1.dismiss());
             // Showing Alert Message
             alertDialog.show();
         }
@@ -421,21 +403,18 @@ public class LoginActivity extends AppCompatActivity {
         params.put(Constant.MOBILE, mobile);
         params.put(Constant.PASSWORD, password);
         params.put(Constant.FCM_ID, "" + session.getData(Constant.FCM_ID));
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
+        ApiConfig.RequestToVolley((result, response) -> {
 
-                //System.out.println ("============login res " + response);
-                if (result) {
-                    try {
-                        JSONObject objectbject = new JSONObject(response);
-                        if (!objectbject.getBoolean(Constant.ERROR)) {
-                            StartMainActivity(objectbject, password);
-                        }
-                        Toast.makeText(activity, objectbject.getString("message"), Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-
+            //System.out.println ("============login res " + response);
+            if (result) {
+                try {
+                    JSONObject objectbject = new JSONObject(response);
+                    if (!objectbject.getBoolean(Constant.ERROR)) {
+                        StartMainActivity(objectbject, password);
                     }
+                    Toast.makeText(activity, objectbject.getString("message"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+
                 }
             }
         }, activity, Constant.LoginUrl, params, true);
@@ -497,19 +476,16 @@ public class LoginActivity extends AppCompatActivity {
         params.put(Constant.FCM_ID, "" + session.getData(Constant.FCM_ID));
         params.put(Constant.REFERRAL_CODE, Constant.randomAlphaNumeric(8));
         params.put(Constant.FRIEND_CODE, edtRefer.getText().toString().trim());
-        ApiConfig.RequestToVolley(new VolleyCallback() {
-            @Override
-            public void onSuccess(boolean result, String response) {
-                if (result) {
-                    try {
-                        JSONObject objectbject = new JSONObject(response);
-                        if (!objectbject.getBoolean(Constant.ERROR)) {
-                            StartMainActivity(objectbject, password);
-                        }
-                        Toast.makeText(activity, objectbject.getString("message"), Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject objectbject = new JSONObject(response);
+                    if (!objectbject.getBoolean(Constant.ERROR)) {
+                        StartMainActivity(objectbject, password);
                     }
+                    Toast.makeText(activity, objectbject.getString("message"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException ignored) {
+
                 }
             }
         }, activity, Constant.RegisterUrl, params, true);
@@ -681,7 +657,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
 
             finish();
-        } catch (JSONException e) {
+        } catch (JSONException ignored) {
 
         }
 

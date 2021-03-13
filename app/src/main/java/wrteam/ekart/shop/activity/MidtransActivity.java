@@ -7,12 +7,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -43,6 +47,10 @@ public class MidtransActivity extends AppCompatActivity {
     Map<String, String> sendParams;
     String from;
 
+    CardView cardViewHamburger;
+    TextView toolbarTitle;
+    ImageView imageMenu;
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +59,22 @@ public class MidtransActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_view);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.midtrans));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        cardViewHamburger = findViewById(R.id.cardViewHamburger);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
+        imageMenu = findViewById(R.id.imageMenu);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbarTitle.setText(getString(R.string.midtrans));
+
+        imageMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_back));
+        cardViewHamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         paymentModelClass = new PaymentModelClass(MidtransActivity.this);
         url = getIntent().getStringExtra("url");
         orderId = getIntent().getStringExtra(Constant.ORDER_ID);

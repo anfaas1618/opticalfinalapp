@@ -89,7 +89,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
     TextView tvSubTotal, txttotalitems, tvSelectDeliveryDate, tvWltBalance, tvProceedOrder, tvConfirmOrder, tvPayment, tvDelivery;
     double subtotal = 0.0, usedBalance = 0.0, totalAfterTax = 0.0, taxAmt = 0.0, pCodeDiscount = 0.0;
     RadioButton rbCOD, rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe, rbPayTm;
-    PaymentModelClass paymentModelClass;
     ArrayList<BookingDate> bookingDates;
     RelativeLayout confirmLyt, lytWallet;
     RecyclerView recyclerViewDates;
@@ -114,7 +113,6 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_payment, container, false);
         activity = getActivity();
-        paymentModelClass = new PaymentModelClass(activity);
         Constant.selectedDatePosition = 0;
         session = new Session(getActivity());
         getAllWidgets(root);
@@ -130,7 +128,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         variantIdList = getArguments().getStringArrayList("variantIdList");
         qtyList = getArguments().getStringArrayList("qtyList");
 
-        tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+subtotal));
+        tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + subtotal));
         txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
 
         if (ApiConfig.isConnected(getActivity())) {
@@ -138,7 +136,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
             GetPaymentConfig();
             chWallet.setTag("false");
-            tvWltBalance.setText("Total Balance: " + session.getData(Constant.currency) + ApiConfig.StringFormat(""+Constant.WALLET_BALANCE));
+            tvWltBalance.setText("Total Balance: " + session.getData(Constant.currency) + ApiConfig.StringFormat("" + Constant.WALLET_BALANCE));
             if (Constant.WALLET_BALANCE == 0) {
                 lytWallet.setVisibility(View.GONE);
             } else {
@@ -154,7 +152,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
 
                     if (Constant.WALLET_BALANCE >= subtotal) {
                         usedBalance = subtotal;
-                        tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + session.getData(Constant.currency) + ApiConfig.StringFormat(""+(Constant.WALLET_BALANCE - usedBalance)));
+                        tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + session.getData(Constant.currency) + ApiConfig.StringFormat("" + (Constant.WALLET_BALANCE - usedBalance)));
                         paymentMethod = Constant.WALLET;
                         lytPayOption.setVisibility(View.GONE);
                     } else {
@@ -163,7 +161,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                         lytPayOption.setVisibility(View.VISIBLE);
                     }
                     subtotal = (subtotal - usedBalance);
-                    tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+subtotal));
+                    tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + subtotal));
                     chWallet.setTag("true");
 
                 } else {
@@ -362,7 +360,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         lytPayOption.setVisibility(View.VISIBLE);
         tvWltBalance.setText(getString(R.string.total) + session.getData(Constant.currency) + Constant.WALLET_BALANCE);
         subtotal = (subtotal + usedBalance);
-        tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+subtotal));
+        tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + subtotal));
         chWallet.setChecked(false);
         chWallet.setTag("false");
     }
@@ -505,7 +503,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         sendparams.put(Constant.TAX_AMOUNT, "" + taxAmt);
         sendparams.put(Constant.TOTAL, "" + total);
         sendparams.put(Constant.TAX_PERCENT, "" + Constant.SETTING_TAX);
-        sendparams.put(Constant.FINAL_TOTAL, "" + ApiConfig.StringFormat(""+subtotal));
+        sendparams.put(Constant.FINAL_TOTAL, "" + subtotal);
         sendparams.put(Constant.PRODUCT_VARIANT_ID, String.valueOf(variantIdList));
         sendparams.put(Constant.QUANTITY, String.valueOf(qtyList));
         sendparams.put(Constant.MOBILE, session.getData(Constant.MOBILE));
@@ -516,7 +514,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         sendparams.put(Constant.PAYMENT_METHOD, paymentMethod);
         if (!pCode.isEmpty()) {
             sendparams.put(Constant.PROMO_CODE, pCode);
-            sendparams.put(Constant.PROMO_DISCOUNT, ApiConfig.StringFormat(""+pCodeDiscount));
+            sendparams.put(Constant.PROMO_DISCOUNT, ApiConfig.StringFormat("" + pCodeDiscount));
         }
         sendparams.put(Constant.ADDRESS, address);
         sendparams.put(Constant.LONGITUDE, session.getCoordinates(Constant.LONGITUDE));
@@ -560,10 +558,10 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
             lytDialogWallet.setVisibility(View.GONE);
         }
 
-        tvDialogItemTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+total));
-        tvDialogDeliveryCharge.setText(Constant.SETTING_DELIVERY_CHARGE > 0 ? session.getData(Constant.currency) + ApiConfig.StringFormat(""+Constant.SETTING_DELIVERY_CHARGE) : getString(R.string.free));
-        tvDialogTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+totalAfterTax));
-        tvDialogFinalTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat(""+subtotal));
+        tvDialogItemTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + total));
+        tvDialogDeliveryCharge.setText(Constant.SETTING_DELIVERY_CHARGE > 0 ? session.getData(Constant.currency) + ApiConfig.StringFormat("" + Constant.SETTING_DELIVERY_CHARGE) : getString(R.string.free));
+        tvDialogTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + totalAfterTax));
+        tvDialogFinalTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + subtotal));
         tvDialogConfirm.setOnClickListener(v -> {
             sendparams.put(Constant.ORDER_NOTE, tvSpecialNote.getText().toString().trim());
             if (paymentMethod.equals(getResources().getString(R.string.codpaytype)) || paymentMethod.equals(getString(R.string.wallettype))) {
@@ -593,8 +591,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                     sendparams.put(Constant.MOBILE, session.getData(Constant.MOBILE));
                     sendparams.put(Constant.USER_NAME, session.getData(Constant.NAME));
                     sendparams.put(Constant.EMAIL, session.getData(Constant.EMAIL));
-
-                    paymentModelClass.OnPayClick(getActivity(), sendparams, Constant.PAYMENT, sendparams.get(Constant.FINAL_TOTAL));
+                    new PaymentModelClass(activity).OnPayClick(getActivity(), sendparams, Constant.PAYMENT, sendparams.get(Constant.FINAL_TOTAL));
                 } else if (paymentMethod.equals(getString(R.string.paypal))) {
                     dialog.dismiss();
                     sendparams.put(Constant.FROM, Constant.PAYMENT);
@@ -640,10 +637,8 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
     }
 
     public void CreateOrderId(double payble) {
-
-        String[] amount = String.valueOf(payble * 100).split("\\.");
         Map<String, String> params = new HashMap<>();
-        params.put("amount", amount[0]);
+        params.put("amount", "" + Math.round(payble) + "00");
         ApiConfig.RequestToVolley(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result, String response) {
@@ -696,9 +691,9 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
                             JSONObject object = new JSONObject(response);
                             if (!object.getBoolean(Constant.ERROR)) {
                                 if (status.equals("stripe")) {
-                                    CreateStripePayment(object.getString(Constant.ORDER_ID), ApiConfig.StringFormat(""+subtotal));
+                                    CreateStripePayment(object.getString(Constant.ORDER_ID), ApiConfig.StringFormat("" + subtotal));
                                 } else if (status.equals("midtrans")) {
-                                    CreateMidtransPayment(object.getString(Constant.ORDER_ID), ApiConfig.StringFormat(""+subtotal));
+                                    CreateMidtransPayment(object.getString(Constant.ORDER_ID), ApiConfig.StringFormat("" + subtotal));
                                 } else if (status.equals("paypal")) {
                                     StartPayPalPayment(sendparams);
                                 } else {
@@ -979,7 +974,7 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode != RaveConstants.RAVE_REQUEST_CODE && data != null) {
-            paymentModelClass.TrasactionMethod(data, getActivity(), Constant.PAYMENT);
+            new PaymentModelClass(activity).TrasactionMethod(data, getActivity(), Constant.PAYMENT);
         } else if (requestCode == RaveConstants.RAVE_REQUEST_CODE && data != null && data.getStringExtra("response") != null) {
             try {
                 JSONObject details = new JSONObject(data.getStringExtra("response"));

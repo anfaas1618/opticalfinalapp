@@ -99,6 +99,7 @@ public class PaymentModelClass {
     }
 
     public void OnPayClick(Activity activity, Map<String, String> sendparams, String OrderType, String amount) {
+        try{
 
         this.sendparams = sendparams;
 
@@ -155,6 +156,9 @@ public class PaymentModelClass {
         } catch (Exception e) {
             Toast.makeText(activity, "build " + e.getMessage(), Toast.LENGTH_SHORT).show();
 
+        }}
+        catch (Exception e){
+            e.printStackTrace();
         }
 
 

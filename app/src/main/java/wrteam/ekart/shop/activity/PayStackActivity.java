@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +53,9 @@ public class PayStackActivity extends AppCompatActivity {
     private EditText expiryMonthField;
     private EditText expiryYearField;
     private EditText cvvField;
+    CardView cardViewHamburger;
+    TextView toolbarTitle;
+    ImageView imageMenu;
 
     public static void setPaystackKey(String publicKey) {
         PaystackSdk.setPublicKey(publicKey);
@@ -67,26 +72,41 @@ public class PayStackActivity extends AppCompatActivity {
         setPaystackKey(Constant.PAYSTACK_KEY);
         activity = PayStackActivity.this;
         session = new Session(activity);
+
         paymentModelClass = new PaymentModelClass(activity);
         sendParams = (Map<String, String>) getIntent().getSerializableExtra("params");
         payableAmount = Double.parseDouble(sendParams.get(Constant.FINAL_TOTAL));
         from = sendParams.get(Constant.FROM);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.paystack));
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbarTitle.setText(getString(R.string.paystack));
+
+        imageMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_back));
+        cardViewHamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         emailField.setText(session.getData(Constant.EMAIL));
         tvPayable.setText(session.getData(Constant.currency) + payableAmount);
     }
 
     public void getAllWidgets() {
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         tvPayable = findViewById(R.id.tvPayable);
         emailField = findViewById(R.id.edit_email_address);
         cardNumberField = findViewById(R.id.edit_card_number);
         expiryMonthField = findViewById(R.id.edit_expiry_month);
         expiryYearField = findViewById(R.id.edit_expiry_year);
         cvvField = findViewById(R.id.edit_cvv);
+
+        cardViewHamburger = findViewById(R.id.cardViewHamburger);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
+        imageMenu = findViewById(R.id.imageMenu);
     }
 
     /**

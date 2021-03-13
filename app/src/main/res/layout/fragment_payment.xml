@@ -230,7 +230,7 @@
                         android:drawablePadding="@dimen/_10sdp"
                         android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
-                        android:tag="@string/paystack"
+                        android:tag="@string/razor_pay"
                         android:text="@string/razor_payment"
                         android:textSize="@dimen/_12sdp"
                         android:visibility="gone" />
@@ -244,6 +244,7 @@
                         android:drawablePadding="@dimen/_10sdp"
                         android:layoutDirection="rtl"
                         android:padding="@dimen/_5sdp"
+                        android:tag="@string/paystack"
                         android:text="@string/paystack"
                         android:textSize="@dimen/_12sdp"
                         android:visibility="gone" />

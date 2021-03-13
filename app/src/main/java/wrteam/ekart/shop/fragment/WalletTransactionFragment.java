@@ -90,7 +90,6 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
     String paymentMethod = null;
     String customerId;
     private ShimmerFrameLayout mShimmerViewContainer;
-    RadioGroup lytPayment;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -112,7 +111,6 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
         tvBalance = root.findViewById(R.id.tvBalance);
         btnRechargeWallet = root.findViewById(R.id.btnRechargeWallet);
         mShimmerViewContainer = root.findViewById(R.id.mShimmerViewContainer);
-        lytPayment = root.findViewById(R.id.lytPayment);
 
         tvAlertTitle.setText(getString(R.string.no_wallet_history_found));
         tvAlertSubTitle.setText(getString(R.string.you_have_not_any_wallet_history_yet));
@@ -136,14 +134,6 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
         tvBalance.setText(session.getData(Constant.currency) + Constant.WALLET_BALANCE);
 
-        lytPayment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                RadioButton rb = (RadioButton) root.findViewById(checkedId);
-                paymentMethod = rb.getTag().toString();
-            }
-        });
-
         btnRechargeWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +149,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
 
                 TextView tvDialogSend, tvDialogCancel, edtAmount, edtMsg;
                 LinearLayout lytPayOption;
+                RadioGroup lytPayment;
                 RadioButton rbPayU, rbPayPal, rbRazorPay, rbPayStack, rbFlutterWave, rbMidTrans, rbStripe, rbPayTm;
 
                 edtAmount = dialogView.findViewById(R.id.edtAmount);
@@ -175,6 +166,15 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                 rbStripe = dialogView.findViewById(R.id.rbStripe);
                 rbPayTm = dialogView.findViewById(R.id.rbPayTm);
                 rbPayU = dialogView.findViewById(R.id.rbPayU);
+                lytPayment = dialogView.findViewById(R.id.lytPayment);
+
+                lytPayment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                        RadioButton rb = (RadioButton) dialogView.findViewById(checkedId);
+                        paymentMethod = rb.getTag().toString();
+                    }
+                });
 
                 Map<String, String> params = new HashMap<>();
                 params.put(Constant.SETTINGS, Constant.GetVal);
@@ -195,6 +195,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                                             Constant.MERCHANT_KEY = object.getString(Constant.PAY_M_KEY);
                                             Constant.MERCHANT_ID = object.getString(Constant.PAYU_M_ID);
                                             Constant.MERCHANT_SALT = object.getString(Constant.PAYU_SALT);
+                                            ApiConfig.SetAppEnvironment(activity);
                                         }
                                         if (object.has(Constant.razor_pay_method)) {
                                             Constant.RAZORPAY = object.getString(Constant.razor_pay_method);
@@ -286,7 +287,6 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                             if (paymentMethod != null) {
                                 amount = edtAmount.getText().toString().trim();
                                 msg = edtMsg.getText().toString().trim();
-                                dialog.dismiss();
                                 RechargeWallet();
                                 dialog.dismiss();
                             } else {
@@ -495,7 +495,7 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
                 Intent intent = new Intent(activity, StripeActivity.class);
                 intent.putExtra(Constant.ORDER_ID, "wallet-refill-user-" + new Session(activity).getData(Constant.ID) + "-" + System.currentTimeMillis());
                 intent.putExtra(Constant.FROM, Constant.WALLET);
-                intent.putExtra(Constant.PARAMS, sendparams);
+                intent.putExtra(Constant.PARAMS, (Serializable) sendparams);
                 startActivity(intent);
             } else {
                 Toast.makeText(activity, getString(R.string.address_msg), Toast.LENGTH_SHORT).show();
@@ -505,7 +505,6 @@ public class WalletTransactionFragment extends Fragment implements PaytmPaymentT
             startPayTmPayment();
         }
     }
-
 
     public void startPayTmPayment() {
         Map<String, String> params = new HashMap<>();

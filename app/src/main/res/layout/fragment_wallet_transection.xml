@@ -80,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     shimmer:shimmer_duration="1200">
 
                     <!-- Adding rows of placeholders -->

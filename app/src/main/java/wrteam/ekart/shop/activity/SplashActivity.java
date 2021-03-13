@@ -47,18 +47,25 @@ public class SplashActivity extends Activity {
                     finish();
                     break;
 
-                case "refer": // Handle the item detail deep link
-                    Constant.FRND_CODE = data.getPath().split("/")[2];
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("label", Constant.FRND_CODE);
-                    assert clipboard != null;
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(SplashActivity.this, R.string.refer_code_copied, Toast.LENGTH_LONG).show();
+                case "refer": // Handle the refer deep link
+                    if(!session.isUserLoggedIn()){
+                        Constant.FRND_CODE = data.getPath().split("/")[2];
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", Constant.FRND_CODE);
+                        assert clipboard != null;
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(SplashActivity.this, R.string.refer_code_copied, Toast.LENGTH_LONG).show();
 
-                    Intent referIntent = new Intent(this, LoginActivity.class);
-                    referIntent.putExtra(Constant.FROM, "register");
-                    startActivity(referIntent);
-                    finish();
+                        Intent referIntent = new Intent(this, LoginActivity.class);
+                        referIntent.putExtra(Constant.FROM, "refer");
+                        startActivity(referIntent);
+                        finish();
+                    }
+                    else{
+                        GetHomeData();
+                        Toast.makeText(activity, "You can not use refer code, You have already logged in.", Toast.LENGTH_SHORT).show();
+                    }
+
                     break;
             }
         } else {
@@ -69,12 +76,7 @@ public class SplashActivity extends Activity {
             int SPLASH_TIME_OUT = 500;
 
             if (!session.getIsFirstTime("is_first_time")) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
-                }, SPLASH_TIME_OUT);
+                new Handler().postDelayed(() -> startActivity(new Intent(SplashActivity.this, WelcomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)), SPLASH_TIME_OUT);
             } else {
                 GetHomeData();
             }

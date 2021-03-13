@@ -7,12 +7,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -46,6 +50,10 @@ public class PayPalWebActivity extends AppCompatActivity {
     Map<String, String> sendParams;
     String from;
 
+    CardView cardViewHamburger;
+    TextView toolbarTitle;
+    ImageView imageMenu;
+
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -59,13 +67,25 @@ public class PayPalWebActivity extends AppCompatActivity {
         from = getIntent().getStringExtra(Constant.FROM);
         session = new Session(PayPalWebActivity.this);
 
-
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        cardViewHamburger = findViewById(R.id.cardViewHamburger);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
+        imageMenu = findViewById(R.id.imageMenu);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbarTitle.setText(getString(R.string.paypal));
+
+        imageMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_back));
+        cardViewHamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         webView = findViewById(R.id.webView);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("PayPal");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         paymentModelClass = new PaymentModelClass(PayPalWebActivity.this);
 
         url = getIntent().getStringExtra("url");
