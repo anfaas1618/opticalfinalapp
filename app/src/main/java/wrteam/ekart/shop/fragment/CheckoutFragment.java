@@ -103,24 +103,26 @@ public class CheckoutFragment extends Fragment {
         tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new PaymentFragment();
-                Bundle bundle = new Bundle();
-                if (subtotal > Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
-                    Constant.SETTING_DELIVERY_CHARGE = 0.0;
+                if (subtotal != 0 && Constant.FLOAT_TOTAL_AMOUNT != 0) {
+                    Fragment fragment = new PaymentFragment();
+                    Bundle bundle = new Bundle();
+                    if (subtotal > Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
+                        Constant.SETTING_DELIVERY_CHARGE = 0.0;
+                    }
+                    bundle.putDouble("subtotal", Double.parseDouble("" + subtotal));
+                    bundle.putDouble("total", Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
+                    bundle.putDouble("pCodeDiscount", Double.parseDouble("" + pCodeDiscount));
+                    bundle.putString("pCode", pCode);
+                    bundle.putStringArrayList("variantIdList", variantIdList);
+                    bundle.putStringArrayList("qtyList", qtyList);
+                    bundle.putString(Constant.FROM, "process");
+                    bundle.putString("address", getArguments().getString("address"));
+                    PaymentFragment.paymentMethod = "";
+                    PaymentFragment.deliveryTime = "";
+                    PaymentFragment.deliveryDay = "";
+                    fragment.setArguments(bundle);
+                    MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 }
-                bundle.putDouble("subtotal", Double.parseDouble("" + subtotal));
-                bundle.putDouble("total", Double.parseDouble("" + Constant.FLOAT_TOTAL_AMOUNT));
-                bundle.putDouble("pCodeDiscount", Double.parseDouble("" + pCodeDiscount));
-                bundle.putString("pCode", pCode);
-                bundle.putStringArrayList("variantIdList", variantIdList);
-                bundle.putStringArrayList("qtyList", qtyList);
-                bundle.putString(Constant.FROM, "process");
-                bundle.putString("address", getArguments().getString("address"));
-                PaymentFragment.paymentMethod = "";
-                PaymentFragment.deliveryTime = "";
-                PaymentFragment.deliveryDay = "";
-                fragment.setArguments(bundle);
-                MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
 
