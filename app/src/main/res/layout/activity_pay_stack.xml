@@ -64,7 +64,7 @@
                 android:padding="@dimen/_15sdp" />
             <!-- Expiry Text for credit card number-->
 
-            <wrteam.ekart.shop.ui.CreditCardEditText
+            <com.mibtech.opticalstorm.ui.CreditCardEditText
                 android:id="@+id/edit_card_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

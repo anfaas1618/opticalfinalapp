@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <wrteam.ekart.shop.ui.TouchImageView
+    <com.mibtech.opticalstorm.ui.TouchImageView
         android:id="@+id/imgSlider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

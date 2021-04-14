@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "wrteam.ekart.shop"
+        applicationId "com.mibtech.opticalstorm"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1

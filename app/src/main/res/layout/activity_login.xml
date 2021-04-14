@@ -247,7 +247,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <wrteam.ekart.shop.ui.PinView
+                <com.mibtech.opticalstorm.ui.PinView
                     android:id="@+id/pinViewOTP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
