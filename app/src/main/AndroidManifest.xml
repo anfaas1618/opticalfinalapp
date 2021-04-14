@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="wrteam.ekart.shop">
+    package="com.mibtech.opticalstorm">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -24,7 +24,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name=".helper.ApiConfig"
+        android:name="com.mibtech.opticalstorm.helper.ApiConfig"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -36,11 +36,11 @@
         tools:targetApi="m">
 
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name="com.mibtech.opticalstorm.activity.WelcomeActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.PayStackActivity"
+            android:name="com.mibtech.opticalstorm.activity.PayStackActivity"
             android:screenOrientation="portrait" />
 
         <uses-library
@@ -61,16 +61,16 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.mibtech.opticalstorm.activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.DrawerActivity"
+            android:name="com.mibtech.opticalstorm.activity.DrawerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="com.mibtech.opticalstorm.activity.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.mibtech.opticalstorm.activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,7 +84,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="webekart.wrteam.in"
+                    android:host="opticalstorm.com"
                     android:pathPrefix="/refer"
                     android:scheme="https" />
             </intent-filter>
@@ -95,24 +95,24 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="webekart.wrteam.in"
+                    android:host="opticalstorm.com"
                     android:pathPrefix="/itemdetail"
                     android:scheme="https" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".activity.PayPalWebActivity"
+            android:name="com.mibtech.opticalstorm.activity.PayPalWebActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MidtransActivity"
+            android:name="com.mibtech.opticalstorm.activity.MidtransActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.StripeActivity"
+            android:name="com.mibtech.opticalstorm.activity.StripeActivity"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".helper.MyFirebaseMessagingService"
+            android:name="com.mibtech.opticalstorm.helper.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -130,7 +130,7 @@
         </provider>
 
         <service
-            android:name=".helper.MyFirebaseMessagingService"
+            android:name="com.mibtech.opticalstorm.helper.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
