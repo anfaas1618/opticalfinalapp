@@ -98,7 +98,7 @@ public class AddressListFragment extends Fragment {
         if (getArguments().getString(Constant.FROM).equalsIgnoreCase("process")) {
             processLyt.setVisibility(View.VISIBLE);
             confirmLyt.setVisibility(View.VISIBLE);
-            tvSubTotal.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + getArguments().getDouble("total")));
+            tvSubTotal.setText(session.getData(Constant.currency) + Constant.formater.format(getArguments().getDouble("total")+Double.parseDouble(getArguments().getString("lens_prices"))));
             txttotalitems.setText(Constant.TOTAL_CART_ITEM + " Items");
             tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
@@ -108,6 +108,23 @@ public class AddressListFragment extends Fragment {
                         Fragment fragment = new CheckoutFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("address", selectedAddress);
+                        bundle.putString("lens_prices",getArguments().getString("lens_prices"));
+                        bundle.putString("lens_name",getArguments().getString("lens_name"));
+                        bundle.putString("RSPH",getArguments().getString("RSPH"));
+                        bundle.putString("RCYL",getArguments().getString("RCYL"));
+                        bundle.putString("RAXIS",getArguments().getString("RAXIS"));
+                        bundle.putString("RVA",getArguments().getString("RVA"));
+                        bundle.putString("LSPH",getArguments().getString("LSPH"));
+                        bundle.putString("LCYL",getArguments().getString("LCYL"));
+                        bundle.putString("LAXIS",getArguments().getString("LAXIS"));
+                        bundle.putString("LVA",getArguments().getString("LVA"));
+                        bundle.putString("intermediate",getArguments().getString("intermediate"));
+                        bundle.putString("additional",getArguments().getString("additional"));
+                        if (getArguments().getString("imageUrl")!=null)
+                            bundle.putString("imageUrl",getArguments().getString("imageUrl"));
+                        else
+                            bundle.putString("imageUrl","no URL uploaded");
+                        System.out.println("=====params " + bundle.toString());
                         fragment.setArguments(bundle);
                         MainActivity.fm.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                         try {

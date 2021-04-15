@@ -124,7 +124,7 @@ public class CartFragment extends Fragment {
                                 }
 
                                 AddressListFragment.selectedAddress = "";
-                                Fragment fragment = new AddressListFragment();
+                                Fragment fragment = new LensPowerFragment();
                                 final Bundle bundle = new Bundle();
                                 bundle.putString(Constant.FROM, "process");
                                 bundle.putDouble("total", Constant.FLOAT_TOTAL_AMOUNT);

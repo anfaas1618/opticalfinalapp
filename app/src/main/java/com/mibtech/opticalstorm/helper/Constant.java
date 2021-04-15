@@ -1,5 +1,6 @@
 package com.mibtech.opticalstorm.helper;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 public class Constant {
@@ -28,6 +29,7 @@ public class Constant {
     //PayTm configs
     public static final String WEBSITE_LIVE_VAL = "WEB";
     public static final String INDUSTRY_TYPE_ID_LIVE_VAL = "Retail";
+    public static DecimalFormat formater = new DecimalFormat("0.00");
     public static final String MOBILE_APP_CHANNEL_ID_LIVE_VAL = "WAP";
     public static final String PAYTM_ORDER_PROCESS_LIVE_URL = "https://securegw.paytm.in/order/process";
     public static final String WEBSITE_DEMO_VAL = "WEBSTAGING";

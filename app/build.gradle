@@ -110,6 +110,7 @@ dependencies {
 
     //Guide Showcase
     implementation 'com.github.mreram:showcaseview:1.2.0'
+    implementation 'com.google.firebase:firebase-storage:19.2.2'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'

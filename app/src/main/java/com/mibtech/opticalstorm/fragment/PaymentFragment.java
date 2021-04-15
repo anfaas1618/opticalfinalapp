@@ -520,6 +520,19 @@ public class PaymentFragment extends Fragment implements PaytmPaymentTransaction
         sendparams.put(Constant.LONGITUDE, session.getCoordinates(Constant.LONGITUDE));
         sendparams.put(Constant.LATITUDE, session.getCoordinates(Constant.LATITUDE));
         sendparams.put(Constant.EMAIL, session.getData(Constant.EMAIL));
+        sendparams.put("lens_prices", getArguments().getString("lens_prices"));
+        sendparams.put("lens_name", getArguments().getString("lens_name"));//HERE
+        sendparams.put("RSPH",  getArguments().getString("RSPH"));//HERE
+        sendparams.put("RCYL", getArguments().getString("RCYL"));//HERE
+        sendparams.put("RAXIS",  getArguments().getString("RAXIS"));//HERE
+        sendparams.put("RVA", getArguments().getString("RVA"));//HERE
+        sendparams.put("LSPH", getArguments().getString("LSPH"));//HERE
+        sendparams.put("LCYL",  getArguments().getString("LCYL"));//HERE
+        sendparams.put("LAXIS",  getArguments().getString("LAXIS"));//HERE
+        sendparams.put("LVA",   getArguments().getString("LVA"));//HERE
+        sendparams.put("intermediate", getArguments().getString("intermediate"));//HERE
+        sendparams.put("additional", getArguments().getString("additional"));//HERE
+        sendparams.put("imageUrl",getArguments().getString("imageUrl"));
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

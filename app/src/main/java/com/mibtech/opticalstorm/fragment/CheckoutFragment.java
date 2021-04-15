@@ -117,6 +117,21 @@ public class CheckoutFragment extends Fragment {
                     bundle.putStringArrayList("qtyList", qtyList);
                     bundle.putString(Constant.FROM, "process");
                     bundle.putString("address", getArguments().getString("address"));
+                    bundle.putString("lens_prices",getArguments().getString("lens_prices"));//HERE
+                    bundle.putString("lens_name",getArguments().getString("lens_name"));//HERE
+                    bundle.putString("RSPH",getArguments().getString("RSPH"));//HERE
+                    bundle.putString("RCYL",getArguments().getString("RCYL"));//HERE
+                    bundle.putString("RCYL",getArguments().getString("RCYL"));//HERE
+                    bundle.putString("RAXIS",getArguments().getString("RAXIS"));//HERE
+                    bundle.putString("RVA",getArguments().getString("RVA"));//HERE
+                    bundle.putString("LSPH",getArguments().getString("LSPH"));//HERE
+                    bundle.putString("LCYL",getArguments().getString("LCYL"));//HERE
+                    bundle.putString("LAXIS",getArguments().getString("LAXIS"));//HERE
+                    bundle.putString("LVA",getArguments().getString("LVA"));//HERE
+                    bundle.putString("intermediate",getArguments().getString("intermediate"));//HERE
+                    bundle.putString("additional",getArguments().getString("additional"));//HERE
+                    bundle.putString("imageUrl",getArguments().getString("imageUrl"));
+                    System.out.println("==park"+bundle.toString());
                     PaymentFragment.paymentMethod = "";
                     PaymentFragment.deliveryTime = "";
                     PaymentFragment.deliveryDay = "";
@@ -241,10 +256,10 @@ public class CheckoutFragment extends Fragment {
                     lytSaveAmount.setVisibility(View.GONE);
                 }
             }
-
-            subtotal = Constant.FLOAT_TOTAL_AMOUNT;
-            tvTotalBeforeTax.setText(session.getData(Constant.currency) + ApiConfig.StringFormat("" + Constant.FLOAT_TOTAL_AMOUNT));
-            if (Constant.FLOAT_TOTAL_AMOUNT <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
+            subtotal = Constant.FLOAT_TOTAL_AMOUNT+Double.parseDouble(getArguments().getString("lens_prices"));
+            double totalprice=Double.parseDouble(getArguments().getString("lens_prices"))+Constant.FLOAT_TOTAL_AMOUNT;
+            tvTotalBeforeTax.setText(session.getData(Constant.currency) + Double.parseDouble("" + totalprice ));
+           if (Constant.FLOAT_TOTAL_AMOUNT <= Constant.SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY) {
                 tvDeliveryCharge.setText(session.getData(Constant.currency) + Constant.SETTING_DELIVERY_CHARGE);
                 subtotal = (subtotal + Constant.SETTING_DELIVERY_CHARGE);
                 deliveryCharge = "" + Constant.SETTING_DELIVERY_CHARGE;
@@ -283,8 +298,7 @@ public class CheckoutFragment extends Fragment {
                     params.put(Constant.VALIDATE_PROMO_CODE, Constant.GetVal);
                     params.put(Constant.USER_ID, session.getData(Constant.ID));
                     params.put(Constant.PROMO_CODE, promoCode);
-                    params.put(Constant.TOTAL, String.valueOf((Constant.FLOAT_TOTAL_AMOUNT + dCharge))); // taxAmt +
-
+                    params.put(Constant.TOTAL, String.valueOf((Constant.FLOAT_TOTAL_AMOUNT +Double.parseDouble(getArguments().getString("lens_prices"))+ dCharge))); // taxAmt +
                     ApiConfig.RequestToVolley(new VolleyCallback() {
                         @SuppressLint("SetTextI18n")
                         @Override

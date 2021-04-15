@@ -1,0 +1,514 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_color"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/processLyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+        <TextView
+            android:id="@+id/tvLens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="Lens Details"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/txt_color"
+            app:drawableStartCompat="@drawable/ic_next_process" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10dp"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="@string/address"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+
+
+        <TextView
+            android:id="@+id/tvSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text="@string/checkout"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+        <TextView
+            android:id="@+id/tvPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/margin_10dp"
+            android:text=".."
+            android:layout_marginLeft="@dimen/dimen_7dp"
+
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/txt_color"
+            app:drawableStartCompat="@drawable/ic_next_process_gray" />
+    </LinearLayout>
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/confirmLyt"
+        android:layout_below="@+id/processLyt"
+        android:layout_margin="@dimen/margin_5dp"
+
+        android:background="@color/bg_color"
+        android:fadeScrollbars="true"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/powerTypeLyt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/selectPowerType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/selectPowerType"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llcheckbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <CheckBox
+                        android:id="@+id/chSingleVision"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:tag="singlevision"
+                        android:text="@string/singleVision" />
+
+                    <LinearLayout
+                        android:id="@+id/single_vision_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+
+                        android:layoutDirection="ltr"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <CheckBox
+
+                            android:id="@+id/chAntiGlare1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="999"
+                            android:text="@string/antiGlare1" />
+
+                        <CheckBox
+                            android:id="@+id/chBlueBlock1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="1399"
+                            android:text="@string/blueBlock1" />
+
+                        <CheckBox
+                            android:id="@+id/chPhotoChromics1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="1199"
+                            android:text="@string/photoChromics1" />
+
+                    </LinearLayout>
+
+
+                    <CheckBox
+                        android:id="@+id/chBifocal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:tag="bifocal"
+                        android:text="@string/bifocal" />
+
+                    <LinearLayout
+                        android:id="@+id/bifocal_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+
+                        android:layoutDirection="ltr"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <CheckBox
+                            android:id="@+id/chAntiGlare2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="1299"
+                            android:text="@string/antiGlare2" />
+
+                        <CheckBox
+                            android:id="@+id/chBlueBlock2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="1699"
+                            android:text="@string/blueBlock2" />
+
+                        <CheckBox
+                            android:id="@+id/chPhotoChromics2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="1899"
+                            android:text="@string/photoChromics2" />
+
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/chProgressive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:tag="bifocal"
+                        android:text="@string/progressive" />
+
+                    <LinearLayout
+                        android:id="@+id/progressive_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+
+                        android:layoutDirection="ltr"
+
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <CheckBox
+                            android:id="@+id/chAntiGlare3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="1999"
+                            android:text="@string/antiGlare3" />
+
+                        <CheckBox
+                            android:id="@+id/chBlueBlock3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="2899"
+                            android:text="@string/blueBlock3" />
+
+                        <CheckBox
+                            android:id="@+id/chPhotoChromics3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:tag="2699"
+                            android:text="@string/photoChromics3" />
+
+                    </LinearLayout>
+
+
+                    <CheckBox
+                        android:id="@+id/chZeroPower"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:tag="zeroPower"
+                        android:text="@string/zeroPower" />
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relspec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/specsPower"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/powerDetails"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp" />
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="30dp"
+                        android:stretchColumns="*">
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:background="#DBFFA0"
+                                android:gravity="center"
+                                android:padding="3dp"
+                                android:text="@string/newRx"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+
+                                android:background="#C8E9FF"
+                                android:padding="3dp"
+                                android:text="@string/spherical"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:background="#C8E9FF"
+                                android:padding="3dp"
+                                android:text="@string/cylinder"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:background="#C8E9FF"
+                                android:padding="3dp"
+                                android:text="@string/axis"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:background="#C8E9FF"
+                                android:padding="3dp"
+                                android:text="@string/va"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:background="#C8E9FF"
+                                android:gravity="center"
+                                android:padding="3dp"
+                                android:text="@string/rightEye"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/RSPH"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/RCYL"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/RAXIS"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/RVA"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:background="#C8E9FF"
+                                android:gravity="center"
+                                android:padding="3dp"
+                                android:text="@string/leftEye"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/LSPH"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/LCYL"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/LAXIS"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/LVA"
+                                android:layout_width="match_parent"
+                                android:background="@color/white"
+                                android:padding="3dp"
+                                android:textAlignment="center" />
+                        </TableRow>
+
+                        <TableRow>
+
+
+                        </TableRow>
+
+
+                    </TableLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="@dimen/dimen_10dp"
+                        android:text="additional" />
+
+                    <EditText
+                        android:id="@+id/additional"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="@dimen/dimen_10dp"
+                        android:text="intermediate" />
+
+                    <EditText
+                        android:id="@+id/intermediate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="   Upload doctors results"/>
+
+
+                <ImageView
+                    android:id="@+id/IdProf"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    app:srcCompat="@drawable/ic_next_process_gray"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/card_bg_color"/>
+
+                <Button
+                    android:id="@+id/UploadBtn"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/button1"
+                    android:text="Upload"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:id="@+id/confirmLyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/card_shadow"
+        android:padding="@dimen/dimen_10dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvSubTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/tvConfrimLens"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/txt_color" />
+
+        <TextView
+            android:id="@+id/txttotalitems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvSubTotal"
+            android:layout_toStartOf="@id/tvConfrimLens"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/tvConfrimLens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_10dp"
+            android:background="@drawable/confirm_bg"
+            android:gravity="center"
+            android:padding="@dimen/dimen_12dp"
+            android:text="@string/proceed"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</RelativeLayout>
+

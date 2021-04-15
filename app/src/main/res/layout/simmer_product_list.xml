@@ -16,6 +16,7 @@
     app:cardCornerRadius="5dp">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_5sdp">
@@ -23,8 +24,7 @@
         <RelativeLayout
             android:id="@+id/lytImgThumb"
             android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_80sdp"
-            android:layout_below="@+id/txtstatus">
+            android:layout_height="@dimen/_80sdp">
 
             <View
                 android:id="@+id/imgThumb"
@@ -40,7 +40,6 @@
             android:id="@+id/lytPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtstatus"
             android:layout_toEndOf="@+id/lytImgThumb">
 
             <RelativeLayout

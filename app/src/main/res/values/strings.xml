@@ -334,4 +334,29 @@
     <string name="hi_user">Hi, There!</string>
     <string name="hi">Hi,&#160;</string>
     <string name="search_by_product_name">Search by Product Name</string>
+    <string name="please_wait">Please wait....</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selectPowerType">Select power Type</string>
+    <string name="singleVision">singleVision</string>
+    <string name="blueBlock1">blue block</string>
+    <string name="photoChromics1">photoChromics</string>
+    <string name="bifocal">bifocal</string>
+    <string name="antiGlare2">antiGlare</string>
+    <string name="blueBlock2">blueBlock2</string>
+    <string name="antiGlare1">antiGlare</string>
+    <string name="photoChromics2">photoChromics</string>
+    <string name="progressive">progressive</string>
+    <string name="antiGlare3">antiGlare</string>
+    <string name="blueBlock3">blueBlock</string>
+    <string name="photoChromics3">photoChromics</string>
+    <string name="zeroPower">zeroPower</string>
+    <string name="powerDetails">powerDetails</string>
+    <string name="newRx">newRx</string>
+    <string name="spherical">spherical</string>
+    <string name="cylinder">cylinder</string>
+    <string name="axis">axis</string>
+    <string name="va">va</string>
+    <string name="rightEye">rightEye</string>
+    <string name="leftEye">leftEye</string>
 </resources>
